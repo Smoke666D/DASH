@@ -17,6 +17,7 @@
 	#include "ch32v20x_rcc.h"
 
 void     DMA1_Channel1_IRQHandler(void)   __attribute__((interrupt()));
+void     DMA1_Channel3_IRQHandler(void)   __attribute__((interrupt()));
 void     DMA1_Channel4_IRQHandler(void)   __attribute__((interrupt()));
 void     DMA1_Channel5_IRQHandler(void)   __attribute__((interrupt()));
 void     DMA1_Channel7_IRQHandler(void)   __attribute__((interrupt()));
@@ -357,6 +358,18 @@ void DMA1_Channel1_IRQHandler(void)
        {
     	   DMA_CALLback[0].CallBack();
            DMA_ClearITPendingBit(DMA1_IT_GL1); //Сбрасываем флаг
+       }
+       return;
+
+}
+
+void DMA1_Channel3_IRQHandler(void)
+{
+
+    if(DMA_GetITStatus(DMA1_IT_TC3)==SET )
+       {
+    	   DMA_CALLback[2].CallBack();
+           DMA_ClearITPendingBit(DMA1_IT_GL3); //Сбрасываем флаг
        }
        return;
 

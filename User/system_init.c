@@ -75,10 +75,10 @@ static StaticTask_t InputsTaskControlBlock;
 
 void vSYStaskInit ( void )
 {
-  /*  (* xProcessTaskHandle ())
+   (* xProcessTaskHandle ())
              = xTaskCreateStatic( vRedrawTask, "ProcessTask", PROCESS_STK_SIZE , ( void * ) 1, PROCESS_TASK_PRIO  ,
                                      (StackType_t * const )ProcessTaskBuffer, &ProcessTaskControlBlock );
-  (* xCanOpenPeriodicTaskHandle ())
+  /*(* xCanOpenPeriodicTaskHandle ())
   = xTaskCreateStatic( vCanOpenPeriodicProcess, "CanOpenPeriodic", PERIODIC_CAN_STK_SIZE , ( void * ) 1, PERIODIC_CAN_TASK_PRIO ,
                      (StackType_t * const )CanOpnePeriodicTaskBuffer, &CanOpnePeriodicTaskControlBlock );
   (* xCanOpenProcessTaskHandle())
@@ -101,67 +101,47 @@ void vSYSeventInit ( void )
 }
 
 
-
-static uint8_t data[100];
-
-
 static  TaskFSM_t DeafaultTaskFSM = STATE_INIT;
 
 void StartDefaultTask(void *argument)
 {
 
     uint32_t ulNotifiedValue;
+    uint16_t dd = 0;
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
 
-
-
  // vProceesInit();
- // vLedDriverStart();
+
   //xEventGroupSetBits( xResetEventHandle, RESTART_DISABLE);
   for(;;)
   {
-     /* switch( DeafaultTaskFSM)
+      switch( DeafaultTaskFSM)
       {
           case STATE_INIT:
-              InitDataModel();
+              DataModel_Init();
+           //   xTaskNotifyWait(0, pdTRUE, &ulNotifiedValue,portMAX_DELAY);
               vLedDriverStart();
-              InputsNotifyTaskToInit();
+           //   InputsNotifyTaskToInit();
               DeafaultTaskFSM = STATE_WHAIT_TO_RAEDY;
               break;
           case STATE_WHAIT_TO_RAEDY:
-              xTaskNotifyWait(0, 0, &ulNotifiedValue,portMAX_DELAY);
-              if ( ulNotifiedValue == 2)
-              {
-                  ulTaskNotifyValueClearIndexed(NULL, 0, 0xFFFF);
+             //xTaskNotifyWait(0, 0, &ulNotifiedValue,portMAX_DELAY);
+             // if ( ulNotifiedValue == 2)
+              //{
+              //    ulTaskNotifyValueClearIndexed(NULL, 0, 0xFFFF);
                   DeafaultTaskFSM = STATE_RUN;
-              }
+              //}
               break;
           case STATE_RUN:
-              vTaskDelay(500);
+              setReg(BIG_SEG,&dd,2);
+              vTaskDelay(1000);
+              if (++dd>9) dd = 0;
+
               HAL_WDTReset();
               printf("We alive!!\r\n");
               break;
-      }*/
-      //vTestEEPROM();
-      printf("I2C Test start\n\r");
-
-          for (int i=0;i<100;i++)
-          {
-              data[i]=i;
-          }
-          eEEPROMWr(0,data,30,2);
-          for (int i=0;i<100;i++)
-          {
-                  data[i]=0;
-           }
-          eEEPROMRd(0,data,30,2);
-          for (int i=0;i<100;i++)
-          {
-                data[i]=i+2;
-          }
-          eEEPROMWr(0,data,30,2);
-      vTaskDelay(100);
+      }
   }
   /* USER CODE END 5 */
 }

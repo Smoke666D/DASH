@@ -10,6 +10,7 @@
 #include "hal_dma.h"
 #include "hal_timers.h"
 #include "hal_spi.h"
+#include "hal_gpio.h"
 
 /*                              0     1    2    3    4   5    6    7    8   9*/
 const u8 DigitMask[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6E,0x7D,0x07,0x3F,0x6F};
@@ -165,10 +166,11 @@ void SetSEG( u16 mask, u32 value)
 
 
 
-void SetBigSeg( u8 mask)
+void SetBigSeg( u16 mask)
 {
     SPI2_DATA[0] &= 0x0003;
     SPI2_DATA[0] = (mask <<2);
+
 }
 
 /*
@@ -176,17 +178,18 @@ void SetBigSeg( u8 mask)
  */
 void vSetBrigth( BRIGTH_CHANNEL_t ch, u8 brigth)
 {
-    HAL_TIMER_SetPWMPulse(TIMER2, (ch == RGB_CHANNEL) ? TIM_CHANNEL_3 :  TIM_CHANNEL_4 ,Brigth[brigth]);
-    HAL_TIMER_EnablePWMCH(TIMER2,0);
+  //  HAL_TIMER_SetPWMPulse(TIMER3, (ch == RGB_CHANNEL) ? TIM_CHANNEL_3 :  TIM_CHANNEL_4 ,Brigth[brigth]);
+   // HAL_TIMER_EnablePWMCH(TIMER3,0);
     return;
 }
 
 
 void SPI1_DMA_Callback( void )
 {
-    HAL_DMA_Disable(DMA1_CH2);
+    HAL_DMA_Disable(DMA1_CH3);
     HAL_SPI_RXOveleyClear(SPI1 );
     while (HAL_SPI_GetBusy(SPI1) == HAL_SET);
+    HAL_SetBit(  SPI1_Port , SPI1_NSS_Pin);
     return;
 }
 
@@ -195,6 +198,7 @@ void SPI2_DMA_Callback( void )
     HAL_DMA_Disable(DMA1_CH5);
     HAL_SPI_RXOveleyClear(SPI2 );
     while (HAL_SPI_GetBusy(SPI2) == HAL_SET);
+    HAL_SetBit(  SPI2_Port , SPI2_NSS_Pin);
     return;
 }
 
@@ -204,12 +208,12 @@ void SPI2_DMA_Callback( void )
  */
 void vLedDriverStart(void)
 {
-	HAL_DMAInitIT(DMA1_Channel5,MTOP, SPI2_CHIP_COUNT  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,1,4,&SPI2_DMA_Callback);
-	HAL_DMAInitIT(DMA1_Channel3,MTOP, SPI1_CHIP_COUNT  ,(u32)&SPI1->DATAR, (u32)SPI1_DATA,0,1,4,&SPI1_DMA_Callback);
-	HAL_TiemrEneblae(TIMER3);
+	//HAL_DMAInitIT(DMA1_Channel5,MTOP, SPI2_CHIP_COUNT  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,1,4,&SPI2_DMA_Callback);
+	//HAL_DMAInitIT(DMA1_Channel3,MTOP, SPI1_CHIP_COUNT  ,(u32)&SPI1->DATAR, (u32)SPI1_DATA,0,1,4,&SPI1_DMA_Callback);
+	//HAL_TiemrEneblae(TIMER3);
 	TIM_Cmd( PWM_TIMER_1, ENABLE );
-	vSetBrigth( RGB_CHANNEL,   LED_CHANELL_BRIGTH[0]);
-	vSetBrigth( WHITE_CHANNEL, LED_CHANELL_BRIGTH[1]);
+	vSetBrigth( RGB_CHANNEL,    6 );//LED_CHANELL_BRIGTH[0]);
+	vSetBrigth( WHITE_CHANNEL, 6 );//LED_CHANELL_BRIGTH[1]);
 	return;
 }
 
@@ -217,12 +221,35 @@ void vLedDriverStart(void)
 /*
  *  Функция вывода данных в SPI, вызывается по прерыванию таймра №4
  */
+//uint16_t data1 = 0x1;
 void vLedProcess( void )
 {
-   HAL_DMA_SetCounter(DMA1_CH5, SPI2_CHIP_COUNT);
-   HAL_DMA_Enable(DMA1_CH5);
-   HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
-   HAL_DMA_Enable(DMA1_CH3);
+   int i =0;
+   HAL_ResetBit(  SPI1_Port , SPI1_NSS_Pin);
+   HAL_ResetBit(  SPI2_Port , SPI2_NSS_Pin);
+    while (i<SPI2_CHIP_COUNT )
+    {
+        if ( SPI_I2S_GetFlagStatus( SPI2, SPI_I2S_FLAG_TXE ) != RESET )
+        {
+            SPI_I2S_SendData( SPI2, SPI2_DATA[i]);
+            i++;
+        }
+    }
+    i=0;
+    while (i<SPI1_CHIP_COUNT)
+    {
+       if( SPI_I2S_GetFlagStatus( SPI1, SPI_I2S_FLAG_TXE ) != RESET )
+       {
+           SPI_I2S_SendData( SPI1, SPI1_DATA[i]);
+           i++;
+       }
+    }
+    HAL_SetBit(  SPI1_Port , SPI1_NSS_Pin);
+   HAL_SetBit(  SPI2_Port , SPI2_NSS_Pin);
+  // HAL_DMA_SetCounter(DMA1_CH5, SPI2_CHIP_COUNT);
+  // HAL_DMA_Enable(DMA1_CH5);
+  // HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
+  // HAL_DMA_Enable(DMA1_CH3);
    return;
 }
 

@@ -259,15 +259,16 @@ void vRedrawTask( void * argument )
     u32 buffer32;
     u16 low_edge, high_edge;
     u8 brakecode_no_valid = 0;
-   /* KeyEvent TempEvent;
     u8 data;
+   /* KeyEvent TempEvent;
+
     u16 bd;
     vDashDrawInit();
-    xEventGroupWaitBits(xGetSystemEventHeandler(),DATA_MODEL_READY, pdTRUE, pdFALSE, portMAX_DELAY );
+    xEventGroupWaitBits(xGetSystemEventHeandler(),DATA_MODEL_READY, pdTRUE, pdFALSE, portMAX_DELAY );*/
     while(1)
     {
         vTaskDelay(10);
-        if ( xQueueReceive( pKeyboard, &TempEvent,0 ) != errQUEUE_EMPTY )
+       /* if ( xQueueReceive( pKeyboard, &TempEvent,0 ) != errQUEUE_EMPTY )
         {
             switch (TempEvent.KeyCode)
             {
@@ -364,14 +365,14 @@ void vRedrawTask( void * argument )
         else
         {
             SetSEG( (u16)((buffer32 >>8) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF))  );
-        }
+        }*/
         //§°§ä§à§Ò§â§Ñ§Ø§Ö§ß§Ú§Ö §Ò§à§Ý§î§ê§à§Ô§à §ã§Ö§Ô§Þ§Ö§ß§Ö§ä§Ñ
         data = getReg16(BIG_SEG);
-        u8 seg_view = 0;
-        if (data!=0)
+        u16 seg_view = 0;
+       if (data!=0)
         {
-            seg_view = getReg16(BIG_SEGVAL1 + data -1 );
+            seg_view = getReg16(BIG_SEGVAL1 + (--data)*2 );
         }
         SetBigSeg(seg_view);
-    }*/
+    }
 }

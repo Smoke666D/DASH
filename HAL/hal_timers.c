@@ -80,10 +80,11 @@ void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Peri
 
 	}
     NVIC_InitStructure.NVIC_IRQChannel =  irq;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 3;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;
     NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
     NVIC_Init(&NVIC_InitStructure);
+    TIM_Cmd(timers[TimerName], ENABLE);
 #endif
 }
 
@@ -248,7 +249,7 @@ void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32
 
 	 TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	 TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-	 TIM_OCInitStructure.TIM_Pulse = Period;
+	 TIM_OCInitStructure.TIM_Pulse = Period-200;
 	 TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 	 if (channel &  TIM_CHANNEL_1)
 	 {
@@ -272,6 +273,7 @@ void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32
 	 }
 	 TIM_ARRPreloadConfig( timers[TimerName], ENABLE );
 	 TIM_CtrlPWMOutputs(timers[TimerName], ENABLE );
+	 TIM_Cmd(timers[TimerName], ENABLE );
 #endif
 }
 

@@ -37,13 +37,12 @@ static u16 secondcounter;
 static u32 odometr;
 static u8 data_init = 0;
 
+static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
 
 
+void setReg16( u16 reg_adress, u16 data);
 
-
-
-uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
-void InitDataModel()
+ void DataModel_Init()
 {
     memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
     if ( eEEPROMRd(0x00 ,DATA_MODEL_REGISTER , EEPROM_REGISER_COUNT,0) == EEPROM_OK)
@@ -54,7 +53,7 @@ void InitDataModel()
              DATA_MODEL_REGISTER[VALID_CODE_ADDRES]                = VALID_CODE;
              DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]                 = MAX_BRIGTH;
              DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]                   = MAX_BRIGTH;
-             *((u16*)&(DATA_MODEL_REGISTER[ BAR_VALUE_HIGH]))   =  36;
+           /*  *((u16*)&(DATA_MODEL_REGISTER[ BAR_VALUE_HIGH]))   =  36;
              *((u16*)&(DATA_MODEL_REGISTER[BAR_VALUE_LOW]))     =  0;
              *((u16*)&(DATA_MODEL_REGISTER[ BAR_VALUE_RED_HIGH]))  = 5;
              *((u16*)&(DATA_MODEL_REGISTER[BAR_VALUE_RED_LOW]))    = 0;
@@ -145,7 +144,7 @@ void InitDataModel()
              *((u16*)&(DATA_MODEL_REGISTER[RGB14_VALUE_RED_HIGH]))    =2;
              *((u16*)&(DATA_MODEL_REGISTER[RGB14_VALUE_RED_LOW]))     =2;
              *((u16*)&(DATA_MODEL_REGISTER[RGB14_VALUE_BLUE_HIGH]))   =0;
-             *((u16*)&(DATA_MODEL_REGISTER[RGB14_VALUE_BLUE_LOW]))    =0;
+             *((u16*)&(DATA_MODEL_REGISTER[RGB14_VALUE_BLUE_LOW]))    =0;*/
              DATA_MODEL_REGISTER[RGBMAP1]  =0;
              DATA_MODEL_REGISTER[RGBMAP2]  =0;
              DATA_MODEL_REGISTER[RGBMAP3]  =0;
@@ -161,16 +160,16 @@ void InitDataModel()
              DATA_MODEL_REGISTER[RGBMAP13] =1;
              DATA_MODEL_REGISTER[RGBMAP14] =2;
              DATA_MODEL_REGISTER[BARMAP] =0;
-             *((u16*)&(DATA_MODEL_REGISTER[BIG_SEGVAL1 ])) =0;
-             *((u16*)&(DATA_MODEL_REGISTER[BIG_SEGVAL2 ])) =0;
-             *((u16*)&(DATA_MODEL_REGISTER[BIG_SEGVAL3 ])) =0;
-             *((u16*)&(DATA_MODEL_REGISTER[BIG_SEGVAL4 ])) =0;
-             *((u16*)&(DATA_MODEL_REGISTER[BIG_SEGVAL5 ])) =0;
-             *((u16*)&(DATA_MODEL_REGISTER[BIG_SEGVAL6 ])) =0;
-             *((u16*)&(DATA_MODEL_REGISTER[BIG_SEGVAL7 ])) =0;
-             *((u16*)&(DATA_MODEL_REGISTER[BIG_SEGVAL8 ])) =0;
-             *((u16*)&(DATA_MODEL_REGISTER[BIG_SEGVAL9 ])) =0;
-             *((u32 *)(&DATA_MODEL_REGISTER[HOUR_COUNTER_ADR])) = 0x00;
+             setReg16(BIG_SEGVAL1, 0x336);
+             setReg16(BIG_SEGVAL2, 0x03F);
+             setReg16(BIG_SEGVAL3, 0x2F3);
+             setReg16(BIG_SEGVAL4, 0x0F3);
+             setReg16(BIG_SEGVAL5, 0x006);
+             setReg16(BIG_SEGVAL6, 0x0DB);
+             setReg16(BIG_SEGVAL7, 0x0CF);
+             setReg16(BIG_SEGVAL8, 0x0E6);
+             setReg16(BIG_SEGVAL9, 0x0ED);
+            /* *((u32 *)(&DATA_MODEL_REGISTER[HOUR_COUNTER_ADR])) = 0x00;
              *((u32 *)(&DATA_MODEL_REGISTER[ODOMETR_ADR])) = 0x00;
              DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT] = 19;
              DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 19;
@@ -196,7 +195,7 @@ void InitDataModel()
              *((u32*)&(DATA_MODEL_REGISTER[ MENU7_MAP ])) =0;
              *((u32*)&(DATA_MODEL_REGISTER[ MENU8_MAP ])) =0;
              *((u32*)&(DATA_MODEL_REGISTER[ MENU9_MAP ])) =0;
-             *((u32*)&(DATA_MODEL_REGISTER[ MENU10_MAP ])) =0;
+             *((u32*)&(DATA_MODEL_REGISTER[ MENU10_MAP ])) =0;*/
              DATA_MODEL_REGISTER[MENU_DEF_POS]             =0;
              DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      =1;
              eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,0);
@@ -218,16 +217,16 @@ void InitDataModel()
          OD_set_value(OD_ENTRY_H2019,0x04 ,&DATA_MODEL_REGISTER[BAR_VALUE_GREEN_LOW], 2, true);
 
 
-             for (int j= 0; j<RGB_DIOD_COUNT; j++)
-             {
-                 OD_set_value(OD_ENTRY_H2008, j+1 ,&DATA_MODEL_REGISTER[RGBMAP1 +j], 1, true);
-                 for (int i = 0; i < 6; i++ )
+         for (int j= 0; j<RGB_DIOD_COUNT; j++)
+         {
+             OD_set_value(OD_ENTRY_H2008, j+1 ,&DATA_MODEL_REGISTER[RGBMAP1 +j], 1, true);
+             for (int i = 0; i < 6; i++ )
                      OD_set_value(&OD->list[34+j], i+1 ,&DATA_MODEL_REGISTER[RGB1_VALUE_GREEN_HIGH +i*2], 2, true);
-             }
-             OD_set_value(OD_ENTRY_H2008, 15 ,&DATA_MODEL_REGISTER[BARMAP], 1, true);
-             vSetInitBrigth(RGB_CHANNEL,DATA_MODEL_REGISTER[RGB_BRIGTH_ADR] );
-             vSetInitBrigth(WHITE_CHANNEL,DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR] );
-             u32 data32 = getReg32(HOUR_COUNTER_ADR);
+         }
+         OD_set_value(OD_ENTRY_H2008, 15 ,&DATA_MODEL_REGISTER[BARMAP], 1, true);
+         vSetInitBrigth(RGB_CHANNEL,DATA_MODEL_REGISTER[RGB_BRIGTH_ADR] );
+         vSetInitBrigth(WHITE_CHANNEL,DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR] );
+           /*  u32 data32 = getReg32(HOUR_COUNTER_ADR);
              OD_set_value(OD_ENTRY_H2004,0x02,&data32,4,true);
              odometr     = getReg32(ODOMETR_ADR);
              OD_set_value(OD_ENTRY_H2004,0x01,&odometr,4,true);
@@ -292,19 +291,25 @@ void InitDataModel()
                   u32 data32  = *((u32*)&(DATA_MODEL_REGISTER[ MENU1_MAP + i*4]));
                   OD_set_value(OD_ENTRY_H201A, 1+i*4 ,&data32, 4, true);
               }
-              data_init = 0;
+              data_init = 0;*/
 
     }
-    xEventGroupSetBits(xGetSystemEventHeandler(),DATA_MODEL_READY);
+    //xEventGroupSetBits(xGetSystemEventHeandler(),DATA_MODEL_READY);
     secondcounter = 0;
 }
 
 
+void setReg16( u16 reg_adress, u16 data)
+{
+    DATA_MODEL_REGISTER[ reg_adress] = (u8)( data & 0xFF);
+    DATA_MODEL_REGISTER[ reg_adress + 1] =(u8)( data>>8 & 0xFF);
 
+}
 
 u16 setReg(u16 reg_adress, void * data, u8 len)
 {
     u8 Buffer[4];
+    u16 d;
      switch (len)
      {
             case 1:
@@ -312,8 +317,9 @@ u16 setReg(u16 reg_adress, void * data, u8 len)
                 DATA_MODEL_REGISTER[reg_adress] = Buffer[0];
                 break;
             case 2:
-                *((u16 *)Buffer) = *((u16 *)data);
-                *((u16 *)&DATA_MODEL_REGISTER[reg_adress]) = *((u16 *)Buffer);
+                d = *((u16 *)data);
+                DATA_MODEL_REGISTER[ reg_adress] = d & 0xFF;
+                DATA_MODEL_REGISTER[ reg_adress + 1] = d>>8 & 0xFF;
                 break;
             case 4:
                 *((u32 *)Buffer) = *((u32 *)data);
@@ -325,13 +331,16 @@ u16 setReg(u16 reg_adress, void * data, u8 len)
 u16 getReg16(u16 reg_adress )
 {
 
-    return  *((u16 *)&DATA_MODEL_REGISTER[reg_adress]);
+
+    uint16_t  data =  (u16)DATA_MODEL_REGISTER[reg_adress] | (u16)(DATA_MODEL_REGISTER[reg_adress+1])<<8;
+    //uint16_t data = * pdata;
+    return  data;//*( (u16 *) (DATA_MODEL_REGISTER + reg_adress));
 }
 
 u32 getReg32(u16 reg_adress )
 {
 
-    return  *((u32 *)&DATA_MODEL_REGISTER[reg_adress]);
+    return  *((u32 *)&(DATA_MODEL_REGISTER[reg_adress]));
 }
 
 u8 getReg8( u16 reg_adress)

@@ -55,7 +55,7 @@ typedef enum
 #define I2C_NAME_t I2C_TypeDef *
 #endif
 
-void InitI2CDMA( I2C_NAME_t i2c);
+void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior);
 void I2C1_EV_IRQHandler( void );
 void I2C1_ER_IRQHandler ( void );
 void I2C2_EV_IRQHandler( void );

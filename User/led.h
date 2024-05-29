@@ -66,7 +66,7 @@ void SetSegDirect( u8 number, u8 mask);
 void SetSEG( u16 mask, u32 value);
 void vSetInitBrigth(BRIGTH_CHANNEL_t ch, u8 brigth);
 void vSetBrigth( BRIGTH_CHANNEL_t ch, u8 brigth);
-void SetBigSeg( u8 mask);
+void SetBigSeg( u16 mask);
 void SetBarState( u8 start, u8 count, LED_COLOR_t color);
 void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state);
 
