@@ -314,6 +314,7 @@ void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size)
 	ADC_ClearITPendingBit(ADC1,ADC_IT_EOC);
 	DMA_ITConfig(chanel,DMA_IT_TC, ENABLE);
 	DMA_Cmd(chanel, ENABLE);
+	ADC_Cmd(ADC1, ENABLE);
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 #endif
 }

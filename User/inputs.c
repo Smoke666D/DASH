@@ -34,7 +34,9 @@ TaskHandle_t * getInputsTaskHandle()
 
 void ADC1_Event( void )
 {
+
     static portBASE_TYPE xHigherPriorityTaskWoken;
+    ADC_Cmd(ADC1, DISABLE);
     xHigherPriorityTaskWoken = pdFALSE;
     xTaskNotifyIndexedFromISR(pInputsTaskHandle, 2, ADC1_DATA_READY, eSetValueWithOverwrite, &xHigherPriorityTaskWoken  );
     portEND_SWITCHING_ISR( xHigherPriorityTaskWoken );
@@ -46,8 +48,8 @@ void ADC1_Init()
 {
     uint8_t ADC1_CHANNEL[5] = { ADC_CH_0,  ADC_CH_1, ADC_CH_2, ADC_CH_3,  ADC_CH_6};
     HAL_ADC_ContiniusScanCinvertionDMA( ADC_1 ,  5 ,  ADC1_CHANNEL);
-    HAL_ADC_AWDT_IT_Init( ADC_1, ADC_CH_6 );
-    HAL_DMAInitIT( DMA1_CH1,PTOM, (ADC1_CHANNELS * ADC_FRAME_SIZE) , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(), 0, 1, 3, &ADC1_Event  );
+  //  HAL_ADC_AWDT_IT_Init( ADC_1, ADC_CH_6 );
+    HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(), 0, 1, 3, &ADC1_Event  );
     vAINInit();
 }
 
@@ -78,7 +80,7 @@ void ADC_FSM()
               case AIN2:
               case AIN3:
               case AIN4:
-                  OurVData[i]= fGetAinCalData( i , (float)( ADC_Buffer*RA)/(4095-  ADC_Buffer) );
+                  //OurVData[i]= fGetAinCalData( i , (float)( ADC_Buffer*RA)/(4095-  ADC_Buffer) );
                   break;
               case AIN5:
                   OurVData[i]= (float) ADC_Buffer  * AINCOOF1 + INDIOD;
@@ -191,32 +193,32 @@ void InputsNotifyTaskToInit()
  * */
 void vInputsTask( void * argument )
 {
-  TaskFSM_t  state;
+  TaskFSM_t  state = STATE_IDLE;
   uint32_t ulNotifiedValue;
   BaseType_t notify;
   uint8_t OD_flag;
   uint8_t OD_Ain_flag;
-  OD_DIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2006);
-  OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
+  //OD_DIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2006);
+  //OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
 
   //Прежде чем запуститься таск, нужно убедиться что прочитались данные из EEPROM и система проинициализирована
-  xEventGroupWaitBits(xGetSystemEventHeandler(),DATA_MODEL_READY, pdTRUE, pdFALSE, portMAX_DELAY );
+  //xEventGroupWaitBits(xGetSystemEventHeandler(),DATA_MODEL_READY, pdTRUE, pdFALSE, portMAX_DELAY );*/
   for(;;)
   {
     switch (state)
     {
         case  STATE_IDLE:
-            xTaskNotifyWait(0,0xFF ,&ulNotifiedValue,portMAX_DELAY);
+           xTaskNotifyWait(0,0xFF ,&ulNotifiedValue,portMAX_DELAY);
             if ((ulNotifiedValue & TASK_INIT_NOTIFY) !=0)
             {
                 ADC1_Init();
-                vDINInit();
+              //  vDINInit();
                 state = STATE_INIT;
             }
             break;
         case STATE_INIT:                                                                  //Отправляем вызывающей задаче уведомление что таск запущен
             state = STATE_RUN;
-            xTaskNotify(pTaskToNotifykHandle, INPUTS_DRIVER_READY , eIncrement);
+            xTaskNotifyGiveIndexed(pTaskToNotifykHandle,0);
             HAL_ADC_StartDMA(DMA1_CH1,getADC1Buffer(),ADC1_CHANNELS * ADC_FRAME_SIZE);
             break;
         case  STATE_RUN:
@@ -235,7 +237,7 @@ void vInputsTask( void * argument )
                 }
                 HAL_ADC_StartDMA(DMA1_CH1,getADC1Buffer(),ADC1_CHANNELS * ADC_FRAME_SIZE);
             }
-            vDinDoutProcess();
+          /*  vDinDoutProcess();
             uint8_t din_data;
             //Обработка дискрентого входа датчика давления масла
             if ( xGetDIN(INPUT_3,&din_data) == DIN_CHANGE )
@@ -269,7 +271,7 @@ void vInputsTask( void * argument )
             {
                OD_Ain_flag = RESET;
                OD_requestTPDO(OD_AIN_flagsPDO,1);
-            }
+            }*/
             break;
 
     }

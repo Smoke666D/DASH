@@ -15,7 +15,7 @@
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2024-03-19" fileModificationTime="22:09:56.8184808+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2024-05-29" fileModificationTime="18:29:34.3070313+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <q1:DeviceIdentity>
         <q1:vendorName>SIDER</q1:vendorName>
         <q1:vendorID>2</q1:vendorID>
@@ -172,7 +172,7 @@
             <UINT />
           </q1:array>
           <q1:array name="BAR SETUP REGISTER" uniqueID="UID_ARR_2019">
-            <q1:subrange lowerLimit="0" upperLimit="6" />
+            <q1:subrange lowerLimit="0" upperLimit="7" />
             <UINT />
           </q1:array>
           <q1:array name="MENU MAP REGISTER" uniqueID="UID_ARR_201A">
@@ -3263,7 +3263,7 @@ bit 0-31: Manufacturer specific</description>
           <q1:parameter uniqueID="UID_SUB_201900">
             <label lang="en">Highest sub-index supported</label>
             <USINT />
-            <q1:defaultValue value="0x06" />
+            <q1:defaultValue value="0x07" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_201901" access="readWrite">
             <label lang="en">RGB1 GREEN High</label>
@@ -3322,6 +3322,17 @@ bit 0-31: Manufacturer specific</description>
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_201906" access="readWrite">
             <label lang="en">SCALE Low</label>
+            <UINT />
+            <q1:defaultValue value="0xFFFF" />
+            <q1:allowedValues>
+              <q1:range>
+                <minValue value="0x00" />
+                <maxValue value="0xFFFF" />
+              </q1:range>
+            </q1:allowedValues>
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_201907" access="readWrite">
+            <label lang="en">BAR_MODE</label>
             <UINT />
             <q1:defaultValue value="0xFFFF" />
             <q1:allowedValues>
@@ -4517,7 +4528,7 @@ Thride byte - RGB WHITE NUMBER</description>
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2024-03-19" fileModificationTime="22:09:56.8184808+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2024-05-29" fileModificationTime="18:29:34.3070313+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <ApplicationLayers>
         <q2:CANopenObjectList>
           <CANopenObject index="1000" name="Device type" objectType="7" PDOmapping="no" uniqueIDRef="UID_OBJ_1000" />
@@ -4950,7 +4961,7 @@ Thride byte - RGB WHITE NUMBER</description>
             <CANopenSubObject subIndex="05" name="RGB1 BLUE High" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201605" />
             <CANopenSubObject subIndex="06" name="RGB1 BLUE Low" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201606" />
           </CANopenObject>
-          <CANopenObject index="2019" name="BAR SETUP REGISTER" objectType="8" uniqueIDRef="UID_OBJ_2019" subNumber="7">
+          <CANopenObject index="2019" name="BAR SETUP REGISTER" objectType="8" uniqueIDRef="UID_OBJ_2019" subNumber="8">
             <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201900" />
             <CANopenSubObject subIndex="01" name="RGB1 GREEN High" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201901" />
             <CANopenSubObject subIndex="02" name="RGB1 GREEN Low" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201902" />
@@ -4958,6 +4969,7 @@ Thride byte - RGB WHITE NUMBER</description>
             <CANopenSubObject subIndex="04" name="RGB1 RED Low" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201904" />
             <CANopenSubObject subIndex="05" name="SCALE High" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201905" />
             <CANopenSubObject subIndex="06" name="SCALE Low" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201906" />
+            <CANopenSubObject subIndex="07" name="BAR_MODE" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201907" />
           </CANopenObject>
           <CANopenObject index="201A" name="MENU MAP REGISTER" objectType="8" uniqueIDRef="UID_OBJ_201A" subNumber="11">
             <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201A00" />

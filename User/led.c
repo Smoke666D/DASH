@@ -12,8 +12,8 @@
 #include "hal_spi.h"
 #include "hal_gpio.h"
 
-/*                              0     1    2    3    4   5    6    7    8   9*/
-const u8 DigitMask[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6E,0x7D,0x07,0x3F,0x6F};
+/*                        0     1    2    3    4   5    6    7    8   9*/
+const u8 DigitMask[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6E,0x7D,0x07,0x7F,0x6F};
 static const u16 Brigth[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,34,55,89,144,233,256,610,PWM_TIM_PERIOD};
 static u8 LED_CHANELL_BRIGTH[2];
 static uint16_t SPI1_DATA[SPI1_CHIP_COUNT];
@@ -21,13 +21,29 @@ static uint16_t SPI2_DATA[SPI2_CHIP_COUNT];
 
 
 
-void SetBarState( u8 start, u8 count, LED_COLOR_t color)
+void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r )
 {
-    u8 offest = (color == GREEN_COLOR) ? 0 : 1;
-    if (count > 0)
-       SPI1_DATA[offest] = (0xFFFF << 16-count) >> (start - 1);
-   else
-       SPI1_DATA[offest] = 0x0000;
+   u32 bar_led_buffer=0;
+   u32 maskr= 0x01;
+   u32 maskg =0x02;
+
+   maskr = maskr<<(start_r*2);
+   maskg = maskg<<(start_g*2);
+   for (u8 i =0;i<count_g;i++)
+   {
+      bar_led_buffer|= maskg;
+      maskg = maskg<<2;
+   }
+   SPI1_DATA[ 3] = (u16)(bar_led_buffer & 0xFFFF);
+   SPI1_DATA[ 4] = (u16)(bar_led_buffer>>16 & 0xFFFF);
+   bar_led_buffer = 0;
+   for (u8 i =0;i< count_r;i++)
+   {
+        bar_led_buffer|= maskr;
+        maskr = maskr<<2;
+   }
+   SPI1_DATA[ 3] |= (u16)(bar_led_buffer & 0xFFFF);
+   SPI1_DATA[ 4] |= (u16)(bar_led_buffer>>16 & 0xFFFF);
    return;
 }
 
@@ -50,14 +66,66 @@ void vSetInitBrigth(BRIGTH_CHANNEL_t ch, u8 brigth)
 
 void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state)
 {
-   u8 offset = (color == BLUE_COLOR) ? 2 : ( (color==GREEN_COLOR) ? 3 : 4 );
+   u8 offset;
+   u8 step;
+   switch (number)
+   {
+       case 0:
+       case 1:
+           offset   = 2;
+           step     = number*3;
+           break;
+       case 2:
+       case 3:
+           offset  = 1;
+           step =   (number-2)*3;
+           break;
+       case 4:
+       case 5:
+           offset   = 0;
+           step     = (number-4)*3;
+           break;
+       case 6:
+           offset   = 2;
+           step     = 9;
+           break;
+       case 7:
+           offset   = 2;
+           step     = 6;
+           break;
+       case 8:
+           offset   = 1;
+           step     = 13;
+           break;
+       case 9:
+           offset   = 1;
+           step     = 10;
+           break;
+       case 10:
+           offset   = 0;
+           step  =   12;
+           break;
+       case 11:
+           offset   = 0;
+           step     = 9;
+           break;
+       case 12:
+           offset = 2;
+           step = 12;
+           break;
+       case 13:
+           offset = 0;
+           step =   6;
+           break;
+   }
+   u16 mask = (color == BLUE_COLOR) ? 0x04 : ( (color==GREEN_COLOR) ? 0x02 : 0x01 );
    if ( state == STATE_ON )
    {
-         SPI1_DATA[offset] |= 0x01 >> (number -1);
+         SPI1_DATA[offset]   |= mask << step;
    }
    else
    {
-         SPI1_DATA[offset] &= ~(0x01 >> (number -1));
+         SPI1_DATA[offset] &= ~(mask << step );
    }
 }
 /*
@@ -69,23 +137,23 @@ void SetSegDirect( u8 number, u8 mask)
     switch (number)
     {
            case 0:
-               SPI2_DATA[3] &= 0xFFFC;
-               SPI2_DATA[3] |= (mask & 0x03);
-               SPI2_DATA[2] &= 0x07FF;
-               SPI2_DATA[2] |= ((u16)(mask & 0xF1)<<9);
+               SPI2_DATA[0] &= 0xFFFC;
+               SPI2_DATA[0] |= mask>>5;
+               SPI2_DATA[1] &= 0x07FF;
+               SPI2_DATA[1] |= (mask)<<11;
                break;
            case 1:
-               SPI2_DATA[2] &= 0xFC07;
-               SPI2_DATA[2] |= (mask << 3 );
+               SPI2_DATA[1] &= 0xFC03;
+               SPI2_DATA[1] |= (mask << 3 );
                break;
            case 2:
+
+               SPI2_DATA[1] &= 0xFFF8;
+               SPI2_DATA[1] |= (mask >> 4);
+               SPI2_DATA[2] &= 0x0FFF;
+               SPI2_DATA[2] |= (mask <<12);
                break;
-               SPI2_DATA[2] &= 0xFFF8;
-               SPI2_DATA[2] |= (mask & 0x07);
-               SPI2_DATA[1] &= 0x0FFF;
-               SPI2_DATA[1] |= ((u16)(mask & 0xF1)<<12);
-               break;
-           case 3:
+          /* case 3:
                SPI2_DATA[1] &= 0xF01F;
                SPI2_DATA[1] |= (mask << 5);
                break;
@@ -101,7 +169,7 @@ void SetSegDirect( u8 number, u8 mask)
                break;
            case 6:
                SPI2_DATA[0] &= 0xFFFB;
-               SPI2_DATA[0] |= ( mask & 0x0003 );
+               SPI2_DATA[0] |= ( mask & 0x0003 );*/
     }
 }
 
@@ -119,48 +187,52 @@ void SetSEG( u16 mask, u32 value)
   u32 val = value;
   u8 dc = 2,mask_count = 2;
 
-  if (val%1000000)
+  if (val/1000000)
   {
       dc = 7;
       mask_count = 0;
   }
   else
-      if (val%100000)
+      if (val/100000)
       {
           mask_count = 1;
           dc = 6;
       }
        else
-          if (val%10000)
+          if (val/10000)
               dc = 5;
           else
-              if (val%1000)
+              if (val/1000)
                 dc = 4;
               else
-               if (val%100)
+               if (val/100)
                    dc =3;
 
   for (u8 i = 0;i<dc;i++)
   {
      u8 digit = val % 10;
-     SPI2_DATA[2] |= 0x0400; //Ставим точку
+     SPI2_DATA[1] |= 0x0400; //Ставим точку
      SetSegDirect(i,DigitMask[digit]);
      val = val/10;
   }
-  switch(mask_count)
+  for (u8 i=(dc);i<7;i++)
+  {
+      SetSegDirect(i,0);
+  }
+  /*switch(mask_count)
   {
       case 1:
           break;
-          SPI2_DATA[0] &= 0xFF80;
-          SPI2_DATA[0] |= (mask & 0x007F);
+          SPI2_DATA[3] &= 0xFF80;
+          SPI2_DATA[3] |= (mask & 0x007F);
           break;
       case 2:
-          SPI2_DATA[0] &= 0xC000;
-          SPI2_DATA[0] |=  ( (mask & 0x7F) | (mask & 0x7F00)>> 6);
+          SPI2_DATA[3] &= 0xC000;
+          SPI2_DATA[3] |=  ( (mask & 0x7F) | (mask & 0x7F00)>> 6);
           break;
       default:
           break;
-  }
+  }*/
 
 }
 
@@ -169,7 +241,7 @@ void SetSEG( u16 mask, u32 value)
 void SetBigSeg( u16 mask)
 {
     SPI2_DATA[0] &= 0x0003;
-    SPI2_DATA[0] = (mask <<2);
+    SPI2_DATA[0] |= (mask <<2);
 
 }
 
@@ -208,8 +280,8 @@ void SPI2_DMA_Callback( void )
  */
 void vLedDriverStart(void)
 {
-	//HAL_DMAInitIT(DMA1_Channel5,MTOP, SPI2_CHIP_COUNT  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,1,4,&SPI2_DMA_Callback);
-	//HAL_DMAInitIT(DMA1_Channel3,MTOP, SPI1_CHIP_COUNT  ,(u32)&SPI1->DATAR, (u32)SPI1_DATA,0,1,4,&SPI1_DMA_Callback);
+	HAL_DMAInitIT(DMA1_Channel5,MTOP, DMA_HWORD  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,1,2,&SPI2_DMA_Callback);
+	HAL_DMAInitIT(DMA1_Channel3,MTOP, DMA_HWORD  ,(u32)&SPI1->DATAR, (u32)SPI1_DATA,0,1,2,&SPI1_DMA_Callback);
 	//HAL_TiemrEneblae(TIMER3);
 	TIM_Cmd( PWM_TIMER_1, ENABLE );
 	vSetBrigth( RGB_CHANNEL,    6 );//LED_CHANELL_BRIGTH[0]);
@@ -224,32 +296,12 @@ void vLedDriverStart(void)
 //uint16_t data1 = 0x1;
 void vLedProcess( void )
 {
-   int i =0;
    HAL_ResetBit(  SPI1_Port , SPI1_NSS_Pin);
    HAL_ResetBit(  SPI2_Port , SPI2_NSS_Pin);
-    while (i<SPI2_CHIP_COUNT )
-    {
-        if ( SPI_I2S_GetFlagStatus( SPI2, SPI_I2S_FLAG_TXE ) != RESET )
-        {
-            SPI_I2S_SendData( SPI2, SPI2_DATA[i]);
-            i++;
-        }
-    }
-    i=0;
-    while (i<SPI1_CHIP_COUNT)
-    {
-       if( SPI_I2S_GetFlagStatus( SPI1, SPI_I2S_FLAG_TXE ) != RESET )
-       {
-           SPI_I2S_SendData( SPI1, SPI1_DATA[i]);
-           i++;
-       }
-    }
-    HAL_SetBit(  SPI1_Port , SPI1_NSS_Pin);
-   HAL_SetBit(  SPI2_Port , SPI2_NSS_Pin);
-  // HAL_DMA_SetCounter(DMA1_CH5, SPI2_CHIP_COUNT);
-  // HAL_DMA_Enable(DMA1_CH5);
-  // HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
-  // HAL_DMA_Enable(DMA1_CH3);
+   HAL_DMA_SetCounter(DMA1_CH5, SPI2_CHIP_COUNT);
+   HAL_DMA_Enable(DMA1_CH5);
+   HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
+   HAL_DMA_Enable(DMA1_CH3);
    return;
 }
 

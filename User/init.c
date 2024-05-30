@@ -57,7 +57,7 @@ void vInit_DeviceConfig( void )
     HAL_SPI_InitDMA(SPI1, SPI_16bit ,SPI_SOFT_NSS);
 	HAL_SPI_InitDMA(SPI2, SPI_16bit ,SPI_SOFT_NSS);
 
-//	HAL_RTC_IT_Init(&vIncrementSystemCounters);
+	HAL_RTC_IT_Init(&vIncrementSystemCounters,1,5);
 	HAL_TIMER_InitIt( TIMER4, 1000000, 1000, &vLedProcess );
 	HAL_TIMER_PWMTimersInit(TIMER3 , 100000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
 	//HAL_InitCaptureDMATimer( TIMER1 ,  1000, 60000, TIM_CHANNEL_4);

@@ -248,21 +248,151 @@ void vRGBOff( u8 ch)
 void vGetEdgeData(u16 addr,  u16 *high, u16 * low)
 {
     *high = getReg16(addr );
-    *low  = getReg16(addr+1 );
+    *low  = getReg16(addr + 2 );
+}
+
+void vRGBMode( u8 i,  u16 bd)
+{
+    u16 low_edge, high_edge;
+    LED_STATE_t state;
+    u16 offset = RGB1_VALUE_GREEN_HIGH + i*6*2;
+    vGetEdgeData( offset, &high_edge,&low_edge);
+    if ((low_edge ==0) && (high_edge ==0)) state = STATE_OFF;
+    else
+    if (low_edge <= high_edge)   //§°§Ò§í§é§ß§í§Û §â§Ö§Ø§Ú§Þ, §á§â§à§Ó§Ö§â§ñ§Ö§Þ §ß§Ñ §á§à§á§Ñ§Õ§Ñ§ß§Ú§Ö §Ó §à§Ü§ß§à.
+    {
+         state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
+    }
+    else  // §Ú§ß§Ó§Ö§ã§ß§í§Û §â§Ö§Ø§Ú§Þ, §á§à§á§Ñ§Õ§Ñ§Ö§Þ §ß§Ñ §ß§Ö§á§à§á§Ñ§Õ§Ñ§ß§Ú§Ö §Ó §à§Ü§ß§à
+    {
+         state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
+    }
+    SetRGB( i, GREEN_COLOR, state);
+    vGetEdgeData( offset +4 , &high_edge,&low_edge);
+    if ((low_edge ==0) && (high_edge ==0)) state = STATE_OFF;
+    else
+    if (low_edge <= high_edge)   //§°§Ò§í§é§ß§í§Û §â§Ö§Ø§Ú§Þ, §á§â§à§Ó§Ö§â§ñ§Ö§Þ §ß§Ñ §á§à§á§Ñ§Õ§Ñ§ß§Ú§Ö §Ó §à§Ü§ß§à.
+    {
+         state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
+    }
+    else  // §Ú§ß§Ó§Ö§ã§ß§í§Û §â§Ö§Ø§Ú§Þ, §á§à§á§Ñ§Õ§Ñ§Ö§Þ §ß§Ñ §ß§Ö§á§à§á§Ñ§Õ§Ñ§ß§Ú§Ö §Ó §à§Ü§ß§à
+    {
+        state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
+    }
+    SetRGB( i, RED_COLOR, state);
+    vGetEdgeData( offset +8, &high_edge,&low_edge);
+    if ((low_edge ==0) && (high_edge ==0)) state = STATE_OFF;
+    else
+    if (low_edge <= high_edge)   //§°§Ò§í§é§ß§í§Û §â§Ö§Ø§Ú§Þ, §á§â§à§Ó§Ö§â§ñ§Ö§Þ §ß§Ñ §á§à§á§Ñ§Õ§Ñ§ß§Ú§Ö §Ó §à§Ü§ß§à.
+    {
+        state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
+    }
+    else  // §Ú§ß§Ó§Ö§ã§ß§í§Û §â§Ö§Ø§Ú§Þ, §á§à§á§Ñ§Õ§Ñ§Ö§Þ §ß§Ñ §ß§Ö§á§à§á§Ñ§Õ§Ñ§ß§Ú§Ö §Ó §à§Ü§ß§à
+    {
+        state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
+    }
+    SetRGB( i, BLUE_COLOR, state);
+}
+
+
+void vBarColorMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge_r, u8 * startG, u8 * countG, u8 * startR, u8 * countR, float delta, u16 bd )
+{
+    u16 max_value,min_value;
+    vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
+    delta = (float)(max_value - min_value)/16.0;
+    if (bd >= low_edge_r)
+    {
+        *startR =(u8)(( float)(low_edge_r - min_value)/delta);
+        u16 val_delta = (bd<= high_edge_r) ? (bd - low_edge_r ) : (high_edge_r - low_edge_r );
+        *countR = (u8)(( float)(val_delta )/delta );
+    }
+    if (bd >= low_edge_g)
+    {
+         *startG =(u8)(( float)(low_edge_g - min_value)/delta);
+         u16 val_delta = (bd<= high_edge_g) ? (bd - low_edge_g ) : (high_edge_g - low_edge_g );
+         *countG = (u8)(( float)(val_delta )/delta) ;
+     }
+}
+
+/*
+ *  §²§Ö§Ø§Ú§Þ §Ò§Ñ§â§Ñ - §à§Ü§à§ß§ß§í§Û, §à§Õ§ß§à§è§Ó§Ö§ä§ß§í§Û
+ */
+void vBarWindowMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge_r, u8 * startG, u8 * countG, u8 * startR, u8 * countR, u8 bar_count, u16 bd )
+{
+    if (low_edge_g  >  high_edge_g)
+    {
+          if (  ((  bd < low_edge_g) && (bd > high_edge_r) )  || (( bd < high_edge_g ) && ( bd > low_edge_r  )) )
+          {
+               *countR = bar_count;
+               *countG = bar_count;
+          }
+          else
+          if ((  bd < high_edge_r) || ( bd > low_edge_r ) )   *countR = bar_count;
+          else                                                *countG = bar_count;
+
+    }
+    else
+    {
+          if (  ((  bd > low_edge_r) && (bd < high_edge_g) )  || (( bd < high_edge_r ) && ( bd >low_edge_g  )) )
+          {
+                *countR = bar_count;
+                *countG = bar_count;
+          }
+          else
+          if ((  bd < high_edge_g) && ( bd > low_edge_g ) )  *countG = bar_count;
+          else                                               *countR = bar_count;
+     }
+}
+
+
+
+/*
+ *  §²§Ö§Ø§Ú§Þ §Ò§Ñ§â§Ñ - §à§Ü§à§ß§ß§í§Û, §à§Õ§ß§à§è§Ó§Ö§ä§ß§í§Û
+ */
+void vBarMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge_r,  u8 * countG,  u8 * countR, u8 bar_count, u16 bd )
+{
+    u16 max_value,min_value;
+    vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
+    if ( high_edge_g > high_edge_r)
+    {
+         if ( ( low_edge_g > high_edge_r) || ( ( high_edge_r >= low_edge_g ) && ( (  bd < low_edge_g)  || ( bd > high_edge_r ))) )
+         {
+              if (bd > high_edge_r)  *countG = bar_count; else  *countR = bar_count;
+         }
+         else
+         {
+              *countG = bar_count;
+              *countR = bar_count;
+         }
+     }
+     else
+     {
+         if ( ( low_edge_r > high_edge_g) || ( ( high_edge_g >= low_edge_r ) && ( (  bd < low_edge_r)  || ( bd > high_edge_g ))) )
+         {
+             if (bd > high_edge_g)  *countR = bar_count; else *countG = bar_count;
+         }
+         else
+         {
+             *countG = bar_count;
+             *countR = bar_count;
+        }
+     }
 }
 /*
  *
  */
 void vRedrawTask( void * argument )
 {
-    LED_STATE_t state;
+
     u32 buffer32;
-    u16 low_edge, high_edge;
+    u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r;
+
     u8 brakecode_no_valid = 0;
     u8 data;
+    u16 bd;
    /* KeyEvent TempEvent;
 
-    u16 bd;
+
     vDashDrawInit();
     xEventGroupWaitBits(xGetSystemEventHeandler(),DATA_MODEL_READY, pdTRUE, pdFALSE, portMAX_DELAY );*/
     while(1)
@@ -292,7 +422,7 @@ void vRedrawTask( void * argument )
         //§±§â§à§Ó§Ö§â§ñ§Ö§Þ, §ß§Ö §ß§å§Ø§ß§à §Ý§Ú §Ó§Ö§â§ß§å§ä§î§ã§ñ §Ó §Õ§à§Þ§Ñ§ê§ß§Ö§Ö §Þ§Ö§ß§ð
         MenuBackHomeCheck(10);
         //§±§â§à§Ó§Ö§â§ñ§Ö§Þ §â§Ö§Ô§Ú§ã§ä§â §à§ê§Ú§Ò§à§Ü
-        SetErrorRegiter(ErrorRegister);
+        SetErrorRegiter(ErrorRegister);*/
         //§°§ä§â§Ú§ã§à§Ó§í§Ó§Ñ§Ö§Þ RGB §á§Ú§Ü§ä§à§â§Ô§â§Ñ§Þ§Þ§í
         for (u8 i = 0;i < RGB_DIOD_COUNT; i++)
         {
@@ -304,21 +434,12 @@ void vRedrawTask( void * argument )
             else
             {
                 bd = getODValue(data);
-                u16 offset = RGB1_VALUE_GREEN_HIGH + i*6;
-                vGetEdgeData( offset, &high_edge,&low_edge);
-                state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
-                SetRGB( i, GREEN_COLOR, state);
-                vGetEdgeData( offset +2 , &high_edge,&low_edge);
-                state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
-                SetRGB( i, RED_COLOR, state);
-                vGetEdgeData( offset +4, &high_edge,&low_edge);
-                state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
-                SetRGB( i, BLUE_COLOR, state);
-            }
 
+                vRGBMode( i,  bd);
+            }
         }
         //§£§í§Ó§à§Õ §Õ§Ñ§ß§ß§í§ç §Ó §Ò§Ñ§â
-        data =  getReg8( BARMAP);
+        data =  getReg8(BARMAP);
         u8 startR = 0;
         u8 countR = 0;
         u8 startG = 0;
@@ -327,31 +448,37 @@ void vRedrawTask( void * argument )
         {
             bd = getODValue(data);
             u16 max_value,min_value;
-            vGetEdgeData( BAR_VALUE_HIGH, &high_edge,&low_edge);
-            float delta = (max_value - min_value)/16;
-            vGetEdgeData( BAR_VALUE_RED_HIGH, &high_edge,&low_edge);
-            if (bd >= low_edge)
+            vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
+            vGetEdgeData( BAR_VALUE_RED_HIGH, &high_edge_r,&low_edge_r);
+            vGetEdgeData( BAR_VALUE_GREEN_HIGH, &high_edge_g,&low_edge_g);
+            float delta = (float)(max_value - min_value)/16.0;
+            if ( getReg8(BAR_MODE) == 0 )
             {
-                startR =(u8)( float)(low_edge - min_value)/delta;
-                u16 val_delta = (bd<= high_edge) ? (bd - low_edge ) : (high_edge - low_edge );
-                countR = (u8)( float)(val_delta )/delta ;
+                if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
+                {
+                    vBarColorMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, delta,  bd );
+                }
             }
-            vGetEdgeData( BAR_VALUE_GREEN_HIGH, &high_edge,&low_edge);
-            if (bd >= low_edge)
+            else
             {
-                 startG =(u8)( float)(low_edge - min_value)/delta;
-                 u16 val_delta = (bd<= high_edge) ? (bd - low_edge ) : (high_edge - low_edge );
-                 countG = (u8)( float)(val_delta )/delta ;
-             }
+                u8 bar_count = (u8)(( float)(bd /delta));
+                if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
+                {
+                    vBarWindowMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, bar_count,  bd );
+                }
+                else
+                {
+                    vBarMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &countG,  &countR, bar_count,  bd );
+                }
+            }
         }
-        SetBarState(  startR, countR, RED_COLOR);
-        SetBarState(  startG, countG, GREEN_COLOR);
+        SetBarState( startG, countG, startR, countR );
         //§¬§à§ß§Ö§è §Ó§í§Ó§à§Õ§Ñ §Õ§Ñ§ß§ß§í§ç §Ó §Ò§Ñ§â
 
         //§°§ä§à§Ò§â§Ñ§Ø§Ö§ß§Ú§Ö §Þ§Ö§ß§ð
-        buffer32 = uGetCurrMenu();
+      //  buffer32 = uGetCurrMenu();
        //
-        if ((buffer32 & 0xFF) == chErrorRegister )
+       /* if ((buffer32 & 0xFF) == chErrorRegister )
         {   u8 code = getCurrErrorCode();
             SetSegDirect(6,0x79);
             SetSegDirect(5,0x58);
@@ -366,10 +493,11 @@ void vRedrawTask( void * argument )
         {
             SetSEG( (u16)((buffer32 >>8) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF))  );
         }*/
+        SetSEG( 0x4444,  getODValue(27)  );
         //§°§ä§à§Ò§â§Ñ§Ø§Ö§ß§Ú§Ö §Ò§à§Ý§î§ê§à§Ô§à §ã§Ö§Ô§Þ§Ö§ß§Ö§ä§Ñ
         data = getReg16(BIG_SEG);
         u16 seg_view = 0;
-       if (data!=0)
+        if (data!=0)
         {
             seg_view = getReg16(BIG_SEGVAL1 + (--data)*2 );
         }

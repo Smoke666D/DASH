@@ -28,7 +28,7 @@ void HAL_SPI_InitDMA(HAL_SPI_t spi , SPI_DATA_Size_t data_size , SPI_NSS_t nss)
     SPI_InitStructure.SPI_CRCPolynomial = 0;
     SPI_Init(spi, &SPI_InitStructure);
     //SPI_SSOutputCmd(spi, ENABLE);
-  //  SPI_I2S_DMACmd(spi, SPI_I2S_DMAReq_Tx, ENABLE);
+    SPI_I2S_DMACmd(spi, SPI_I2S_DMAReq_Tx, ENABLE);
     SPI_Cmd(spi, ENABLE);
 #endif
 

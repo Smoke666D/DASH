@@ -11,7 +11,7 @@
 #include "main.h"
 
 
-#define VALID_CODE      0x54
+#define VALID_CODE      0x74
 #define VALID_CODE_ADDRES     0
 
 #define RGB_BRIGTH_ADR         (VALID_CODE_ADDRES +1)
@@ -21,7 +21,8 @@
 #define HOUR_COUNTER_ADR       (BITRATE_ADR +1 )
 #define ODOMETR_ADR            (HOUR_COUNTER_ADR + 4 )
 #define ODOMETR_MAP            (ODOMETR_ADR  + 4 )
-#define BAR_VALUE_HIGH         (ODOMETR_MAP  + 1 )
+#define BAR_MODE               (ODOMETR_MAP  + 1 )
+#define BAR_VALUE_HIGH         (BAR_MODE  + 1 )
 #define BAR_VALUE_LOW          (BAR_VALUE_HIGH  + 2 )
 #define BAR_VALUE_RED_HIGH     (BAR_VALUE_LOW  + 2 )
 #define BAR_VALUE_RED_LOW      (BAR_VALUE_RED_HIGH + 2 )
@@ -181,6 +182,10 @@
 #define TOTAL_REGISTER_COUNT  (V17 +2 )
 
 void DataModel_Init();
+void setReg32( u16 reg_adress, u32 data);
+void setReg16( u16 reg_adress, u16 data);
+
+void setReg8( u16 reg_adress, u8 data);
 u32 getReg32(u16 reg_adress );
 u16 setReg(u16 reg_adress, void * data, u8 len);
 u16 getReg16(u16 reg_adress );

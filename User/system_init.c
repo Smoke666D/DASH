@@ -7,6 +7,7 @@
 #include "system_init.h"
 #include "hal_wdt.h"
 #include "inputs.h"
+#include "portmacro.h"
 
 
 
@@ -83,9 +84,9 @@ void vSYStaskInit ( void )
                      (StackType_t * const )CanOpnePeriodicTaskBuffer, &CanOpnePeriodicTaskControlBlock );
   (* xCanOpenProcessTaskHandle())
   = xTaskCreateStatic( vCanOpenProcess, "CanOpenProcessTask", CAN_OPEN_STK_SIZE , ( void * ) 1, CAN_OPEN_TASK_PRIO ,
-  (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );
+  (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );*/
   (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, 3, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
- */ DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, 3, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
+  DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, 3, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
   return;
 }
 
@@ -108,6 +109,7 @@ void StartDefaultTask(void *argument)
 
     uint32_t ulNotifiedValue;
     uint16_t dd = 0;
+    u16 i= 0;
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
 
@@ -120,23 +122,62 @@ void StartDefaultTask(void *argument)
       {
           case STATE_INIT:
               DataModel_Init();
+               setReg16(BAR_VALUE_HIGH        ,360);
+               setReg16(BAR_VALUE_LOW         ,0);
+               setReg16(BAR_VALUE_RED_HIGH    ,150);
+               setReg16(BAR_VALUE_RED_LOW     ,230);
+               setReg16(BAR_VALUE_GREEN_HIGH  ,270);
+               setReg16(BAR_VALUE_GREEN_LOW   ,110);
+               setReg8(BAR_MODE   ,1);
+
+               setReg16(RGB5_VALUE_GREEN_HIGH       ,190);
+               setReg16(RGB5_VALUE_GREEN_LOW        ,110);
+               setReg16(RGB5_VALUE_RED_HIGH        ,100);
+               setReg16(RGB5_VALUE_RED_LOW         ,200);
+               setReg16(RGB5_VALUE_BLUE_HIGH       ,0);
+               setReg16(RGB5_VALUE_BLUE_LOW        ,0);
+               setReg8(RGBMAP5   ,1);
+
+               setReg16(RGB9_VALUE_GREEN_HIGH       ,190);
+               setReg16(RGB9_VALUE_GREEN_LOW        ,110);
+               setReg16(RGB9_VALUE_RED_HIGH        ,100);
+               setReg16(RGB9_VALUE_RED_LOW         ,200);
+               setReg16(RGB9_VALUE_BLUE_HIGH       ,0);
+               setReg16(RGB9_VALUE_BLUE_LOW        ,0);
+               setReg8(RGBMAP9   ,1);
+
+
+               setReg16(RGB14_VALUE_GREEN_HIGH       ,190);
+               setReg16(RGB14_VALUE_GREEN_LOW        ,110);
+               setReg16(RGB14_VALUE_RED_HIGH        ,100);
+                              setReg16(RGB14_VALUE_RED_LOW         ,200);
+                              setReg16(RGB14_VALUE_BLUE_HIGH       ,0);
+                              setReg16(RGB14_VALUE_BLUE_LOW        ,0);
+                              setReg8(RGBMAP14   ,1);
+
+
+               setReg8(RGBMAP13, 0);
+             //  setReg8(RGBMAP14, 0);
            //   xTaskNotifyWait(0, pdTRUE, &ulNotifiedValue,portMAX_DELAY);
               vLedDriverStart();
-           //   InputsNotifyTaskToInit();
+              InputsNotifyTaskToInit();
               DeafaultTaskFSM = STATE_WHAIT_TO_RAEDY;
               break;
           case STATE_WHAIT_TO_RAEDY:
-             //xTaskNotifyWait(0, 0, &ulNotifiedValue,portMAX_DELAY);
-             // if ( ulNotifiedValue == 2)
-              //{
-              //    ulTaskNotifyValueClearIndexed(NULL, 0, 0xFFFF);
+              xTaskNotifyWait(0, 0, &ulNotifiedValue,portMAX_DELAY);
+              if ( ulNotifiedValue == 1)
+              {
+                  ulTaskNotifyValueClearIndexed(0, 0, 0xFFFF);
                   DeafaultTaskFSM = STATE_RUN;
-              //}
+              }
               break;
           case STATE_RUN:
               setReg(BIG_SEG,&dd,2);
-              vTaskDelay(1000);
+              setReg8( V1, i);
+              vTaskDelay(500);
               if (++dd>9) dd = 0;
+              i= i+10;
+              if (i >=370) i = 0;
 
               HAL_WDTReset();
               printf("We alive!!\r\n");

@@ -10,6 +10,8 @@
 /*----------------------- Includes -------------------------------------*/
 #include "main.h"
 #include "FreeRTOS.h"
+#include "queue.h"
+#include "list.h"
 #include "task.h"
 #include "semphr.h"
 #include "event_groups.h"

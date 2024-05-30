@@ -105,10 +105,10 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
 	 ADC_DeInit(adc);
 	 adcConfig.ADC_Mode = ADC_Mode_Independent;
 	 adcConfig.ADC_ScanConvMode =ENABLE;
-	 adcConfig.ADC_ContinuousConvMode = DISABLE;
+	 adcConfig.ADC_ContinuousConvMode = ENABLE;
 	 adcConfig.ADC_ExternalTrigConv =ADC_ExternalTrigConv_None;
 	 adcConfig.ADC_DataAlign = ADC_DataAlign_Right;
-	 adcConfig.ADC_NbrOfChannel = ADC_CHANNEL;
+	 adcConfig.ADC_NbrOfChannel = channel_count;
 	 adcConfig.ADC_OutputBuffer = ADC_OutputBuffer_Disable;
 	 adcConfig.ADC_Pga = ADC_Pga_1;
 	 ADC_Init(adc, &adcConfig);

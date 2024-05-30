@@ -12,8 +12,8 @@
 	#include "apm32f4xx_pmu.h"
 	#include "apm32f4xx_rcm.h"
 #endif
-#if MCU == CH32
-
+#if MCU == CH32V2
+void RTC_IRQHandler ( void )  __attribute__((interrupt()));
 #endif
 
 //Callbacl функция для вызова из секундрого прерывания RTC
@@ -38,7 +38,7 @@ void vRTCInit()
 #endif
 }
 
-void HAL_RTC_IT_Init(  void (* rtc_it_callback) ( void ))
+void HAL_RTC_IT_Init(  void (* rtc_it_callback) ( void ), uint8_t prior, uint8_t subprior )
 {
 #if MCU == CH32V2
 	  NVIC_InitTypeDef      NVIC_InitStructure = {0};
@@ -69,8 +69,8 @@ void HAL_RTC_IT_Init(  void (* rtc_it_callback) ( void ))
 	  RTC_ExitConfigMode();
 
 	  NVIC_InitStructure.NVIC_IRQChannel =  RTC_IRQn;
-	  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 5;
-	  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
+	  NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
 	  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	  NVIC_Init(&NVIC_InitStructure);
 #endif
