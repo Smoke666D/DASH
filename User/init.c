@@ -15,34 +15,6 @@ static void MX_GPIO_Init( void );
 
 
 
-static uint8_t STATUS[KEY_COUNT];
-static uint8_t  COUNTERS[KEY_COUNT];
-
-
-FlagStatus fPortState (uint8_t i)
-{
-
-    return GPIO_ReadInputDataBit( KL_Port, KL_Pin );
-}
-/*
- *
- *
- */
-void vInitKeybord()
-{
-    KeybaordStruct_t KeyboardInit;
-    KeyboardInit.KEYBOARD_COUNT    = KEY_COUNT;
-    KeyboardInit.COUNTERS          = COUNTERS;
-    KeyboardInit.STATUS            = STATUS;
-    KeyboardInit.REPEAT_TIME       = 1000U;
-    KeyboardInit.KEYDOWN_HOLD_TIME = 2 ;
-    KeyboardInit.KEYDOWN_DELAY     = 30;
-    KeyboardInit.KEYBOARD_PERIOD   = 10U;
-    KeyboardInit.getPortCallback = &fPortState;
-    eKeyboardInit(&KeyboardInit);
-
-}
-
 
 
 
@@ -58,14 +30,19 @@ void vInit_DeviceConfig( void )
 	HAL_SPI_InitDMA(SPI2, SPI_16bit ,SPI_SOFT_NSS);
 
 	HAL_RTC_IT_Init(&vIncrementSystemCounters,1,5);
-	HAL_TIMER_InitIt( TIMER4, 1000000, 1000, &vLedProcess );
+	HAL_TIMER_InitIt( TIMER4, 1000000, 600, &vRGBProcess ,1,3);
+	//HAL_TIMER_InitIt( TIMER1, 100000, 1000, &vRGBProcess ,1,3);
+
+	HAL_TiemrEneblae( TIMER4);
+	//HAL_TiemrEneblae( TIMER1);
 	HAL_TIMER_PWMTimersInit(TIMER3 , 100000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
+	HAL_TiemrEneblae( TIMER3);
 	//HAL_InitCaptureDMATimer( TIMER1 ,  1000, 60000, TIM_CHANNEL_4);
 	//HAL_InitCaptureDMATimer( TIMER2 ,  1000, 60000, TIM_CHANNEL_2);
 	//I2C_DeInit(I2C1);
 	vInitEEPROM(1,5);
 	HAL_SetBit(PowerOn_Port, PowerOn_Pin);
-
+	vCanOpenInit(CAN1);;
 	return;
 }
 

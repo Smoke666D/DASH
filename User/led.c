@@ -13,12 +13,12 @@
 #include "hal_gpio.h"
 
 /*                        0     1    2    3    4   5    6    7    8   9*/
-const u8 DigitMask[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6E,0x7D,0x07,0x7F,0x6F};
+const u8 DigitMask[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
 static const u16 Brigth[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,34,55,89,144,233,256,610,PWM_TIM_PERIOD};
 static u8 LED_CHANELL_BRIGTH[2];
 static uint16_t SPI1_DATA[SPI1_CHIP_COUNT];
 static uint16_t SPI2_DATA[SPI2_CHIP_COUNT];
-
+static uint16_t SPI2_DATA_DRAW[SPI2_CHIP_COUNT];
 
 
 void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r )
@@ -147,29 +147,28 @@ void SetSegDirect( u8 number, u8 mask)
                SPI2_DATA[1] |= (mask << 3 );
                break;
            case 2:
-
                SPI2_DATA[1] &= 0xFFF8;
                SPI2_DATA[1] |= (mask >> 4);
                SPI2_DATA[2] &= 0x0FFF;
                SPI2_DATA[2] |= (mask <<12);
                break;
-          /* case 3:
-               SPI2_DATA[1] &= 0xF01F;
-               SPI2_DATA[1] |= (mask << 5);
+           case 3:
+               SPI2_DATA[2] &= 0xF01F;
+               SPI2_DATA[2] |= (mask << 5);
                break;
            case 4:
-               SPI2_DATA[1] &= 0xFFE0;
-               SPI2_DATA[1] |= (mask & 0x1F);
-               SPI2_DATA[0] &= 0x03FF;
-               SPI2_DATA[0] |= ((u16)(mask & 0x60)<<13);
+               SPI2_DATA[2] &= 0xFFE0;
+               SPI2_DATA[2] |= ((mask>>2) & 0x1F);
+               SPI2_DATA[3] &= 0x03FF;
+               SPI2_DATA[3] |= (mask <<14);
                break;
            case 5:
-               SPI2_DATA[2] &= 0xC07F;
-               SPI2_DATA[2] |= ((u16)mask << 6 );
+               SPI2_DATA[3] &= 0xC07F;
+               SPI2_DATA[3] |= ((u16)mask << 7 );
                break;
            case 6:
-               SPI2_DATA[0] &= 0xFFFB;
-               SPI2_DATA[0] |= ( mask & 0x0003 );*/
+               SPI2_DATA[3] &= 0xFF80;
+               SPI2_DATA[3] |=  mask ;
     }
 }
 
@@ -219,7 +218,7 @@ void SetSEG( u16 mask, u32 value)
   {
       SetSegDirect(i,0);
   }
-  /*switch(mask_count)
+  switch(mask_count)
   {
       case 1:
           break;
@@ -228,11 +227,11 @@ void SetSEG( u16 mask, u32 value)
           break;
       case 2:
           SPI2_DATA[3] &= 0xC000;
-          SPI2_DATA[3] |=  ( (mask & 0x7F) | (mask & 0x7F00)>> 6);
+          SPI2_DATA[3] |=  ( ((mask & 0x7F)>>7) | (mask>>8 & 0x7F));
           break;
       default:
           break;
-  }*/
+  }
 
 }
 
@@ -250,8 +249,8 @@ void SetBigSeg( u16 mask)
  */
 void vSetBrigth( BRIGTH_CHANNEL_t ch, u8 brigth)
 {
-  //  HAL_TIMER_SetPWMPulse(TIMER3, (ch == RGB_CHANNEL) ? TIM_CHANNEL_3 :  TIM_CHANNEL_4 ,Brigth[brigth]);
-   // HAL_TIMER_EnablePWMCH(TIMER3,0);
+    HAL_TIMER_SetPWMPulse(TIMER3, (ch == RGB_CHANNEL) ? TIM_CHANNEL_3 :  TIM_CHANNEL_4 , Brigth[brigth]);
+    HAL_TIMER_EnablePWMCH(TIMER3,0);
     return;
 }
 
@@ -283,12 +282,18 @@ void vLedDriverStart(void)
 	HAL_DMAInitIT(DMA1_Channel5,MTOP, DMA_HWORD  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,1,2,&SPI2_DMA_Callback);
 	HAL_DMAInitIT(DMA1_Channel3,MTOP, DMA_HWORD  ,(u32)&SPI1->DATAR, (u32)SPI1_DATA,0,1,2,&SPI1_DMA_Callback);
 	//HAL_TiemrEneblae(TIMER3);
-	TIM_Cmd( PWM_TIMER_1, ENABLE );
-	vSetBrigth( RGB_CHANNEL,    6 );//LED_CHANELL_BRIGTH[0]);
-	vSetBrigth( WHITE_CHANNEL, 6 );//LED_CHANELL_BRIGTH[1]);
+	//TIM_Cmd( PWM_TIMER_1, ENABLE );
+
+	vSetBrigth( RGB_CHANNEL,    10 );//LED_CHANELL_BRIGTH[0]);
+	vSetBrigth( WHITE_CHANNEL,  14 );//LED_CHANELL_BRIGTH[1]);
 	return;
 }
 
+
+u16 counter_R =80;
+u16 counter_G =50;
+u16 counter_B =90;
+u16 counterRGB =0;
 
 /*
  *  Функция вывода данных в SPI, вызывается по прерыванию таймра №4
@@ -296,15 +301,56 @@ void vLedDriverStart(void)
 //uint16_t data1 = 0x1;
 void vLedProcess( void )
 {
-   HAL_ResetBit(  SPI1_Port , SPI1_NSS_Pin);
-   HAL_ResetBit(  SPI2_Port , SPI2_NSS_Pin);
-   HAL_DMA_SetCounter(DMA1_CH5, SPI2_CHIP_COUNT);
-   HAL_DMA_Enable(DMA1_CH5);
-   HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
-   HAL_DMA_Enable(DMA1_CH3);
+   //if (memcmp(SPI2_DATA_DRAW,SPI2_DATA,SPI2_CHIP_COUNT) != 0)
+  // {
+     //  memcpy(SPI2_DATA_DRAW,SPI2_DATA,SPI2_CHIP_COUNT);
+       HAL_ResetBit(  SPI2_Port , SPI2_NSS_Pin);
+       HAL_DMA_SetCounter(DMA1_CH5, SPI2_CHIP_COUNT);
+       HAL_DMA_Enable(DMA1_CH5);
+   //}
+
+  // if (++counterRGB >= 100)
+  // {
+  //     counterRGB = 0;
+  // }
+ /*  if (counterRGB++ >= 2)
+   {
+       SPI1_DATA[0]&=0x6DB6;
+       SPI1_DATA[1]&=0xDBF6;
+       SPI1_DATA[2]&=0x6DB6;
+       SPI1_DATA[3]&=0xAAAA;
+       counterRGB = 0;
+       SPI1_DATA[4]&=0xAAAA;
+
+   }*/
+  /* if (counterRGB >= counter_G)
+   {
+       SPI1_DATA[0]&=
+              SPI1_DATA[1]&=
+              SPI1_DATA[2]&=
+              SPI1_DATA[3]&=
+              SPI1_DATA[4]&=
+    }
+   if (counterRGB >= counter_B)
+    {
+
+       SPI1_DATA[0]&=
+              SPI1_DATA[1]&=
+              SPI1_DATA[2]&=
+              SPI1_DATA[3]&=
+              SPI1_DATA[4]&=
+    }*/
+
+
    return;
 }
 
+void vRGBProcess()
+{
+    HAL_ResetBit(  SPI1_Port , SPI1_NSS_Pin);
+    HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
+    HAL_DMA_Enable(DMA1_CH3);
 
+}
 
 

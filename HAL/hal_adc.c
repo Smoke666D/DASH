@@ -1,7 +1,7 @@
 /*
  * hal_adc.c
  *
- *  Created on: 11 Р°РїСЂ. 2024 Рі.
+ *  Created on: 11 апр. 2024 г.
  *      Author: i.dymov
  */
 
@@ -14,6 +14,8 @@
 
 static uint8_t ADC_INIT = 0;
 
+ADC_t adcs;
+
 #if MCU == APM32
 static const  ADC_CHANNEL_T ADC_chennel_ref[]={  ADC_CHANNEL_0,  ADC_CHANNEL_1,  ADC_CHANNEL_2, ADC_CHANNEL_3, ADC_CHANNEL_4,  ADC_CHANNEL_5,  ADC_CHANNEL_6,  ADC_CHANNEL_7,  ADC_CHANNEL_8,  ADC_CHANNEL_9,  ADC_CHANNEL_10,
     ADC_CHANNEL_11, ADC_CHANNEL_12, ADC_CHANNEL_13, ADC_CHANNEL_14, ADC_CHANNEL_15,  ADC_CHANNEL_16,  ADC_CHANNEL_17, ADC_CHANNEL_18, } ;
@@ -24,7 +26,7 @@ static s16 Calibrattion_Val = 0;
 static const  uint8_t ADC_chennel_ref[]={  ADC_Channel_0,  ADC_Channel_1,  ADC_Channel_2, ADC_Channel_3, ADC_Channel_4,  ADC_Channel_5,  ADC_Channel_6,  ADC_Channel_7,  ADC_Channel_8,  ADC_Channel_9,  ADC_Channel_10,
 		ADC_Channel_11, ADC_Channel_12, ADC_Channel_13, ADC_Channel_14, ADC_Channel_15,  ADC_Channel_16,  ADC_Channel_17} ;
 
-
+void ADC1_2_IRQHandler(void) __attribute__((interrupt()));
 
 u16 Get_ConversionVal(s16 val)
 {
@@ -108,7 +110,7 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
 	 adcConfig.ADC_ContinuousConvMode = ENABLE;
 	 adcConfig.ADC_ExternalTrigConv =ADC_ExternalTrigConv_None;
 	 adcConfig.ADC_DataAlign = ADC_DataAlign_Right;
-	 adcConfig.ADC_NbrOfChannel = channel_count;
+	 adcConfig.ADC_NbrOfChannel = ADC_CHANNEL;
 	 adcConfig.ADC_OutputBuffer = ADC_OutputBuffer_Disable;
 	 adcConfig.ADC_Pga = ADC_Pga_1;
 	 ADC_Init(adc, &adcConfig);
@@ -165,14 +167,35 @@ void HAL_ADCDMA_Disable(ADC_NUMBER_t adc_number)
 #endif
 }
 
-void HAL_ADC_AWDT_IT_Init( ADC_NUMBER_t adc, uint8_t channel )
+void HAL_ADC_AWDT_IT_Init( ADC_NUMBER_t adc, uint8_t channel,u16 low, u16 high, void (*f)(void ) , uint8_t prior, uint8_t subprior )
 {
+	adcs.awdt_callback = f;
 #if MCU == CH32V2
-	 ADC_Cmd(adc, DISABLE);
-	 ADC_AnalogWatchdogThresholdsConfig(adc, 3500, 1000);
-	 ADC_AnalogWatchdogSingleChannelConfig( adc, ADC_Channel_6);
-	 ADC_AnalogWatchdogCmd( adc, ADC_AnalogWatchdog_SingleRegEnable);
-	 ADC_ITConfig( adc, ADC_IT_AWD, ENABLE);
-	 ADC_Cmd(adc, ENABLE);
+	NVIC_InitTypeDef      NVIC_InitStructure = {0};
+	ADC_Cmd(adc, DISABLE);
+    ADC_AnalogWatchdogThresholdsConfig(adc, high, low);
+    ADC_AnalogWatchdogSingleChannelConfig( adc,  channel);
+    ADC_AnalogWatchdogCmd( adc, ADC_AnalogWatchdog_SingleRegEnable);
+    ADC_ITConfig( adc, ADC_IT_AWD, ENABLE);
+    ADC_Cmd(adc, ENABLE);
+    NVIC_InitStructure.NVIC_IRQChannel =  ADC_IRQn;
+   	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
+   	NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
+   	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+   	NVIC_Init(&NVIC_InitStructure);
 #endif
 }
+
+#if MCU == CH32V2
+
+void ADC1_2_IRQHandler(void)
+{
+    if(ADC_GetITStatus( ADC1, ADC_IT_AWD))
+    {
+        ADC_ClearITPendingBit( ADC1, ADC_IT_AWD);
+        adcs.awdt_callback();
+    }
+}
+#endif
+
+

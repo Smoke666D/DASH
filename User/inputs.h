@@ -8,6 +8,8 @@
 #ifndef INC_INPUTS_H_
 #define INC_INPUTS_H_
 /*----------------------- Includes -------------------------------------*/
+#include "system_init.h"
+
 #include "main.h"
 #include "FreeRTOS.h"
 #include "queue.h"
@@ -40,7 +42,7 @@ TaskHandle_t * getInputsTaskHandle();
 void vInputsTask( void * argument );
 void InputsNotifyTaskToStop();
 void InputsNotifyTaskToInit();
-
+float GetAIN(u8 ch);
 
 /*----------------------------------------------------------------------------*/
 #endif /* INC_KEYBOARD_H_ */

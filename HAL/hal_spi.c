@@ -23,7 +23,7 @@ void HAL_SPI_InitDMA(HAL_SPI_t spi , SPI_DATA_Size_t data_size , SPI_NSS_t nss)
     SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
     SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
     SPI_InitStructure.SPI_NSS = (nss == SPI_SOFT_NSS) ? SPI_NSS_Soft : SPI_NSS_Hard ;
-	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;
+	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;
     SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB ;
     SPI_InitStructure.SPI_CRCPolynomial = 0;
     SPI_Init(spi, &SPI_InitStructure);

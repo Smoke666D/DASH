@@ -7,10 +7,7 @@
 #include "system_init.h"
 #include "hal_wdt.h"
 #include "inputs.h"
-#include "portmacro.h"
-
-
-
+#include "keyboard_task.h"
 
 static void StartDefaultTask(void *argument);
 static StaticTask_t xIdleTaskTCB                                     __SECTION(RAM_SECTION_CCMRAM);
@@ -29,6 +26,13 @@ static StackType_t CanOpnePeriodicTaskBuffer[PERIODIC_CAN_STK_SIZE ];
 static StackType_t KeyboardTaskBuffer[KEYBOARD_STK_SIZE ];
 static StackType_t ProcessTaskBuffer[ PROCESS_STK_SIZE ];
 static TaskHandle_t DefautTask_Handler;
+static StackType_t defaultTaskBuffer[DEFAULT_TASK_STACK_SIZE];
+static StackType_t InputsTaskBuffer[INPUTS_TASK_STACK_SIZE];
+static StaticTask_t defaultTaskControlBlock;
+static StaticTask_t InputsTaskControlBlock;
+static TaskHandle_t DefautTask_Handler;
+uint8_t ucQueueStorageArea[  16U * sizeof( KeyEvent ) ];
+static StaticQueue_t xStaticQueue;
 /*
  * 妤快把快技快扶扶抑快
  */
@@ -47,7 +51,6 @@ void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
                                      StackType_t **ppxTimerTaskStackBuffer,
                                      uint32_t *pulTimerTaskStackSize )
 {
-
    *ppxTimerTaskTCBBuffer = &xTimerTaskTCB;
    *ppxTimerTaskStackBuffer = uxTimerTaskStack;
    *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
@@ -55,45 +58,33 @@ void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
 /*
  *
  */
-static TaskHandle_t DefautTask_Handler;
-static StackType_t defaultTaskBuffer[DEFAULT_TASK_STACK_SIZE];
-static StackType_t InputsTaskBuffer[INPUTS_TASK_STACK_SIZE];
-static StaticTask_t defaultTaskControlBlock;
-static StaticTask_t InputsTaskControlBlock;
 
 
-/*
-
-
-   xTaskCreate((TaskFunction_t )vKeyboardTask,
-                       (const char*    )"Keyboard",
-                       (uint16_t       )DRAW_STK_SIZE,
-                       (void*          )NULL,
-                       (UBaseType_t    )DRAW_TASK_PRIO,
-                       (TaskHandle_t*  )&DrawHandle);
-
-*/
 
 void vSYStaskInit ( void )
 {
+    (* xKeyboardProcessTaskHandle ())
+            = xTaskCreateStatic( vKeyboardTask, "KeyboardTask", KEYBOARD_STK_SIZE , ( void * ) 1, KEYBOARD_TASK_PRIO   ,
+                            (StackType_t * const )KeyboardTaskBuffer, &KeyboardTaskControlBlock );
    (* xProcessTaskHandle ())
              = xTaskCreateStatic( vRedrawTask, "ProcessTask", PROCESS_STK_SIZE , ( void * ) 1, PROCESS_TASK_PRIO  ,
                                      (StackType_t * const )ProcessTaskBuffer, &ProcessTaskControlBlock );
-  /*(* xCanOpenPeriodicTaskHandle ())
+  (* xCanOpenPeriodicTaskHandle ())
   = xTaskCreateStatic( vCanOpenPeriodicProcess, "CanOpenPeriodic", PERIODIC_CAN_STK_SIZE , ( void * ) 1, PERIODIC_CAN_TASK_PRIO ,
                      (StackType_t * const )CanOpnePeriodicTaskBuffer, &CanOpnePeriodicTaskControlBlock );
   (* xCanOpenProcessTaskHandle())
   = xTaskCreateStatic( vCanOpenProcess, "CanOpenProcessTask", CAN_OPEN_STK_SIZE , ( void * ) 1, CAN_OPEN_TASK_PRIO ,
-  (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );*/
+  (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );
   (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, 3, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
   DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, 3, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
+  vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
+  vTaskSuspend( *xCanOpenProcessTaskHandle());
   return;
 }
 
 void vSYSqueueInit ( void )
 {
-//  *( pCANRXgetQueue() ) = xQueueCreate( CANRX_QUEUE_SIZE, sizeof( CAN_FRAME_TYPE));
-  //*( pCANTXgetQueue() ) = xQueueCreate( CANTX_QUEUE_SIZE, sizeof( CAN_TX_FRAME_TYPE ) );
+    *( xKeyboardQueue()) = xQueueCreateStatic( 16U, sizeof( KeyEvent ),ucQueueStorageArea, &xStaticQueue );;
 }
 /*----------------------------------------------------------------------------*/
 void vSYSeventInit ( void )
@@ -157,17 +148,23 @@ void StartDefaultTask(void *argument)
 
 
                setReg8(RGBMAP13, 0);
+               setReg32(MENU2_MAP,0x003E0015);
+               setReg32(MENU1_MAP,0x0076001B);
              //  setReg8(RGBMAP14, 0);
            //   xTaskNotifyWait(0, pdTRUE, &ulNotifiedValue,portMAX_DELAY);
               vLedDriverStart();
               InputsNotifyTaskToInit();
+              RedrawNotifyTaskToInit();
               DeafaultTaskFSM = STATE_WHAIT_TO_RAEDY;
               break;
           case STATE_WHAIT_TO_RAEDY:
               xTaskNotifyWait(0, 0, &ulNotifiedValue,portMAX_DELAY);
-              if ( ulNotifiedValue == 1)
+              if ( ulNotifiedValue == 2)
               {
                   ulTaskNotifyValueClearIndexed(0, 0, 0xFFFF);
+                  vTaskResume( *xCanOpenProcessTaskHandle());
+                  vTaskResume( *xCanOpenPeriodicTaskHandle ());
+
                   DeafaultTaskFSM = STATE_RUN;
               }
               break;
@@ -178,9 +175,7 @@ void StartDefaultTask(void *argument)
               if (++dd>9) dd = 0;
               i= i+10;
               if (i >=370) i = 0;
-
               HAL_WDTReset();
-              printf("We alive!!\r\n");
               break;
       }
   }

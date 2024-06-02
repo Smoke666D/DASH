@@ -8,10 +8,10 @@
 #ifndef USER_DATAMODEL_H_
 #define USER_DATAMODEL_H_
 
-#include "main.h"
+#include "system_init.h"
 
 
-#define VALID_CODE      0x74
+#define VALID_CODE      0x54
 #define VALID_CODE_ADDRES     0
 
 #define RGB_BRIGTH_ADR         (VALID_CODE_ADDRES +1)
@@ -195,6 +195,6 @@ uint16_t vGetBitrate();
 void vIncrementSystemCounters();
 void WriteRegToEEPROM( u16 reg_adress, void * data, u8 len);
 uint8_t vGetNodeId( void );
-
+void vSaveData();
 u32 getOdometr();
 #endif /* USER_DATAMODEL_H_ */

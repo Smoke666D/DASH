@@ -11,6 +11,7 @@ C_SRCS += \
 ../User/dash_draw.c \
 ../User/init.c \
 ../User/inputs.c \
+../User/keyboard_task.c \
 ../User/led.c \
 ../User/main.c \
 ../User/process.c \
@@ -24,6 +25,7 @@ OBJS += \
 ./User/dash_draw.o \
 ./User/init.o \
 ./User/inputs.o \
+./User/keyboard_task.o \
 ./User/led.o \
 ./User/main.o \
 ./User/process.o \
@@ -37,6 +39,7 @@ C_DEPS += \
 ./User/dash_draw.d \
 ./User/init.d \
 ./User/inputs.d \
+./User/keyboard_task.d \
 ./User/led.d \
 ./User/main.d \
 ./User/process.d \

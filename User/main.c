@@ -20,28 +20,7 @@
 #include "HW_API.h"
 #include "system_init.h"
 
-
-
-
 /* Global Variable */
-TaskHandle_t KeyboardTaskHandle;
-
-
-TaskHandle_t DrawHandle;
-TaskHandle_t LedHandle;
-
-
-void vKeyboardTask(void *argument);
-
-
-EventGroupHandle_t xResetEventHandle;
-StaticEventGroup_t xCreatedEventGroup;
-EventGroupHandle_t xSystemEventHandle;
-
-EventGroupHandle_t xGetSystemEventHeandler()
-{
-    return (xSystemEventHandle);
-}
 /*********************************************************************
  * @fn      main
  *
@@ -57,10 +36,6 @@ int main(void)
     USART_Printf_Init(115200);
     printf("Start\n");
     vInit_DeviceConfig( );
-   // xSystemEventHandle  = xEventGroupCreate(  );
-   // InitDataModel();
-   // vLedDriverStart();
-  //  vCanOpenInit(CAN1);
     vSYSeventInit ();
     vSYSqueueInit ();
     vSYStaskInit ( );
@@ -74,19 +49,11 @@ int main(void)
 
 
 
-void vKeyboardTask(void *argument)
-{
-   vSetupKeyboard();
-   for (;;)
-   {
-      KeyBoardProcess();
-   }
-}
 
 
 void vRestartNode( void )
 {
-    xEventGroupClearBitsFromISR(xResetEventHandle,RESTART_DISABLE);
+
     return;
 }
 

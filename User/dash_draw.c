@@ -9,6 +9,8 @@
 #include "CO_ODinterface.h"
 #include "OD.h"
 #include "hw_lib_din.h"
+#include "hw_lib_keyboard.h"
+#include "inputs.h"
 
 static Menu_Object_t menu;
 static QueueHandle_t     pKeyboard        = NULL;
@@ -32,6 +34,7 @@ u32 getODValue( VIRTUAL_CHANNEL_t virtualchannel)
 {
   u8 data8;
   u16 data16;
+  float temp;
   switch (virtualchannel)
   {
     case vCHANNEL1:
@@ -57,8 +60,9 @@ u32 getODValue( VIRTUAL_CHANNEL_t virtualchannel)
     case chAIN2 :
     case chAIN3 :
     case chAKB  :
-        data16 = (u16)( GetAIN(virtualchannel -chAIN1 )/10);
-        return ((u32) data16);
+        temp = GetAIN(virtualchannel -chAIN1 )*10;
+      //  data16 = (u16)( GetAIN(virtualchannel -chAIN1 )*10);
+        return ( (u32) temp);
     case chRPM1  :
         xGetRPM(INPUT_1 ,&data16);
         float coof1 = (float)getReg16(RPM1_COOF)/1000;
@@ -112,7 +116,7 @@ void IncMenuIndex( )
           }
       }
    }
-   if (++menu.current_menu >= MAX_MENU_COUNT )  menu.current_menu = 1;
+   if (++menu.current_menu >=  menu.max_menu_index )  menu.current_menu = 0;
 }
 
 void SetCurMenuHome()
@@ -186,6 +190,7 @@ void vDashDrawInit()
     menu.home_menu = getReg8(MENU_DEF_POS);
     menu.home_menu_back_time_s = getReg8(MENU_HOME_BACK_TIME );
     menu.current_menu = menu.home_menu;
+    menu.max_menu_index  = 0;
   //  pKeyboard = pGetKeyboardQueue();
     //§±§â§à§Ó§Ö§â§ñ§Ö§Þ §ã§Ü§à§Ü§Ý§î§à §Ó §Þ§Ö§ß§ð §Ú§ß§Õ§Ö§Ü§à§ã§Ó
     for (u8 i=0;i< MAX_MENU_COUNT;i++)
@@ -193,8 +198,12 @@ void vDashDrawInit()
         u32 menu_mask =  getReg32( MENU1_MAP + i*4);
         menu.menu_draw[i] = menu_mask;
         if ( CheckMenuChannel( (menu_mask & 0xFF )) == LAST_ITEM)
-                return;
+        {
+            menu.max_menu_index = i;
+            break;
+        }
     }
+
     menu.buffer_error_register = 0;
     menu.cur_dispaly_error = 0;
     return;
@@ -378,129 +387,154 @@ void vBarMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge
         }
      }
 }
+
+
+static TaskHandle_t  pTaskToNotifykHandle;
+
+void RedrawNotifyTaskToStop()
+{
+    xTaskNotify(pProcessTaskHandle, TASK_STOP_NOTIFY , eSetValueWithOverwrite);
+}
+
+void RedrawNotifyTaskToInit()
+{
+    pTaskToNotifykHandle = xTaskGetCurrentTaskHandle();
+    xTaskNotify(pProcessTaskHandle, TASK_INIT_NOTIFY , eSetValueWithOverwrite);
+}
 /*
  *
  */
 void vRedrawTask( void * argument )
 {
-
     u32 buffer32;
-    u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r;
-
-    u8 brakecode_no_valid = 0;
-    u8 data;
-    u16 bd;
-   /* KeyEvent TempEvent;
-
-
-    vDashDrawInit();
-    xEventGroupWaitBits(xGetSystemEventHeandler(),DATA_MODEL_READY, pdTRUE, pdFALSE, portMAX_DELAY );*/
+    uint32_t ulNotifiedValue;
+    TaskFSM_t  state = STATE_IDLE;
+    u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r,bd;
+    KeyEvent TempEvent;
+    u8 data, brakecode_no_valid = 0;
+    pKeyboard = *( xKeyboardQueue());
     while(1)
     {
-        vTaskDelay(10);
-       /* if ( xQueueReceive( pKeyboard, &TempEvent,0 ) != errQUEUE_EMPTY )
+        switch(state)
         {
-            switch (TempEvent.KeyCode)
-            {
-                case KEY_ON_REPEAT:
-                    SetCurMenuHome();
-                    brakecode_no_valid =1;
-                    break;
-                case BRAKECODE:
-                    keystate = 0;
-                    if (brakecode_no_valid)
-                        brakecode_no_valid = 0;
-                    else
-                        IncMenuIndex();
-                     break;
-                case MAKECODE:
-                    keystate  = 1;
-                    vAcceptError();
-                    break;
-            }
-        }
-        //§±§â§à§Ó§Ö§â§ñ§Ö§Þ, §ß§Ö §ß§å§Ø§ß§à §Ý§Ú §Ó§Ö§â§ß§å§ä§î§ã§ñ §Ó §Õ§à§Þ§Ñ§ê§ß§Ö§Ö §Þ§Ö§ß§ð
-        MenuBackHomeCheck(10);
-        //§±§â§à§Ó§Ö§â§ñ§Ö§Þ §â§Ö§Ô§Ú§ã§ä§â §à§ê§Ú§Ò§à§Ü
-        SetErrorRegiter(ErrorRegister);*/
-        //§°§ä§â§Ú§ã§à§Ó§í§Ó§Ñ§Ö§Þ RGB §á§Ú§Ü§ä§à§â§Ô§â§Ñ§Þ§Þ§í
-        for (u8 i = 0;i < RGB_DIOD_COUNT; i++)
-        {
-            data =  getReg8( RGBMAP1 + i);
-            if (data==0 )
-            {
-                vRGBOff( i);
-            }
-            else
-            {
-                bd = getODValue(data);
+            case STATE_IDLE:
+                xTaskNotifyWait(0,0xFF ,&ulNotifiedValue,portMAX_DELAY);
+                if ((ulNotifiedValue & TASK_INIT_NOTIFY) !=0)
+                {
+                    vDashDrawInit();
+                    state = STATE_INIT;
+                }
+                break;
+            case STATE_INIT:
+                state = STATE_RUN;
+                xTaskNotifyGiveIndexed(pTaskToNotifykHandle,0);
+                break;
+            case STATE_RUN:
+                 vTaskDelay(10);
+                 if ( xQueueReceive( pKeyboard, &TempEvent,0 ) != errQUEUE_EMPTY )
+                 {
+                     switch (TempEvent.Status)
+                     {
+                         case KEY_ON_REPEAT:
+                             SetCurMenuHome();
+                             brakecode_no_valid =1;
+                             break;
+                         case BRAKECODE:
+                             keystate = 0;
+                             if (brakecode_no_valid)
+                                 brakecode_no_valid = 0;
+                             else
+                                 IncMenuIndex();
+                             break;
+                         case MAKECODE:
+                             keystate  = 1;
+                             vAcceptError();
+                             break;
+                     }
+                 }
+                 //§±§â§à§Ó§Ö§â§ñ§Ö§Þ, §ß§Ö §ß§å§Ø§ß§à §Ý§Ú §Ó§Ö§â§ß§å§ä§î§ã§ñ §Ó §Õ§à§Þ§Ñ§ê§ß§Ö§Ö §Þ§Ö§ß§ð
+                 /* MenuBackHomeCheck(10);
+                //§±§â§à§Ó§Ö§â§ñ§Ö§Þ §â§Ö§Ô§Ú§ã§ä§â §à§ê§Ú§Ò§à§Ü
+                SetErrorRegiter(ErrorRegister);*/
+                 //§°§ä§â§Ú§ã§à§Ó§í§Ó§Ñ§Ö§Þ RGB §á§Ú§Ü§ä§à§â§Ô§â§Ñ§Þ§Þ§í
+                 for (u8 i = 0;i < RGB_DIOD_COUNT; i++)
+                 {
+                     data =  getReg8( RGBMAP1 + i);
+                     if (data==0 )
+                     {
+                         vRGBOff( i);
+                     }
+                     else
+                     {
+                         bd = getODValue(data);
+                         vRGBMode( i,  bd);
+                     }
+                 }
+                 //§£§í§Ó§à§Õ §Õ§Ñ§ß§ß§í§ç §Ó §Ò§Ñ§â
+                 data =  getReg8(BARMAP);
+                 u8 startR = 0;
+                 u8 countR = 0;
+                 u8 startG = 0;
+                 u8 countG = 0;
+                 if (data!=0)
+                 {
+                     bd = getODValue(data);
+                     u16 max_value,min_value;
+                     vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
+                     vGetEdgeData( BAR_VALUE_RED_HIGH, &high_edge_r,&low_edge_r);
+                     vGetEdgeData( BAR_VALUE_GREEN_HIGH, &high_edge_g,&low_edge_g);
+                     float delta = (float)(max_value - min_value)/16.0;
+                     if ( getReg8(BAR_MODE) == 0 )
+                     {
+                         if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
+                         {
+                             vBarColorMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, delta,  bd );
+                         }
+                     }
+                     else
+                     {
+                         u8 bar_count = (u8)(( float)(bd /delta));
+                         if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
+                         {
+                             vBarWindowMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, bar_count,  bd );
+                         }
+                         else
+                         {
+                             vBarMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &countG,  &countR, bar_count,  bd );
+                         }
+                     }
+                 }
+                 SetBarState( startG, countG, startR, countR );
+                 //§¬§à§ß§Ö§è §Ó§í§Ó§à§Õ§Ñ §Õ§Ñ§ß§ß§í§ç §Ó §Ò§Ñ§â
 
-                vRGBMode( i,  bd);
+                 // §°§ä§à§Ò§â§Ñ§Ø§Ö§ß§Ú§Ö §Þ§Ö§ß§ð
+                 buffer32 = uGetCurrMenu();
+                 //
+                 /* if ((buffer32 & 0xFF) == chErrorRegister )
+                 {   u8 code = getCurrErrorCode();
+                    SetSegDirect(6,0x79);
+                    SetSegDirect(5,0x58);
+                    SetSegDirect(4,0x58);
+                    SetSegPoint( RESET);
+                    SetSegDirect(3,0x00);
+                    SetSegDirect(2,DigitMask[code/10]);
+                    SetSegDirect(1,DigitMask[code%10]);
+                    SetSegDirect(0,0x00);
+                }
+               // else
+                  */{
+                     SetSEG( (u16)((buffer32 >>8) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF))  );
+                  }
+                  //§°§ä§à§Ò§â§Ñ§Ø§Ö§ß§Ú§Ö §Ò§à§Ý§î§ê§à§Ô§à §ã§Ö§Ô§Þ§Ö§ß§Ö§ä§Ñ
+                  data = getReg16(BIG_SEG);
+                  u16 seg_view = 0;
+                  if (data!=0)
+                  {
+                      seg_view = getReg16(BIG_SEGVAL1 + (--data)*2 );
+                  }
+                  SetBigSeg(seg_view);
+                  vLedProcess( );
+                  break;
             }
         }
-        //§£§í§Ó§à§Õ §Õ§Ñ§ß§ß§í§ç §Ó §Ò§Ñ§â
-        data =  getReg8(BARMAP);
-        u8 startR = 0;
-        u8 countR = 0;
-        u8 startG = 0;
-        u8 countG = 0;
-        if (data!=0)
-        {
-            bd = getODValue(data);
-            u16 max_value,min_value;
-            vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
-            vGetEdgeData( BAR_VALUE_RED_HIGH, &high_edge_r,&low_edge_r);
-            vGetEdgeData( BAR_VALUE_GREEN_HIGH, &high_edge_g,&low_edge_g);
-            float delta = (float)(max_value - min_value)/16.0;
-            if ( getReg8(BAR_MODE) == 0 )
-            {
-                if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
-                {
-                    vBarColorMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, delta,  bd );
-                }
-            }
-            else
-            {
-                u8 bar_count = (u8)(( float)(bd /delta));
-                if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
-                {
-                    vBarWindowMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, bar_count,  bd );
-                }
-                else
-                {
-                    vBarMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &countG,  &countR, bar_count,  bd );
-                }
-            }
-        }
-        SetBarState( startG, countG, startR, countR );
-        //§¬§à§ß§Ö§è §Ó§í§Ó§à§Õ§Ñ §Õ§Ñ§ß§ß§í§ç §Ó §Ò§Ñ§â
-
-        //§°§ä§à§Ò§â§Ñ§Ø§Ö§ß§Ú§Ö §Þ§Ö§ß§ð
-      //  buffer32 = uGetCurrMenu();
-       //
-       /* if ((buffer32 & 0xFF) == chErrorRegister )
-        {   u8 code = getCurrErrorCode();
-            SetSegDirect(6,0x79);
-            SetSegDirect(5,0x58);
-            SetSegDirect(4,0x58);
-            SetSegPoint( RESET);
-            SetSegDirect(3,0x00);
-            SetSegDirect(2,DigitMask[code/10]);
-            SetSegDirect(1,DigitMask[code%10]);
-            SetSegDirect(0,0x00);
-        }
-        else
-        {
-            SetSEG( (u16)((buffer32 >>8) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF))  );
-        }*/
-        SetSEG( 0x4444,  getODValue(27)  );
-        //§°§ä§à§Ò§â§Ñ§Ø§Ö§ß§Ú§Ö §Ò§à§Ý§î§ê§à§Ô§à §ã§Ö§Ô§Þ§Ö§ß§Ö§ä§Ñ
-        data = getReg16(BIG_SEG);
-        u16 seg_view = 0;
-        if (data!=0)
-        {
-            seg_view = getReg16(BIG_SEGVAL1 + (--data)*2 );
-        }
-        SetBigSeg(seg_view);
-    }
 }

@@ -8,7 +8,9 @@
 #ifndef USER_DASH_DRAW_H_
 #define USER_DASH_DRAW_H_
 
-#include "main.h"
+
+#include "system_init.h"
+#include "filters.h"
 #include "types.h"
 
 #define RGB_DIOD_COUNT 14
@@ -16,7 +18,7 @@
 typedef enum
 {
   MENU_ORDINARY = 0,
-  LAST_ITEM     = 0,
+  LAST_ITEM     = 1,
 
 } MENU_CHECK_CHANNEL_t;
 
@@ -67,6 +69,7 @@ typedef struct
 } Menu_Object_t;
 
 TaskHandle_t * xProcessTaskHandle ();
+void RedrawNotifyTaskToInit();
 u8 GetCurMenuHome();
 void vSetErrorReg( u32 data);
 u32 getODValue( VIRTUAL_CHANNEL_t virtualchannel);

@@ -37,6 +37,6 @@
 
 void vRestartNode( void );
 void Error_Handler(void);
-EventGroupHandle_t xGetSystemEventHeandler();
+
 
 #endif /* USER_MAIN_H_ */

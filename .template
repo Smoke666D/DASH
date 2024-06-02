@@ -1,5 +1,5 @@
 Address=0x08000000
-Target Path=obj\CH32V203-FreeRTOS-Keypad.hex
+Target Path=obj\DASH.hex
 Erase All=false
 Program=true
 Verify=true

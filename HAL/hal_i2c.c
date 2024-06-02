@@ -27,6 +27,7 @@ static EERPOM_ERROR_CODE_t I2C_Master_ReviceIT(  u8 DevAdrees, u16 data_addres, 
 static EERPOM_ERROR_CODE_t I2C_Master_TransmitIT(  u8 DevAdrees, u16 data_addres, u8 * data, u16 data_size, u32 timeout,uint8_t TNI  );
 
 
+
 void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 {
 

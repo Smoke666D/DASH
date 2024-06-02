@@ -8,11 +8,15 @@
 #ifndef USER_SYSTEM_INIT_H_
 #define USER_SYSTEM_INIT_H_
 
+#include "main.h"
 #include "FreeRTOS.h"
-#include "task.h"
 #include "queue.h"
 #include "list.h"
+#include "task.h"
+#include "semphr.h"
 #include "event_groups.h"
+#include "portmacro.h"
+#include "stdbool.h"
 
 #define __SECTION(x)
 

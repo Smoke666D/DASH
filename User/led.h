@@ -69,7 +69,7 @@ void vSetBrigth( BRIGTH_CHANNEL_t ch, u8 brigth);
 void SetBigSeg( u16 mask);
 void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r );
 void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state);
-
+void vRGBProcess();
 void vLedDriverStart(void);
 void vLedProcess( void );
 #endif /* INC_LED_H_ */

@@ -5,6 +5,7 @@
  *      Author: i.dymov
  */
 
+
 #include "DataModel.h"
 #include "301/CO_NMT_Heartbeat.h"
 #include "CO_driver_target.h"
@@ -171,7 +172,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(BIG_SEGVAL7       , 0x0CF);
              setReg16(BIG_SEGVAL8       , 0x0E6);
              setReg16(BIG_SEGVAL9       , 0x0ED);
-             setReg32(HOUR_COUNTER_ADR  , 0x00);
+             setReg32(HOUR_COUNTER_ADR  , 0x100);
              setReg32(ODOMETR_ADR       ,0x00);
              DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT] = 19;
              DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 19;
@@ -198,6 +199,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg32( MENU8_MAP ,0);
              setReg32( MENU9_MAP ,0);
              setReg32( MENU10_MAP , 0);
+             DATA_MODEL_REGISTER[NODE_ID_ADR] = 16;
              DATA_MODEL_REGISTER[MENU_DEF_POS]             =0;
              DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      =1;
              eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,0);
@@ -211,9 +213,9 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
          {
              OD_set_value(OD_ENTRY_H2007, j+2 ,&DATA_MODEL_REGISTER[BIG_SEGVAL1+j*2], 2, true);
          }
-         OD_set_value(OD_ENTRY_H2019,0x06 ,&DATA_MODEL_REGISTER[ BAR_VALUE_HIGH],2, true);
+         OD_set_value(OD_ENTRY_H2019,0x06 ,&DATA_MODEL_REGISTER[BAR_VALUE_HIGH],2, true);
          OD_set_value(OD_ENTRY_H2019,0x05 ,&DATA_MODEL_REGISTER[BAR_VALUE_LOW], 2, true);
-         OD_set_value(OD_ENTRY_H2019,0x01 ,&DATA_MODEL_REGISTER[ BAR_VALUE_RED_HIGH],2, true);
+         OD_set_value(OD_ENTRY_H2019,0x01 ,&DATA_MODEL_REGISTER[BAR_VALUE_RED_HIGH],2, true);
          OD_set_value(OD_ENTRY_H2019,0x02 ,&DATA_MODEL_REGISTER[BAR_VALUE_RED_LOW], 2, true);
          OD_set_value(OD_ENTRY_H2019,0x03 ,&DATA_MODEL_REGISTER[BAR_VALUE_GREEN_HIGH],2, true);
          OD_set_value(OD_ENTRY_H2019,0x04 ,&DATA_MODEL_REGISTER[BAR_VALUE_GREEN_LOW], 2, true);
@@ -228,10 +230,12 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
          OD_set_value(OD_ENTRY_H2008, 15 ,&DATA_MODEL_REGISTER[BARMAP], 1, true);
          vSetInitBrigth(RGB_CHANNEL,DATA_MODEL_REGISTER[RGB_BRIGTH_ADR] );
          vSetInitBrigth(WHITE_CHANNEL,DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR] );
-           /*  u32 data32 = getReg32(HOUR_COUNTER_ADR);
+         //
+
+             u32 data32 = getReg32(HOUR_COUNTER_ADR);
              OD_set_value(OD_ENTRY_H2004,0x02,&data32,4,true);
-             odometr     = getReg32(ODOMETR_ADR);
-             OD_set_value(OD_ENTRY_H2004,0x01,&odometr,4,true);
+           /*  odometr     = getReg32(ODOMETR_ADR);
+            // OD_set_value(OD_ENTRY_H2004,0x01,&odometr,4,true);
              odometr     = odometr * 100;
              POINT_t point;
              u8 cal_point_count  = DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT];
@@ -358,7 +362,7 @@ u16 getReg16(u16 reg_adress )
 u32 getReg32(u16 reg_adress )
 {
     u32 data = (u32)DATA_MODEL_REGISTER[reg_adress] | (u32)(DATA_MODEL_REGISTER[reg_adress+1])<<8 |
-            (u32)DATA_MODEL_REGISTER[reg_adress+2] | (u32)(DATA_MODEL_REGISTER[reg_adress+3])<<24;
+            (u32)DATA_MODEL_REGISTER[reg_adress+2]<<16 | (u32)(DATA_MODEL_REGISTER[reg_adress+3])<<24;
     return  (data);
 }
 
@@ -429,7 +433,7 @@ uint16_t vFDGetNMTState( void )
 
 uint8_t vGetNodeId( void )
 {
-  return ( bReadEEPROM( NODE_ID_ADR,0) );
+  return ( getReg8( NODE_ID_ADR) );
 }
 
 void vIncrementSystemCounters()
@@ -448,7 +452,7 @@ void vIncrementSystemCounters()
 
 void vSaveData()
 {
-    *((u32 *)(&DATA_MODEL_REGISTER[ODOMETR_ADR])) = odometr/100;
+    //*((u32 *)(&DATA_MODEL_REGISTER[ODOMETR_ADR])) = odometr/100;
     eEEPROMWr(HOUR_COUNTER_ADR,&DATA_MODEL_REGISTER[HOUR_COUNTER_ADR],8,0);
 }
 

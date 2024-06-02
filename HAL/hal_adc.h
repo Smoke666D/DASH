@@ -36,7 +36,11 @@ typedef enum
 } ADC_CH_T;
 
 
+typedef struct
+{
+  void (*awdt_callback)(void);
 
+} ADC_t;
 
 #if MCU == APM32
 	#define ADC_NUMBER_t ADC_T*
@@ -58,6 +62,6 @@ void HAL_ADC_TempEnable();
 void HAL_ADC_VrefEnable();
 void HAL_ADC_Enable(ADC_NUMBER_t adc_number);
 void HAL_ADCDMA_Disable(ADC_NUMBER_t adc_number);
-void HAL_ADC_AWDT_IT_Init( ADC_NUMBER_t adc, uint8_t channel );
+void HAL_ADC_AWDT_IT_Init( ADC_NUMBER_t adc, uint8_t channel,u16 low, u16 high, void (*f)(void ) , uint8_t prior, uint8_t subprior );
 
 #endif /* HAL_HAL_ADC_H_ */
