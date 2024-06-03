@@ -16,7 +16,7 @@
 
         Created:      31.01.2017 17:13:00
         Created By:   Smoke666
-        Modified:     29.05.2024 18:29:34
+        Modified:     03.06.2024 12:29:16
         Modified By:  rOBIN 2
 
     Device Info:
@@ -70,9 +70,9 @@
 #define OD_CNT_ARR_201A 10
 #define OD_CNT_ARR_201B 3
 #define OD_CNT_ARR_202F 2
-#define OD_CNT_ARR_2030 30
-#define OD_CNT_ARR_2031 30
-#define OD_CNT_ARR_2032 30
+#define OD_CNT_ARR_2030 31
+#define OD_CNT_ARR_2031 31
+#define OD_CNT_ARR_2032 31
 #define OD_CNT_ARR_2033 2
 
 

@@ -682,7 +682,7 @@ static ODR_t OD_readAIN_RPM (OD_stream_t *stream, void *buf, OD_size_t count, OD
         }
 #endif
         *countRead = 2;
-        *((u16 *)buf) = getODValue( chAIN1 -1 + stream->subIndex);
+        *((u16 *)buf) = getODValue( chAIN1 -1 + stream->subIndex,0);
         return (ODR_OK);
 }
 
@@ -695,7 +695,7 @@ static ODR_t OD_readDIN (OD_stream_t *stream, void *buf, OD_size_t count, OD_siz
      }
 #endif
      *countRead = 1;
-     *((u8 *)buf) = (u8)getODValue( chKEY  -1 + stream->subIndex);
+     *((u8 *)buf) = (u8)getODValue( chKEY  -1 + stream->subIndex,0);
      return (ODR_OK);
 }
 

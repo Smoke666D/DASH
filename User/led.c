@@ -18,7 +18,6 @@ static const u16 Brigth[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,34,55,89,144,233,256,
 static u8 LED_CHANELL_BRIGTH[2];
 static uint16_t SPI1_DATA[SPI1_CHIP_COUNT];
 static uint16_t SPI2_DATA[SPI2_CHIP_COUNT];
-static uint16_t SPI2_DATA_DRAW[SPI2_CHIP_COUNT];
 
 
 void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r )
@@ -183,9 +182,14 @@ void SetSegPoint( u8 on)
 
 void SetSEG( u16 mask, u32 value)
 {
-  u32 val = value;
+  int32_t val = value;
+  u8 min = 0;
   u8 dc = 2,mask_count = 2;
-
+  if (val <0)
+  {
+      min = 1;
+      val=val*-1;
+  }
   if (val/1000000)
   {
       dc = 7;
@@ -214,6 +218,12 @@ void SetSEG( u16 mask, u32 value)
      SetSegDirect(i,DigitMask[digit]);
      val = val/10;
   }
+  if ( min )
+  {
+      SetSegDirect(dc,0x40);
+      dc++;
+  }
+
   for (u8 i=(dc);i<7;i++)
   {
       SetSegDirect(i,0);
@@ -223,11 +233,11 @@ void SetSEG( u16 mask, u32 value)
       case 1:
           break;
           SPI2_DATA[3] &= 0xFF80;
-          SPI2_DATA[3] |= (mask & 0x007F);
+          SPI2_DATA[3] |= ((mask>>8) & 0x7F);
           break;
       case 2:
           SPI2_DATA[3] &= 0xC000;
-          SPI2_DATA[3] |=  ( ((mask & 0x7F)>>7) | (mask>>8 & 0x7F));
+          SPI2_DATA[3] |=  ( (mask>>8 & 0x7F) | (mask & 0x7F)<<7);
           break;
       default:
           break;
@@ -284,8 +294,8 @@ void vLedDriverStart(void)
 	//HAL_TiemrEneblae(TIMER3);
 	//TIM_Cmd( PWM_TIMER_1, ENABLE );
 
-	vSetBrigth( RGB_CHANNEL,    10 );//LED_CHANELL_BRIGTH[0]);
-	vSetBrigth( WHITE_CHANNEL,  14 );//LED_CHANELL_BRIGTH[1]);
+	vSetBrigth( RGB_CHANNEL,    11 );//LED_CHANELL_BRIGTH[0]);
+	vSetBrigth( WHITE_CHANNEL,  11 );//LED_CHANELL_BRIGTH[1]);
 	return;
 }
 

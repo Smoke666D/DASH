@@ -37,6 +37,13 @@
 
 
 #define RA  10000.0
+#define R22 15000.0
+#define R21 10000.0
+#define VADD_COOF ((R21+R22)/R22)
+#define Rgnd  15000.0
+#define Rup   10000.0
+#define Rpup  3000.0
+#define AIN_COOF   ((Rup+Rgnd)/Rgnd)
 /*----------------------------- Functions ------------------------------------*/
 TaskHandle_t * getInputsTaskHandle();
 void vInputsTask( void * argument );

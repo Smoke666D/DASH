@@ -30,10 +30,11 @@ void vSetErrorReg( u32 data)
 {
     ErrorRegister = data;
 }
-u32 getODValue( VIRTUAL_CHANNEL_t virtualchannel)
+int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
 {
   u8 data8;
   u16 data16;
+  int32_t out_data;
   float temp;
   switch (virtualchannel)
   {
@@ -51,45 +52,55 @@ u32 getODValue( VIRTUAL_CHANNEL_t virtualchannel)
     case vCHANNEL12:
     case vCHANNEL13:
     case vCHANNEL14:
-        return ((u32) getReg8(V1 + virtualchannel -1 ));
+        out_data= ((int32_t) getReg8(V1 + virtualchannel -1 ));
+        break;
     case vCHANNEL15:
     case vCHANNEL16:
     case vCHANNEL17:
-        return ((u32) getReg16(V1 + virtualchannel -1 ));
+        out_data=((u32) getReg16(V1 + virtualchannel -1 ));
+        break;
     case chAIN1 :
+
+        out_data= fGetAinCalData( 0 , GetAIN(virtualchannel -chAIN1 ))*10;
+        if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET);
+        break;
     case chAIN2 :
     case chAIN3 :
     case chAKB  :
-        temp = GetAIN(virtualchannel -chAIN1 )*10;
-      //  data16 = (u16)( GetAIN(virtualchannel -chAIN1 )*10);
-        return ( (u32) temp);
+        out_data = (int32_t) GetAIN(virtualchannel -chAIN1 )*10;
+        break;
     case chRPM1  :
         xGetRPM(INPUT_1 ,&data16);
         float coof1 = (float)getReg16(RPM1_COOF)/1000;
         data16 = (u16)((data16 *coof1)*10.0);
-        return ((u32) data16);
+        out_data = ((u32) data16);
+        break;
     case chRPM2  :
         xGetRPM(INPUT_2 ,&data16);
         float coof2 = (float)getReg16(RPM2_COOF)/1000;
         data16 = (u16)((data16 *coof2)*10.0);
-        return ((u32) data16);
+        out_data =  ((u32) data16);
+        break;
       case chKEY  :
-          return ((u32) keystate);
+          out_data =  ((u32) keystate);
+          break;
       case chDIN1   :
-          xGetDIN(INPUT_3,&data8);
-          return ((u32) data8);
+
+          out_data =  uGetDIN(INPUT_3);
+          break;
       case chODOMETR:
-          return getOdometr();
+          out_data =  getOdometr();
           break;
       case  chHOUR:
-          return  getReg32(HOUR_COUNTER_ADR);
+          out_data =  getReg32(HOUR_COUNTER_ADR);
           break;
       case chErrorRegister:
-          return ( ErrorRegister);
+          out_data =  ErrorRegister;
           break;
 
   }
-  return 0;
+
+  return (out_data);
 }
 
 /*
@@ -466,7 +477,7 @@ void vRedrawTask( void * argument )
                      }
                      else
                      {
-                         bd = getODValue(data);
+                         bd = getODValue(data,1);
                          vRGBMode( i,  bd);
                      }
                  }
@@ -478,7 +489,7 @@ void vRedrawTask( void * argument )
                  u8 countG = 0;
                  if (data!=0)
                  {
-                     bd = getODValue(data);
+                     bd = getODValue(data,1);
                      u16 max_value,min_value;
                      vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
                      vGetEdgeData( BAR_VALUE_RED_HIGH, &high_edge_r,&low_edge_r);
@@ -523,7 +534,7 @@ void vRedrawTask( void * argument )
                 }
                // else
                   */{
-                     SetSEG( (u16)((buffer32 >>8) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF))  );
+                     SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),0)  );
                   }
                   //§°§ä§à§Ò§â§Ñ§Ø§Ö§ß§Ú§Ö §Ò§à§Ý§î§ê§à§Ô§à §ã§Ö§Ô§Þ§Ö§ß§Ö§ä§Ñ
                   data = getReg16(BIG_SEG);

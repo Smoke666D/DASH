@@ -125,9 +125,9 @@ OD_ATTR_ROM OD_ROM_t OD_ROM = {
     .x201A_MENU_MAP_REGISTER = {0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF},
     .x201B_MENU_SETUP_REGISTER_sub0 = 0x03,
     .x202F_brigthRegister_sub0 = 0x02,
-    .x2030_ADC_1_CalibraionRegister_sub0 = 0x1E,
-    .x2031_ADC_2_CalibraionRegister_sub0 = 0x1E,
-    .x2032_ADC_3_CalibraionRegister_sub0 = 0x1E,
+    .x2030_ADC_1_CalibraionRegister_sub0 = 0x1F,
+    .x2031_ADC_2_CalibraionRegister_sub0 = 0x1F,
+    .x2032_ADC_3_CalibraionRegister_sub0 = 0x1F,
     .x2033_RPM_CalibrationRegister_sub0 = 0x02
 };
 
@@ -1087,9 +1087,9 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x201B, 0x04, ODT_ARR, &ODObjs.o_201B_MENU_SETUP_REGISTER, NULL},
     {0x2024, 0x01, ODT_VAR, &ODObjs.o_2024_baudRateSetting, NULL},
     {0x202F, 0x03, ODT_ARR, &ODObjs.o_202F_brigthRegister, NULL},
-    {0x2030, 0x1F, ODT_ARR, &ODObjs.o_2030_ADC_1_CalibraionRegister, NULL},
-    {0x2031, 0x1F, ODT_ARR, &ODObjs.o_2031_ADC_2_CalibraionRegister, NULL},
-    {0x2032, 0x1F, ODT_ARR, &ODObjs.o_2032_ADC_3_CalibraionRegister, NULL},
+    {0x2030, 0x20, ODT_ARR, &ODObjs.o_2030_ADC_1_CalibraionRegister, NULL},
+    {0x2031, 0x20, ODT_ARR, &ODObjs.o_2031_ADC_2_CalibraionRegister, NULL},
+    {0x2032, 0x20, ODT_ARR, &ODObjs.o_2032_ADC_3_CalibraionRegister, NULL},
     {0x2033, 0x03, ODT_ARR, &ODObjs.o_2033_RPM_CalibrationRegister, NULL},
     {0x0000, 0x00, 0, NULL, NULL}
 };

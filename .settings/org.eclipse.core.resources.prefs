@@ -41,6 +41,7 @@ encoding//FreeRTOS/tasks.c=GBK
 encoding//FreeRTOS/timers.c=GBK
 encoding//HAL/board_define.h=GBK
 encoding//HAL/hal_adc.c=GBK
+encoding//HAL/hal_adc.h=GBK
 encoding//HAL/hal_can.c=UTF-8
 encoding//HAL/hal_can.h=GBK
 encoding//HAL/hal_dma.c=UTF-8

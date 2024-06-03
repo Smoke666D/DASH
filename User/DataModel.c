@@ -13,26 +13,26 @@
 #include "dash_draw.h"
 #include "hw_lib_eeprom.h"
 
-const uint16_t CalPoint[20][2] = {{0,32742},
-                                 {5,25451},
-                                 {10,19936},
-                                 {15,15731},
-                                 {17,14337},
-                                 {18,13693},
-                                 {20,12500},
-                                 {21,11948},
-                                 {22,11423},
-                                 {23,10925},
-                                 {25,10000},
-                                 {26,9570},
-                                 {27,9162},
-                                 {28,8773},
-                                 {29,8403},
-                                 {30,8051},
-                                 {35,6523},
-                                 {40,5315},
-                                 {45,4355},
-                                 {50,3593}
+const uint16_t CalPoint[18][2] = {
+                                  {130,89},
+                                  {120,113},
+                                  {110,110},
+                                  {100,187},
+                                  {90,243},
+                                  {80,323},
+                                  {70,436},
+                                  {60,596},
+                                  {50,834},
+                                  {40,1175},
+                                  {30,1707},
+                                  {20,2500},
+                                  {10,3792},
+                                  {0,5896},
+                                  {-10,9397},
+                                  {-20,15462},
+                                  {-30,26114},
+                                  {-40,45313}
+
 };
 //static u32 hourcounter;
 static u16 secondcounter;
@@ -66,8 +66,8 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(NODE_ID_ADR           ,0x16);
              setReg16(RGB1_VALUE_GREEN_HIGH ,0);
              setReg16(RGB1_VALUE_GREEN_LOW  ,0);
-             setReg16(RGB1_VALUE_RED_HIGH   ,0);
-             setReg16(RGB1_VALUE_RED_LOW    ,0);
+             setReg16(RGB1_VALUE_RED_HIGH   ,1);
+             setReg16(RGB1_VALUE_RED_LOW    ,1);
              setReg16(RGB1_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB1_VALUE_BLUE_LOW   ,0);
              setReg16(RGB2_VALUE_GREEN_HIGH ,0);
@@ -109,7 +109,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(RGB8_VALUE_GREEN_HIGH ,0);
              setReg16(RGB8_VALUE_GREEN_LOW  ,0);
              setReg16(RGB8_VALUE_RED_HIGH   ,0);
-             setReg16(RGB8_VALUE_RED_LOW    ,0);
+             setReg16(RGB8_VALUE_RED_LOW    ,1400);
              setReg16(RGB8_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB8_VALUE_BLUE_LOW   ,0);
              setReg16(RGB9_VALUE_GREEN_HIGH ,0);
@@ -148,14 +148,14 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(RGB14_VALUE_RED_LOW   ,2);
              setReg16(RGB14_VALUE_BLUE_HIGH ,0);
              setReg16(RGB14_VALUE_BLUE_LOW  ,0);
-             DATA_MODEL_REGISTER[RGBMAP1]  =0;
+             DATA_MODEL_REGISTER[RGBMAP1]  =chDIN1;
              DATA_MODEL_REGISTER[RGBMAP2]  =0;
              DATA_MODEL_REGISTER[RGBMAP3]  =0;
              DATA_MODEL_REGISTER[RGBMAP4]  =0;
              DATA_MODEL_REGISTER[RGBMAP5]  =0;
              DATA_MODEL_REGISTER[RGBMAP6]  =0;
              DATA_MODEL_REGISTER[RGBMAP7]  =0;
-             DATA_MODEL_REGISTER[RGBMAP8]  =0;
+             DATA_MODEL_REGISTER[RGBMAP8]  =chAIN1;
              DATA_MODEL_REGISTER[RGBMAP9]  =0;
              DATA_MODEL_REGISTER[RGBMAP10] =0;
              DATA_MODEL_REGISTER[RGBMAP11] =0;
@@ -174,24 +174,28 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(BIG_SEGVAL9       , 0x0ED);
              setReg32(HOUR_COUNTER_ADR  , 0x100);
              setReg32(ODOMETR_ADR       ,0x00);
-             DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT] = 19;
-             DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 19;
-             DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT] = 19;
-             for (u8 i=0; i< 19;i++)
+             DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT] = 18;
+             setReg16(AIN1_OFFSET,400);
+             DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 18;
+             setReg16(AIN2_OFFSET,400);
+             DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT] = 18;
+             setReg16(AIN3_OFFSET,400);
+             for (u8 i=0; i< 18;i++)
              {
-                 setReg16(AIN1_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]*10);
+                 setReg16(AIN1_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
                  setReg16(AIN1_CAL_POINT_BEGIN + i*4 + 2, CalPoint[i][1]);
-                 setReg16(AIN2_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]*10);
+                 setReg16(AIN2_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4 + 2, CalPoint[i][1]);
-                 setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]*10);
+                 setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
                  setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2 ,CalPoint[i][1]);
              }
+
+
              setReg16(RPM1_COOF, 1000);
              setReg16(RPM2_COOF, 1000);
-
-             setReg32( MENU1_MAP ,0);
-             setReg32(MENU2_MAP ,0);
-             setReg32( MENU3_MAP ,0);
+             setReg32( MENU1_MAP ,0x783F0000 | chAIN1);
+             setReg32( MENU2_MAP , 0x3E000000 | chAKB );
+             setReg32( MENU3_MAP ,0x76000000 | chHOUR );
              setReg32( MENU4_MAP ,0);
              setReg32(MENU5_MAP ,0);
              setReg32(MENU6_MAP ,0);
@@ -234,24 +238,32 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
 
              u32 data32 = getReg32(HOUR_COUNTER_ADR);
              OD_set_value(OD_ENTRY_H2004,0x02,&data32,4,true);
+
+
            /*  odometr     = getReg32(ODOMETR_ADR);
             // OD_set_value(OD_ENTRY_H2004,0x01,&odometr,4,true);
-             odometr     = odometr * 100;
-             POINT_t point;
+             odometr     = odometr * 100;*/
+             POINT_t point[2];
              u8 cal_point_count  = DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT];
              data32 = (u32) cal_point_count;
-             OD_set_value(OD_ENTRY_H2030, 1 ,&data32, 4, true);
-             if ( eAinCalDataConfig(AIN1,cal_point_count ) == CAL_SUCCESS)
+             OD_set_value(OD_ENTRY_H2030, 2 ,&data32, 4, true);
+             if ( eAinCalDataConfig(AIN1,cal_point_count -1 ) == CAL_SUCCESS)
              {
-                 for (u8 i = 1; i<= cal_point_count;i++)
+                 for (u8 i = 0; i< cal_point_count - 1 ;i++)
                  {
-                     u16 data16  = *((u16*)&(DATA_MODEL_REGISTER[AIN1_CAL_POINT_BEGIN + i*4]));
-                     point.X = (float)data16;
-                     OD_set_value(OD_ENTRY_H2030, 2+i*2 ,&data16, 2, true);
-                     data16 = (*((u16*)&(DATA_MODEL_REGISTER[AIN1_CAL_POINT_BEGIN + i*4 + 2 ])));
-                     point.Y = (float)data16/10;
-                     OD_set_value(OD_ENTRY_H2030, 3+i*2 ,&data16, 2, true);
+                     int16_t data16  = (int16_t)getReg16(AIN1_CAL_POINT_BEGIN + i*4);
+                     point[0].Y = (float)data16;
+                     u16 udata16 = getReg16(AIN1_CAL_POINT_BEGIN + i*4 + 2);
+                     point[0].X = (float)udata16;
+                     data16  = (int16_t)getReg16(AIN1_CAL_POINT_BEGIN + i*4 + 4);
+                     point[1].Y = (float)data16;
+                     udata16 = getReg16(AIN1_CAL_POINT_BEGIN + i*4 + 6);
+                     point[1].X = (float)udata16;
                      eSetAinCalPoint(AIN1,&point, i);
+                     //OD_set_value(OD_ENTRY_H2030, 2+i*2 ,&data16, 2, true);
+
+                     //OD_set_value(OD_ENTRY_H2030, 3+i*2 ,&data16, 2, true);
+
                  }
              }
              cal_point_count  = DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT];
@@ -261,13 +273,18 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              {
                     for (u8 i = 1; i<= cal_point_count;i++)
                     {
-                        u16 data16  = *((u16*)&(DATA_MODEL_REGISTER[AIN2_CAL_POINT_BEGIN + i*4]));
-                        point.X = (float)data16;
-                        OD_set_value(OD_ENTRY_H2031, 2+i*2 ,&data16, 2, true);
-                        data16 = (*((u16*)&(DATA_MODEL_REGISTER[AIN2_CAL_POINT_BEGIN + i*4 + 2 ])));
-                        point.Y = (float)data16/10;
-                        OD_set_value(OD_ENTRY_H2031, 3+i*2 ,&data16, 2, true);
-                       eSetAinCalPoint(AIN2,&point, i);
+                        int16_t data16  = (int16_t)getReg16(AIN2_CAL_POINT_BEGIN + i*4);
+                        point[0].Y = (float)data16;
+                        u16 udata16 = getReg16(AIN2_CAL_POINT_BEGIN + i*4 + 2);
+                        point[0].X = (float)udata16;
+                        data16  = (int16_t)getReg16(AIN2_CAL_POINT_BEGIN + i*4 + 4);
+                        point[1].Y = (float)data16;
+                        udata16 = getReg16(AIN2_CAL_POINT_BEGIN + i*4 + 6);
+                        point[1].X = (float)udata16;
+
+                        //OD_set_value(OD_ENTRY_H2031, 2+i*2 ,&data16, 2, true);
+                       // OD_set_value(OD_ENTRY_H2031, 3+i*2 ,&data16, 2, true);
+                        eSetAinCalPoint(AIN2,&point, i);
                      }
 
                }
@@ -277,16 +294,21 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
               if ( eAinCalDataConfig(AIN2,cal_point_count ) == CAL_SUCCESS)
               {
                     for (u8 i = 1; i<= cal_point_count;i++)
-                    {
-                        u16 data16  = *((u16*)&(DATA_MODEL_REGISTER[AIN3_CAL_POINT_BEGIN + i*4]));
-                        point.X = (float)data16;
-                        OD_set_value(OD_ENTRY_H2031, 2+i*2 ,&data16, 2, true);
-                        data16 = (*((u16*)&(DATA_MODEL_REGISTER[AIN3_CAL_POINT_BEGIN + i*4 + 2 ])));
-                        point.Y = (float)data16/10;
-                        OD_set_value(OD_ENTRY_H2032, 3+i*2 ,&data16, 2, true);
+                    {int16_t data16  = (int16_t)getReg16(AIN3_CAL_POINT_BEGIN + i*4);
+                    point[0].Y = (float)data16;
+                    u16 udata16 = getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2);
+                    point[0].X = (float)udata16;
+                    data16  = (int16_t)getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 4);
+                    point[1].Y = (float)data16;
+                    udata16 = getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 6);
+                    point[1].X = (float)udata16;
+
+                       // OD_set_value(OD_ENTRY_H2031, 2+i*2 ,&data16, 2, true);
+                       // OD_set_value(OD_ENTRY_H2032, 3+i*2 ,&data16, 2, true);
                         eSetAinCalPoint(AIN3,&point, i);
                     }
                }
+              /*
               OD_set_value(OD_ENTRY_H2033, 1 ,&DATA_MODEL_REGISTER[MENU_DEF_POS], 1, true);
               OD_set_value(OD_ENTRY_H2033, 2 ,&DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME], 1, true);
               OD_set_value(OD_ENTRY_H201B, 2 ,&DATA_MODEL_REGISTER[RPM2_COOF], 2, true);

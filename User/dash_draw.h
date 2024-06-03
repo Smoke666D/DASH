@@ -72,7 +72,7 @@ TaskHandle_t * xProcessTaskHandle ();
 void RedrawNotifyTaskToInit();
 u8 GetCurMenuHome();
 void vSetErrorReg( u32 data);
-u32 getODValue( VIRTUAL_CHANNEL_t virtualchannel);
+int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable);
 void IncMenuIndex();
 u8 SetCurrentMenu( u8 menu_item);
 u8 SetDefault( u8 menu_item);

@@ -121,6 +121,9 @@ void StartDefaultTask(void *argument)
                setReg16(BAR_VALUE_GREEN_LOW   ,110);
                setReg8(BAR_MODE   ,1);
 
+
+
+
                setReg16(RGB5_VALUE_GREEN_HIGH       ,190);
                setReg16(RGB5_VALUE_GREEN_LOW        ,110);
                setReg16(RGB5_VALUE_RED_HIGH        ,100);
@@ -146,12 +149,6 @@ void StartDefaultTask(void *argument)
                               setReg16(RGB14_VALUE_BLUE_LOW        ,0);
                               setReg8(RGBMAP14   ,1);
 
-
-               setReg8(RGBMAP13, 0);
-               setReg32(MENU2_MAP,0x003E0015);
-               setReg32(MENU1_MAP,0x0076001B);
-             //  setReg8(RGBMAP14, 0);
-           //   xTaskNotifyWait(0, pdTRUE, &ulNotifiedValue,portMAX_DELAY);
               vLedDriverStart();
               InputsNotifyTaskToInit();
               RedrawNotifyTaskToInit();
