@@ -11,7 +11,7 @@
 #include "system_init.h"
 
 
-#define VALID_CODE      0x71
+#define VALID_CODE      0x24
 #define VALID_CODE_ADDRES     0
 
 #define RGB_BRIGTH_ADR         (VALID_CODE_ADDRES +1)
@@ -145,8 +145,7 @@
 #define AIN1_CAL_POINT_BEGIN  (AIN3_OFFSET  + 2 )
 #define AIN2_CAL_POINT_BEGIN  (AIN1_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
 #define AIN3_CAL_POINT_BEGIN  (AIN2_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
-#define NODE_ID_ADR           (AIN3_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
-#define RPM1_COOF            ( NODE_ID_ADR+1)
+#define RPM1_COOF             (AIN3_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
 #define RPM2_COOF            ( RPM1_COOF+2)
 #define MENU1_MAP             (RPM2_COOF+2)
 #define MENU2_MAP             (MENU1_MAP + 4)

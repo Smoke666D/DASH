@@ -29,9 +29,8 @@ void vInit_DeviceConfig( void )
 	 vAINInit();
     HAL_SPI_InitDMA(SPI1, SPI_16bit ,SPI_SOFT_NSS);
 	HAL_SPI_InitDMA(SPI2, SPI_16bit ,SPI_SOFT_NSS);
-
 	HAL_RTC_IT_Init(&vIncrementSystemCounters,1,5);
-	HAL_TIMER_InitIt( TIMER4, 1000000, 600, &vRGBProcess ,1,3);
+	HAL_TIMER_InitIt( TIMER4, 1000000, 100, &vRGBProcess ,1,3);
 
 	HAL_TiemrEneblae( TIMER4);
 	//HAL_TiemrEneblae( TIMER1);
@@ -59,7 +58,7 @@ static void MX_GPIO_Init(void)
   //Конфигурируем порты в
 
   //Конфигурируем порты выхода
-   HAL_InitGpioOut(PowerOn_Port , PowerOn_Pin);
+  HAL_InitGpioOut(PowerOn_Port , PowerOn_Pin);
 //Конфигурируем порты DIN
   HAL_InitGpioIn( Din3_4_5_Port,Din3_Pin | Din4_Pin | Din5_Pin );
   /*
@@ -86,8 +85,10 @@ static void MX_GPIO_Init(void)
  /*
   * Порты CAN
   */
-  HAL_InitGpioAF( CAN_Port  ,  CAN_RX_Pin , GPIO_Remap1_CAN1 , MODE_IN_PU );
-  HAL_InitGpioAF( CAN_Port  ,  CAN_TX_Pin , GPIO_Remap1_CAN1 , MODE_OUT_PP );
+  HAL_InitGpioAF(CAN_Port,CAN_TX_Pin,GPIO_Remap1_CAN1,GPIO_Mode_AF_PP);
+  HAL_InitGpioAF(CAN_Port,CAN_RX_Pin,GPIO_Remap1_CAN1,GPIO_Mode_IPU);
+
+
 
   //Потры I2C, ремапа не нужно
   HAL_InitGpioAF( I2C1_Port , I2C1_SDA_Pin | I2C1_SCL_Pin   , 0 , GPIO_Mode_AF_OD );

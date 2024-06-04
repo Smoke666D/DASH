@@ -67,7 +67,7 @@ all: DASH.elf secondary-outputs
 
 # Tool invocations
 DASH.elf: $(OBJS) $(USER_OBJS)
-	@	@	riscv-none-embed-gcc -march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -msave-restore -O1 -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -fsingle-precision-constant -Wunused  -g -T "C:\MRS_DATA\workspace\DASH\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"DASH.map" --specs=nano.specs --specs=nosys.specs -o "DASH.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	@	@	riscv-none-embed-gcc -march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -fsingle-precision-constant -Wunused  -g -T "C:\MRS_DATA\workspace\DASH\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"DASH.map" --specs=nano.specs --specs=nosys.specs -o "DASH.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@	@
 DASH.hex: DASH.elf
 	@	riscv-none-embed-objcopy -O ihex "DASH.elf"  "DASH.hex"

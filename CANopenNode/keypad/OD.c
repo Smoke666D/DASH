@@ -72,13 +72,10 @@ OD_ATTR_ROM OD_ROM_t OD_ROM = {
         .mappedObject_3 = 0x20020310
     },
     .x1800_TPDOCommunicationParameter = {
-        .maxSub_index = 0x06,
+        .maxSub_index = 0x05,
         .COB_IDUsedByTPDO = 0x00000180,
-        .transmissionType = 0xFF,
-        .inhibitTime = 0x0064,
-        .compatibilityEntry = 0x00,
-        .eventTimer = 0x03E8,
-        .SYNCStartValue = 0x00
+        .transmissionType = 0xFE,
+        .eventTimer = 0x0000
     },
     .x1A00_TPDOMappingParameter = {
         .numberOfMappedObjects = 0x05,
@@ -160,22 +157,16 @@ OD_ATTR_PERSIST_COMM OD_PERSIST_COMM_t OD_PERSIST_COMM = {
 
 OD_ATTR_ OD__t OD_ = {
     .x1801_TPDOCommunicationParameter = {
-        .maxSub_index = 0x06,
+        .maxSub_index = 0x05,
         .COB_IDUsedByTPDO = 0x00000280,
-        .transmissionType = 0xFF,
-        .inhibitTime = 0x0064,
-        .compatibilityEntry = 0x00,
-        .eventTimer = 0x03E8,
-        .SYNCStartValue = 0x00
+        .transmissionType = 0xFE,
+        .eventTimer = 0x0000
     },
     .x1802_TPDOCommunicationParameter = {
-        .maxSub_index = 0x06,
+        .maxSub_index = 0x05,
         .COB_IDUsedByTPDO = 0x00000380,
-        .transmissionType = 0xFF,
-        .inhibitTime = 0x0064,
-        .compatibilityEntry = 0x00,
-        .eventTimer = 0x03E8,
-        .SYNCStartValue = 0x00
+        .transmissionType = 0xFE,
+        .eventTimer = 0x0000
     },
     .x1A01_TPDOMappingParameter = {
         .numberOfMappedObjects = 0x03,
@@ -185,8 +176,8 @@ OD_ATTR_ OD__t OD_ = {
     },
     .x1A02_TPDOMappingParameter = {
         .numberOfMappedObjects = 0x02,
-        .mappedObject_1 = 0x20060201,
-        .mappedObject_2 = 0x20060201
+        .mappedObject_1 = 0x20060208,
+        .mappedObject_2 = 0x20060108
     }
 };
 
@@ -215,9 +206,9 @@ typedef struct {
     OD_obj_record_t o_1601_RPDOMappingParameter[7];
     OD_obj_record_t o_1602_RPDOMappingParameter[7];
     OD_obj_record_t o_1603_RPDOMappingParameter[4];
-    OD_obj_record_t o_1800_TPDOCommunicationParameter[7];
-    OD_obj_record_t o_1801_TPDOCommunicationParameter[7];
-    OD_obj_record_t o_1802_TPDOCommunicationParameter[7];
+    OD_obj_record_t o_1800_TPDOCommunicationParameter[4];
+    OD_obj_record_t o_1801_TPDOCommunicationParameter[4];
+    OD_obj_record_t o_1802_TPDOCommunicationParameter[4];
     OD_obj_record_t o_1A00_TPDOMappingParameter[6];
     OD_obj_record_t o_1A01_TPDOMappingParameter[4];
     OD_obj_record_t o_1A02_TPDOMappingParameter[3];
@@ -581,28 +572,10 @@ static CO_PROGMEM ODObjs_t ODObjs = {
             .dataLength = 1
         },
         {
-            .dataOrig = &OD_ROM.x1800_TPDOCommunicationParameter.inhibitTime,
-            .subIndex = 3,
-            .attribute = ODA_SDO_R | ODA_MB,
-            .dataLength = 2
-        },
-        {
-            .dataOrig = &OD_ROM.x1800_TPDOCommunicationParameter.compatibilityEntry,
-            .subIndex = 4,
-            .attribute = ODA_SDO_R,
-            .dataLength = 1
-        },
-        {
             .dataOrig = &OD_ROM.x1800_TPDOCommunicationParameter.eventTimer,
             .subIndex = 5,
             .attribute = ODA_SDO_R | ODA_MB,
             .dataLength = 2
-        },
-        {
-            .dataOrig = &OD_ROM.x1800_TPDOCommunicationParameter.SYNCStartValue,
-            .subIndex = 6,
-            .attribute = ODA_SDO_R,
-            .dataLength = 1
         }
     },
     .o_1801_TPDOCommunicationParameter = {
@@ -625,28 +598,10 @@ static CO_PROGMEM ODObjs_t ODObjs = {
             .dataLength = 1
         },
         {
-            .dataOrig = &OD_.x1801_TPDOCommunicationParameter.inhibitTime,
-            .subIndex = 3,
-            .attribute = ODA_SDO_R | ODA_MB,
-            .dataLength = 2
-        },
-        {
-            .dataOrig = &OD_.x1801_TPDOCommunicationParameter.compatibilityEntry,
-            .subIndex = 4,
-            .attribute = ODA_SDO_R,
-            .dataLength = 1
-        },
-        {
             .dataOrig = &OD_.x1801_TPDOCommunicationParameter.eventTimer,
             .subIndex = 5,
             .attribute = ODA_SDO_R | ODA_MB,
             .dataLength = 2
-        },
-        {
-            .dataOrig = &OD_.x1801_TPDOCommunicationParameter.SYNCStartValue,
-            .subIndex = 6,
-            .attribute = ODA_SDO_R,
-            .dataLength = 1
         }
     },
     .o_1802_TPDOCommunicationParameter = {
@@ -669,28 +624,10 @@ static CO_PROGMEM ODObjs_t ODObjs = {
             .dataLength = 1
         },
         {
-            .dataOrig = &OD_.x1802_TPDOCommunicationParameter.inhibitTime,
-            .subIndex = 3,
-            .attribute = ODA_SDO_R | ODA_MB,
-            .dataLength = 2
-        },
-        {
-            .dataOrig = &OD_.x1802_TPDOCommunicationParameter.compatibilityEntry,
-            .subIndex = 4,
-            .attribute = ODA_SDO_R,
-            .dataLength = 1
-        },
-        {
             .dataOrig = &OD_.x1802_TPDOCommunicationParameter.eventTimer,
             .subIndex = 5,
             .attribute = ODA_SDO_R | ODA_MB,
             .dataLength = 2
-        },
-        {
-            .dataOrig = &OD_.x1802_TPDOCommunicationParameter.SYNCStartValue,
-            .subIndex = 6,
-            .attribute = ODA_SDO_R,
-            .dataLength = 1
         }
     },
     .o_1A00_TPDOMappingParameter = {
@@ -828,7 +765,7 @@ static CO_PROGMEM ODObjs_t ODObjs = {
         .attribute0 = ODA_SDO_R,
         .attribute = ODA_SDO_R | ODA_TPDO,
         .dataElementLength = 1,
-        .dataElementSizeof = sizeof(bool_t)
+        .dataElementSizeof = sizeof(uint8_t)
     },
     .o_2007_BIG_SEG_CONFIG = {
         .dataOrig0 = &OD_ROM.x2007_BIG_SEG_CONFIG_sub0,
@@ -1053,9 +990,9 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x1601, 0x07, ODT_REC, &ODObjs.o_1601_RPDOMappingParameter, NULL},
     {0x1602, 0x07, ODT_REC, &ODObjs.o_1602_RPDOMappingParameter, NULL},
     {0x1603, 0x04, ODT_REC, &ODObjs.o_1603_RPDOMappingParameter, NULL},
-    {0x1800, 0x07, ODT_REC, &ODObjs.o_1800_TPDOCommunicationParameter, NULL},
-    {0x1801, 0x07, ODT_REC, &ODObjs.o_1801_TPDOCommunicationParameter, NULL},
-    {0x1802, 0x07, ODT_REC, &ODObjs.o_1802_TPDOCommunicationParameter, NULL},
+    {0x1800, 0x04, ODT_REC, &ODObjs.o_1800_TPDOCommunicationParameter, NULL},
+    {0x1801, 0x04, ODT_REC, &ODObjs.o_1801_TPDOCommunicationParameter, NULL},
+    {0x1802, 0x04, ODT_REC, &ODObjs.o_1802_TPDOCommunicationParameter, NULL},
     {0x1A00, 0x06, ODT_REC, &ODObjs.o_1A00_TPDOMappingParameter, NULL},
     {0x1A01, 0x04, ODT_REC, &ODObjs.o_1A01_TPDOMappingParameter, NULL},
     {0x1A02, 0x03, ODT_REC, &ODObjs.o_1A02_TPDOMappingParameter, NULL},

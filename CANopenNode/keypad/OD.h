@@ -16,7 +16,7 @@
 
         Created:      31.01.2017 17:13:00
         Created By:   Smoke666
-        Modified:     03.06.2024 12:29:16
+        Modified:     04.06.2024 13:56:25
         Modified By:  rOBIN 2
 
     Device Info:
@@ -134,10 +134,7 @@ typedef struct {
         uint8_t maxSub_index;
         uint32_t COB_IDUsedByTPDO;
         uint8_t transmissionType;
-        uint16_t inhibitTime;
-        uint8_t compatibilityEntry;
         uint16_t eventTimer;
-        uint8_t SYNCStartValue;
     } x1800_TPDOCommunicationParameter;
     struct {
         uint8_t numberOfMappedObjects;
@@ -222,19 +219,13 @@ typedef struct {
         uint8_t maxSub_index;
         uint32_t COB_IDUsedByTPDO;
         uint8_t transmissionType;
-        uint16_t inhibitTime;
-        uint8_t compatibilityEntry;
         uint16_t eventTimer;
-        uint8_t SYNCStartValue;
     } x1801_TPDOCommunicationParameter;
     struct {
         uint8_t maxSub_index;
         uint32_t COB_IDUsedByTPDO;
         uint8_t transmissionType;
-        uint16_t inhibitTime;
-        uint8_t compatibilityEntry;
         uint16_t eventTimer;
-        uint8_t SYNCStartValue;
     } x1802_TPDOCommunicationParameter;
     struct {
         uint8_t numberOfMappedObjects;

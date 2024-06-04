@@ -79,7 +79,6 @@ void ADC_FSM()
 {
    uint16_t * pBuffer = getADC1Buffer();
    float Vx =0;
-   float t1,t2;
       for (u16 i = 0; i<ADC1_CHANNELS  * ADC_FRAME_SIZE ;i++)
           pBuffer[i]= Get_ConversionVal(pBuffer[i]);
       for (u8 i = 0; i< ADC1_CHANNELS ;i++)
@@ -183,7 +182,6 @@ static void vDINInit()
     DIN_CONFIG.ulLowCounter  = DEF_L_FRONT;
     DIN_CONFIG.getPortCallback = &fDinStateCallback;
     eDinConfigWtihStruct(INPUT_3,&DIN_CONFIG);
-    DIN_CONFIG.eInputType = DIN_CONFIG_NEGATIVE;
     eDinConfigWtihStruct(INPUT_4,&DIN_CONFIG);
     DOUT_CONFIG.setPortCallback =&vSetDoutState;
     eDOUTConfigWtihStruct( OUT_1, &DOUT_CONFIG);
@@ -196,7 +194,7 @@ static void vDINInit()
   //  HAL_TiemrEneblae(TIMER2);
 }
 
-
+u16 BufAIN[4]={0};
 /*---------------------------------------------------------------------------------------------------*/
 /*
  * Задача обработки клавиш
@@ -241,11 +239,13 @@ void vInputsTask( void * argument )
                 u16 data;
                 for (u8 i=0; i<4;i++)
                 {
-                  /* if ( xGetAin( i , &data) ==1)
+                    data = getODValue( chAIN1 + i,1);
+                   if (BufAIN[i]!= data)
                    {
+                       BufAIN[i] = data;
                        OD_set_value(OD_ENTRY_H2005, 0x01+i, &data, 2, true);
                        OD_Ain_flag = SET;
-                   }*/
+                   }
                 }
                 if (GetAIN(3) < 7.0 )
                 {
@@ -257,7 +257,7 @@ void vInputsTask( void * argument )
                 if ((low_power_mode_flag) && (GetAIN(3) > 7.0 ))
                 {
                     low_power_mode_flag = 0;
-                    vSetBrigth( RGB_CHANNEL,    11 );//LED_CHANELL_BRIGTH[0]);
+                    vSetBrigth( RGB_CHANNEL,    14 );//LED_CHANELL_BRIGTH[0]);
                     vSetBrigth( WHITE_CHANNEL,  11 );//LED_CHANELL_BRIGTH[1]);
                 }
                 HAL_ADC_StartDMA(DMA1_CH1,getADC1Buffer(),ADC1_CHANNELS * ADC_FRAME_SIZE);
@@ -279,7 +279,7 @@ void vInputsTask( void * argument )
                    OD_Ain_flag = SET;
                 }
             }*/
-          /*  if ( uGetDIN(INPUT_4)== SET)
+            if ( uGetDIN(INPUT_4)== RESET)
             {
                 eSetDUT(OUT_1, SET);
             }
@@ -297,7 +297,7 @@ void vInputsTask( void * argument )
             {
                OD_Ain_flag = RESET;
                OD_requestTPDO(OD_AIN_flagsPDO,1);
-            }*/
+            }
             break;
     }
 

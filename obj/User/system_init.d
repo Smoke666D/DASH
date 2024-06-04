@@ -59,7 +59,40 @@ User/system_init.o: ../User/system_init.c ../User/system_init.h \
  ../User/inputs.h C:\MRS_DATA\workspace\DASH\HAL/hal_wdt.h \
  ../User/keyboard_task.h \
  C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_keyboard.h \
- C:\MRS_DATA\workspace\DASH\HAL/hal_gpio.h
+ C:\MRS_DATA\workspace\DASH\HAL/hal_gpio.h ../User/process.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode\301/CO_ODinterface.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_driver.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_config.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/CO_driver_target.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/CANopen.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_driver.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_ODinterface.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_NMT_Heartbeat.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_ODinterface.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_Emergency.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_HBconsumer.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_NMT_Heartbeat.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_Emergency.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SDOserver.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SDOclient.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SDOserver.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_fifo.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SYNC.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_PDO.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SYNC.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_TIME.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/303/CO_LEDs.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/304/CO_GFC.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/304/CO_SRDO.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/305/CO_LSSslave.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/305/CO_LSS.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/305/CO_LSSmaster.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/309/CO_gateway_ascii.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SDOclient.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/305/CO_LSSmaster.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/303/CO_LEDs.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode/extra/CO_trace.h \
+ C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/OD.h
 
 ../User/system_init.h:
 
@@ -196,3 +229,71 @@ C:\MRS_DATA\workspace\DASH\HAL/hal_wdt.h:
 C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_keyboard.h:
 
 C:\MRS_DATA\workspace\DASH\HAL/hal_gpio.h:
+
+../User/process.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode\301/CO_ODinterface.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_driver.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_config.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/CO_driver_target.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/CANopen.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_driver.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_ODinterface.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_NMT_Heartbeat.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_ODinterface.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_Emergency.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_HBconsumer.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_NMT_Heartbeat.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_Emergency.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SDOserver.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SDOclient.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SDOserver.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_fifo.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SYNC.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_PDO.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SYNC.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_TIME.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/303/CO_LEDs.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/304/CO_GFC.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/304/CO_SRDO.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/305/CO_LSSslave.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/305/CO_LSS.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/305/CO_LSSmaster.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/309/CO_gateway_ascii.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_SDOclient.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/305/CO_LSSmaster.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/303/CO_LEDs.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode/extra/CO_trace.h:
+
+C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/OD.h:

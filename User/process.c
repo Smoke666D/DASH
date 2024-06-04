@@ -46,190 +46,189 @@ static ODR_t OD_readMenuSetup (OD_stream_t *stream, void *buf, OD_size_t count, 
 /* Variables used for triggering TPDO, see simulation in app_programRt(). */
 
 
-OD_extension_t OD_V1_7_extension = {
+const OD_extension_t OD_V1_7_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeV1_7
 };
-OD_extension_t OD_V8_14_extension = {
+const  OD_extension_t OD_V8_14_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeV8_14
 };
-OD_extension_t OD_V15_17_extension = {
+const  OD_extension_t OD_V15_17_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeV15_17
 };
 
-OD_extension_t  OD_DASH_PARAM_extension = {
-        .object = NULL,
-        .read =  OD_readDashParam,
+const OD_extension_t  OD_DASH_PARAM_extension = {
+       .read =  OD_readDashParam,
         .write = OD_writeDashParam,
     };
 
-OD_extension_t OD_ADC1_CAL_extension = {
+const OD_extension_t OD_ADC1_CAL_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeADC1
 };
 
-OD_extension_t OD_ADC2_CAL_extension = {
+const OD_extension_t OD_ADC2_CAL_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeADC2
 };
 
-OD_extension_t OD_ADC3_CAL_extension = {
+const OD_extension_t OD_ADC3_CAL_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeADC3
 };
 
 
-OD_extension_t OD_BRIGTH_extension = {
+const OD_extension_t OD_BRIGTH_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeBrigth
 };
 
-OD_extension_t OD_BAR_extension = {
+const OD_extension_t OD_BAR_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeBAR
 };
 
-OD_extension_t OD_RGB1_extension = {
+const OD_extension_t OD_RGB1_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB1
 };
 
-OD_extension_t OD_RGB2_extension = {
+const OD_extension_t OD_RGB2_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB2
 };
 
-OD_extension_t OD_RGB3_extension = {
+const OD_extension_t OD_RGB3_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB3
 };
 
-OD_extension_t OD_RGB4_extension = {
+const OD_extension_t OD_RGB4_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB4
 };
 
-OD_extension_t OD_RGB5_extension = {
+const OD_extension_t OD_RGB5_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB5
 };
 
-OD_extension_t OD_RGB6_extension = {
+const OD_extension_t OD_RGB6_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB6
 };
 
-OD_extension_t OD_RGB7_extension = {
+const OD_extension_t OD_RGB7_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB7
 };
 
-OD_extension_t OD_RGB8_extension = {
+const OD_extension_t OD_RGB8_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB8
 };
 
-OD_extension_t OD_RGB9_extension = {
+const OD_extension_t OD_RGB9_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB9
 };
 
-OD_extension_t OD_RGB10_extension = {
+const OD_extension_t OD_RGB10_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB10
 };
 
-OD_extension_t OD_RGB11_extension = {
+const OD_extension_t OD_RGB11_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB11
 };
 
-OD_extension_t OD_RGB12_extension = {
+const OD_extension_t OD_RGB12_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB12
 };
 
-OD_extension_t OD_RGB13_extension = {
+const OD_extension_t OD_RGB13_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB13
 };
 
-OD_extension_t OD_RGB14_extension = {
+const OD_extension_t OD_RGB14_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGB14
 };
 
-OD_extension_t OD_RGBMAP_extension = {
+const OD_extension_t OD_RGBMAP_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeRGBMAP
 };
-OD_extension_t OD_SEG_extension = {
+const OD_extension_t OD_SEG_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeSEG
 };
 
-OD_extension_t  OD_RPMCONFIG_extension = {
+const OD_extension_t  OD_RPMCONFIG_extension = {
         .object = NULL,
         .read =  OD_readOriginal,
         .write = OD_writeRPMConfig
     };
 
-OD_extension_t  OD_AIN_RPM_extension = {
+const OD_extension_t  OD_AIN_RPM_extension = {
         .object = NULL,
         .read =  OD_readAIN_RPM,
         .write = OD_writeOriginal
     };
-OD_extension_t  OD_ERROR_REG_extension = {
+const OD_extension_t  OD_ERROR_REG_extension = {
         .object = NULL,
         .read =  NULL,
         .write = OD_writeERROR_REG
     };
 
 
-OD_extension_t  OD_DIN_extension= {
+const OD_extension_t  OD_DIN_extension= {
         .object = NULL,
         .read =  OD_readDIN,
         .write = NULL
     };
 
-OD_extension_t  OD_MENU_MAP_extension= {
+const OD_extension_t  OD_MENU_MAP_extension= {
         .object = NULL,
         .read =  OD_readOriginal,
         .write = OD_writeMenuMap
     };
-OD_extension_t  OD_BITRATE_extension= {
+const OD_extension_t  OD_BITRATE_extension= {
         .object = NULL,
         .read =  NULL,
         .write = OD_writeBitrate
     };
 
-OD_extension_t  OD_MENU_SETUP_extension= {
+const OD_extension_t  OD_MENU_SETUP_extension= {
         .object = NULL,
         .read =  OD_readMenuSetup,
         .write = OD_writeMenuSetup
@@ -279,8 +278,8 @@ static ODR_t OD_writeV1_7(OD_stream_t *stream,const  void *buf, OD_size_t count,
     if ((stream == NULL) || (buf == NULL) || (countWritten == NULL))
         return (ODR_DEV_INCOMPAT);
 #endif
-    uint16_t data = CO_getUint16(buf);
-    WriteReg( V1 + (stream->subIndex -1),&data,1);
+    uint16_t data = CO_getUint8(buf);
+   WriteReg( V1 + (stream->subIndex -1),&data,1);
     return ( OD_writeOriginal(stream, buf, count, countWritten) );
 
 
@@ -291,7 +290,7 @@ static ODR_t OD_writeV8_14(OD_stream_t *stream,const  void *buf, OD_size_t count
     if ((stream == NULL) || (buf == NULL) || (countWritten == NULL))
         return (ODR_DEV_INCOMPAT);
 #endif
-    uint16_t data = CO_getUint16(buf);
+    uint16_t data = CO_getUint8(buf);
     WriteReg( V8 + (stream->subIndex -1),&data,1);
     return ( OD_writeOriginal(stream, buf, count, countWritten));
 
@@ -682,7 +681,11 @@ static ODR_t OD_readAIN_RPM (OD_stream_t *stream, void *buf, OD_size_t count, OD
         }
 #endif
         *countRead = 2;
-        *((u16 *)buf) = getODValue( chAIN1 -1 + stream->subIndex,0);
+        u16 temp = (u16)getODValue( chAIN1 -1 + stream->subIndex,0);
+        u8 *ptemp = (u8 * )buf;
+        ptemp[0] =  (u8)( temp & 0xFF);
+        ptemp[1] =  (u8)((temp >>8) & 0xFF);
+
         return (ODR_OK);
 }
 
@@ -695,7 +698,8 @@ static ODR_t OD_readDIN (OD_stream_t *stream, void *buf, OD_size_t count, OD_siz
      }
 #endif
      *countRead = 1;
-     *((u8 *)buf) = (u8)getODValue( chKEY  -1 + stream->subIndex,0);
+     u8 *ptemp = (u8 * )buf;
+     ptemp[0] = (u8)getODValue( chKEY  -1 + stream->subIndex,0);
      return (ODR_OK);
 }
 

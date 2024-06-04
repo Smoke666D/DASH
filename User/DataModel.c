@@ -52,18 +52,19 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
          if (DATA_MODEL_REGISTER[VALID_CODE_ADDRES]!=VALID_CODE )
          {
              DATA_MODEL_REGISTER[BITRATE_ADR ]                     = 2;
+             DATA_MODEL_REGISTER[NODE_ID]                     = 0x20;
              DATA_MODEL_REGISTER[VALID_CODE_ADDRES]                = VALID_CODE;
              DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]                 = MAX_BRIGTH;
              DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]                   = MAX_BRIGTH;
-             DATA_MODEL_REGISTER[BAR_MODE]                         = 1;
+             DATA_MODEL_REGISTER[BAR_MODE]   = 1;
              setReg16(BAR_VALUE_HIGH        ,36);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,5);
              setReg16(BAR_VALUE_RED_LOW     ,0);
              setReg16(BAR_VALUE_GREEN_HIGH  ,36);
              setReg16(BAR_VALUE_GREEN_LOW   ,5);
-             setReg16(BITRATE_ADR           ,2);
-             setReg16(NODE_ID_ADR           ,0x16);
+             //setReg16(BITRATE_ADR           ,2);
+            // setReg16(NODE_ID_ADR           ,0x16);
              setReg16(RGB1_VALUE_GREEN_HIGH ,0);
              setReg16(RGB1_VALUE_GREEN_LOW  ,0);
              setReg16(RGB1_VALUE_RED_HIGH   ,1);
@@ -90,8 +91,8 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(RGB4_VALUE_BLUE_LOW   ,0);
              setReg16(RGB5_VALUE_GREEN_HIGH ,0);
              setReg16(RGB5_VALUE_GREEN_LOW  ,0);
-             setReg16(RGB5_VALUE_RED_HIGH   ,0);
-             setReg16(RGB5_VALUE_RED_LOW    ,0);
+             setReg16(RGB5_VALUE_RED_HIGH   ,90);
+             setReg16(RGB5_VALUE_RED_LOW    ,160);
              setReg16(RGB5_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB5_VALUE_BLUE_LOW   ,0);
              setReg16(RGB6_VALUE_GREEN_HIGH ,0);
@@ -100,10 +101,10 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(RGB6_VALUE_RED_LOW    ,0);
              setReg16(RGB6_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB6_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB7_VALUE_GREEN_HIGH ,0);
-             setReg16(RGB7_VALUE_GREEN_LOW  ,0);
-             setReg16(RGB7_VALUE_RED_HIGH   ,0);
-             setReg16(RGB7_VALUE_RED_LOW    ,0);
+             setReg16(RGB7_VALUE_GREEN_HIGH ,1);
+             setReg16(RGB7_VALUE_GREEN_LOW  ,1);
+             setReg16(RGB7_VALUE_RED_HIGH   ,1);
+             setReg16(RGB7_VALUE_RED_LOW    ,1);
              setReg16(RGB7_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB7_VALUE_BLUE_LOW   ,0);
              setReg16(RGB8_VALUE_GREEN_HIGH ,0);
@@ -130,21 +131,21 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(RGB11_VALUE_RED_LOW   ,0);
              setReg16(RGB11_VALUE_BLUE_HIGH ,0);
              setReg16(RGB11_VALUE_BLUE_LOW  ,0);
-             setReg16(RGB12_VALUE_GREEN_HIGH,0);
-             setReg16(RGB12_VALUE_GREEN_LOW ,0);
-             setReg16(RGB12_VALUE_RED_HIGH  ,0);
-             setReg16(RGB12_VALUE_RED_LOW   ,0);
+             setReg16(RGB12_VALUE_GREEN_HIGH,2);
+             setReg16(RGB12_VALUE_GREEN_LOW ,2);
+             setReg16(RGB12_VALUE_RED_HIGH  ,2);
+             setReg16(RGB12_VALUE_RED_LOW   ,2);
              setReg16(RGB12_VALUE_BLUE_HIGH ,0);
              setReg16(RGB12_VALUE_BLUE_LOW  ,0);
-             setReg16(RGB13_VALUE_GREEN_HIGH,2);
+             setReg16(RGB13_VALUE_GREEN_HIGH,3);
              setReg16(RGB13_VALUE_GREEN_LOW ,1);
-             setReg16(RGB13_VALUE_RED_HIGH  ,2);
+             setReg16(RGB13_VALUE_RED_HIGH  ,3);
              setReg16(RGB13_VALUE_RED_LOW   ,2);
              setReg16(RGB13_VALUE_BLUE_HIGH ,0);
              setReg16(RGB13_VALUE_BLUE_LOW  ,0);
-             setReg16(RGB14_VALUE_GREEN_HIGH,2);
+             setReg16(RGB14_VALUE_GREEN_HIGH,3);
              setReg16(RGB14_VALUE_GREEN_LOW ,1);
-             setReg16(RGB14_VALUE_RED_HIGH  ,2);
+             setReg16(RGB14_VALUE_RED_HIGH  ,3);
              setReg16(RGB14_VALUE_RED_LOW   ,2);
              setReg16(RGB14_VALUE_BLUE_HIGH ,0);
              setReg16(RGB14_VALUE_BLUE_LOW  ,0);
@@ -152,16 +153,16 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              DATA_MODEL_REGISTER[RGBMAP2]  =0;
              DATA_MODEL_REGISTER[RGBMAP3]  =0;
              DATA_MODEL_REGISTER[RGBMAP4]  =0;
-             DATA_MODEL_REGISTER[RGBMAP5]  =0;
+             DATA_MODEL_REGISTER[RGBMAP5]  =chAKB;
              DATA_MODEL_REGISTER[RGBMAP6]  =0;
-             DATA_MODEL_REGISTER[RGBMAP7]  =0;
+             DATA_MODEL_REGISTER[RGBMAP7]  =vCHANNEL5;
              DATA_MODEL_REGISTER[RGBMAP8]  =chAIN1;
              DATA_MODEL_REGISTER[RGBMAP9]  =0;
              DATA_MODEL_REGISTER[RGBMAP10] =0;
              DATA_MODEL_REGISTER[RGBMAP11] =0;
-             DATA_MODEL_REGISTER[RGBMAP12] =0;
-             DATA_MODEL_REGISTER[RGBMAP13] =0;
-             DATA_MODEL_REGISTER[RGBMAP14] =0;
+             DATA_MODEL_REGISTER[RGBMAP12] =vCHANNEL5;
+             DATA_MODEL_REGISTER[RGBMAP13] =vCHANNEL4;
+             DATA_MODEL_REGISTER[RGBMAP14] =vCHANNEL3 ;
              DATA_MODEL_REGISTER[BARMAP]   =1;
              setReg16(BIG_SEGVAL1       , 0x336);
              setReg16(BIG_SEGVAL2       , 0x03F);
@@ -193,17 +194,16 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
 
              setReg16(RPM1_COOF, 1000);
              setReg16(RPM2_COOF, 1000);
-             setReg32( MENU1_MAP ,0x783F0000 | chAIN1);
+             setReg32( MENU1_MAP , 0x78790000 | chAIN1);
              setReg32( MENU2_MAP , 0x3E000000 | chAKB );
-             setReg32( MENU3_MAP ,0x76000000 | chHOUR );
-             setReg32( MENU4_MAP ,0);
-             setReg32(MENU5_MAP ,0);
+             setReg32( MENU3_MAP , 0x76000000 | chHOUR );
+             setReg32( MENU4_MAP , 0x783F0000 | chAIN2);
+             setReg32(MENU5_MAP ,  0x71000000 | chAIN3);;
              setReg32(MENU6_MAP ,0);
              setReg32( MENU7_MAP ,0);
              setReg32( MENU8_MAP ,0);
              setReg32( MENU9_MAP ,0);
              setReg32( MENU10_MAP , 0);
-             DATA_MODEL_REGISTER[NODE_ID_ADR] = 16;
              DATA_MODEL_REGISTER[MENU_DEF_POS]             =0;
              DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      =1;
              eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,0);
@@ -403,12 +403,10 @@ void WriteReg( u16 reg_adress, void * data, u8 len)
             DATA_MODEL_REGISTER[reg_adress] = Buffer[0];
             break;
         case 2:
-            *((u16 *)Buffer) = *((u16 *)data);
-            *((u16 *)&DATA_MODEL_REGISTER[reg_adress]) = *((u16 *)Buffer);
+            setReg16(reg_adress, *((u16 *)Buffer));
             break;
         case 4:
-            *((u32 *)Buffer) = *((u32 *)data);
-            *((u32 *)&DATA_MODEL_REGISTER[reg_adress]) = *((u32 *)Buffer);
+            setReg32(reg_adress, *((u32 *)Buffer));
             break;
     }
     if ((reg_adress < EEPROM_REGISER_COUNT) && (data_init == 0))
@@ -455,20 +453,22 @@ uint16_t vFDGetNMTState( void )
 
 uint8_t vGetNodeId( void )
 {
-  return ( getReg8( NODE_ID_ADR) );
+  return ( getReg8( NODE_ID) );
 }
 
 void vIncrementSystemCounters()
 {
-    uint32_t data = getReg32(HOUR_COUNTER_ADR);
-    data++;
-    setReg32(HOUR_COUNTER_ADR,data);
-    /*if (++secondcounter>=360)
+    //uint32_t data = getReg32(HOUR_COUNTER_ADR);
+    //data++;
+   // setReg32(HOUR_COUNTER_ADR,data);
+    if (++secondcounter>=360)
     {
-        (*((u32 *)&DATA_MODEL_REGISTER[HOUR_COUNTER_ADR])) ++;
+        uint32_t data = getReg32(HOUR_COUNTER_ADR);
+        data++;
+        setReg32(HOUR_COUNTER_ADR,data);
         secondcounter = 0;
     }
-    odometr = odometr + getODValue( DATA_MODEL_REGISTER[ODOMETR_MAP])/3.6;*/
+   // odometr = odometr + getODValue( DATA_MODEL_REGISTER[ODOMETR_MAP])/3.6;*/
     return;
 }
 

@@ -14,9 +14,13 @@
 
 /*                        0     1    2    3    4   5    6    7    8   9*/
 const u8 DigitMask[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
-static const u16 Brigth[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,34,55,89,144,233,256,610,PWM_TIM_PERIOD};
+static const u16 Brigth[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,34,55,89,144,233,256,610,PWM_TIM_PERIOD+1};
+static const u16 BrigthR[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,150,200,250,300,350,400,450,500};
+static const u16 BrigthG[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,50,80,100,150,200,250,300,350};
+static const u16 BrigthB[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,150,200,250,300,350,400,450,500};
 static u8 LED_CHANELL_BRIGTH[2];
 static uint16_t SPI1_DATA[SPI1_CHIP_COUNT];
+static uint16_t data[SPI1_CHIP_COUNT];
 static uint16_t SPI2_DATA[SPI2_CHIP_COUNT];
 
 
@@ -290,18 +294,18 @@ void SPI2_DMA_Callback( void )
 void vLedDriverStart(void)
 {
 	HAL_DMAInitIT(DMA1_Channel5,MTOP, DMA_HWORD  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,1,2,&SPI2_DMA_Callback);
-	HAL_DMAInitIT(DMA1_Channel3,MTOP, DMA_HWORD  ,(u32)&SPI1->DATAR, (u32)SPI1_DATA,0,1,2,&SPI1_DMA_Callback);
+	HAL_DMAInitIT(DMA1_Channel3,MTOP, DMA_HWORD  ,(u32)&SPI1->DATAR, (u32)data,0,1,2,&SPI1_DMA_Callback);
 	//HAL_TiemrEneblae(TIMER3);
 	//TIM_Cmd( PWM_TIMER_1, ENABLE );
 
-	vSetBrigth( RGB_CHANNEL,    11 );//LED_CHANELL_BRIGTH[0]);
-	vSetBrigth( WHITE_CHANNEL,  11 );//LED_CHANELL_BRIGTH[1]);
+	vSetBrigth( RGB_CHANNEL,    14 );//LED_CHANELL_BRIGTH[0]);
+	vSetBrigth( WHITE_CHANNEL,  11);//LED_CHANELL_BRIGTH[1]);
 	return;
 }
 
 
-u16 counter_R =80;
-u16 counter_G =50;
+u16 counter_R =50;
+u16 counter_G =20;
 u16 counter_B =90;
 u16 counterRGB =0;
 
@@ -319,37 +323,7 @@ void vLedProcess( void )
        HAL_DMA_Enable(DMA1_CH5);
    //}
 
-  // if (++counterRGB >= 100)
-  // {
-  //     counterRGB = 0;
-  // }
- /*  if (counterRGB++ >= 2)
-   {
-       SPI1_DATA[0]&=0x6DB6;
-       SPI1_DATA[1]&=0xDBF6;
-       SPI1_DATA[2]&=0x6DB6;
-       SPI1_DATA[3]&=0xAAAA;
-       counterRGB = 0;
-       SPI1_DATA[4]&=0xAAAA;
 
-   }*/
-  /* if (counterRGB >= counter_G)
-   {
-       SPI1_DATA[0]&=
-              SPI1_DATA[1]&=
-              SPI1_DATA[2]&=
-              SPI1_DATA[3]&=
-              SPI1_DATA[4]&=
-    }
-   if (counterRGB >= counter_B)
-    {
-
-       SPI1_DATA[0]&=
-              SPI1_DATA[1]&=
-              SPI1_DATA[2]&=
-              SPI1_DATA[3]&=
-              SPI1_DATA[4]&=
-    }*/
 
 
    return;
@@ -357,6 +331,34 @@ void vLedProcess( void )
 
 void vRGBProcess()
 {
+    memcpy(data,SPI1_DATA,SPI1_CHIP_COUNT*2);
+     if (++counterRGB >= PWM_TIM_PERIOD/2)
+      {
+     counterRGB = 0;
+      }
+      if (counterRGB++ >=BrigthR[9])
+      {
+          data[0]&=0x6DB6;
+          data[1]&=0xDBF6;
+          data[2]&=0x6DB6;
+          data[3]&=0xAAAA;
+          data[4]&=0xAAAA;
+      }
+     if (counterRGB++ >=BrigthG[9])
+      {
+          data[0]&=0x5B6D;
+          data[1]&=0xB77D;
+          data[2]&=0x5B6D;
+          data[3]&=0x5555;
+          data[4]&=0x5555;
+
+       }
+      if (counterRGB >= BrigthG[9])
+       {
+          data[0]&=0x36DB;
+          data[1]&=0x6FDB;
+          data[2]&=0x56DB;
+       }
     HAL_ResetBit(  SPI1_Port , SPI1_NSS_Pin);
     HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
     HAL_DMA_Enable(DMA1_CH3);

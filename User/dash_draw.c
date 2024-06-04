@@ -60,12 +60,12 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
         out_data=((u32) getReg16(V1 + virtualchannel -1 ));
         break;
     case chAIN1 :
-
+    case chAIN2 :
+    case chAIN3 :
         out_data= fGetAinCalData( 0 , GetAIN(virtualchannel -chAIN1 ))*10;
         if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET);
         break;
-    case chAIN2 :
-    case chAIN3 :
+
     case chAKB  :
         out_data = (int32_t) GetAIN(virtualchannel -chAIN1 )*10;
         break;

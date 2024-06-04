@@ -8,6 +8,7 @@
 #include "hal_wdt.h"
 #include "inputs.h"
 #include "keyboard_task.h"
+#include "process.h"
 
 static void StartDefaultTask(void *argument);
 static StaticTask_t xIdleTaskTCB                                     __SECTION(RAM_SECTION_CCMRAM);
@@ -121,17 +122,6 @@ void StartDefaultTask(void *argument)
                setReg16(BAR_VALUE_GREEN_LOW   ,110);
                setReg8(BAR_MODE   ,1);
 
-
-
-
-               setReg16(RGB5_VALUE_GREEN_HIGH       ,190);
-               setReg16(RGB5_VALUE_GREEN_LOW        ,110);
-               setReg16(RGB5_VALUE_RED_HIGH        ,100);
-               setReg16(RGB5_VALUE_RED_LOW         ,200);
-               setReg16(RGB5_VALUE_BLUE_HIGH       ,0);
-               setReg16(RGB5_VALUE_BLUE_LOW        ,0);
-               setReg8(RGBMAP5   ,1);
-
                setReg16(RGB9_VALUE_GREEN_HIGH       ,190);
                setReg16(RGB9_VALUE_GREEN_LOW        ,110);
                setReg16(RGB9_VALUE_RED_HIGH        ,100);
@@ -141,17 +131,12 @@ void StartDefaultTask(void *argument)
                setReg8(RGBMAP9   ,1);
 
 
-               setReg16(RGB14_VALUE_GREEN_HIGH       ,190);
-               setReg16(RGB14_VALUE_GREEN_LOW        ,110);
-               setReg16(RGB14_VALUE_RED_HIGH        ,100);
-                              setReg16(RGB14_VALUE_RED_LOW         ,200);
-                              setReg16(RGB14_VALUE_BLUE_HIGH       ,0);
-                              setReg16(RGB14_VALUE_BLUE_LOW        ,0);
-                              setReg8(RGBMAP14   ,1);
+
 
               vLedDriverStart();
               InputsNotifyTaskToInit();
               RedrawNotifyTaskToInit();
+              vProceesInit();
               DeafaultTaskFSM = STATE_WHAIT_TO_RAEDY;
               break;
           case STATE_WHAIT_TO_RAEDY:
@@ -161,7 +146,6 @@ void StartDefaultTask(void *argument)
                   ulTaskNotifyValueClearIndexed(0, 0, 0xFFFF);
                   vTaskResume( *xCanOpenProcessTaskHandle());
                   vTaskResume( *xCanOpenPeriodicTaskHandle ());
-
                   DeafaultTaskFSM = STATE_RUN;
               }
               break;

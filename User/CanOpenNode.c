@@ -231,7 +231,7 @@ void vCanOpenPeriodicProcess(void *argument)
         #if (CO_CONFIG_PDO) & CO_CONFIG_TPDO_ENABLE
                     CO_process_TPDO(CO, syncWas, timeDifference_us, &max_sleep_time_us);
         #endif
-                }
+               }
 
     }
 }

@@ -39,6 +39,7 @@ int main(void)
     vSYSeventInit ();
     vSYSqueueInit ();
     vSYStaskInit ( );
+
     vTaskStartScheduler();
     while(1)
     {
