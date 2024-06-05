@@ -16,7 +16,7 @@
 
         Created:      31.01.2017 17:13:00
         Created By:   Smoke666
-        Modified:     04.06.2024 13:56:25
+        Modified:     04.06.2024 17:50:46
         Modified By:  rOBIN 2
 
     Device Info:
@@ -200,6 +200,7 @@ typedef struct {
         uint32_t mappedObject_1;
         uint32_t mappedObject_2;
         uint32_t mappedObject_3;
+        uint32_t mappedObject_4;
     } x1600_RPDOMappingParameter;
     uint8_t x2000_virtualChannelV1__V7_sub0;
     uint8_t x2001_virtualChannelV8__V14_sub0;

@@ -137,10 +137,11 @@ OD_ATTR_RAM OD_RAM_t OD_RAM = {
         .transmissionType = 0xFE
     },
     .x1600_RPDOMappingParameter = {
-        .numberOfMappedObjects = 0x03,
+        .numberOfMappedObjects = 0x04,
         .mappedObject_1 = 0x20030020,
         .mappedObject_2 = 0x20000108,
-        .mappedObject_3 = 0x20000208
+        .mappedObject_3 = 0x20000208,
+        .mappedObject_4 = 0x20070110
     },
     .x2000_virtualChannelV1__V7_sub0 = 0x07,
     .x2001_virtualChannelV8__V14_sub0 = 0x07,
@@ -202,7 +203,7 @@ typedef struct {
     OD_obj_record_t o_1401_RPDOCommunicationParameter[3];
     OD_obj_record_t o_1402_RPDOCommunicationParameter[3];
     OD_obj_record_t o_1403_RPDOCommunicationParameter[3];
-    OD_obj_record_t o_1600_RPDOMappingParameter[4];
+    OD_obj_record_t o_1600_RPDOMappingParameter[5];
     OD_obj_record_t o_1601_RPDOMappingParameter[7];
     OD_obj_record_t o_1602_RPDOMappingParameter[7];
     OD_obj_record_t o_1603_RPDOMappingParameter[4];
@@ -434,6 +435,12 @@ static CO_PROGMEM ODObjs_t ODObjs = {
         {
             .dataOrig = &OD_RAM.x1600_RPDOMappingParameter.mappedObject_3,
             .subIndex = 3,
+            .attribute = ODA_SDO_R | ODA_MB,
+            .dataLength = 4
+        },
+        {
+            .dataOrig = &OD_RAM.x1600_RPDOMappingParameter.mappedObject_4,
+            .subIndex = 4,
             .attribute = ODA_SDO_R | ODA_MB,
             .dataLength = 4
         }
@@ -771,7 +778,7 @@ static CO_PROGMEM ODObjs_t ODObjs = {
         .dataOrig0 = &OD_ROM.x2007_BIG_SEG_CONFIG_sub0,
         .dataOrig = NULL,
         .attribute0 = ODA_SDO_R,
-        .attribute = ODA_SDO_RW | ODA_MB,
+        .attribute = ODA_SDO_RW | ODA_RPDO | ODA_MB,
         .dataElementLength = 2,
         .dataElementSizeof = sizeof(int16_t)
     },
@@ -986,7 +993,7 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x1401, 0x03, ODT_REC, &ODObjs.o_1401_RPDOCommunicationParameter, NULL},
     {0x1402, 0x03, ODT_REC, &ODObjs.o_1402_RPDOCommunicationParameter, NULL},
     {0x1403, 0x03, ODT_REC, &ODObjs.o_1403_RPDOCommunicationParameter, NULL},
-    {0x1600, 0x04, ODT_REC, &ODObjs.o_1600_RPDOMappingParameter, NULL},
+    {0x1600, 0x05, ODT_REC, &ODObjs.o_1600_RPDOMappingParameter, NULL},
     {0x1601, 0x07, ODT_REC, &ODObjs.o_1601_RPDOMappingParameter, NULL},
     {0x1602, 0x07, ODT_REC, &ODObjs.o_1602_RPDOMappingParameter, NULL},
     {0x1603, 0x04, ODT_REC, &ODObjs.o_1603_RPDOMappingParameter, NULL},
