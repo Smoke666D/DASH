@@ -16,7 +16,7 @@ static StaticTask_t xTimerTaskTCB                                    __SECTION(R
 static StaticTask_t defaultTaskControlBlock;
 static StaticTask_t CanOpneProccesTaskControlBlock;
 static StaticTask_t CanOpnePeriodicTaskControlBlock;
-static StaticTask_t KeyboardTaskControlBlock;
+
 static StaticTask_t ProcessTaskControlBlock;
 
 static StackType_t uxIdleTaskStack[ configMINIMAL_STACK_SIZE ]       __SECTION(RAM_SECTION_CCMRAM);
@@ -24,7 +24,6 @@ static StackType_t uxTimerTaskStack[ configTIMER_TASK_STACK_DEPTH ]  __SECTION(R
 static StackType_t defaultTaskBuffer[DEFAULT_TASK_STACK_SIZE];
 static StackType_t CanOpneProccesTaskBuffer[CAN_OPEN_STK_SIZE ];
 static StackType_t CanOpnePeriodicTaskBuffer[PERIODIC_CAN_STK_SIZE ];
-static StackType_t KeyboardTaskBuffer[KEYBOARD_STK_SIZE ];
 static StackType_t ProcessTaskBuffer[ PROCESS_STK_SIZE ];
 static TaskHandle_t DefautTask_Handler;
 static StackType_t defaultTaskBuffer[DEFAULT_TASK_STACK_SIZE];
@@ -32,8 +31,8 @@ static StackType_t InputsTaskBuffer[INPUTS_TASK_STACK_SIZE];
 static StaticTask_t defaultTaskControlBlock;
 static StaticTask_t InputsTaskControlBlock;
 static TaskHandle_t DefautTask_Handler;
-uint8_t ucQueueStorageArea[  16U * sizeof( KeyEvent ) ];
-static StaticQueue_t xStaticQueue;
+//uint8_t ucQueueStorageArea[  16U * sizeof( KeyEvent ) ];
+//static StaticQueue_t xStaticQueue;
 /*
  * 妤快把快技快扶扶抑快
  */
@@ -64,9 +63,7 @@ void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
 
 void vSYStaskInit ( void )
 {
-    (* xKeyboardProcessTaskHandle ())
-            = xTaskCreateStatic( vKeyboardTask, "KeyboardTask", KEYBOARD_STK_SIZE , ( void * ) 1, KEYBOARD_TASK_PRIO   ,
-                            (StackType_t * const )KeyboardTaskBuffer, &KeyboardTaskControlBlock );
+
    (* xProcessTaskHandle ())
              = xTaskCreateStatic( vRedrawTask, "ProcessTask", PROCESS_STK_SIZE , ( void * ) 1, PROCESS_TASK_PRIO  ,
                                      (StackType_t * const )ProcessTaskBuffer, &ProcessTaskControlBlock );
@@ -76,7 +73,7 @@ void vSYStaskInit ( void )
   (* xCanOpenProcessTaskHandle())
   = xTaskCreateStatic( vCanOpenProcess, "CanOpenProcessTask", CAN_OPEN_STK_SIZE , ( void * ) 1, CAN_OPEN_TASK_PRIO ,
   (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );
-  (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, 3, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
+  (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, INPUT_TASK_PRIO, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
   DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, 3, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
   vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
   vTaskSuspend( *xCanOpenProcessTaskHandle());
@@ -85,7 +82,7 @@ void vSYStaskInit ( void )
 
 void vSYSqueueInit ( void )
 {
-    *( xKeyboardQueue()) = xQueueCreateStatic( 16U, sizeof( KeyEvent ),ucQueueStorageArea, &xStaticQueue );;
+    //*( xKeyboardQueue()) = xQueueCreateStatic( 16U, sizeof( KeyEvent ),ucQueueStorageArea, &xStaticQueue );;
 }
 /*----------------------------------------------------------------------------*/
 void vSYSeventInit ( void )
@@ -98,41 +95,13 @@ static  TaskFSM_t DeafaultTaskFSM = STATE_INIT;
 
 void StartDefaultTask(void *argument)
 {
-
-    uint32_t ulNotifiedValue;
-    uint16_t dd = 0;
-    u16 i= 0;
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-
- // vProceesInit();
-
-  //xEventGroupSetBits( xResetEventHandle, RESTART_DISABLE);
+  uint32_t ulNotifiedValue;
   for(;;)
   {
       switch( DeafaultTaskFSM)
       {
           case STATE_INIT:
               DataModel_Init();
-               setReg16(BAR_VALUE_HIGH        ,360);
-               setReg16(BAR_VALUE_LOW         ,0);
-               setReg16(BAR_VALUE_RED_HIGH    ,150);
-               setReg16(BAR_VALUE_RED_LOW     ,230);
-               setReg16(BAR_VALUE_GREEN_HIGH  ,270);
-               setReg16(BAR_VALUE_GREEN_LOW   ,110);
-               setReg8(BAR_MODE   ,1);
-
-               setReg16(RGB9_VALUE_GREEN_HIGH       ,190);
-               setReg16(RGB9_VALUE_GREEN_LOW        ,110);
-               setReg16(RGB9_VALUE_RED_HIGH        ,100);
-               setReg16(RGB9_VALUE_RED_LOW         ,200);
-               setReg16(RGB9_VALUE_BLUE_HIGH       ,0);
-               setReg16(RGB9_VALUE_BLUE_LOW        ,0);
-               setReg8(RGBMAP9   ,1);
-
-
-
-
               vLedDriverStart();
               InputsNotifyTaskToInit();
               RedrawNotifyTaskToInit();
@@ -150,12 +119,7 @@ void StartDefaultTask(void *argument)
               }
               break;
           case STATE_RUN:
-              setReg(BIG_SEG,&dd,2);
-              setReg8( V1, i);
               vTaskDelay(500);
-              if (++dd>9) dd = 0;
-              i= i+10;
-              if (i >=370) i = 0;
               HAL_WDTReset();
               break;
       }

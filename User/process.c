@@ -471,9 +471,17 @@ static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, 
        }
 #endif
 
-     uint16_t data = CO_getUint8(buf);
-     uint16_t addr = ( stream->subIndex == 1)? BIG_SEG : (BIG_SEGVAL1 -2 + stream->subIndex);
-     WriteReg( addr ,&data,2);
+     uint16_t data = CO_getUint16(buf);
+     if (stream->subIndex == 1)
+     {
+         setReg(BIG_SEG, &data, 2);
+     }
+     else
+     {
+         WriteReg( BIG_SEGVAL1 -2 + stream->subIndex ,&data,2);
+    }
+
+
      return ( OD_writeOriginal(stream, buf, count, countWritten) );
 }
 
@@ -681,7 +689,7 @@ static ODR_t OD_readAIN_RPM (OD_stream_t *stream, void *buf, OD_size_t count, OD
         }
 #endif
         *countRead = 2;
-        u16 temp = (u16)getODValue( chAIN1 -1 + stream->subIndex,0);
+        u16 temp = (u16)getODValue( chAIN1 -1 + stream->subIndex,1);
         u8 *ptemp = (u8 * )buf;
         ptemp[0] =  (u8)( temp & 0xFF);
         ptemp[1] =  (u8)((temp >>8) & 0xFF);

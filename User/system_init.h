@@ -21,17 +21,16 @@
 #define __SECTION(x)
 
 
-#define  DEFAULT_TASK_STACK_SIZE         128U
-#define  INPUTS_TASK_STACK_SIZE         128U
-#define  DEFAULT_TASK_STACK_SIZE        128U
-#define  CAN_OPEN_TASK_PRIO             7
-#define  CAN_OPEN_STK_SIZE              700
+#define DEFAULT_TASK_STACK_SIZE         128U
+#define INPUTS_TASK_STACK_SIZE         128U
+#define DEFAULT_TASK_STACK_SIZE        128U
+#define CAN_OPEN_TASK_PRIO              7
+#define INPUT_TASK_PRIO                 8
+#define CAN_OPEN_STK_SIZE               700
 #define PERIODIC_CAN_TASK_PRIO          5
 #define PERIODIC_CAN_STK_SIZE           256
-#define PROCESS_TASK_PRIO               10  //§¥§°§­§¨§¦§¯ §¢§½§´§¾ §³§¡§®§½ §£§½§³§°§¬§ª§«
+#define PROCESS_TASK_PRIO               3  //§¥§°§­§¨§¦§¯ §¢§½§´§¾ §³§¡§®§½ §£§½§³§°§¬§ª§«
 #define PROCESS_STK_SIZE                256
-#define KEYBOARD_TASK_PRIO              5
-#define KEYBOARD_STK_SIZE               128
 
 
 #define TASK_RUN_NOTIFY    0x01

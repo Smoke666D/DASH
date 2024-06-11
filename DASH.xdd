@@ -15,7 +15,7 @@
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2024-06-04" fileModificationTime="17:50:46.9621420+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2024-06-11" fileModificationTime="15:37:54.9276667+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <q1:DeviceIdentity>
         <q1:vendorName>SIDER</q1:vendorName>
         <q1:vendorID>2</q1:vendorID>
@@ -96,7 +96,7 @@
             <INT />
           </q1:array>
           <q1:array name="DACH PARAMETR" uniqueID="UID_ARR_2004">
-            <q1:subrange lowerLimit="0" upperLimit="3" />
+            <q1:subrange lowerLimit="0" upperLimit="4" />
             <DINT />
           </q1:array>
           <q1:array name="AIN RPM" uniqueID="UID_ARR_2005">
@@ -200,7 +200,7 @@
             <UDINT />
           </q1:array>
           <q1:array name="RPM Calibration Register" uniqueID="UID_ARR_2033">
-            <q1:subrange lowerLimit="0" upperLimit="2" />
+            <q1:subrange lowerLimit="0" upperLimit="3" />
             <UINT />
           </q1:array>
           <q1:struct name="Identity" uniqueID="UID_REC_1018">
@@ -1726,7 +1726,7 @@ bit 0-31: Manufacturer specific</description>
           <q1:parameter uniqueID="UID_SUB_200400">
             <label lang="en">Highest sub-index supported</label>
             <USINT />
-            <q1:defaultValue value="0x03" />
+            <q1:defaultValue value="0x04" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_200401" access="readWrite">
             <label lang="en">ODOMETR (CH26)</label>
@@ -1750,6 +1750,16 @@ bit 0-31: Manufacturer specific</description>
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_200403" access="readWrite">
             <label lang="en">ODOMETR CHANNEL</label>
+            <DINT />
+            <q1:allowedValues>
+              <q1:range>
+                <minValue value="0x00" />
+                <maxValue value="0x3F" />
+              </q1:range>
+            </q1:allowedValues>
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_200404" access="readWrite">
+            <label lang="en">REVISION CODE</label>
             <DINT />
             <q1:allowedValues>
               <q1:range>
@@ -4455,7 +4465,7 @@ Thride byte - RGB WHITE NUMBER</description>
           <q1:parameter uniqueID="UID_SUB_203300">
             <label lang="en">Highest sub-index supported</label>
             <USINT />
-            <q1:defaultValue value="0x02" />
+            <q1:defaultValue value="0x03" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203301" access="readWrite">
             <label lang="en">RPM1 Coof</label>
@@ -4469,6 +4479,16 @@ Thride byte - RGB WHITE NUMBER</description>
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203302" access="readWrite">
             <label lang="en">RPM2 Coof</label>
+            <UINT />
+            <q1:allowedValues>
+              <q1:range>
+                <minValue value="0x00" />
+                <maxValue value="20" />
+              </q1:range>
+            </q1:allowedValues>
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203303" access="readWrite">
+            <label lang="en">DIN ACTIVE STATE</label>
             <UINT />
             <q1:allowedValues>
               <q1:range>
@@ -4494,7 +4514,7 @@ Thride byte - RGB WHITE NUMBER</description>
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2024-06-04" fileModificationTime="17:50:46.9621420+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2024-06-11" fileModificationTime="15:37:54.9276667+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <ApplicationLayers>
         <q2:CANopenObjectList>
           <CANopenObject index="1000" name="Device type" objectType="7" PDOmapping="no" uniqueIDRef="UID_OBJ_1000" />
@@ -4742,11 +4762,12 @@ Thride byte - RGB WHITE NUMBER</description>
             <CANopenSubObject subIndex="03" name="v17" objectType="7" PDOmapping="RPDO" uniqueIDRef="UID_SUB_200203" />
           </CANopenObject>
           <CANopenObject index="2003" name="Error register (CH28)" objectType="7" PDOmapping="RPDO" uniqueIDRef="UID_OBJ_2003" />
-          <CANopenObject index="2004" name="DACH PARAMETR" objectType="8" uniqueIDRef="UID_OBJ_2004" subNumber="4">
+          <CANopenObject index="2004" name="DACH PARAMETR" objectType="8" uniqueIDRef="UID_OBJ_2004" subNumber="5">
             <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_200400" />
             <CANopenSubObject subIndex="01" name="ODOMETR (CH26)" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_200401" />
             <CANopenSubObject subIndex="02" name="HOUR (CH27)" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_200402" />
             <CANopenSubObject subIndex="03" name="ODOMETR CHANNEL" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_200403" />
+            <CANopenSubObject subIndex="04" name="REVISION CODE" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_200404" />
           </CANopenObject>
           <CANopenObject index="2005" name="AIN RPM" objectType="8" uniqueIDRef="UID_OBJ_2005" subNumber="7">
             <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_200500" />
@@ -5056,10 +5077,11 @@ Thride byte - RGB WHITE NUMBER</description>
             <CANopenSubObject subIndex="1E" name="Point 19" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20321E" />
             <CANopenSubObject subIndex="1F" name="Point 20" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20321F" />
           </CANopenObject>
-          <CANopenObject index="2033" name="RPM Calibration Register" objectType="8" uniqueIDRef="UID_OBJ_2033" subNumber="3">
+          <CANopenObject index="2033" name="RPM Calibration Register" objectType="8" uniqueIDRef="UID_OBJ_2033" subNumber="4">
             <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203300" />
             <CANopenSubObject subIndex="01" name="RPM1 Coof" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203301" />
             <CANopenSubObject subIndex="02" name="RPM2 Coof" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203302" />
+            <CANopenSubObject subIndex="03" name="DIN ACTIVE STATE" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203303" />
           </CANopenObject>
         </q2:CANopenObjectList>
         <dummyUsage>

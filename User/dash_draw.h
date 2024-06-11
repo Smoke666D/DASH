@@ -68,6 +68,26 @@ typedef struct
   u8 cur_dispaly_error;
 } Menu_Object_t;
 
+
+typedef enum
+{
+  SYSTEM_IDLE,
+  SYSTEM_EDIT,
+  SYSTEM_ENTER,
+  SYSTEM_EXIT,
+} KeyDelayState_t;
+
+typedef enum
+{
+  WORK_MENU_STATE,
+  SYS_MENU_STATE,
+  RPM1_UP_MENU_STATE,
+  RPM2_UP_MENU_STATE,
+  RPM1_DOWN_MENU_STATE,
+  RPM2_DOWN_MENU_STATE,
+
+} MenuState_t;
+
 TaskHandle_t * xProcessTaskHandle ();
 void RedrawNotifyTaskToInit();
 u8 GetCurMenuHome();

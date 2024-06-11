@@ -35,11 +35,13 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 	NVIC_InitTypeDef      NVIC_InitStructure = {0};
 	if ( i2c == I2C_1)
 	{
+	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, DISABLE );
 		RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, ENABLE );
 	}
 	else
 	if (i2c == I2C_2)
 	{
+	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C2, DISABLE );
 	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C2, ENABLE );
 	}
     I2C_InitTypeDef I2C_InitTSturcture={0};
@@ -155,6 +157,7 @@ static EERPOM_ERROR_CODE_t I2C_Master_ReviceIT( u8 DevAdrees, u16 data_addres,  
 	I2C_DisableInterrupt(pEEPROM->dev, I2C_INT_EVT | I2C_INT_BUF | I2C_INT_ERR);
 #endif
 #if MCU == CH32V2
+	I2C_Cmd(pEEPROM->dev,ENABLE);
 	I2C_ITConfig(pEEPROM->dev, I2C_IT_BUF | I2C_IT_EVT | I2C_IT_ERR, DISABLE );
 	while( I2C_GetFlagStatus( pEEPROM->dev, I2C_FLAG_BUSY ) != RESET );
 	I2C_AcknowledgeConfig(pEEPROM->dev,ENABLE);
@@ -162,6 +165,7 @@ static EERPOM_ERROR_CODE_t I2C_Master_ReviceIT( u8 DevAdrees, u16 data_addres,  
     I2C_ITConfig(pEEPROM->dev, I2C_IT_BUF | I2C_IT_EVT | I2C_IT_ERR, ENABLE );
 	uint32_t exit_code = ulTaskNotifyTakeIndexed( pEEPROM->ucTaskNatificationIndex, 0xFFFFFFFF, timeout );
     I2C_ITConfig(pEEPROM->dev, I2C_IT_BUF | I2C_IT_EVT | I2C_IT_ERR, DISABLE );
+    I2C_Cmd(pEEPROM->dev,DISABLE);
 #endif
 	res = (exit_code == 0x01  )? (EEPROM_OK) : (EEPROM_WRITE_ERROR) ;
 	pEEPROM->BusyFlag = 0;
@@ -191,12 +195,14 @@ static EERPOM_ERROR_CODE_t I2C_Master_TransmitIT(  u8 DevAdrees, u16 data_addres
 #endif
 #if MCU == CH32V2
 #if MCU == CH32V2
+	I2C_Cmd(pEEPROM->dev,ENABLE);
 	I2C_ITConfig(pEEPROM->dev, I2C_IT_BUF | I2C_IT_EVT | I2C_IT_ERR, DISABLE );
     while( I2C_GetFlagStatus( pEEPROM->dev, I2C_FLAG_BUSY ) != RESET );
     I2C_GenerateSTART( pEEPROM->dev,ENABLE);
     I2C_ITConfig(pEEPROM->dev, I2C_IT_BUF | I2C_IT_EVT | I2C_IT_ERR, ENABLE );
     uint32_t exit_code = ulTaskNotifyTakeIndexed( pEEPROM->ucTaskNatificationIndex, 0xFFFFFFFF, timeout );
     I2C_ITConfig(pEEPROM->dev, I2C_IT_BUF | I2C_IT_EVT | I2C_IT_ERR, DISABLE );
+    I2C_Cmd(pEEPROM->dev,DISABLE);
 #endif
 #endif
 	res = (exit_code > 0  )? (EEPROM_OK) : (EEPROM_READ_ERROR);

@@ -51,21 +51,7 @@ void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r )
 }
 
 
-void vSetInitBrigth(BRIGTH_CHANNEL_t ch, u8 brigth)
-{
-    switch (ch)
-    {
-      case RGB_CHANNEL:
-          LED_CHANELL_BRIGTH[0] = brigth <= MAX_BRIGTH ? brigth : MAX_BRIGTH;
-        break;
-      case WHITE_CHANNEL:
-          LED_CHANELL_BRIGTH[1] = brigth <= MAX_BRIGTH ? brigth : MAX_BRIGTH;
-          break;
-      default:
-          break;
-    }
-    return;
-}
+
 
 void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state)
 {
@@ -162,8 +148,8 @@ void SetSegDirect( u8 number, u8 mask)
            case 4:
                SPI2_DATA[2] &= 0xFFE0;
                SPI2_DATA[2] |= ((mask>>2) & 0x1F);
-               SPI2_DATA[3] &= 0x03FF;
-               SPI2_DATA[3] |= (mask <<14);
+               SPI2_DATA[3] &= 0x3FFF;
+               SPI2_DATA[3] |= ((mask & 0x03) <<14);
                break;
            case 5:
                SPI2_DATA[3] &= 0xC07F;
@@ -295,11 +281,6 @@ void vLedDriverStart(void)
 {
 	HAL_DMAInitIT(DMA1_Channel5,MTOP, DMA_HWORD  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,1,2,&SPI2_DMA_Callback);
 	HAL_DMAInitIT(DMA1_Channel3,MTOP, DMA_HWORD  ,(u32)&SPI1->DATAR, (u32)data,0,1,2,&SPI1_DMA_Callback);
-	//HAL_TiemrEneblae(TIMER3);
-	//TIM_Cmd( PWM_TIMER_1, ENABLE );
-
-	vSetBrigth( RGB_CHANNEL,    14 );//LED_CHANELL_BRIGTH[0]);
-	vSetBrigth( WHITE_CHANNEL,  11);//LED_CHANELL_BRIGTH[1]);
 	return;
 }
 
@@ -315,23 +296,15 @@ u16 counterRGB =0;
 //uint16_t data1 = 0x1;
 void vLedProcess( void )
 {
-   //if (memcmp(SPI2_DATA_DRAW,SPI2_DATA,SPI2_CHIP_COUNT) != 0)
-  // {
-     //  memcpy(SPI2_DATA_DRAW,SPI2_DATA,SPI2_CHIP_COUNT);
-       HAL_ResetBit(  SPI2_Port , SPI2_NSS_Pin);
-       HAL_DMA_SetCounter(DMA1_CH5, SPI2_CHIP_COUNT);
-       HAL_DMA_Enable(DMA1_CH5);
-   //}
-
-
-
-
+   HAL_ResetBit(  SPI2_Port , SPI2_NSS_Pin);
+   HAL_DMA_SetCounter(DMA1_CH5, SPI2_CHIP_COUNT);
+   HAL_DMA_Enable(DMA1_CH5);
    return;
 }
 
 void vRGBProcess()
 {
-    memcpy(data,SPI1_DATA,SPI1_CHIP_COUNT*2);
+     memcpy(data,SPI1_DATA,SPI1_CHIP_COUNT*2);
      if (++counterRGB >= PWM_TIM_PERIOD/2)
       {
      counterRGB = 0;
@@ -347,7 +320,7 @@ void vRGBProcess()
      if (counterRGB++ >=BrigthG[9])
       {
           data[0]&=0x5B6D;
-          data[1]&=0xB77D;
+          data[1]&=0xB7ED;
           data[2]&=0x5B6D;
           data[3]&=0x5555;
           data[4]&=0x5555;
@@ -362,7 +335,6 @@ void vRGBProcess()
     HAL_ResetBit(  SPI1_Port , SPI1_NSS_Pin);
     HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
     HAL_DMA_Enable(DMA1_CH3);
-
 }
 
 

@@ -18,6 +18,7 @@ static TMR_T * timers[TIMERS_COUNT] = { TMR1,TMR2,TMR3,TMR4,TMR5,TMR6,TMR7,TMR8,
 #endif
 #if MCU == CH32V2
 static TIM_TypeDef * timers[TIMERS_COUNT] = { TIM1,TIM2,TIM3,TIM4,TIM5};
+void TIM1_CC_IRQHandler(void)  __attribute__((interrupt()));
 void TIM2_IRQHandler(void) __attribute__((interrupt()));
 void TIM3_IRQHandler(void) __attribute__((interrupt()));
 void TIM4_IRQHandler(void) __attribute__((interrupt()));
@@ -92,7 +93,58 @@ void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Peri
 #endif
 }
 
+uint16_t bufdata = 0;
+u8 over = 0;
 #if MCU == CH32V2
+
+void TIM1_CC_IRQHandler(void)
+{
+    UBaseType_t uxSavedInterruptStatus;
+    uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+    /*if  (TIM_GetITStatus(TIM1, TIM_IT_CC1) )
+    {
+         //   config[0].event_callback_function(1);
+        //    TIM_SetCounter(TIM1,0);
+        TIM_ClearITPendingBit(TIM1, TIM_IT_CC1);
+
+    }
+    if  ( TIM_GetITStatus(TIM1, TIM_IT_CC2) )
+    {
+      //  config[0].event_callback_function(2);
+      //  TIM_SetCounter(TIM1,0);
+        TIM_ClearITPendingBit(TIM1, TIM_IT_CC2);
+
+    }*/
+    if  ( TIM_GetITStatus(TIM1, TIM_IT_CC3) )
+        {
+             u16 data = TIM_GetCapture3(TIM1);
+            if (TIM_GetFlagStatus(TIM1,TIM_FLAG_CC3OF)==RESET)
+            {
+                config[0].event_callback_function(3, data );
+            }
+            else
+            {
+                TIM_ClearFlag(TIM1, TIM_FLAG_CC3OF);
+            }
+        }
+
+
+    if  ( TIM_GetITStatus(TIM1, TIM_IT_CC4) )
+    {
+        //TIM_SetCounter(TIM1,0);
+         u16 data = TIM_GetCapture4(TIM1);
+        if (TIM_GetFlagStatus(TIM1,TIM_FLAG_CC4OF)==RESET)
+        {
+            config[0].event_callback_function(4, data );
+        }
+        else
+        {
+            TIM_ClearFlag(TIM1, TIM_FLAG_CC4OF);
+        }
+    }
+   // TIM_ClearFlag(TIM1,TIM_FLAG_CC3OF | TIM_FLAG_CC4OF);
+    taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+}
 
 void  TIM1_UP_IRQHandler(void)
 {
@@ -202,6 +254,7 @@ void  HW_TIMER_BaseTimerInit(TimerName_t TimerName  )
 	  TIM_DeInit(timers[TimerName]);
 	  TIM_InternalClockConfig(timers[TimerName]);
 	  TIM_TimeBaseStructInit(&TIM_TimeBaseInitStructure);
+	  if (config[TimerName].ClockDiv != 0) TIM_TimeBaseInitStructure.TIM_ClockDivision = config[TimerName].ClockDiv;
 	  TIM_TimeBaseInitStructure.TIM_Period = config[TimerName].Period;
 	  TIM_TimeBaseInitStructure.TIM_Prescaler = config[TimerName].Div;
 	  TIM_TimeBaseInit( timers[TimerName], &TIM_TimeBaseInitStructure);
@@ -316,7 +369,7 @@ IRQn_Type getTimerIRQ(TimerName_t TimerName )
 #endif
 }
 
-void HAL_InitCaptureIRQTimer( TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel )
+void HAL_InitCaptureIRQTimer( TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period,   uint8_t channel )
 {
 #if MCU == APM32
 	TMR_ICConfig_T ICConfig;
@@ -343,34 +396,115 @@ void HAL_InitCaptureIRQTimer( TimerName_t TimerName , uint32_t freq_in_hz, uint3
 #endif
 }
 
-void HAL_InitCaptureDMATimer( TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel )
+void HAL_TimeInitCaptureIT( TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel,uint8_t prior, uint8_t subprior, void (*f)( u8 ,u16) )
 {
-	uint32_t Freq = getTimerFreq( TimerName );
-#if MCU == CH32V2
+	 uint32_t Freq = getTimerFreq( TimerName );
 
-	 TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
+
+#if MCU == CH32V2
+	 NVIC_InitTypeDef      NVIC_InitStructure = {0};
 	 TIM_ICInitTypeDef       TIM_ICInitStructure;
+
+	 config[0].event_callback_function = f;
 	 TIM_DeInit(timers[TimerName]);
+	 vTimerInitRCC(TimerName) ;
+	 config[TimerName].Period = Period;
+	 config[TimerName].Div = (Freq /freq_in_hz) ;
+	// config[TimerName].ClockDiv = temp_div;
+	 HW_TIMER_BaseTimerInit(TimerName);
 	 TIM_InternalClockConfig(timers[TimerName]);
-	 TIM_TimeBaseStructInit(&TIM_TimeBaseInitStructure);
-	 TIM_TimeBaseInitStructure.TIM_Period = CC_PERIOD;
-	 TIM_TimeBaseInitStructure.TIM_Prescaler = (Freq /freq_in_hz);
-	 TIM_TimeBaseInit( timers[TimerName] , &TIM_TimeBaseInitStructure);
-	 if (channel &  TIM_CHANNEL_1) { TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;  TIM_ITConfig(timers[TimerName], TIM_IT_CC1 , ENABLE);}
-	 if (channel &  TIM_CHANNEL_2) { TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;  TIM_ITConfig(timers[TimerName], TIM_IT_CC2 , ENABLE);}
-	 if (channel &  TIM_CHANNEL_3) { TIM_ICInitStructure.TIM_Channel = TIM_Channel_3;  TIM_ITConfig(timers[TimerName], TIM_IT_CC3 , ENABLE);}
-	 if (channel &  TIM_CHANNEL_4) { TIM_ICInitStructure.TIM_Channel = TIM_Channel_4;  TIM_ITConfig(timers[TimerName], TIM_IT_CC4 , ENABLE);}
+	 TIM_ICInitStructure.TIM_ICFilter = 0x0;
 	 TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
-	 TIM_ICInitStructure.TIM_ICFilter = 0x00;
-	 TIM_ICInitStructure.TIM_ICPolarity = TIM_ICPolarity_BothEdge;
-	 TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
-	 TIM_PWMIConfig(timers[TimerName], &TIM_ICInitStructure);
-	 TIM_SelectInputTrigger(timers[TimerName],TIM_TS_TI2FP2);
-	 TIM_SelectSlaveMode(timers[TimerName], TIM_SlaveMode_Reset);
-	 TIM_SelectMasterSlaveMode(timers[TimerName], TIM_MasterSlaveMode_Enable);
+
+	 if (( channel == TIM_CHANNEL_1 ) || ( channel == TIM_CHANNEL_2 ))
+	 {
+	     TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;
+	     TIM_ICInitStructure.TIM_ICPolarity=  (channel == TIM_CHANNEL_1) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
+	     TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_1) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
+	     TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
+	     TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;
+	     TIM_ICInitStructure.TIM_ICPolarity= (channel == TIM_CHANNEL_2) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
+	     TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_2) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
+	     TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
+	     TIM_ITConfig(timers[TimerName],TIM_IT_CC1,ENABLE);
+	     TIM_ITConfig(timers[TimerName],TIM_IT_CC2,ENABLE);
+	    // TIM_SelectInputTrigger(TIM1, (channel == TIM_CHANNEL_1) ? TIM_TS_TI1FP1 : TIM_TS_TI2FP1);
+	 }
+	 if (( channel == TIM_CHANNEL_3 ) || ( channel == TIM_CHANNEL_4 ))
+	     {
+	         /*TIM_ICInitStructure.TIM_Channel = TIM_Channel_3;
+	         TIM_ICInitStructure.TIM_ICPolarity=  (channel == TIM_CHANNEL_3) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
+	         TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_3) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
+	         TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);*/
+	         TIM_ICInitStructure.TIM_Channel = TIM_Channel_4;
+	         TIM_ICInitStructure.TIM_ICPolarity= (channel == TIM_CHANNEL_4) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
+	         TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_4) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
+	         TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
+
+	        // TIM_ITConfig(timers[TimerName],TIM_IT_CC3,ENABLE);
+	         TIM_ITConfig(timers[TimerName],TIM_IT_CC4,ENABLE);
+	     }
+
+	 NVIC_InitStructure.NVIC_IRQChannel =  TIM1_CC_IRQn;
+	 NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
+	 NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
+	 NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	 NVIC_Init(&NVIC_InitStructure);
+
 #endif
 
 }
+
+void HAL_TimeInitCaptureDMA( TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel )
+{
+     uint32_t Freq = getTimerFreq( TimerName );
+
+
+#if MCU == CH32V2
+     NVIC_InitTypeDef      NVIC_InitStructure = {0};
+     TIM_ICInitTypeDef       TIM_ICInitStructure;
+
+     TIM_DeInit(timers[TimerName]);
+     vTimerInitRCC(TimerName) ;
+     config[TimerName].Period = Period;
+     config[TimerName].Div = (Freq /freq_in_hz) ;
+    // config[TimerName].ClockDiv = temp_div;
+     HW_TIMER_BaseTimerInit(TimerName);
+     TIM_InternalClockConfig(timers[TimerName]);
+     TIM_ICInitStructure.TIM_ICFilter = 4;
+     TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
+
+     if (( channel == TIM_CHANNEL_1 ) || ( channel == TIM_CHANNEL_2 ))
+     {
+         TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;
+         TIM_ICInitStructure.TIM_ICPolarity=  (channel == TIM_CHANNEL_1) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
+         TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_1) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
+         TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
+         TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;
+         TIM_ICInitStructure.TIM_ICPolarity= (channel == TIM_CHANNEL_2) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
+         TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_2) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
+         TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
+         TIM_ITConfig(timers[TimerName],TIM_IT_CC1,ENABLE);
+         TIM_ITConfig(timers[TimerName],TIM_IT_CC2,ENABLE);
+        // TIM_SelectInputTrigger(TIM1, (channel == TIM_CHANNEL_1) ? TIM_TS_TI1FP1 : TIM_TS_TI2FP1);
+     }
+     if (( channel == TIM_CHANNEL_3 ) || ( channel == TIM_CHANNEL_4 ))
+         {
+
+             TIM_ICInitStructure.TIM_Channel = TIM_Channel_4;
+             TIM_ICInitStructure.TIM_ICPolarity= (channel == TIM_CHANNEL_4) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
+             TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_4) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
+             TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
+             TIM_ITConfig(timers[TimerName],TIM_IT_CC4,ENABLE);
+         }
+     TIM_DMACmd(timers[TimerName],TIM_DMA_CC4,ENABLE);
+
+    // TIM_SelectSlaveMode(timers[TimerName], TIM_SlaveMode_Reset);
+     //TIM_SelectMasterSlaveMode(timers[TimerName], TIM_MasterSlaveMode_Enable);
+#endif
+
+}
+
 
 
 uint16_t vHAL_CaptureTimerInteruptCallback(TimerName_t TimerName , uint16_t TimInterupt  )

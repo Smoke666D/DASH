@@ -36,6 +36,14 @@
 #define RR  300.0
 
 
+typedef enum
+{
+    START_UP_STATE,
+    RUN_STATE_INIT,
+    RUN_STATE,
+    SAVE_STATE,
+} INPUTS_FSM_t;
+
 #define RA  10000.0
 #define R22 15000.0
 #define R21 10000.0

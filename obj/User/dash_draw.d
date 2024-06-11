@@ -65,7 +65,8 @@ User/dash_draw.o: ../User/dash_draw.c ../User/dash_draw.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/OD.h \
  C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_din.h \
  C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_keyboard.h \
- C:\MRS_DATA\workspace\DASH\HAL/hal_gpio.h
+ C:\MRS_DATA\workspace\DASH\HAL/hal_gpio.h \
+ C:\MRS_DATA\workspace\DASH\HWLIB/HW_API.h
 
 ../User/dash_draw.h:
 
@@ -210,3 +211,5 @@ C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_din.h:
 C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_keyboard.h:
 
 C:\MRS_DATA\workspace\DASH\HAL/hal_gpio.h:
+
+C:\MRS_DATA\workspace\DASH\HWLIB/HW_API.h:

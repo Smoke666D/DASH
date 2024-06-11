@@ -28,6 +28,9 @@ static uint8_t *OD_AIN_flagsPDO = NULL;
 static uint16_t ADC_OLD_RAW[ ADC1_CHANNELS  ];
 static float    OurVData[ ADC1_CHANNELS ];
 static u16      ViewData[ ADC1_CHANNELS ] ;
+static median_filter_data_t      RPM_MIDIAN_FILTER_STRUC[2] __SECTION(RAM_SECTION_CCMRAM);
+static ab_filter_data_t          RPM_AB_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
+static aver_filter_data_t        RPM_AVER_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
 /*
  *
  */
@@ -156,20 +159,16 @@ void  vSetDoutState( OUT_NAME_TYPE ucCh, u8 BitVal )
       HAL_ResetBit(PowerON_Port,PowerON_Pin);
 
 }
-/*
- *
- */
-static void DMA1_Channel4_Callback(void)
+
+
+ void CaptureCallBack( u8 ch, u16 data )
 {
-    RMPDataConvert(INPUT_1);
+   DMA_Cmd(DMA1_CH4, DISABLE);
+   DMA_SetCurrDataCounter(DMA1_CH4,  CC_BUFFER_SIZE);
+   RMPDataConvert(INPUT_1);
+   DMA_Cmd(DMA1_CH4, ENABLE);
 }
-/*
- *
- */
-static void DMA1_Channel7_Callback(void)
-{
-    RMPDataConvert(INPUT_2);
-}
+
 /*
  *
  */
@@ -181,20 +180,34 @@ static void vDINInit()
     DIN_CONFIG.ulHighCounter = DEF_H_FRONT;
     DIN_CONFIG.ulLowCounter  = DEF_L_FRONT;
     DIN_CONFIG.getPortCallback = &fDinStateCallback;
-    eDinConfigWtihStruct(INPUT_3,&DIN_CONFIG);
+
     eDinConfigWtihStruct(INPUT_4,&DIN_CONFIG);
+    DIN_CONFIG.eInputType = (getReg8(DIN_ACTIVE_STATE)==1) ? DIN_CONFIG_POSITIVE : DIN_CONFIG_NEGATIVE;
+    eDinConfigWtihStruct(INPUT_3,&DIN_CONFIG);
+    DIN_CONFIG.eInputType = DIN_CONFIG_POSITIVE;
     DOUT_CONFIG.setPortCallback =&vSetDoutState;
     eDOUTConfigWtihStruct( OUT_1, &DOUT_CONFIG);
     //Конфигурация счетных входо
+
+    vInitMedianFilter(&RPM_MIDIAN_FILTER_STRUC[0]);
+        vInitMedianFilter(&RPM_MIDIAN_FILTER_STRUC[1]);
+        vInitABFilter(&RPM_AB_FILTER_STRUC[0],0.90);
+        vInitABFilter(&RPM_AB_FILTER_STRUC[1],0.90);
+        vInitRunAverga(&RPM_AVER_FILTER_STRUC[0],0.5);
+        vInitRunAverga(&RPM_AVER_FILTER_STRUC[1],0.5);
     eRPMConfig(INPUT_1,RPM_CH1);
     eRPMConfig(INPUT_2,RPM_CH2);
-   // HAL_DMAInitIT(DMA1_CH4,PTOM, CC_BUFFER_SIZE, HAL_GetTimerCounterRegAdres(TIMER1, TIM_CHANNEL_4), (u32)uGetRPMBuffer(INPUT_1),  0,1,3, &DMA1_Channel4_Callback);
-  //  HAL_DMAInitIT(DMA1_CH7,PTOM, CC_BUFFER_SIZE, HAL_GetTimerCounterRegAdres(TIMER2, TIM_CHANNEL_2), (u32)uGetRPMBuffer(INPUT_2),  0,1,3, &DMA1_Channel7_Callback);
-  //  HAL_TiemrEneblae(TIMER1);
-  //  HAL_TiemrEneblae(TIMER2);
+    HAL_TimeInitCaptureIT( TIMER1 , 2000, 60000, TIM_CHANNEL_4,0,5,&CaptureCallBack);
+    HAL_TimeInitCaptureDMA( TIMER1 , 2000, 60000, TIM_CHANNEL_4);
+    HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1), 0, 1, 3, &CaptureCallBack );
+    DMA_SetCurrDataCounter(DMA1_CH4,  CC_BUFFER_SIZE);
+    DMA_Cmd(DMA1_CH4, ENABLE);
+    HAL_TiemrEneblae(TIMER1);
+
 }
 
 u16 BufAIN[4]={0};
+
 /*---------------------------------------------------------------------------------------------------*/
 /*
  * Задача обработки клавиш
@@ -202,16 +215,13 @@ u16 BufAIN[4]={0};
 void vInputsTask( void * argument )
 {
   TaskFSM_t  state = STATE_IDLE;
-  u8 low_power_mode_flag =0;
+  INPUTS_FSM_t InitState = START_UP_STATE;
   uint32_t ulNotifiedValue;
-  BaseType_t notify;
-  uint8_t OD_flag;
+  u8 data_send_dealy = 0;
+  u16 data;
   uint8_t OD_Ain_flag;
   OD_DIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2006);
   OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
-
-  //Прежде чем запуститься таск, нужно убедиться что прочитались данные из EEPROM и система проинициализирована
-  //xEventGroupWaitBits(xGetSystemEventHeandler(),DATA_MODEL_READY, pdTRUE, pdFALSE, portMAX_DELAY );*/
   for(;;)
   {
     switch (state)
@@ -228,80 +238,80 @@ void vInputsTask( void * argument )
         case STATE_INIT:                                                                  //Отправляем вызывающей задаче уведомление что таск запущен
             state = STATE_RUN;
             xTaskNotifyGiveIndexed(pTaskToNotifykHandle,0);
-            HAL_ADC_StartDMA(DMA1_CH1,getADC1Buffer(),ADC1_CHANNELS * ADC_FRAME_SIZE);
             break;
         case  STATE_RUN:
+            HAL_ADC_StartDMA(DMA1_CH1,getADC1Buffer(),ADC1_CHANNELS * ADC_FRAME_SIZE);
             vTaskDelay(10);
-            notify = xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0);
-            if (notify & ADC1_DATA_READY)
+            if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) & ADC1_DATA_READY)
             {
                 ADC_FSM();
-                u16 data;
-                for (u8 i=0; i<4;i++)
+                vDinDoutProcess();
+                switch (  InitState  )
                 {
-                    data = getODValue( chAIN1 + i,1);
-                   if (BufAIN[i]!= data)
-                   {
-                       BufAIN[i] = data;
-                       OD_set_value(OD_ENTRY_H2005, 0x01+i, &data, 2, true);
-                       OD_Ain_flag = SET;
-                   }
+                    case START_UP_STATE:
+                        if ( uGetDIN(INPUT_4) && (GetAIN(3)>= 7.0 )) InitState = RUN_STATE_INIT;
+                        break;
+                    case RUN_STATE_INIT:
+                        vSetBrigth( RGB_CHANNEL,    getReg8(RGB_BRIGTH_ADR) );
+                        vSetBrigth( WHITE_CHANNEL,  getReg8(WHITE_BRIGTH_ADR));
+                        eSetDUT(OUT_1, SET);
+                        InitState = RUN_STATE;
+                        break;
+                    case RUN_STATE:
+                        for (u8 i=0; i<4;i++)
+                        {
+                            data = getODValue( chAIN1 + i,1);
+                            if (BufAIN[i]!= data)
+                            {
+                                BufAIN[i] = data;
+                                OD_Ain_flag = SET;
+                            }
+                        }
+                        if (GetAIN(3) > 7.0 )
+                        {
+                            if ( uGetDIN(INPUT_4)== RESET)
+                            {
+                                eSetDUT(OUT_1, SET);
+                                InitState = SAVE_STATE;
+                                break;
+                            }
+                            for (u8 i =0;i<2;i++)
+                            {
+                                u16 rpm;
+                                if  (xGetRPM(i ,&rpm) == DIN_CHANGE)
+                                {
+                                  OD_Ain_flag = SET;
+                                }
+                            }
+                            uint8_t din_data;
+                            if (++data_send_dealy> 10)  data_send_dealy = 0;
+                            //Обработка дискрентого входа датчика давления масла
+                             if (( xGetDIN(INPUT_3,&din_data) == DIN_CHANGE ) || (data_send_dealy==0))
+                             {
+                                 OD_requestTPDO(OD_DIN_flagsPDO,1);
+                             }
+                             if ((OD_Ain_flag) || (data_send_dealy==0))
+                             {
+                                   OD_Ain_flag = RESET;
+                                   OD_requestTPDO(OD_AIN_flagsPDO,1);
+                             }
+                        }
+                        else
+                        {
+                            InitState = SAVE_STATE;
+                        }
+                        break;
+                    case SAVE_STATE:
+                        vSetBrigth( RGB_CHANNEL,    0 );//LED_CHANELL_BRIGTH[0]);
+                        vSetBrigth( WHITE_CHANNEL,  0 );//LED_CHANELL_BRIGTH[1]);
+                        vSaveData();
+                        eSetDUT(OUT_1, RESET);
+                        InitState = START_UP_STATE;
+                        break;
                 }
-                if (GetAIN(3) < 7.0 )
-                {
-                    low_power_mode_flag = 1;
-                    vSetBrigth( RGB_CHANNEL,    0 );//LED_CHANELL_BRIGTH[0]);
-                    vSetBrigth( WHITE_CHANNEL,  0 );//LED_CHANELL_BRIGTH[1]);
-                    vSaveData();
-                }
-                if ((low_power_mode_flag) && (GetAIN(3) > 7.0 ))
-                {
-                    low_power_mode_flag = 0;
-                    vSetBrigth( RGB_CHANNEL,    14 );//LED_CHANELL_BRIGTH[0]);
-                    vSetBrigth( WHITE_CHANNEL,  11 );//LED_CHANELL_BRIGTH[1]);
-                }
-                HAL_ADC_StartDMA(DMA1_CH1,getADC1Buffer(),ADC1_CHANNELS * ADC_FRAME_SIZE);
-            }
-            vDinDoutProcess();
-            uint8_t din_data;
-            //Обработка дискрентого входа датчика давления масла
-          // if ( xGetDIN(INPUT_3,&din_data) == DIN_CHANGE )
-         //   {
-         //       OD_set_value(OD_ENTRY_H2006, 0x02   , &state, 1, true);
-         //       OD_flag = SET;
-        //    }
-           /* for (u8 i =0;i<2;i++)
-            {
-                u16 rpm;
-                if  (xGetRPM(i ,&rpm) == DIN_CHANGE)
-                {
-                   OD_set_value(OD_ENTRY_H2005, 0x05 + i   , &rpm, 2, true);
-                   OD_Ain_flag = SET;
-                }
-            }*/
-            if ( uGetDIN(INPUT_4)== RESET)
-            {
-                eSetDUT(OUT_1, SET);
-            }
-            else
-            {
-                vSaveData();
-                eSetDUT(OUT_1, RESET);
-            }
-            if (OD_flag)
-            {
-               OD_flag = RESET;
-               OD_requestTPDO(OD_DIN_flagsPDO,1);
-            }
-            if (OD_Ain_flag)
-            {
-               OD_Ain_flag = RESET;
-               OD_requestTPDO(OD_AIN_flagsPDO,1);
             }
             break;
     }
-
-
   }
 }
 

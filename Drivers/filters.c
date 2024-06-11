@@ -93,7 +93,7 @@ median_data MedianFilter( median_data new_val,median_filter_data_t * filter)
         }
     }
      median_data res = 0;
-    if ((MEDIAN_COUNT & 2) == 0)
+    if ((MEDIAN_COUNT & 0x1) != 0)
     {
         res = buf[MEDIAN_COUNT/2];
     }

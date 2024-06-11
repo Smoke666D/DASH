@@ -11,9 +11,9 @@
 #include "hw_lib_din.h"
 #include "hw_lib_keyboard.h"
 #include "inputs.h"
+#include "HW_API.h"
 
 static Menu_Object_t menu;
-static QueueHandle_t     pKeyboard        = NULL;
 static u32 ErrorRegister = 0;
 static u8 keystate = 0;
 
@@ -32,8 +32,8 @@ void vSetErrorReg( u32 data)
 }
 int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
 {
-  u8 data8;
-  u16 data16;
+  u8 data8  = 0;
+  u16 data16 = 0;
   int32_t out_data;
   float temp;
   switch (virtualchannel)
@@ -70,15 +70,17 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
         out_data = (int32_t) GetAIN(virtualchannel -chAIN1 )*10;
         break;
     case chRPM1  :
-        xGetRPM(INPUT_1 ,&data16);
-        float coof1 = (float)getReg16(RPM1_COOF)/1000;
-        data16 = (u16)((data16 *coof1)*10.0);
-        out_data = ((u32) data16);
-        break;
+        data16 = GetRPM(INPUT_1);
+
+        float coof1 = (float)getReg16(RPM1_COOF)/RMP_OFFSET;
+        out_data = (u32)((data16 *coof1)*10.0);
+
+        return  (out_data);
+
     case chRPM2  :
-        xGetRPM(INPUT_2 ,&data16);
-        float coof2 = (float)getReg16(RPM2_COOF)/1000;
-        data16 = (u16)((data16 *coof2)*10.0);
+        data16 = GetRPM(INPUT_2);
+        float coof2 = (float)getReg16(RPM2_COOF)/RMP_OFFSET;
+        data16 = (u32)((data16 *coof2)*10.0);
         out_data =  ((u32) data16);
         break;
       case chKEY  :
@@ -104,22 +106,22 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
 }
 
 /*
- * API ß’ß›ßÒ ß‚ß—ß“ß‡ß‰ßÌ ß„ ßﬁß÷ßﬂß
+ * API –¥–ª—è —Ä–∞–±–æ—Ç—ã —Å –º–µ–Ω—é
  */
 void IncMenuIndex( )
 {
-   if (menu.menu_draw[menu.current_menu] == chErrorRegister)   //ß¶ß„ß›ß⁄ ß‰ß÷ß‹ßÂßÎß⁄ß÷ ß‡ß‰ß‡ß“ß‚ßÿß—ß÷ßﬁßÌß€ ß·ßÂßﬂß‹ß‰ ßﬁß÷ßﬂß - ß‡ßÍß⁄ß“ß‹ß⁄
+   if (menu.menu_draw[menu.current_menu] == chErrorRegister)   //–ï—Å–ª–∏ —Ç–µ–∫—É—â–∏–µ –æ—Ç–æ–±—Ä–∂–∞–µ–º—ã–π –ø—É–Ω–∫—Ç –º–µ–Ω—é - –æ—à–∏–±–∫–∏
    {
-      if ( menu.buffer_error_register !=0 )                 //ß¶ß„ß›ß⁄ ß‡ßÍß⁄ß“ß‹ß⁄ ß”ß„ß÷ ß‰ß—ß‹ß⁄ ß÷ß„ß‰ßÓ.
+      if ( menu.buffer_error_register !=0 )                 //–ï—Å–ª–∏ –æ—à–∏–±–∫–∏ –≤—Å–µ —Ç–∞–∫–∏ –µ—Å—Ç—å.
       {
           while (1)
           {
               if (menu.buffer_error_register & (1>>menu.cur_dispaly_error) !=0)
               {
                   menu.cur_dispaly_error++;
-                  return;  //ß¶ß›ß„ß⁄ ß÷ß„ß‰ßÓ ßÈß‰ß‡ ß‡ß‰ß‡ßß‚ß—ßÿß—ß‰ßÓ
+                  return;  //–ï–ª—Å–∏ –µ—Å—Ç—å —á—Ç–æ –æ—Ç–æ—é—Ä–∞–∂–∞—Ç—å
               }
-              if (++menu.cur_dispaly_error > 32)  //ß¶ß„ß›ß⁄ ß·ß‚ß‡ß›ß⁄ß„ß‰ß—ß›ß⁄ ß”ß„ß÷ ß‡ßÍß⁄ß“ß‹ß⁄, ß‰ß‡ ß„ß“ß‚ß—ß„ßÌß”ß—ß÷ßﬁ ß„ßÈß‰ß÷ßÈß⁄ß‹ ß⁄ ß·ß÷ß‚ß÷ßÁß‡ß’ß⁄ßﬁ ß” ß„ß›ß÷ß’ßÂßß⁄ßÎß÷ß€ ß·ßÂßﬂß‹ß‰ ßﬁß÷ßﬂß
+              if (++menu.cur_dispaly_error > 32)  //–ï—Å–ª–∏ –ø—Ä–æ–ª–∏—Å—Ç–∞–ª–∏ –≤—Å–µ –æ—à–∏–±–∫–∏, —Ç–æ —Å–±—Ä–∞—Å—ã–≤–∞–µ–º —Å—á—Ç–µ—á–∏–∫ –∏ –ø–µ—Ä–µ—Ö–æ–¥–∏–º –≤ —Å–ª–µ–¥—É—é–∏—â–µ–π –ø—É–Ω–∫—Ç –º–µ–Ω—é
               {
                  menu.cur_dispaly_error =0;
                  break;
@@ -128,11 +130,19 @@ void IncMenuIndex( )
       }
    }
    if (++menu.current_menu >=  menu.max_menu_index )  menu.current_menu = 0;
+   menu.current_timer_ms = 0;
+}
+
+void GoToHome()
+{
+    menu.current_timer_ms = 0;
+    menu.current_menu = menu.home_menu;
 }
 
 void SetCurMenuHome()
 {
-    menu.home_menu = menu.current_menu;
+    GoToHome();
+    WriteReg( MENU_DEF_POS  ,&menu.home_menu,1);
 }
 
 u8 GetCurMenuHome()
@@ -171,10 +181,9 @@ void MenuBackHomeCheck( u8 time_increment)
     if (( menu.current_menu!= menu.home_menu ) && (menu.show_error_flag == 0 ))
     {
            menu.current_timer_ms += time_increment;
-           if ((menu.current_timer_ms/1000)>= (menu.home_menu_back_time_s))
+           if ((menu.current_timer_ms)>= (menu.home_menu_back_time_s*1000))
            {
-               menu.current_timer_ms = 0;
-               menu.current_menu = menu.home_menu;
+               GoToHome();
            }
     }
 }
@@ -203,7 +212,7 @@ void vDashDrawInit()
     menu.current_menu = menu.home_menu;
     menu.max_menu_index  = 0;
   //  pKeyboard = pGetKeyboardQueue();
-    //ß±ß‚ß‡ß”ß÷ß‚ßÒß÷ßﬁ ß„ß‹ß‡ß‹ß›ßÓß‡ ß” ßﬁß÷ßﬂß ß⁄ßﬂß’ß÷ß‹ß‡ß„ß”
+    //–ü—Ä–æ–≤–µ—Ä—è–µ–º —Å–∫–æ–∫–ª—å–æ –≤ –º–µ–Ω—é –∏–Ω–¥–µ–∫–æ—Å–≤
     for (u8 i=0;i< MAX_MENU_COUNT;i++)
     {
         u32 menu_mask =  getReg32( MENU1_MAP + i*4);
@@ -251,7 +260,7 @@ u8 getCurrErrorCode()
 }
 
 /*
- * ß¨ß‡ßﬂß÷ßË API ß’ß›ßÒ ß‚ß—ß“ß‡ß‰ßÌß„ ßﬁß÷ßﬂß
+ * –ö–æ–Ω–µ—Ü API –¥–ª—è —Ä–∞–±–æ—Ç—ã—Å –º–µ–Ω—é
  */
 
 void vRGBOff( u8 ch)
@@ -279,11 +288,11 @@ void vRGBMode( u8 i,  u16 bd)
     vGetEdgeData( offset, &high_edge,&low_edge);
     if ((low_edge ==0) && (high_edge ==0)) state = STATE_OFF;
     else
-    if (low_edge <= high_edge)   //ß∞ß“ßÌßÈßﬂßÌß€ ß‚ß÷ßÿß⁄ßﬁ, ß·ß‚ß‡ß”ß÷ß‚ßÒß÷ßﬁ ßﬂß— ß·ß‡ß·ß—ß’ß—ßﬂß⁄ß÷ ß” ß‡ß‹ßﬂß‡.
+    if (low_edge <= high_edge)   //–û–±—ã—á–Ω—ã–π —Ä–µ–∂–∏–º, –ø—Ä–æ–≤–µ—Ä—è–µ–º –Ω–∞ –ø–æ–ø–∞–¥–∞–Ω–∏–µ –≤ –æ–∫–Ω–æ.
     {
          state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
     }
-    else  // ß⁄ßﬂß”ß÷ß„ßﬂßÌß€ ß‚ß÷ßÿß⁄ßﬁ, ß·ß‡ß·ß—ß’ß—ß÷ßﬁ ßﬂß— ßﬂß÷ß·ß‡ß·ß—ß’ß—ßﬂß⁄ß÷ ß” ß‡ß‹ßﬂß‡
+    else  // –∏–Ω–≤–µ—Å–Ω—ã–π —Ä–µ–∂–∏–º, –ø–æ–ø–∞–¥–∞–µ–º –Ω–∞ –Ω–µ–ø–æ–ø–∞–¥–∞–Ω–∏–µ –≤ –æ–∫–Ω–æ
     {
          state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
     }
@@ -291,11 +300,11 @@ void vRGBMode( u8 i,  u16 bd)
     vGetEdgeData( offset +4 , &high_edge,&low_edge);
     if ((low_edge ==0) && (high_edge ==0)) state = STATE_OFF;
     else
-    if (low_edge <= high_edge)   //ß∞ß“ßÌßÈßﬂßÌß€ ß‚ß÷ßÿß⁄ßﬁ, ß·ß‚ß‡ß”ß÷ß‚ßÒß÷ßﬁ ßﬂß— ß·ß‡ß·ß—ß’ß—ßﬂß⁄ß÷ ß” ß‡ß‹ßﬂß‡.
+    if (low_edge <= high_edge)   //–û–±—ã—á–Ω—ã–π —Ä–µ–∂–∏–º, –ø—Ä–æ–≤–µ—Ä—è–µ–º –Ω–∞ –ø–æ–ø–∞–¥–∞–Ω–∏–µ –≤ –æ–∫–Ω–æ.
     {
          state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
     }
-    else  // ß⁄ßﬂß”ß÷ß„ßﬂßÌß€ ß‚ß÷ßÿß⁄ßﬁ, ß·ß‡ß·ß—ß’ß—ß÷ßﬁ ßﬂß— ßﬂß÷ß·ß‡ß·ß—ß’ß—ßﬂß⁄ß÷ ß” ß‡ß‹ßﬂß‡
+    else  // –∏–Ω–≤–µ—Å–Ω—ã–π —Ä–µ–∂–∏–º, –ø–æ–ø–∞–¥–∞–µ–º –Ω–∞ –Ω–µ–ø–æ–ø–∞–¥–∞–Ω–∏–µ –≤ –æ–∫–Ω–æ
     {
         state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
     }
@@ -303,11 +312,11 @@ void vRGBMode( u8 i,  u16 bd)
     vGetEdgeData( offset +8, &high_edge,&low_edge);
     if ((low_edge ==0) && (high_edge ==0)) state = STATE_OFF;
     else
-    if (low_edge <= high_edge)   //ß∞ß“ßÌßÈßﬂßÌß€ ß‚ß÷ßÿß⁄ßﬁ, ß·ß‚ß‡ß”ß÷ß‚ßÒß÷ßﬁ ßﬂß— ß·ß‡ß·ß—ß’ß—ßﬂß⁄ß÷ ß” ß‡ß‹ßﬂß‡.
+    if (low_edge <= high_edge)   //–û–±—ã—á–Ω—ã–π —Ä–µ–∂–∏–º, –ø—Ä–æ–≤–µ—Ä—è–µ–º –Ω–∞ –ø–æ–ø–∞–¥–∞–Ω–∏–µ –≤ –æ–∫–Ω–æ.
     {
         state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
     }
-    else  // ß⁄ßﬂß”ß÷ß„ßﬂßÌß€ ß‚ß÷ßÿß⁄ßﬁ, ß·ß‡ß·ß—ß’ß—ß÷ßﬁ ßﬂß— ßﬂß÷ß·ß‡ß·ß—ß’ß—ßﬂß⁄ß÷ ß” ß‡ß‹ßﬂß‡
+    else  // –∏–Ω–≤–µ—Å–Ω—ã–π —Ä–µ–∂–∏–º, –ø–æ–ø–∞–¥–∞–µ–º –Ω–∞ –Ω–µ–ø–æ–ø–∞–¥–∞–Ω–∏–µ –≤ –æ–∫–Ω–æ
     {
         state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
     }
@@ -335,7 +344,7 @@ void vBarColorMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high
 }
 
 /*
- *  ß≤ß÷ßÿß⁄ßﬁ ß“ß—ß‚ß— - ß‡ß‹ß‡ßﬂßﬂßÌß€, ß‡ß’ßﬂß‡ßËß”ß÷ß‰ßﬂßÌß€
+ *  –†–µ–∂–∏–º –±–∞—Ä–∞ - –æ–∫–æ–Ω–Ω—ã–π, –æ–¥–Ω–æ—Ü–≤–µ—Ç–Ω—ã–π
  */
 void vBarWindowMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge_r, u8 * startG, u8 * countG, u8 * startR, u8 * countR, u8 bar_count, u16 bd )
 {
@@ -367,7 +376,7 @@ void vBarWindowMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  hig
 
 
 /*
- *  ß≤ß÷ßÿß⁄ßﬁ ß“ß—ß‚ß— - ß‡ß‹ß‡ßﬂßﬂßÌß€, ß‡ß’ßﬂß‡ßËß”ß÷ß‰ßﬂßÌß€
+ *  –†–µ–∂–∏–º –±–∞—Ä–∞ - –æ–∫–æ–Ω–Ω—ã–π, –æ–¥–Ω–æ—Ü–≤–µ—Ç–Ω—ã–π
  */
 void vBarMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge_r,  u8 * countG,  u8 * countR, u8 bar_count, u16 bd )
 {
@@ -412,18 +421,188 @@ void RedrawNotifyTaskToInit()
     pTaskToNotifykHandle = xTaskGetCurrentTaskHandle();
     xTaskNotify(pProcessTaskHandle, TASK_INIT_NOTIFY , eSetValueWithOverwrite);
 }
+
+
+
+//static TaskHandle_t  pKeybardTaskHandle ;
+static uint8_t  STATUS = 0;
+
+
+BitState_t fPortStateKey (uint8_t i)
+{
+
+     return HAL_GetBit( Din3_4_5_Port ,Din4_Pin );
+
+}
+#define SERVICE_MODE_TIME_OUT 600
+#define SERVICE_MODE_EXIT     400
+#define SERVICE_MODE_ENTER    200
+
+static void SegClear()
+{
+    for (u8 i = 0;i<7;i++)
+    {
+        SetSegDirect(i,0x00);
+    }
+}
+static void SegPrint(u8 s1,u8 s2,u8 s3,u8 s4,u8 s5,u8 s6,u8 s7)
+{
+    SetSegDirect(6,s1);
+    SetSegDirect(5,s2);
+    SetSegDirect(4,s3);
+    SetSegDirect(3,s4);
+    SetSegDirect(2,s5);
+    SetSegDirect(1,s6);
+    SetSegDirect(0,s7);
+}
+
+static void SeriveceMenuDraw( u8 servece_menu_state)
+{
+    switch (servece_menu_state )
+    {
+                     case 1:
+                         SegPrint(0x50,0x73,0x06,0,0,0,0);
+                         break;
+                    case 2:
+                         SegPrint(0x50,0x73,0x5B,0,0,0,0);
+                         break;
+                    case 3:
+                         SegPrint(0x6D,0x77,0x3E,0x79,0,0,0);
+                         break;
+                    default:
+                         SegPrint(0x6D,0x6E,0x6D,0,0,0,0);
+                         break;
+    }
+}
+
+static  MenuState_t MenuSatate = WORK_MENU_STATE;
+static u8 ServieModeFSM = 0;
+static u16 ServiceModeCounter = 0;
+
+static void SystemMenuDraw(u8 key_press_flag, KeyDelayState_t SystemDelayState)
+{
+    u32 buffer32;
+    u8 data;
+    switch (MenuSatate)
+    {
+        case WORK_MENU_STATE:
+            MenuBackHomeCheck( 10);
+            if (key_press_flag )
+            {
+                switch (SystemDelayState)
+                {
+                    case SYSTEM_EDIT:
+                            MenuSatate = SYS_MENU_STATE;
+                            break;
+                    case SYSTEM_EXIT:
+                    case SYSTEM_ENTER:
+                         SetCurMenuHome();
+                        break;
+                    default:
+                         IncMenuIndex();
+                         break;
+                }
+            }
+           buffer32 = uGetCurrMenu();
+           SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),0)  );
+           break;
+       case SYS_MENU_STATE:
+           if ( key_press_flag )
+           {
+               switch (SystemDelayState)
+               {
+                   case SYSTEM_IDLE: if (++ServieModeFSM>3) ServieModeFSM = 1; break;
+                   case SYSTEM_EDIT: GoToHome(); MenuSatate = WORK_MENU_STATE; break;
+                   default:
+
+                       switch (ServieModeFSM)
+                       {
+                          case 1:
+                             MenuSatate= RPM1_UP_MENU_STATE;
+                             break;
+                         case 2:
+                             MenuSatate= RPM2_UP_MENU_STATE;
+                             break;
+                        case 3:
+                             SaveReg16(RPM1_COOF, 2);
+                             SaveReg16(RPM2_COOF, 2);
+                             ServieModeFSM = 0;
+                             break;
+                      }
+                   break;
+               }
+           }
+            SeriveceMenuDraw(ServieModeFSM );
+            break;
+       case RPM1_UP_MENU_STATE:
+       case RPM2_UP_MENU_STATE:
+           if (MenuSatate == RPM1_UP_MENU_STATE)
+                SetSEG( (u16)0x2306,  getODValue(chRPM1,0) );
+           else
+                SetSEG( (u16)0x635B,  getODValue(chRPM2,0) );
+            if (key_press_flag)
+            {
+               switch (SystemDelayState)
+               {
+                  case SYSTEM_ENTER:
+                      MenuSatate = (MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_DOWN_MENU_STATE: RPM2_DOWN_MENU_STATE;
+                      break;
+                  case SYSTEM_IDLE:
+                      data =  getReg16((MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_COOF :  RPM2_COOF ) + 1;
+                      setReg16((MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_COOF :  RPM2_COOF,data);
+                      break;
+                  default:
+                      MenuSatate = SYS_MENU_STATE;
+                      break;
+               }
+             }
+             break;
+        case RPM1_DOWN_MENU_STATE:
+        case RPM2_DOWN_MENU_STATE:
+            if (MenuSatate == RPM1_DOWN_MENU_STATE)
+                SetSEG( (u16)0x1C06,  getODValue(chRPM1,0) );
+            else
+                SetSEG( (u16)0x3F5B,  getODValue(chRPM2,0) );
+            if (key_press_flag)
+            {
+                 switch (SystemDelayState)
+                 {
+                       case SYSTEM_ENTER:
+                           MenuSatate = (MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_UP_MENU_STATE: RPM2_UP_MENU_STATE;
+                          break;
+                       case SYSTEM_IDLE:
+                           data =  getReg16((MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_COOF :  RPM2_COOF ) - 1;
+                           setReg16((MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_COOF :  RPM2_COOF,data);
+                           break;
+                       default:
+                           MenuSatate = SYS_MENU_STATE;
+                           break;
+                  }
+               }
+               break;
+     }
+
+      if (MenuSatate!= WORK_MENU_STATE)
+      {
+           if (++ServiceModeCounter>40) ServiceModeCounter = 0;
+            if (ServiceModeCounter>21)  SegClear();
+      }
+}
+
+static uint16_t COUNTER = 0;
 /*
  *
  */
 void vRedrawTask( void * argument )
 {
-    u32 buffer32;
+
     uint32_t ulNotifiedValue;
     TaskFSM_t  state = STATE_IDLE;
     u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r,bd;
-    KeyEvent TempEvent;
-    u8 data, brakecode_no_valid = 0;
-    pKeyboard = *( xKeyboardQueue());
+    u8 data;
+    uint8_t key_press_flag = 0;
+    KeyDelayState_t SystemDelayState = SYSTEM_IDLE;
+
     while(1)
     {
         switch(state)
@@ -442,32 +621,42 @@ void vRedrawTask( void * argument )
                 break;
             case STATE_RUN:
                  vTaskDelay(10);
-                 if ( xQueueReceive( pKeyboard, &TempEvent,0 ) != errQUEUE_EMPTY )
+                 if ( HAL_GetBit( Din3_4_5_Port ,Din4_Pin ) == KEY_OFF_STATE)
                  {
-                     switch (TempEvent.Status)
+                     if  (STATUS!=0)
                      {
-                         case KEY_ON_REPEAT:
-                             SetCurMenuHome();
-                             brakecode_no_valid =1;
-                             break;
-                         case BRAKECODE:
-                             keystate = 0;
-                             if (brakecode_no_valid)
-                                 brakecode_no_valid = 0;
-                             else
-                                 IncMenuIndex();
-                             break;
-                         case MAKECODE:
-                             keystate  = 1;
-                             vAcceptError();
-                             break;
+                         key_press_flag = 1;
+                         STATUS = 0;
+                         COUNTER = 0;
                      }
                  }
-                 //ß±ß‚ß‡ß”ß÷ß‚ßÒß÷ßﬁ, ßﬂß÷ ßﬂßÂßÿßﬂß‡ ß›ß⁄ ß”ß÷ß‚ßﬂßÂß‰ßÓß„ßÒ ß” ß’ß‡ßﬁß—ßÍßﬂß÷ß÷ ßﬁß÷ßﬂß
-                 /* MenuBackHomeCheck(10);
-                //ß±ß‚ß‡ß”ß÷ß‚ßÒß÷ßﬁ ß‚ß÷ß‘ß⁄ß„ß‰ß‚ ß‡ßÍß⁄ß“ß‡ß‹
-                SetErrorRegiter(ErrorRegister);*/
-                 //ß∞ß‰ß‚ß⁄ß„ß‡ß”ßÌß”ß—ß÷ßﬁ RGB ß·ß⁄ß‹ß‰ß‡ß‚ß‘ß‚ß—ßﬁßﬁßÌ
+                 else
+                 {
+                     COUNTER++;
+                     if (( STATUS == 0) && (COUNTER >= 5))
+                     {
+                         STATUS = 1;
+                     }
+                     if (( COUNTER>= SERVICE_MODE_TIME_OUT ) && (STATUS == 1))
+                     {
+                         SystemDelayState = SYSTEM_EDIT;
+                         key_press_flag = 1;
+                         STATUS = 2;
+                     }
+                     else
+                     if (( COUNTER>= SERVICE_MODE_EXIT  ) && (STATUS == 1))
+                     {
+                         SystemDelayState = SYSTEM_EXIT;
+
+                     }
+                     else
+                     if (( COUNTER>= SERVICE_MODE_ENTER   ) && (STATUS == 1))
+                     {
+                         SystemDelayState = SYSTEM_ENTER;
+
+                     }
+                 }
+                 //–û—Ç—Ä–∏—Å–æ–≤—ã–≤–∞–µ–º RGB –ø–∏–∫—Ç–æ—Ä–≥—Ä–∞–º–º—ã
                  for (u8 i = 0;i < RGB_DIOD_COUNT; i++)
                  {
                      data =  getReg8( RGBMAP1 + i);
@@ -481,7 +670,7 @@ void vRedrawTask( void * argument )
                          vRGBMode( i,  bd);
                      }
                  }
-                 //ß£ßÌß”ß‡ß’ ß’ß—ßﬂßﬂßÌßÁ ß” ß“ß—ß‚
+                 //–í—ã–≤–æ–¥ –¥–∞–Ω–Ω—ã—Ö –≤ –±–∞—Ä
                  data =  getReg8(BARMAP);
                  u8 startR = 0;
                  u8 countR = 0;
@@ -516,12 +705,20 @@ void vRedrawTask( void * argument )
                      }
                  }
                  SetBarState( startG, countG, startR, countR );
-                 //ß¨ß‡ßﬂß÷ßË ß”ßÌß”ß‡ß’ß— ß’ß—ßﬂßﬂßÌßÁ ß” ß“ß—ß‚
+                 //–ö–æ–Ω–µ—Ü –≤—ã–≤–æ–¥–∞ –¥–∞–Ω–Ω—ã—Ö –≤ –±–∞—Ä
 
-                 // ß∞ß‰ß‡ß“ß‚ß—ßÿß÷ßﬂß⁄ß÷ ßﬁß÷ßﬂß
-                 buffer32 = uGetCurrMenu();
+                 // –û—Ç–æ–±—Ä–∞–∂–µ–Ω–∏–µ –º–µ–Ω—é
+                 SystemMenuDraw(key_press_flag ,SystemDelayState);
+                 if ( key_press_flag )
+                 {
+                      key_press_flag = 0;
+                      SystemDelayState = SYSTEM_IDLE;
+                 }
                  //
-                 /* if ((buffer32 & 0xFF) == chErrorRegister )
+                 /*
+                  *
+                  * //–ü—Ä–æ–≤–µ—Ä—è–µ–º —Ä–µ–≥–∏—Å—Ç—Ä –æ—à–∏–±–æ–∫
+               // SetErrorRegiter(ErrorRegister); if ((buffer32 & 0xFF) == chErrorRegister )
                  {   u8 code = getCurrErrorCode();
                     SetSegDirect(6,0x79);
                     SetSegDirect(5,0x58);
@@ -533,10 +730,10 @@ void vRedrawTask( void * argument )
                     SetSegDirect(0,0x00);
                 }
                // else
-                  */{
-                     SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),0)  );
-                  }
-                  //ß∞ß‰ß‡ß“ß‚ß—ßÿß÷ßﬂß⁄ß÷ ß“ß‡ß›ßÓßÍß‡ß‘ß‡ ß„ß÷ß‘ßﬁß÷ßﬂß÷ß‰ß—
+                  {*/
+
+                 // }
+                  //–û—Ç–æ–±—Ä–∞–∂–µ–Ω–∏–µ –±–æ–ª—å—à–æ–≥–æ —Å–µ–≥–º–µ–Ω–µ—Ç–∞
                   data = getReg16(BIG_SEG);
                   u16 seg_view = 0;
                   if (data!=0)

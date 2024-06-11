@@ -11,7 +11,7 @@
 #include "system_init.h"
 
 
-#define VALID_CODE      0x24
+#define VALID_CODE      0x55
 #define VALID_CODE_ADDRES     0
 
 #define RGB_BRIGTH_ADR         (VALID_CODE_ADDRES +1)
@@ -159,7 +159,8 @@
 #define MENU10_MAP            (MENU9_MAP + 4)
 #define MENU_DEF_POS          (MENU10_MAP +4)
 #define MENU_HOME_BACK_TIME   (MENU_DEF_POS +1 )
-#define EEPROM_REGISER_COUNT  (MENU_HOME_BACK_TIME +1)
+#define DIN_ACTIVE_STATE      (MENU_HOME_BACK_TIME +1)
+#define EEPROM_REGISER_COUNT  (DIN_ACTIVE_STATE  +1)
 
 
 #define BIG_SEG                 ( EEPROM_REGISER_COUNT)
@@ -181,6 +182,9 @@
 #define V16                     ( V15 + 2 )
 #define V17                     ( V16 + 2 )
 
+#define AIN_OFFSET                400
+#define RMP_OFFSET                1000
+
 #define TOTAL_REGISTER_COUNT  (V17 +2 )
 
 void DataModel_Init();
@@ -199,4 +203,5 @@ void WriteRegToEEPROM( u16 reg_adress, void * data, u8 len);
 uint8_t vGetNodeId( void );
 void vSaveData();
 u32 getOdometr();
+void SaveReg16(u16 reg_adress, u8 notyfy_index );
 #endif /* USER_DATAMODEL_H_ */

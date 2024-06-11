@@ -29,12 +29,13 @@ void vInit_DeviceConfig( void )
 	 vAINInit();
     HAL_SPI_InitDMA(SPI1, SPI_16bit ,SPI_SOFT_NSS);
 	HAL_SPI_InitDMA(SPI2, SPI_16bit ,SPI_SOFT_NSS);
+
 	HAL_RTC_IT_Init(&vIncrementSystemCounters,1,5);
 	HAL_TIMER_InitIt( TIMER4, 1000000, 100, &vRGBProcess ,1,3);
 
 	HAL_TiemrEneblae( TIMER4);
 	//HAL_TiemrEneblae( TIMER1);
-	HAL_TIMER_PWMTimersInit(TIMER3 , 100000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
+	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
 	HAL_TiemrEneblae( TIMER3);
 	//HAL_InitCaptureDMATimer( TIMER1 ,  1000, 60000, TIM_CHANNEL_4);
 	//HAL_InitCaptureDMATimer( TIMER2 ,  1000, 60000, TIM_CHANNEL_2);
@@ -64,8 +65,8 @@ static void MX_GPIO_Init(void)
   /*
    * Потры RPM
    */
-  HAL_InitGpioAF( Din2_Port , Din2_Pin , GPIO_PartialRemap1_TIM2 , MODE_OUT_PP );
-  HAL_InitGpioAF( Din1_Port , Din1_Pin , 0 , MODE_OUT_PP );
+  HAL_InitGpioAF( Din2_Port , Din2_Pin , GPIO_PartialRemap1_TIM2 ,GPIO_Mode_IN_FLOATING );
+  HAL_InitGpioAF( Din1_Port , Din1_Pin , 0 , GPIO_Mode_IN_FLOATING);
   /*
    * Порты яроксти ШИМ
    */

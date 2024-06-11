@@ -30,21 +30,21 @@ BitState_t fPortState (uint8_t i)
  *
  *
  */
-void vInitKeybord()
+/*void vInitKeybord()
 {
     KeybaordStruct_t KeyboardInit;
     KeyboardInit.KEYBOARD_COUNT    = KEY_COUNT;
     KeyboardInit.COUNTERS          = COUNTERS;
     KeyboardInit.STATUS            = STATUS;
-    KeyboardInit.REPEAT_TIME       = 2;
-    KeyboardInit.KEYDOWN_HOLD_TIME = 2 ;
-    KeyboardInit.KEYDOWN_DELAY     = 2;
-    KeyboardInit.KEYBOARD_PERIOD   = 20;
+    KeyboardInit.REPEAT_TIME       = 10;
+    KeyboardInit.KEYDOWN_HOLD_TIME = 20 ;
+    KeyboardInit.KEYDOWN_DELAY     = 4;
+    KeyboardInit.KEYBOARD_PERIOD   = 10;
     KeyboardInit.getPortCallback = &fPortState;
     eKeyboardInit(&KeyboardInit);
 }
-
-
+*/
+/*
 void vKeyboardTask( void * argument )
 {
   vInitKeybord();
@@ -54,3 +54,4 @@ void vKeyboardTask( void * argument )
     HW_LIB_KeyboradFSM();
   }
 }
+*/

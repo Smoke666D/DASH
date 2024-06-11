@@ -37,7 +37,7 @@ const uint16_t CalPoint[18][2] = {
 //static u32 hourcounter;
 static u16 secondcounter;
 static u32 odometr;
-static u8 data_init = 0;
+//static u8 data_init = 0;
 
 static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
 
@@ -47,15 +47,15 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
  void DataModel_Init()
 {
     memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
-    if ( eEEPROMRd(0x00 ,DATA_MODEL_REGISTER , EEPROM_REGISER_COUNT,0) == EEPROM_OK)
+    if ( eEEPROMRd(0x00 ,DATA_MODEL_REGISTER , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
          if (DATA_MODEL_REGISTER[VALID_CODE_ADDRES]!=VALID_CODE )
          {
-             DATA_MODEL_REGISTER[BITRATE_ADR ]                     = 2;
+             DATA_MODEL_REGISTER[BITRATE_ADR ]                = 2;
              DATA_MODEL_REGISTER[NODE_ID]                     = 0x20;
-             DATA_MODEL_REGISTER[VALID_CODE_ADDRES]                = VALID_CODE;
-             DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]                 = MAX_BRIGTH;
-             DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]                   = MAX_BRIGTH;
+             DATA_MODEL_REGISTER[VALID_CODE_ADDRES]           = VALID_CODE;
+             DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]            = 11;
+             DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]              = 14;
              DATA_MODEL_REGISTER[BAR_MODE]   = 1;
              setReg16(BAR_VALUE_HIGH        ,36);
              setReg16(BAR_VALUE_LOW         ,0);
@@ -63,8 +63,6 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(BAR_VALUE_RED_LOW     ,0);
              setReg16(BAR_VALUE_GREEN_HIGH  ,36);
              setReg16(BAR_VALUE_GREEN_LOW   ,5);
-             //setReg16(BITRATE_ADR           ,2);
-            // setReg16(NODE_ID_ADR           ,0x16);
              setReg16(RGB1_VALUE_GREEN_HIGH ,0);
              setReg16(RGB1_VALUE_GREEN_LOW  ,0);
              setReg16(RGB1_VALUE_RED_HIGH   ,1);
@@ -77,28 +75,28 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(RGB2_VALUE_RED_LOW    ,0);
              setReg16(RGB2_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB2_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB3_VALUE_GREEN_HIGH ,0);
-             setReg16(RGB3_VALUE_GREEN_LOW  ,0);
-             setReg16(RGB3_VALUE_RED_HIGH   ,0);
-             setReg16(RGB3_VALUE_RED_LOW    ,0);
+             setReg16(RGB3_VALUE_GREEN_HIGH ,650+AIN_OFFSET );
+             setReg16(RGB3_VALUE_GREEN_LOW  ,600+AIN_OFFSET );
+             setReg16(RGB3_VALUE_RED_HIGH   ,1);
+             setReg16(RGB3_VALUE_RED_LOW    ,650+AIN_OFFSET );
              setReg16(RGB3_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB3_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB4_VALUE_GREEN_HIGH ,0);
-             setReg16(RGB4_VALUE_GREEN_LOW  ,0);
-             setReg16(RGB4_VALUE_RED_HIGH   ,0);
-             setReg16(RGB4_VALUE_RED_LOW    ,0);
-             setReg16(RGB4_VALUE_BLUE_HIGH  ,0);
-             setReg16(RGB4_VALUE_BLUE_LOW   ,0);
+             setReg16(RGB4_VALUE_GREEN_HIGH ,1);
+             setReg16(RGB4_VALUE_GREEN_LOW  ,1);
+             setReg16(RGB4_VALUE_RED_HIGH   ,1);
+             setReg16(RGB4_VALUE_RED_LOW    ,1);
+             setReg16(RGB4_VALUE_BLUE_HIGH  ,3);
+             setReg16(RGB4_VALUE_BLUE_LOW   ,1);
              setReg16(RGB5_VALUE_GREEN_HIGH ,0);
              setReg16(RGB5_VALUE_GREEN_LOW  ,0);
              setReg16(RGB5_VALUE_RED_HIGH   ,90);
              setReg16(RGB5_VALUE_RED_LOW    ,160);
              setReg16(RGB5_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB5_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB6_VALUE_GREEN_HIGH ,0);
-             setReg16(RGB6_VALUE_GREEN_LOW  ,0);
-             setReg16(RGB6_VALUE_RED_HIGH   ,0);
-             setReg16(RGB6_VALUE_RED_LOW    ,0);
+             setReg16(RGB6_VALUE_GREEN_HIGH ,1);
+             setReg16(RGB6_VALUE_GREEN_LOW  ,1);
+             setReg16(RGB6_VALUE_RED_HIGH   ,1);
+             setReg16(RGB6_VALUE_RED_LOW    ,1);
              setReg16(RGB6_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB6_VALUE_BLUE_LOW   ,0);
              setReg16(RGB7_VALUE_GREEN_HIGH ,1);
@@ -107,16 +105,16 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(RGB7_VALUE_RED_LOW    ,1);
              setReg16(RGB7_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB7_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB8_VALUE_GREEN_HIGH ,0);
-             setReg16(RGB8_VALUE_GREEN_LOW  ,0);
-             setReg16(RGB8_VALUE_RED_HIGH   ,0);
-             setReg16(RGB8_VALUE_RED_LOW    ,1400);
+             setReg16(RGB8_VALUE_GREEN_HIGH ,1000+AIN_OFFSET );
+             setReg16(RGB8_VALUE_GREEN_LOW  ,950+AIN_OFFSET );
+             setReg16(RGB8_VALUE_RED_HIGH   ,1);
+             setReg16(RGB8_VALUE_RED_LOW    ,1000+AIN_OFFSET );
              setReg16(RGB8_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB8_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB9_VALUE_GREEN_HIGH ,0);
-             setReg16(RGB9_VALUE_GREEN_LOW  ,0);
-             setReg16(RGB9_VALUE_RED_HIGH   ,0);
-             setReg16(RGB9_VALUE_RED_LOW    ,0);
+             setReg16(RGB9_VALUE_GREEN_HIGH ,3);
+             setReg16(RGB9_VALUE_GREEN_LOW  ,2);
+             setReg16(RGB9_VALUE_RED_HIGH   ,3);
+             setReg16(RGB9_VALUE_RED_LOW    ,2);
              setReg16(RGB9_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB9_VALUE_BLUE_LOW   ,0);
              setReg16(RGB10_VALUE_GREEN_HIGH,0);
@@ -137,27 +135,27 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg16(RGB12_VALUE_RED_LOW   ,2);
              setReg16(RGB12_VALUE_BLUE_HIGH ,0);
              setReg16(RGB12_VALUE_BLUE_LOW  ,0);
-             setReg16(RGB13_VALUE_GREEN_HIGH,3);
+             setReg16(RGB13_VALUE_GREEN_HIGH,1);
              setReg16(RGB13_VALUE_GREEN_LOW ,1);
-             setReg16(RGB13_VALUE_RED_HIGH  ,3);
-             setReg16(RGB13_VALUE_RED_LOW   ,2);
-             setReg16(RGB13_VALUE_BLUE_HIGH ,0);
-             setReg16(RGB13_VALUE_BLUE_LOW  ,0);
-             setReg16(RGB14_VALUE_GREEN_HIGH,3);
+           //  setReg16(RGB13_VALUE_RED_HIGH  ,0);
+            //setReg16(RGB13_VALUE_RED_LOW   ,0);
+             //setReg16(RGB13_VALUE_BLUE_HIGH ,0);
+            // setReg16(RGB13_VALUE_BLUE_LOW  ,0);
+             setReg16(RGB14_VALUE_GREEN_HIGH,1);
              setReg16(RGB14_VALUE_GREEN_LOW ,1);
-             setReg16(RGB14_VALUE_RED_HIGH  ,3);
-             setReg16(RGB14_VALUE_RED_LOW   ,2);
-             setReg16(RGB14_VALUE_BLUE_HIGH ,0);
-             setReg16(RGB14_VALUE_BLUE_LOW  ,0);
+            // setReg16(RGB14_VALUE_RED_HIGH  ,0);
+           //  setReg16(RGB14_VALUE_RED_LOW   ,0);
+           //  setReg16(RGB14_VALUE_BLUE_HIGH ,0);
+          //  setReg16(RGB14_VALUE_BLUE_LOW  ,0);
              DATA_MODEL_REGISTER[RGBMAP1]  =chDIN1;
              DATA_MODEL_REGISTER[RGBMAP2]  =0;
-             DATA_MODEL_REGISTER[RGBMAP3]  =0;
-             DATA_MODEL_REGISTER[RGBMAP4]  =0;
+             DATA_MODEL_REGISTER[RGBMAP3]  =chAIN1;
+             DATA_MODEL_REGISTER[RGBMAP4]  =vCHANNEL2;
              DATA_MODEL_REGISTER[RGBMAP5]  =chAKB;
-             DATA_MODEL_REGISTER[RGBMAP6]  =0;
+             DATA_MODEL_REGISTER[RGBMAP6]  =vCHANNEL1 ;
              DATA_MODEL_REGISTER[RGBMAP7]  =vCHANNEL5;
-             DATA_MODEL_REGISTER[RGBMAP8]  =chAIN1;
-             DATA_MODEL_REGISTER[RGBMAP9]  =0;
+             DATA_MODEL_REGISTER[RGBMAP8]  =chAIN2;
+             DATA_MODEL_REGISTER[RGBMAP9]  =vCHANNEL3 ;
              DATA_MODEL_REGISTER[RGBMAP10] =0;
              DATA_MODEL_REGISTER[RGBMAP11] =0;
              DATA_MODEL_REGISTER[RGBMAP12] =vCHANNEL5;
@@ -176,11 +174,11 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg32(HOUR_COUNTER_ADR  , 0x100);
              setReg32(ODOMETR_ADR       ,0x00);
              DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT] = 18;
-             setReg16(AIN1_OFFSET,400);
+             setReg16(AIN1_OFFSET,AIN_OFFSET );
              DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 18;
-             setReg16(AIN2_OFFSET,400);
+             setReg16(AIN2_OFFSET,AIN_OFFSET );
              DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT] = 18;
-             setReg16(AIN3_OFFSET,400);
+             setReg16(AIN3_OFFSET,AIN_OFFSET );
              for (u8 i=0; i< 18;i++)
              {
                  setReg16(AIN1_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
@@ -190,34 +188,30 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
                  setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
                  setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2 ,CalPoint[i][1]);
              }
-
-
-             setReg16(RPM1_COOF, 1000);
-             setReg16(RPM2_COOF, 1000);
-             setReg32( MENU1_MAP , 0x78790000 | chAIN1);
+             setReg16(RPM1_COOF, RMP_OFFSET);
+             setReg16(RPM2_COOF, RMP_OFFSET);
+             setReg32( MENU6_MAP , 0x78790000 | chAIN1);
              setReg32( MENU2_MAP , 0x3E000000 | chAKB );
              setReg32( MENU3_MAP , 0x76000000 | chHOUR );
              setReg32( MENU4_MAP , 0x783F0000 | chAIN2);
              setReg32(MENU5_MAP ,  0x71000000 | chAIN3);;
-             setReg32(MENU6_MAP ,0);
-             setReg32( MENU7_MAP ,0);
+             setReg32(MENU1_MAP ,  0x50730000 | chRPM1);
+             setReg32( MENU7_MAP , 0x6D000000 | chRPM2);
              setReg32( MENU8_MAP ,0);
              setReg32( MENU9_MAP ,0);
              setReg32( MENU10_MAP , 0);
              DATA_MODEL_REGISTER[MENU_DEF_POS]             =0;
-             DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      =1;
-             eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,0);
+             DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      =10;
+             DATA_MODEL_REGISTER[DIN_ACTIVE_STATE]         = 0;
+             eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,2);
              memset(DATA_MODEL_REGISTER,0,EEPROM_REGISER_COUNT);
-             eEEPROMRd(0x00 ,DATA_MODEL_REGISTER , EEPROM_REGISER_COUNT,0);
+             vTaskDelay(10);
+             eEEPROMRd(0x00 ,DATA_MODEL_REGISTER , EEPROM_REGISER_COUNT,2);
          }
-         data_init  = 1;
-         OD_set_value(OD_ENTRY_H2024,0x00 ,&DATA_MODEL_REGISTER[ BITRATE_ADR],1, true);
+        // data_init  = 1;
          //§¥§Ñ§ß§ß§í§Ö §Ò§à§Ý§î§ê§à§Ô§à §ã§Ö§Ô§Þ§Ö§ß§ä§ß§Ú§Ü§Ñ
-         for (int j = 0; j< 9;j++)
-         {
-             OD_set_value(OD_ENTRY_H2007, j+2 ,&DATA_MODEL_REGISTER[BIG_SEGVAL1+j*2], 2, true);
-         }
-         OD_set_value(OD_ENTRY_H2019,0x06 ,&DATA_MODEL_REGISTER[BAR_VALUE_HIGH],2, true);
+
+       /*  OD_set_value(OD_ENTRY_H2019,0x06 ,&DATA_MODEL_REGISTER[BAR_VALUE_HIGH],2, true);
          OD_set_value(OD_ENTRY_H2019,0x05 ,&DATA_MODEL_REGISTER[BAR_VALUE_LOW], 2, true);
          OD_set_value(OD_ENTRY_H2019,0x01 ,&DATA_MODEL_REGISTER[BAR_VALUE_RED_HIGH],2, true);
          OD_set_value(OD_ENTRY_H2019,0x02 ,&DATA_MODEL_REGISTER[BAR_VALUE_RED_LOW], 2, true);
@@ -231,21 +225,19 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              for (int i = 0; i < 6; i++ )
                      OD_set_value(&OD->list[34+j], i+1 ,&DATA_MODEL_REGISTER[RGB1_VALUE_GREEN_HIGH +i*2], 2, true);
          }
-         OD_set_value(OD_ENTRY_H2008, 15 ,&DATA_MODEL_REGISTER[BARMAP], 1, true);
-         vSetInitBrigth(RGB_CHANNEL,DATA_MODEL_REGISTER[RGB_BRIGTH_ADR] );
-         vSetInitBrigth(WHITE_CHANNEL,DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR] );
-         //
+     //    OD_set_value(OD_ENTRY_H2008, 15 ,&DATA_MODEL_REGISTER[BARMAP], 1, true);
 
+*
              u32 data32 = getReg32(HOUR_COUNTER_ADR);
              OD_set_value(OD_ENTRY_H2004,0x02,&data32,4,true);
-
+*/
 
            /*  odometr     = getReg32(ODOMETR_ADR);
             // OD_set_value(OD_ENTRY_H2004,0x01,&odometr,4,true);
              odometr     = odometr * 100;*/
              POINT_t point[2];
              u8 cal_point_count  = DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT];
-             data32 = (u32) cal_point_count;
+             u32 data32 = (u32) cal_point_count;
              OD_set_value(OD_ENTRY_H2030, 2 ,&data32, 4, true);
              if ( eAinCalDataConfig(AIN1,cal_point_count -1 ) == CAL_SUCCESS)
              {
@@ -308,21 +300,8 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
                         eSetAinCalPoint(AIN3,&point, i);
                     }
                }
-              /*
-              OD_set_value(OD_ENTRY_H2033, 1 ,&DATA_MODEL_REGISTER[MENU_DEF_POS], 1, true);
-              OD_set_value(OD_ENTRY_H2033, 2 ,&DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME], 1, true);
-              OD_set_value(OD_ENTRY_H201B, 2 ,&DATA_MODEL_REGISTER[RPM2_COOF], 2, true);
-              OD_set_value(OD_ENTRY_H201B, 3 ,&DATA_MODEL_REGISTER[RPM2_COOF], 2, true);
-
-              for (u8 i = 0; i <10; i++)
-              {
-                  u32 data32  = *((u32*)&(DATA_MODEL_REGISTER[ MENU1_MAP + i*4]));
-                  OD_set_value(OD_ENTRY_H201A, 1+i*4 ,&data32, 4, true);
-              }
-              data_init = 0;*/
 
     }
-    //xEventGroupSetBits(xGetSystemEventHeandler(),DATA_MODEL_READY);
     secondcounter = 0;
 }
 
@@ -375,6 +354,13 @@ u16 setReg(u16 reg_adress, void * data, u8 len)
      return (0);
 }
 
+
+void SaveReg16(u16 reg_adress, u8 notyfy_index )
+{
+    eEEPROMWr(reg_adress, &DATA_MODEL_REGISTER[reg_adress],2,notyfy_index );
+}
+
+
 u16 getReg16(u16 reg_adress )
 {
     uint16_t  data =  (u16)DATA_MODEL_REGISTER[reg_adress] | (u16)(DATA_MODEL_REGISTER[reg_adress+1])<<8;
@@ -409,7 +395,7 @@ void WriteReg( u16 reg_adress, void * data, u8 len)
             setReg32(reg_adress, *((u32 *)Buffer));
             break;
     }
-    if ((reg_adress < EEPROM_REGISER_COUNT) && (data_init == 0))
+    if (reg_adress < EEPROM_REGISER_COUNT)
         eEEPROMWr(reg_adress,Buffer,len,0);
 }
 
