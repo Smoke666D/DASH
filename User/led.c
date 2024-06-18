@@ -18,10 +18,10 @@ static const u16 Brigth[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,34,55,89,144,233,256,
 static const u16 BrigthR[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,150,200,250,300,350,400,450,500};
 static const u16 BrigthG[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,50,80,100,150,200,250,300,350};
 static const u16 BrigthB[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,150,200,250,300,350,400,450,500};
-static u8 LED_CHANELL_BRIGTH[2];
 static uint16_t SPI1_DATA[SPI1_CHIP_COUNT];
 static uint16_t data[SPI1_CHIP_COUNT];
 static uint16_t SPI2_DATA[SPI2_CHIP_COUNT];
+static u16 counterRGB =0;
 
 
 void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r )
@@ -51,8 +51,11 @@ void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r )
 }
 
 
-
-
+/*
+ * Функция вывода в RGB светодиод. Из-за неравномернго распределения
+ * светодидов по драйверу, нуобходимо вычилить номер драйвера и биты
+ * в драйвере, отвечающие за нужный цвет выбранного светодиода
+ */
 void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state)
 {
    u8 offset;
@@ -90,21 +93,19 @@ void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state)
            offset   = 1;
            step     = 10;
            break;
+       case 12:
        case 10:
-           offset   = 0;
-           step  =   12;
-           break;
+            offset   = (number - 10);
+            step     = 12;
+            break;
        case 11:
            offset   = 0;
            step     = 9;
            break;
-       case 12:
-           offset = 2;
-           step = 12;
-           break;
+
        case 13:
-           offset = 0;
-           step =   6;
+           offset   = 0;
+           step     = 6;
            break;
    }
    u16 mask = (color == BLUE_COLOR) ? 0x04 : ( (color==GREEN_COLOR) ? 0x02 : 0x01 );
@@ -164,9 +165,9 @@ void SetSegDirect( u8 number, u8 mask)
 void SetSegPoint( u8 on)
 {
     if (on)
-        SPI2_DATA[2] |= 0x0400;
+        SPI2_DATA[1] |= 0x0400;
     else
-        SPI2_DATA[2] &= ~0x0400;
+        SPI2_DATA[1] &= ~0x0400;
    return;
 }
 
@@ -236,12 +237,10 @@ void SetSEG( u16 mask, u32 value)
 }
 
 
-
 void SetBigSeg( u16 mask)
 {
     SPI2_DATA[0] &= 0x0003;
     SPI2_DATA[0] |= (mask <<2);
-
 }
 
 /*
@@ -285,10 +284,8 @@ void vLedDriverStart(void)
 }
 
 
-u16 counter_R =50;
-u16 counter_G =20;
-u16 counter_B =90;
-u16 counterRGB =0;
+
+
 
 /*
  *  Функция вывода данных в SPI, вызывается по прерыванию таймра №4
@@ -305,11 +302,9 @@ void vLedProcess( void )
 void vRGBProcess()
 {
      memcpy(data,SPI1_DATA,SPI1_CHIP_COUNT*2);
-     if (++counterRGB >= PWM_TIM_PERIOD/2)
-      {
-     counterRGB = 0;
-      }
-      if (counterRGB++ >=BrigthR[9])
+     if (++counterRGB >= PWM_TIM_PERIOD/2) counterRGB = 0;
+
+      if (counterRGB++ >=BrigthR[10])
       {
           data[0]&=0x6DB6;
           data[1]&=0xDBF6;
@@ -317,7 +312,7 @@ void vRGBProcess()
           data[3]&=0xAAAA;
           data[4]&=0xAAAA;
       }
-     if (counterRGB++ >=BrigthG[9])
+     if (counterRGB++ >=BrigthG[10])
       {
           data[0]&=0x5B6D;
           data[1]&=0xB7ED;
@@ -326,7 +321,7 @@ void vRGBProcess()
           data[4]&=0x5555;
 
        }
-      if (counterRGB >= BrigthG[9])
+      if (counterRGB >= BrigthG[10])
        {
           data[0]&=0x36DB;
           data[1]&=0x6FDB;
@@ -336,5 +331,3 @@ void vRGBProcess()
     HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
     HAL_DMA_Enable(DMA1_CH3);
 }
-
-

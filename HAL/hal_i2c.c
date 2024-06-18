@@ -45,10 +45,10 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C2, ENABLE );
 	}
     I2C_InitTypeDef I2C_InitTSturcture={0};
-    I2C_InitTSturcture.I2C_ClockSpeed = 100000;
-    I2C_InitTSturcture.I2C_Mode = I2C_Mode_I2C;
-    I2C_InitTSturcture.I2C_DutyCycle = I2C_DutyCycle_16_9;
-    I2C_InitTSturcture.I2C_Ack = I2C_Ack_Enable;
+    I2C_InitTSturcture.I2C_ClockSpeed          = 400000;
+    I2C_InitTSturcture.I2C_Mode                = I2C_Mode_I2C;
+    I2C_InitTSturcture.I2C_DutyCycle           = I2C_DutyCycle_16_9;
+    I2C_InitTSturcture.I2C_Ack                 = I2C_Ack_Enable;
     I2C_InitTSturcture.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
     I2C_Init(i2c, &I2C_InitTSturcture );
     I2C_Cmd( i2c, ENABLE );

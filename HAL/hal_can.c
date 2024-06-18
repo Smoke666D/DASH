@@ -121,13 +121,10 @@ void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
      NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
      NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
      NVIC_Init(&NVIC_InitStructure);
-
      NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX1_IRQn;
      NVIC_Init(&NVIC_InitStructure);
-
      NVIC_InitStructure.NVIC_IRQChannel = USB_HP_CAN1_TX_IRQn;
      NVIC_Init(&NVIC_InitStructure);
-
      NVIC_InitStructure.NVIC_IRQChannel = CAN1_SCE_IRQn;
      NVIC_Init(&NVIC_InitStructure);
 #endif
@@ -209,10 +206,10 @@ void HAL_CANSetFiters(uint8_t filter_index, uint32_t f1,uint32_t f2,uint32_t f3,
 	CAN_FilterInitTypeDef  sFilterConfig;
 	sFilterConfig.CAN_FilterMode  = CAN_FilterMode_IdList;
 	sFilterConfig.CAN_FilterScale = CAN_FilterScale_16bit;
-	sFilterConfig.CAN_FilterIdLow =   f1 <<5;
-	sFilterConfig.CAN_FilterIdHigh =  f3 <<5;
-	sFilterConfig.CAN_FilterMaskIdLow  = f2 <<5;
-	sFilterConfig.CAN_FilterMaskIdHigh = f4 <<5;
+	sFilterConfig.CAN_FilterIdLow       =   f1 <<5;
+	sFilterConfig.CAN_FilterIdHigh      =  f3 <<5;
+	sFilterConfig.CAN_FilterMaskIdLow   = f2 <<5;
+	sFilterConfig.CAN_FilterMaskIdHigh  = f4 <<5;
 	sFilterConfig.CAN_FilterFIFOAssignment =  (FIFO  == FILTER_FIFO_0) ?  CAN_Filter_FIFO0 :  CAN_Filter_FIFO1 ;
 	sFilterConfig.CAN_FilterNumber = filter_index;
 	sFilterConfig.CAN_FilterActivation =ENABLE;

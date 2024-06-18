@@ -28,14 +28,13 @@ TaskHandle_t * xProcessTaskHandle ()
 
 void vSetErrorReg( u32 data)
 {
+
     ErrorRegister = data;
 }
 int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
 {
-  u8 data8  = 0;
   u16 data16 = 0;
   int32_t out_data;
-  float temp;
   switch (virtualchannel)
   {
     case vCHANNEL1:
@@ -52,57 +51,64 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case vCHANNEL12:
     case vCHANNEL13:
     case vCHANNEL14:
-        out_data= ((int32_t) getReg8(V1 + virtualchannel -1 ));
-        break;
+        return ( (int32_t) getReg8(V1 + virtualchannel -1 ) );
     case vCHANNEL15:
     case vCHANNEL16:
     case vCHANNEL17:
-        out_data=((u32) getReg16(V1 + virtualchannel -1 ));
-        break;
+        return ( (u32) getReg16(V1 + virtualchannel -1 ) );
     case chAIN1 :
     case chAIN2 :
     case chAIN3 :
         out_data= fGetAinCalData( 0 , GetAIN(virtualchannel -chAIN1 ))*10;
         if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET);
-        break;
-
+        return  (out_data);
     case chAKB  :
-        out_data = (int32_t) GetAIN(virtualchannel -chAIN1 )*10;
-        break;
+        return ( (int32_t) GetAIN(virtualchannel -chAIN1 )*10 );
     case chRPM1  :
         data16 = GetRPM(INPUT_1);
-
         float coof1 = (float)getReg16(RPM1_COOF)/RMP_OFFSET;
-        out_data = (u32)((data16 *coof1)*10.0);
-
-        return  (out_data);
-
+        return ( (u32)((data16 *coof1)*10.0) );
     case chRPM2  :
         data16 = GetRPM(INPUT_2);
         float coof2 = (float)getReg16(RPM2_COOF)/RMP_OFFSET;
-        data16 = (u32)((data16 *coof2)*10.0);
-        out_data =  ((u32) data16);
-        break;
+        return ( (u32)((data16 *coof2)*10.0) );
       case chKEY  :
-          out_data =  ((u32) keystate);
-          break;
+          return ((u32) keystate);
       case chDIN1   :
-
-          out_data =  uGetDIN(INPUT_3);
-          break;
+          return ( (u32) uGetDIN(INPUT_3) );
       case chODOMETR:
-          out_data =  getOdometr();
-          break;
+          return ( getOdometr() );
       case  chHOUR:
-          out_data =  getReg32(HOUR_COUNTER_ADR);
-          break;
+          return ( getReg32(HOUR_COUNTER_ADR) );
       case chErrorRegister:
-          out_data =  ErrorRegister;
-          break;
-
+          return ( ErrorRegister );
+      case chVERSION:
+          out_data = getReg32(VERSION_REG);
+          return (out_data & 0xFF) + ((out_data>>8) & 0xFF)*100+ ((out_data>>16) & 0xFF)*10000;
+      default:
+          return (0);
   }
+}
 
-  return (out_data);
+
+static u8 getErrorCode()
+{
+    while (1)
+    {
+        if ((menu.buffer_error_register & (1<<menu.cur_dispaly_error)) !=0) break;
+        if (++menu.cur_dispaly_error > 32)
+        {
+            menu.cur_dispaly_error = 0;
+        }
+        if (menu.buffer_error_register == 0) break;
+    }
+    return (menu.cur_dispaly_error);
+}
+
+u8 getCurrErrorCode()
+{
+
+    return (getErrorCode() + 1);
 }
 
 /*
@@ -114,19 +120,20 @@ void IncMenuIndex( )
    {
       if ( menu.buffer_error_register !=0 )                 //Если ошибки все таки есть.
       {
-          while (1)
-          {
-              if (menu.buffer_error_register & (1>>menu.cur_dispaly_error) !=0)
+           while (1)
+           {
+              if (++menu.cur_dispaly_error > 32)
               {
-                  menu.cur_dispaly_error++;
-                  return;  //Елси есть что отоюражать
+                  menu.cur_dispaly_error =0;
+                  menu.show_error_flag = 0;
+                  break;
               }
-              if (++menu.cur_dispaly_error > 32)  //Если пролистали все ошибки, то сбрасываем счтечик и переходим в следуюищей пункт меню
+              else
               {
-                 menu.cur_dispaly_error =0;
-                 break;
+                  if ((menu.buffer_error_register & (1<<menu.cur_dispaly_error)) !=0) return;
+
               }
-          }
+           }
       }
    }
    if (++menu.current_menu >=  menu.max_menu_index )  menu.current_menu = 0;
@@ -189,17 +196,22 @@ void MenuBackHomeCheck( u8 time_increment)
 }
 
 
-MENU_CHECK_CHANNEL_t  CheckMenuChannel( u8 menu_item)
+MENU_CHECK_CHANNEL_t  CheckMenuChannel( u8 menu_item, u8 index)
 {
     switch (menu_item)
     {
         case 0:
-            menu.max_menu_index  =  menu_item;
+            menu.max_menu_index  =  index;
             return (LAST_ITEM );
         case chErrorRegister:
-            menu.error_reg_index = menu_item;
+            menu.error_reg_index  = index;
             break;
         default:
+            if ( index >=(MAX_MENU_COUNT-1))
+            {
+                menu.max_menu_index  =  index;
+                return (LAST_ITEM );
+            }
             break;
     }
     return ( MENU_ORDINARY);
@@ -211,19 +223,16 @@ void vDashDrawInit()
     menu.home_menu_back_time_s = getReg8(MENU_HOME_BACK_TIME );
     menu.current_menu = menu.home_menu;
     menu.max_menu_index  = 0;
-  //  pKeyboard = pGetKeyboardQueue();
     //Проверяем скокльо в меню индекосв
     for (u8 i=0;i< MAX_MENU_COUNT;i++)
     {
         u32 menu_mask =  getReg32( MENU1_MAP + i*4);
         menu.menu_draw[i] = menu_mask;
-        if ( CheckMenuChannel( (menu_mask & 0xFF )) == LAST_ITEM)
+        if ( CheckMenuChannel( (menu_mask & 0xFF ),i) == LAST_ITEM)
         {
-            menu.max_menu_index = i;
             break;
         }
     }
-
     menu.buffer_error_register = 0;
     menu.cur_dispaly_error = 0;
     return;
@@ -240,8 +249,15 @@ void vAcceptError()
 
 void SetErrorRegiter( u32 error)
 {
-  if ((error > menu.buffer_error_register ) && ( menu.error_reg_index!=0))
+  if ((error != menu.buffer_error_register ) && ( menu.error_reg_index!=0))
   {
+      u32 temp_mask = error & (~menu.buffer_error_register);
+      menu.cur_dispaly_error = 0;
+      for ( u8 i=0;i<32;i++)
+      {
+        if ((1<<menu.cur_dispaly_error) & temp_mask) break;
+        menu.cur_dispaly_error++;
+      }
       menu.buffer_error_register  = error;
       menu.show_error_flag = 1;
   }
@@ -249,15 +265,12 @@ void SetErrorRegiter( u32 error)
 
 u32 uGetCurrMenu()
 {
-    return ( menu.menu_draw[menu.current_menu]);
+    if ( menu.show_error_flag == 1)  menu.current_menu = menu.error_reg_index;
+    return  ( menu.menu_draw[menu.current_menu] );
 }
 
 
 
-u8 getCurrErrorCode()
-{
-    return (menu.cur_dispaly_error);
-}
 
 /*
  * Конец API для работыс меню
@@ -456,10 +469,13 @@ static void SegPrint(u8 s1,u8 s2,u8 s3,u8 s4,u8 s5,u8 s6,u8 s7)
     SetSegDirect(0,s7);
 }
 
-static void SeriveceMenuDraw( u8 servece_menu_state)
+static void SeriveceMenuDraw( u8 * servece_menu_state)
 {
-    switch (servece_menu_state )
+    switch (*servece_menu_state )
     {
+                     case 0:
+                         SegPrint(0x6D,0x6E,0x6D,0,0,0,0);
+                         break;
                      case 1:
                          SegPrint(0x50,0x73,0x06,0,0,0,0);
                          break;
@@ -467,122 +483,166 @@ static void SeriveceMenuDraw( u8 servece_menu_state)
                          SegPrint(0x50,0x73,0x5B,0,0,0,0);
                          break;
                     case 3:
+                         SegPrint(0x77,0x06,0x54,0x06,0,0,0);
+                         break;
+                    case 4:
+                        SegPrint(0x77,0x06,0x54,0x5B,0,0,0);
+                         break;
+                    case 5:
+                         SegPrint(0x77,0x06,0x54,0x4F,0,0,0);
+                         break;
+                    case 6:
                          SegPrint(0x6D,0x77,0x3E,0x79,0,0,0);
                          break;
+                    case 7:
+                         SetSEG( (u16)0x5000, getODValue(chVERSION,0));
+                         break;
                     default:
-                         SegPrint(0x6D,0x6E,0x6D,0,0,0,0);
+                         *servece_menu_state = 1;
                          break;
     }
 }
 
-static  MenuState_t MenuSatate = WORK_MENU_STATE;
-static u8 ServieModeFSM = 0;
-static u16 ServiceModeCounter = 0;
+static MenuState_t  MenuSatate = WORK_MENU_STATE;
+static u8           ServieModeFSM = 0;
+static u16          ServiceModeCounter = 0;
+static u8           MenuViewBlink = 0;
 
 static void SystemMenuDraw(u8 key_press_flag, KeyDelayState_t SystemDelayState)
 {
     u32 buffer32;
     u8 data;
-    switch (MenuSatate)
+    if ( MenuSatate == WORK_MENU_STATE )
     {
-        case WORK_MENU_STATE:
-            MenuBackHomeCheck( 10);
-            if (key_press_flag )
-            {
-                switch (SystemDelayState)
-                {
-                    case SYSTEM_EDIT:
-                            MenuSatate = SYS_MENU_STATE;
-                            break;
-                    case SYSTEM_EXIT:
-                    case SYSTEM_ENTER:
-                         SetCurMenuHome();
-                        break;
-                    default:
-                         IncMenuIndex();
-                         break;
-                }
-            }
-           buffer32 = uGetCurrMenu();
-           SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),0)  );
-           break;
-       case SYS_MENU_STATE:
-           if ( key_press_flag )
+        MenuBackHomeCheck( 10);
+        if (key_press_flag )
+        {
+           switch (SystemDelayState)
            {
-               switch (SystemDelayState)
-               {
-                   case SYSTEM_IDLE: if (++ServieModeFSM>3) ServieModeFSM = 1; break;
-                   case SYSTEM_EDIT: GoToHome(); MenuSatate = WORK_MENU_STATE; break;
-                   default:
-
-                       switch (ServieModeFSM)
+               case SYSTEM_EDIT:
+                    MenuSatate = SYS_MENU_STATE;
+                    break;
+              case SYSTEM_EXIT:
+              case SYSTEM_ENTER:
+                    SetCurMenuHome();
+                    break;
+              default:
+                    IncMenuIndex();
+                    break;
+          }
+        }
+       SetErrorRegiter(ErrorRegister);
+       buffer32 = uGetCurrMenu();
+       if ((buffer32 & 0xFF) == chErrorRegister )
+       {
+           u8 code = getCurrErrorCode();
+           SegPrint(0x79,0x50,0x50,0x00,0x00,DigitMask[code/10],DigitMask[code%10]);
+           SetSegPoint( RESET);
+           MenuViewBlink = 1;
+        }
+        else
+        {
+            SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),0)  );
+            MenuViewBlink = 0;
+        }
+    }
+    else if (MenuSatate ==SYS_MENU_STATE )
+    {
+        MenuViewBlink = 1;
+        if ( key_press_flag )
+                   {
+                       switch (SystemDelayState)
                        {
-                          case 1:
-                             MenuSatate= RPM1_UP_MENU_STATE;
-                             break;
-                         case 2:
-                             MenuSatate= RPM2_UP_MENU_STATE;
-                             break;
-                        case 3:
-                             SaveReg16(RPM1_COOF, 2);
-                             SaveReg16(RPM2_COOF, 2);
-                             ServieModeFSM = 0;
-                             break;
-                      }
-                   break;
-               }
-           }
-            SeriveceMenuDraw(ServieModeFSM );
-            break;
-       case RPM1_UP_MENU_STATE:
-       case RPM2_UP_MENU_STATE:
-           if (MenuSatate == RPM1_UP_MENU_STATE)
-                SetSEG( (u16)0x2306,  getODValue(chRPM1,0) );
-           else
-                SetSEG( (u16)0x635B,  getODValue(chRPM2,0) );
-            if (key_press_flag)
-            {
-               switch (SystemDelayState)
-               {
-                  case SYSTEM_ENTER:
-                      MenuSatate = (MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_DOWN_MENU_STATE: RPM2_DOWN_MENU_STATE;
-                      break;
-                  case SYSTEM_IDLE:
-                      data =  getReg16((MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_COOF :  RPM2_COOF ) + 1;
-                      setReg16((MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_COOF :  RPM2_COOF,data);
-                      break;
-                  default:
-                      MenuSatate = SYS_MENU_STATE;
-                      break;
-               }
-             }
-             break;
-        case RPM1_DOWN_MENU_STATE:
-        case RPM2_DOWN_MENU_STATE:
-            if (MenuSatate == RPM1_DOWN_MENU_STATE)
-                SetSEG( (u16)0x1C06,  getODValue(chRPM1,0) );
-            else
-                SetSEG( (u16)0x3F5B,  getODValue(chRPM2,0) );
-            if (key_press_flag)
-            {
-                 switch (SystemDelayState)
-                 {
-                       case SYSTEM_ENTER:
-                           MenuSatate = (MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_UP_MENU_STATE: RPM2_UP_MENU_STATE;
-                          break;
-                       case SYSTEM_IDLE:
-                           data =  getReg16((MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_COOF :  RPM2_COOF ) - 1;
-                           setReg16((MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_COOF :  RPM2_COOF,data);
-                           break;
-                       default:
-                           MenuSatate = SYS_MENU_STATE;
-                           break;
-                  }
-               }
-               break;
-     }
+                           case SYSTEM_IDLE: ServieModeFSM++; break;
+                           case SYSTEM_EDIT: GoToHome(); MenuSatate = WORK_MENU_STATE; break;
+                           default:
 
-      if (MenuSatate!= WORK_MENU_STATE)
+                               switch (ServieModeFSM)
+                               {
+                                  case 1:
+                                     MenuSatate= RPM1_UP_MENU_STATE;
+                                     break;
+                                 case 2:
+                                     MenuSatate= RPM2_UP_MENU_STATE;
+                                     break;
+                                 case 3:
+                                     MenuSatate =AIN1_VIEW_STATE;
+                                     break;
+                                 case 4:
+                                     MenuSatate =AIN2_VIEW_STATE;
+                                     break;
+                                 case 5:
+                                     MenuSatate =AIN3_VIEW_STATE;
+                                     break;
+                                case 6:
+                                     SaveReg16(RPM1_COOF, 2);
+                                     SaveReg16(RPM2_COOF, 2);
+                                     ServieModeFSM = 0;
+                                     break;
+                              }
+                           break;
+                       }
+                   }
+                   SeriveceMenuDraw(&ServieModeFSM );
+    }
+    else
+    {
+        if (key_press_flag)
+        {
+            if ((SystemDelayState == SYSTEM_EDIT) || (SystemDelayState == SYSTEM_EXIT))
+            {
+                MenuSatate = SYS_MENU_STATE;
+            }
+        }
+        switch (MenuSatate)
+          {
+            // case VER_VIEW_STATE:
+
+            //    break;
+             case AIN1_VIEW_STATE:
+                 SetSEG( (u16)0x0600, (int32_t) GetAIN(0 )*10);
+                 break;
+             case AIN2_VIEW_STATE:
+                 SetSEG( (u16)0x05B00, (int32_t) GetAIN(1)*10);
+                 break;
+             case  AIN3_VIEW_STATE:
+                 SetSEG( (u16)0x4F00, (int32_t) GetAIN(2)*10);
+                 break;
+             case RPM1_UP_MENU_STATE:
+             case RPM2_UP_MENU_STATE:
+                 if (MenuSatate == RPM1_UP_MENU_STATE)
+                      SetSEG( (u16)0x2306,  getODValue(chRPM1,0) );
+                 else
+                      SetSEG( (u16)0x635B,  getODValue(chRPM2,0) );
+                  if ((key_press_flag) && (SystemDelayState == SYSTEM_ENTER))
+                  {
+                      MenuSatate = (MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_DOWN_MENU_STATE: RPM2_DOWN_MENU_STATE;
+                  }
+                  if ((key_press_flag) && (SystemDelayState == SYSTEM_IDLE))
+                  {
+                      data =  getReg16((MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_COOF :  RPM2_COOF ) + 1;
+                      setReg16((MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_COOF :  RPM2_COOF, data);
+                   }
+                   break;
+              case RPM1_DOWN_MENU_STATE:
+              case RPM2_DOWN_MENU_STATE:
+                  if (MenuSatate == RPM1_DOWN_MENU_STATE)
+                      SetSEG( (u16)0x1C06,  getODValue(chRPM1,0) );
+                  else
+                      SetSEG( (u16)0x3F5B,  getODValue(chRPM2,0) );
+                  if ((key_press_flag) && (SystemDelayState == SYSTEM_ENTER))
+                  {
+                      MenuSatate = (MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_UP_MENU_STATE: RPM2_UP_MENU_STATE;
+                  }
+                  if ((key_press_flag) && (SystemDelayState == SYSTEM_IDLE))
+                  {
+                     data =  getReg16((MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_COOF :  RPM2_COOF ) - 1;
+                     setReg16((MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_COOF :  RPM2_COOF,data);
+                  }
+                  break;
+           }
+    }
+      if (MenuViewBlink)
       {
            if (++ServiceModeCounter>40) ServiceModeCounter = 0;
             if (ServiceModeCounter>21)  SegClear();
@@ -595,14 +655,12 @@ static uint16_t COUNTER = 0;
  */
 void vRedrawTask( void * argument )
 {
-
     uint32_t ulNotifiedValue;
     TaskFSM_t  state = STATE_IDLE;
     u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r,bd;
     u8 data;
     uint8_t key_press_flag = 0;
     KeyDelayState_t SystemDelayState = SYSTEM_IDLE;
-
     while(1)
     {
         switch(state)
@@ -637,27 +695,27 @@ void vRedrawTask( void * argument )
                      {
                          STATUS = 1;
                      }
-                     if (( COUNTER>= SERVICE_MODE_TIME_OUT ) && (STATUS == 1))
+                     if ( STATUS == 1 )
                      {
-                         SystemDelayState = SYSTEM_EDIT;
-                         key_press_flag = 1;
-                         STATUS = 2;
-                     }
-                     else
-                     if (( COUNTER>= SERVICE_MODE_EXIT  ) && (STATUS == 1))
-                     {
-                         SystemDelayState = SYSTEM_EXIT;
+                         if ( COUNTER >= SERVICE_MODE_TIME_OUT )
+                         {
+                             SystemDelayState = SYSTEM_EDIT;
+                             key_press_flag = 1;
+                             STATUS = 2;
+                         }
+                         else if ( COUNTER >= SERVICE_MODE_EXIT  )
+                         {
+                             SystemDelayState = SYSTEM_EXIT;
 
-                     }
-                     else
-                     if (( COUNTER>= SERVICE_MODE_ENTER   ) && (STATUS == 1))
-                     {
-                         SystemDelayState = SYSTEM_ENTER;
-
+                         }
+                         else if ( COUNTER >= SERVICE_MODE_ENTER   )
+                         {
+                             SystemDelayState = SYSTEM_ENTER;
+                         }
                      }
                  }
                  //Отрисовываем RGB пикторграммы
-                 for (u8 i = 0;i < RGB_DIOD_COUNT; i++)
+                 for ( u8 i = 0; i < RGB_DIOD_COUNT; i++ )
                  {
                      data =  getReg8( RGBMAP1 + i);
                      if (data==0 )
@@ -714,25 +772,7 @@ void vRedrawTask( void * argument )
                       key_press_flag = 0;
                       SystemDelayState = SYSTEM_IDLE;
                  }
-                 //
-                 /*
-                  *
-                  * //Проверяем регистр ошибок
-               // SetErrorRegiter(ErrorRegister); if ((buffer32 & 0xFF) == chErrorRegister )
-                 {   u8 code = getCurrErrorCode();
-                    SetSegDirect(6,0x79);
-                    SetSegDirect(5,0x58);
-                    SetSegDirect(4,0x58);
-                    SetSegPoint( RESET);
-                    SetSegDirect(3,0x00);
-                    SetSegDirect(2,DigitMask[code/10]);
-                    SetSegDirect(1,DigitMask[code%10]);
-                    SetSegDirect(0,0x00);
-                }
-               // else
-                  {*/
 
-                 // }
                   //Отображение большого сегменета
                   data = getReg16(BIG_SEG);
                   u16 seg_view = 0;

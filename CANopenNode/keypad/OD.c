@@ -125,7 +125,7 @@ OD_ATTR_ROM OD_ROM_t OD_ROM = {
     .x2030_ADC_1_CalibraionRegister_sub0 = 0x1F,
     .x2031_ADC_2_CalibraionRegister_sub0 = 0x1F,
     .x2032_ADC_3_CalibraionRegister_sub0 = 0x1F,
-    .x2033_RPM_CalibrationRegister_sub0 = 0x02
+    .x2033_RPM_CalibrationRegister_sub0 = 0x03
 };
 
 OD_ATTR_RAM OD_RAM_t OD_RAM = {
@@ -146,7 +146,7 @@ OD_ATTR_RAM OD_RAM_t OD_RAM = {
     .x2000_virtualChannelV1__V7_sub0 = 0x07,
     .x2001_virtualChannelV8__V14_sub0 = 0x07,
     .x2002_virtualChannelV15_V17_sub0 = 0x03,
-    .x2004_DACH_PARAMETR_sub0 = 0x03,
+    .x2004_DACH_PARAMETR_sub0 = 0x04,
     .x2005_AIN_RPM_sub0 = 0x06
 };
 
@@ -1007,7 +1007,7 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x2001, 0x08, ODT_ARR, &ODObjs.o_2001_virtualChannelV8__V14, NULL},
     {0x2002, 0x04, ODT_ARR, &ODObjs.o_2002_virtualChannelV15_V17, NULL},
     {0x2003, 0x01, ODT_VAR, &ODObjs.o_2003_errorRegisterCH28, NULL},
-    {0x2004, 0x04, ODT_ARR, &ODObjs.o_2004_DACH_PARAMETR, NULL},
+    {0x2004, 0x05, ODT_ARR, &ODObjs.o_2004_DACH_PARAMETR, NULL},
     {0x2005, 0x07, ODT_ARR, &ODObjs.o_2005_AIN_RPM, NULL},
     {0x2006, 0x03, ODT_ARR, &ODObjs.o_2006_DIN_DATA, NULL},
     {0x2007, 0x0B, ODT_ARR, &ODObjs.o_2007_BIG_SEG_CONFIG, NULL},
@@ -1034,7 +1034,7 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x2030, 0x20, ODT_ARR, &ODObjs.o_2030_ADC_1_CalibraionRegister, NULL},
     {0x2031, 0x20, ODT_ARR, &ODObjs.o_2031_ADC_2_CalibraionRegister, NULL},
     {0x2032, 0x20, ODT_ARR, &ODObjs.o_2032_ADC_3_CalibraionRegister, NULL},
-    {0x2033, 0x03, ODT_ARR, &ODObjs.o_2033_RPM_CalibrationRegister, NULL},
+    {0x2033, 0x04, ODT_ARR, &ODObjs.o_2033_RPM_CalibrationRegister, NULL},
     {0x0000, 0x00, 0, NULL, NULL}
 };
 

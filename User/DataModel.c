@@ -34,14 +34,10 @@ const uint16_t CalPoint[18][2] = {
                                   {-40,45313}
 
 };
-//static u32 hourcounter;
+
 static u16 secondcounter;
 static u32 odometr;
-//static u8 data_init = 0;
-
 static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
-
-
 
 
  void DataModel_Init()
@@ -55,7 +51,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              DATA_MODEL_REGISTER[NODE_ID]                     = 0x20;
              DATA_MODEL_REGISTER[VALID_CODE_ADDRES]           = VALID_CODE;
              DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]            = 11;
-             DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]              = 14;
+             DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]              = 13;
              DATA_MODEL_REGISTER[BAR_MODE]   = 1;
              setReg16(BAR_VALUE_HIGH        ,36);
              setReg16(BAR_VALUE_LOW         ,0);
@@ -161,7 +157,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              DATA_MODEL_REGISTER[RGBMAP12] =vCHANNEL5;
              DATA_MODEL_REGISTER[RGBMAP13] =vCHANNEL4;
              DATA_MODEL_REGISTER[RGBMAP14] =vCHANNEL3 ;
-             DATA_MODEL_REGISTER[BARMAP]   =1;
+             DATA_MODEL_REGISTER[BARMAP]   =vCHANNEL6;
              setReg16(BIG_SEGVAL1       , 0x336);
              setReg16(BIG_SEGVAL2       , 0x03F);
              setReg16(BIG_SEGVAL3       , 0x2F3);
@@ -197,10 +193,10 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg32(MENU5_MAP ,  0x71000000 | chAIN3);;
              setReg32(MENU1_MAP ,  0x50730000 | chRPM1);
              setReg32( MENU7_MAP , 0x6D000000 | chRPM2);
-             setReg32( MENU8_MAP ,0);
+             setReg32( MENU8_MAP , chErrorRegister);
              setReg32( MENU9_MAP ,0);
              setReg32( MENU10_MAP , 0);
-             DATA_MODEL_REGISTER[MENU_DEF_POS]             =0;
+             DATA_MODEL_REGISTER[MENU_DEF_POS]             = 0;
              DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      =10;
              DATA_MODEL_REGISTER[DIN_ACTIVE_STATE]         = 0;
              eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,2);
@@ -211,20 +207,10 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
         // data_init  = 1;
          //§¥§Ñ§ß§ß§í§Ö §Ò§à§Ý§î§ê§à§Ô§à §ã§Ö§Ô§Þ§Ö§ß§ä§ß§Ú§Ü§Ñ
 
-       /*  OD_set_value(OD_ENTRY_H2019,0x06 ,&DATA_MODEL_REGISTER[BAR_VALUE_HIGH],2, true);
-         OD_set_value(OD_ENTRY_H2019,0x05 ,&DATA_MODEL_REGISTER[BAR_VALUE_LOW], 2, true);
-         OD_set_value(OD_ENTRY_H2019,0x01 ,&DATA_MODEL_REGISTER[BAR_VALUE_RED_HIGH],2, true);
-         OD_set_value(OD_ENTRY_H2019,0x02 ,&DATA_MODEL_REGISTER[BAR_VALUE_RED_LOW], 2, true);
-         OD_set_value(OD_ENTRY_H2019,0x03 ,&DATA_MODEL_REGISTER[BAR_VALUE_GREEN_HIGH],2, true);
-         OD_set_value(OD_ENTRY_H2019,0x04 ,&DATA_MODEL_REGISTER[BAR_VALUE_GREEN_LOW], 2, true);
+       /*
 
 
-         for (int j= 0; j<RGB_DIOD_COUNT; j++)
-         {
-             OD_set_value(OD_ENTRY_H2008, j+1 ,&DATA_MODEL_REGISTER[RGBMAP1 +j], 1, true);
-             for (int i = 0; i < 6; i++ )
-                     OD_set_value(&OD->list[34+j], i+1 ,&DATA_MODEL_REGISTER[RGB1_VALUE_GREEN_HIGH +i*2], 2, true);
-         }
+
      //    OD_set_value(OD_ENTRY_H2008, 15 ,&DATA_MODEL_REGISTER[BARMAP], 1, true);
 
 *
@@ -252,10 +238,6 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
                      udata16 = getReg16(AIN1_CAL_POINT_BEGIN + i*4 + 6);
                      point[1].X = (float)udata16;
                      eSetAinCalPoint(AIN1,&point, i);
-                     //OD_set_value(OD_ENTRY_H2030, 2+i*2 ,&data16, 2, true);
-
-                     //OD_set_value(OD_ENTRY_H2030, 3+i*2 ,&data16, 2, true);
-
                  }
              }
              cal_point_count  = DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT];
@@ -273,10 +255,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
                         point[1].Y = (float)data16;
                         udata16 = getReg16(AIN2_CAL_POINT_BEGIN + i*4 + 6);
                         point[1].X = (float)udata16;
-
-                        //OD_set_value(OD_ENTRY_H2031, 2+i*2 ,&data16, 2, true);
-                       // OD_set_value(OD_ENTRY_H2031, 3+i*2 ,&data16, 2, true);
-                        eSetAinCalPoint(AIN2,&point, i);
+                        eSetAinCalPoint(AIN2, &point, i);
                      }
 
                }
@@ -286,17 +265,15 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
               if ( eAinCalDataConfig(AIN2,cal_point_count ) == CAL_SUCCESS)
               {
                     for (u8 i = 1; i<= cal_point_count;i++)
-                    {int16_t data16  = (int16_t)getReg16(AIN3_CAL_POINT_BEGIN + i*4);
-                    point[0].Y = (float)data16;
-                    u16 udata16 = getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2);
-                    point[0].X = (float)udata16;
-                    data16  = (int16_t)getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 4);
-                    point[1].Y = (float)data16;
-                    udata16 = getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 6);
-                    point[1].X = (float)udata16;
-
-                       // OD_set_value(OD_ENTRY_H2031, 2+i*2 ,&data16, 2, true);
-                       // OD_set_value(OD_ENTRY_H2032, 3+i*2 ,&data16, 2, true);
+                    {
+                        int16_t data16  = (int16_t)getReg16(AIN3_CAL_POINT_BEGIN + i*4);
+                        point[0].Y = (float)data16;
+                        u16 udata16 = getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2);
+                        point[0].X = (float)udata16;
+                        data16  = (int16_t)getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 4);
+                        point[1].Y = (float)data16;
+                        udata16 = getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 6);
+                        point[1].X = (float)udata16;
                         eSetAinCalPoint(AIN3,&point, i);
                     }
                }
@@ -317,38 +294,38 @@ void setReg16( u16 reg_adress, u16 data)
 {
     DATA_MODEL_REGISTER[ reg_adress] = (u8)( data & 0xFF);
     DATA_MODEL_REGISTER[ reg_adress + 1] =(u8)( data>>8 & 0xFF);
-
 }
 
 void setReg8( u16 reg_adress, u8 data)
 {
     DATA_MODEL_REGISTER[ reg_adress] = (u8)( data );
-
-
 }
 
 u16 setReg(u16 reg_adress, void * data, u8 len)
 {
-    u8 d8;
-    u16 d16;
-    u32 d32;
+   // u8 d8;
+   // u16 d16;
+ //   u32 d32;
      switch (len)
      {
             case 1:
-                d8 = *((u8 *)data);
-                DATA_MODEL_REGISTER[reg_adress] = d8;
+                setReg8(reg_adress,*((u8 *)data));
+              //  d8 = *((u8 *)data);
+               // DATA_MODEL_REGISTER[reg_adress] = d8;
                 break;
             case 2:
-                d16 = *((u16 *)data);
-                DATA_MODEL_REGISTER[ reg_adress] = d16 & 0xFF;
-                DATA_MODEL_REGISTER[ reg_adress + 1] = d16>>8 & 0xFF;
+                setReg16( reg_adress, *((u16 *)data) );
+               // d16 = *((u16 *)data);
+              //  DATA_MODEL_REGISTER[ reg_adress] = d16 & 0xFF;
+               // DATA_MODEL_REGISTER[ reg_adress + 1] = d16>>8 & 0xFF;
                 break;
             case 4:
-                d32 = *((u32 *)data);
-                DATA_MODEL_REGISTER[ reg_adress]     = (u8)( d32 & 0xFF);
-                DATA_MODEL_REGISTER[ reg_adress + 1] = (u8)( d32>>8 & 0xFF);
-                DATA_MODEL_REGISTER[ reg_adress + 2] = (u8)( d32>>16 & 0xFF);
-                DATA_MODEL_REGISTER[ reg_adress + 3] = (u8)( d32>>24 & 0xFF);
+                setReg32( reg_adress, *((u32 *)data) );
+                //d32 = *((u32 *)data);
+               // DATA_MODEL_REGISTER[ rg_adress]     = (u8)( d32 & 0xFF);
+                //DATA_MODEL_REGISTER[ reg_adress + 1] = (u8)( d32>>8 & 0xFF);
+               // DATA_MODEL_REGISTER[ reg_adress + 2] = (u8)( d32>>16 & 0xFF);
+               // DATA_MODEL_REGISTER[ regadress + 3] = (u8)( d32>>24 & 0xFF);
                 break;
       }
      return (0);
@@ -382,10 +359,11 @@ u8 getReg8( u16 reg_adress)
 void WriteReg( u16 reg_adress, void * data, u8 len)
 {
     u8 Buffer[4];
+    memcpy(Buffer,data,len);
     switch (len)
     {
         case 1:
-            Buffer[0] = *((u8 *)data);
+          //  Buffer[0] = *((u8 *)data);
             DATA_MODEL_REGISTER[reg_adress] = Buffer[0];
             break;
         case 2:
@@ -396,44 +374,37 @@ void WriteReg( u16 reg_adress, void * data, u8 len)
             break;
     }
     if (reg_adress < EEPROM_REGISER_COUNT)
-        eEEPROMWr(reg_adress,Buffer,len,0);
+        eEEPROMWr(reg_adress,Buffer,len,2);
 }
 
-
+/*
+ * §£§à§Ù§Ó§â§Ñ§ë§Ñ§Ö§Þ §Ù§ß§Ñ§é§Ö§ß§Ú§Ö §ã§Ü§à§â§à§ã§ä§Ú CAN §Ú§Ù EEPROM
+ */
 uint16_t vGetBitrate()
 {
-   uint16_t data = 0;
    switch( bReadEEPROM( BITRATE_ADR,0 ) )
     {
         case 0x00:
-            data = 1000;
-            break;
+            return (1000);
         case 0x02:
-            data = 500;
-            break;
+            return ( 500 );
         case 0x03:
-            data = 250;
-            break;
+            return ( 250 );
         case 0x04:
-            data = 125;
-            break;
+            return ( 125 );
         case 0x06:
-            data =50;
-            break;
+            return ( 50 );
         case 0x07:
-            data = 20;
-            break;
+            return ( 20 );
         default:
-            data = 125;
-            break;
+            return ( 125 );
+
     }
-    return data;
 }
 
 uint16_t vFDGetNMTState( void )
 {
-
-     return (CO_NMT_STARTUP_TO_OPERATIONAL);
+    return (CO_NMT_STARTUP_TO_OPERATIONAL);
 }
 
 
@@ -442,25 +413,23 @@ uint8_t vGetNodeId( void )
   return ( getReg8( NODE_ID) );
 }
 
+/*
+ * §°§Ò§â§Ñ§Ò§à§ä§é§Ú§Ü §á§â§Ö§â§í§Ó§Ñ§ß§Ú§ñ §à§ä §ã§Ö§Ü§å§ß§Õ§ß§à§Ô§à §ä§Ñ§Û§Þ§Ö§â§Ñ RTC
+ */
 void vIncrementSystemCounters()
 {
-    //uint32_t data = getReg32(HOUR_COUNTER_ADR);
-    //data++;
-   // setReg32(HOUR_COUNTER_ADR,data);
-    if (++secondcounter>=360)
+    if (++secondcounter >= 360 )
     {
-        uint32_t data = getReg32(HOUR_COUNTER_ADR);
-        data++;
-        setReg32(HOUR_COUNTER_ADR,data);
+        setReg32(HOUR_COUNTER_ADR,  getReg32(HOUR_COUNTER_ADR) + 1 );
         secondcounter = 0;
     }
-   // odometr = odometr + getODValue( DATA_MODEL_REGISTER[ODOMETR_MAP])/3.6;*/
+    odometr = odometr + getODValue( DATA_MODEL_REGISTER[ODOMETR_MAP],0) /3.6;
     return;
 }
 
 void vSaveData()
 {
-    //*((u32 *)(&DATA_MODEL_REGISTER[ODOMETR_ADR])) = odometr/100;
+    setReg32(ODOMETR_ADR, odometr/100);
     eEEPROMWr(HOUR_COUNTER_ADR,&DATA_MODEL_REGISTER[HOUR_COUNTER_ADR],8,0);
 }
 

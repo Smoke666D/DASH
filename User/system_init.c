@@ -7,7 +7,6 @@
 #include "system_init.h"
 #include "hal_wdt.h"
 #include "inputs.h"
-#include "keyboard_task.h"
 #include "process.h"
 
 static void StartDefaultTask(void *argument);

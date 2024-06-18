@@ -279,7 +279,7 @@ static ODR_t OD_writeV1_7(OD_stream_t *stream,const  void *buf, OD_size_t count,
         return (ODR_DEV_INCOMPAT);
 #endif
     uint16_t data = CO_getUint8(buf);
-   WriteReg( V1 + (stream->subIndex -1),&data,1);
+    WriteReg( V1 + (stream->subIndex -1),&data,1);
     return ( OD_writeOriginal(stream, buf, count, countWritten) );
 
 
@@ -328,6 +328,9 @@ static ODR_t OD_readDashParam (OD_stream_t *stream, void *buf, OD_size_t count, 
                case 3:
                    *((uint32_t *)buf) =  (u32)getReg8( ODOMETR_MAP);
                    break;
+               case 4:
+                   *((uint32_t *)buf) =  getReg32(VERSION_REG);
+                   break;
        }
        return (ODR_OK);
 }
@@ -346,6 +349,14 @@ static ODR_t OD_writeDashParam(OD_stream_t *stream,const  void *buf, OD_size_t c
              WriteReg( ODOMETR_MAP ,&data, 1);
              *countWritten = 4;
              return (ODR_OK);
+      }
+      else
+      if (stream->subIndex == 4)
+      {
+          uint32_t data =CO_getUint32(buf);
+          WriteReg(VERSION_REG ,&data, 4);
+          *countWritten = 4;
+          return (ODR_OK);
       }
       else
             return (ODR_READONLY);
@@ -372,8 +383,8 @@ static ODR_t WriteRGB(uint16_t addr, OD_stream_t *stream,const  void *buf, OD_si
            return ODR_DEV_INCOMPAT;
        }
 #endif
-      uint8_t data = CO_getUint8(buf);
-      WriteReg( addr  + (stream->subIndex -1),&data,1);
+      uint16_t data = CO_getUint16(buf);
+      WriteReg( addr  + (stream->subIndex -1),&data,2);
       return (OD_writeOriginal(stream, buf, count, countWritten));
 }
 

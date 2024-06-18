@@ -52,6 +52,7 @@ typedef enum
     chODOMETR       = 26,
     chHOUR          = 27,
     chErrorRegister = 28,
+    chVERSION       = 29
 } VIRTUAL_CHANNEL_t;
 
 typedef struct
@@ -81,11 +82,15 @@ typedef enum
 {
   WORK_MENU_STATE,
   SYS_MENU_STATE,
+  ERROR_MENU_STATE,
   RPM1_UP_MENU_STATE,
   RPM2_UP_MENU_STATE,
   RPM1_DOWN_MENU_STATE,
   RPM2_DOWN_MENU_STATE,
-
+  AIN1_VIEW_STATE,
+  AIN2_VIEW_STATE,
+  AIN3_VIEW_STATE,
+  VER_VIEW_STATE,
 } MenuState_t;
 
 TaskHandle_t * xProcessTaskHandle ();

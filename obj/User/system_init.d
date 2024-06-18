@@ -57,9 +57,7 @@ User/system_init.o: ../User/system_init.c ../User/system_init.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/CO_driver_ST32F103.h \
  ../User/CanOpenNode.h ../User/led.h ../User/init.h ../User/DataModel.h \
  ../User/inputs.h C:\MRS_DATA\workspace\DASH\HAL/hal_wdt.h \
- ../User/keyboard_task.h \
- C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_keyboard.h \
- C:\MRS_DATA\workspace\DASH\HAL/hal_gpio.h ../User/process.h \
+ ../User/process.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode\301/CO_ODinterface.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_driver.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_config.h \
@@ -223,12 +221,6 @@ C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/CO_driver_ST32F103.h:
 ../User/inputs.h:
 
 C:\MRS_DATA\workspace\DASH\HAL/hal_wdt.h:
-
-../User/keyboard_task.h:
-
-C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_keyboard.h:
-
-C:\MRS_DATA\workspace\DASH\HAL/hal_gpio.h:
 
 ../User/process.h:
 

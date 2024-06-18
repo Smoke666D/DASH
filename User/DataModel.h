@@ -11,7 +11,7 @@
 #include "system_init.h"
 
 
-#define VALID_CODE      0x55
+#define VALID_CODE      0x54
 #define VALID_CODE_ADDRES     0
 
 #define RGB_BRIGTH_ADR         (VALID_CODE_ADDRES +1)
@@ -160,7 +160,8 @@
 #define MENU_DEF_POS          (MENU10_MAP +4)
 #define MENU_HOME_BACK_TIME   (MENU_DEF_POS +1 )
 #define DIN_ACTIVE_STATE      (MENU_HOME_BACK_TIME +1)
-#define EEPROM_REGISER_COUNT  (DIN_ACTIVE_STATE  +1)
+#define VERSION_REG           (DIN_ACTIVE_STATE  +1)
+#define EEPROM_REGISER_COUNT  (VERSION_REG   +4)
 
 
 #define BIG_SEG                 ( EEPROM_REGISER_COUNT)

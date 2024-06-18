@@ -27,7 +27,6 @@ static uint8_t *OD_DIN_flagsPDO = NULL;
 static uint8_t *OD_AIN_flagsPDO = NULL;
 static uint16_t ADC_OLD_RAW[ ADC1_CHANNELS  ];
 static float    OurVData[ ADC1_CHANNELS ];
-static u16      ViewData[ ADC1_CHANNELS ] ;
 static median_filter_data_t      RPM_MIDIAN_FILTER_STRUC[2] __SECTION(RAM_SECTION_CCMRAM);
 static ab_filter_data_t          RPM_AB_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
 static aver_filter_data_t        RPM_AVER_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
@@ -73,7 +72,6 @@ void ADC1_Init()
     uint8_t ADC1_CHANNEL[5] = { ADC_CH_0,  ADC_CH_1, ADC_CH_2, ADC_CH_6,  ADC_CH_3};
     HAL_ADC_ContiniusScanCinvertionDMA( ADC_1 ,  5 ,  ADC1_CHANNEL);
     HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(), 0, 1, 3, &ADC1_Event  );
-
 }
 /*
  *
@@ -190,11 +188,11 @@ static void vDINInit()
     //Конфигурация счетных входо
 
     vInitMedianFilter(&RPM_MIDIAN_FILTER_STRUC[0]);
-        vInitMedianFilter(&RPM_MIDIAN_FILTER_STRUC[1]);
-        vInitABFilter(&RPM_AB_FILTER_STRUC[0],0.90);
-        vInitABFilter(&RPM_AB_FILTER_STRUC[1],0.90);
-        vInitRunAverga(&RPM_AVER_FILTER_STRUC[0],0.5);
-        vInitRunAverga(&RPM_AVER_FILTER_STRUC[1],0.5);
+    vInitMedianFilter(&RPM_MIDIAN_FILTER_STRUC[1]);
+    vInitABFilter(&RPM_AB_FILTER_STRUC[0],0.90);
+    vInitABFilter(&RPM_AB_FILTER_STRUC[1],0.90);
+    vInitRunAverga(&RPM_AVER_FILTER_STRUC[0],0.5);
+    vInitRunAverga(&RPM_AVER_FILTER_STRUC[1],0.5);
     eRPMConfig(INPUT_1,RPM_CH1);
     eRPMConfig(INPUT_2,RPM_CH2);
     HAL_TimeInitCaptureIT( TIMER1 , 2000, 60000, TIM_CHANNEL_4,0,5,&CaptureCallBack);
@@ -302,8 +300,8 @@ void vInputsTask( void * argument )
                         }
                         break;
                     case SAVE_STATE:
-                        vSetBrigth( RGB_CHANNEL,    0 );//LED_CHANELL_BRIGTH[0]);
-                        vSetBrigth( WHITE_CHANNEL,  0 );//LED_CHANELL_BRIGTH[1]);
+                        vSetBrigth( RGB_CHANNEL,    0 );
+                        vSetBrigth( WHITE_CHANNEL,  0 );
                         vSaveData();
                         eSetDUT(OUT_1, RESET);
                         InitState = START_UP_STATE;

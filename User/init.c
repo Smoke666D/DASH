@@ -26,15 +26,12 @@ void vInit_DeviceConfig( void )
 {	
     //Настройка тактирования всех устрйоств
 	MX_GPIO_Init( );
-	 vAINInit();
+	vAINInit();
     HAL_SPI_InitDMA(SPI1, SPI_16bit ,SPI_SOFT_NSS);
 	HAL_SPI_InitDMA(SPI2, SPI_16bit ,SPI_SOFT_NSS);
-
 	HAL_RTC_IT_Init(&vIncrementSystemCounters,1,5);
 	HAL_TIMER_InitIt( TIMER4, 1000000, 100, &vRGBProcess ,1,3);
-
 	HAL_TiemrEneblae( TIMER4);
-	//HAL_TiemrEneblae( TIMER1);
 	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
 	HAL_TiemrEneblae( TIMER3);
 	//HAL_InitCaptureDMATimer( TIMER1 ,  1000, 60000, TIM_CHANNEL_4);
@@ -89,11 +86,8 @@ static void MX_GPIO_Init(void)
   HAL_InitGpioAF(CAN_Port,CAN_TX_Pin,GPIO_Remap1_CAN1,GPIO_Mode_AF_PP);
   HAL_InitGpioAF(CAN_Port,CAN_RX_Pin,GPIO_Remap1_CAN1,GPIO_Mode_IPU);
 
-
-
   //Потры I2C, ремапа не нужно
   HAL_InitGpioAF( I2C1_Port , I2C1_SDA_Pin | I2C1_SCL_Pin   , 0 , GPIO_Mode_AF_OD );
-
 }
 
 
