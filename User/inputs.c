@@ -30,6 +30,7 @@ static float    OurVData[ ADC1_CHANNELS ];
 static median_filter_data_t      RPM_MIDIAN_FILTER_STRUC[2] __SECTION(RAM_SECTION_CCMRAM);
 static ab_filter_data_t          RPM_AB_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
 static aver_filter_data_t        RPM_AVER_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
+
 /*
  *
  */
@@ -178,7 +179,6 @@ static void vDINInit()
     DIN_CONFIG.ulHighCounter = DEF_H_FRONT;
     DIN_CONFIG.ulLowCounter  = DEF_L_FRONT;
     DIN_CONFIG.getPortCallback = &fDinStateCallback;
-
     eDinConfigWtihStruct(INPUT_4,&DIN_CONFIG);
     DIN_CONFIG.eInputType = (getReg8(DIN_ACTIVE_STATE)==1) ? DIN_CONFIG_POSITIVE : DIN_CONFIG_NEGATIVE;
     eDinConfigWtihStruct(INPUT_3,&DIN_CONFIG);
@@ -186,7 +186,6 @@ static void vDINInit()
     DOUT_CONFIG.setPortCallback =&vSetDoutState;
     eDOUTConfigWtihStruct( OUT_1, &DOUT_CONFIG);
     //Конфигурация счетных входо
-
     vInitMedianFilter(&RPM_MIDIAN_FILTER_STRUC[0]);
     vInitMedianFilter(&RPM_MIDIAN_FILTER_STRUC[1]);
     vInitABFilter(&RPM_AB_FILTER_STRUC[0],0.90);

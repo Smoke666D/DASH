@@ -384,7 +384,7 @@ static ODR_t WriteRGB(uint16_t addr, OD_stream_t *stream,const  void *buf, OD_si
        }
 #endif
       uint16_t data = CO_getUint16(buf);
-      WriteReg( addr  + (stream->subIndex -1),&data,2);
+      WriteReg( addr  + (stream->subIndex -1)*2 ,&data,2);
       return (OD_writeOriginal(stream, buf, count, countWritten));
 }
 

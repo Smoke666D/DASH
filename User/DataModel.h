@@ -11,7 +11,7 @@
 #include "system_init.h"
 
 
-#define VALID_CODE      0x54
+#define VALID_CODE      0x44
 #define VALID_CODE_ADDRES     0
 
 #define RGB_BRIGTH_ADR         (VALID_CODE_ADDRES +1)

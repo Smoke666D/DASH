@@ -14,7 +14,8 @@
 
 /*                        0     1    2    3    4   5    6    7    8   9*/
 const u8 DigitMask[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
-static const u16 Brigth[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,34,55,89,144,233,256,610,PWM_TIM_PERIOD+1};
+//                                       0  1  2  3 4  5  6  7  8  9 10   11  12 13   14
+static const u16 Brigth[MAX_BRIGTH] =  { 0, 2, 3, 5,8,13,21,34,55,89,144,233,350,610,PWM_TIM_PERIOD+1};
 static const u16 BrigthR[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,150,200,250,300,350,400,450,500};
 static const u16 BrigthG[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,50,80,100,150,200,250,300,350};
 static const u16 BrigthB[MAX_BRIGTH] = { 0, 2, 3, 5,8,13,21,150,200,250,300,350,400,450,500};
