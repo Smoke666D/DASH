@@ -302,36 +302,6 @@ void setReg8( u16 reg_adress, u8 data)
     DATA_MODEL_REGISTER[ reg_adress] = (u8)( data );
 }
 
-u16 setReg(u16 reg_adress, void * data, u8 len)
-{
-   // u8 d8;
-   // u16 d16;
- //   u32 d32;
-     switch (len)
-     {
-            case 1:
-                setReg8(reg_adress,*((u8 *)data));
-              //  d8 = *((u8 *)data);
-               // DATA_MODEL_REGISTER[reg_adress] = d8;
-                break;
-            case 2:
-                setReg16( reg_adress, *((u16 *)data) );
-               // d16 = *((u16 *)data);
-              //  DATA_MODEL_REGISTER[ reg_adress] = d16 & 0xFF;
-               // DATA_MODEL_REGISTER[ reg_adress + 1] = d16>>8 & 0xFF;
-                break;
-            case 4:
-                setReg32( reg_adress, *((u32 *)data) );
-                //d32 = *((u32 *)data);
-               // DATA_MODEL_REGISTER[ rg_adress]     = (u8)( d32 & 0xFF);
-                //DATA_MODEL_REGISTER[ reg_adress + 1] = (u8)( d32>>8 & 0xFF);
-               // DATA_MODEL_REGISTER[ reg_adress + 2] = (u8)( d32>>16 & 0xFF);
-               // DATA_MODEL_REGISTER[ regadress + 3] = (u8)( d32>>24 & 0xFF);
-                break;
-      }
-     return (0);
-}
-
 
 void SaveReg16(u16 reg_adress, u8 notyfy_index )
 {

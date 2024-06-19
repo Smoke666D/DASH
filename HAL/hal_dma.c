@@ -261,8 +261,8 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   dmaConfig.DMA_Mode		   		= DMA_Mode_Normal;
 	   dmaConfig.DMA_Priority		    = DMA_Priority_Medium;
 	   dmaConfig.DMA_PeripheralBaseAddr = paddr;
-	   dmaConfig.DMA_MemoryBaseAddr    = memadr;
-	   dmaConfig.DMA_M2M 		       = DMA_M2M_Disable;
+	   dmaConfig.DMA_MemoryBaseAddr     = memadr;
+	   dmaConfig.DMA_M2M 		        = DMA_M2M_Disable;
 	   DMA_Init(stream , &dmaConfig);
 	   DMA_ITConfig(stream ,DMA_IT_TC,ENABLE);
 	   DMA_ClearITPendingBit( flag);

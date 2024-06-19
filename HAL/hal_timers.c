@@ -44,7 +44,6 @@ void vHAL_SetTimerFreq( TimerName_t TimerName, uint32_t freq_in_hz  )
 void vHW_L_LIB_FreeRunInit( TimerName_t TimerName, uint32_t freq_in_hz  )
 {
 	uint32_t Freq= getTimerFreq( TimerName );
-
 	vTimerInitRCC(TimerName );
 #if MCU == APM32
 	config[TimerName].Period = 0xFFFF;
@@ -69,7 +68,6 @@ void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Peri
 	uint8_t irq;
 	switch (TimerName )
 	{
-
 		case TIMER2:
 			irq = TIM2_IRQn;
 			break;
@@ -249,7 +247,6 @@ void  HW_TIMER_BaseTimerInit(TimerName_t TimerName  )
 	TMR_ConfigInternalClock(timers[TimerName]);
 #endif
 #if MCU == CH32V2
-
 	  TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
 	  TIM_DeInit(timers[TimerName]);
 	  TIM_InternalClockConfig(timers[TimerName]);
@@ -638,54 +635,32 @@ static void vTimerInitRCC(TimerName_t TimerName)
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
 #endif
 		     break;
-		case TIMER6:
 #if MCU == APM32
+		case TIMER6:
 			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR6);
-#endif
-#if MCU == CH32V2
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
-#endif
 			 break;
 		case TIMER7:
-#if MCU == APM32
 			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR7);
-#endif
-#if MCU == CH32V2
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM7, ENABLE);
-#endif
 			 break;
 		case TIMER8:
-#if MCU == APM32
 			RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR8);
-#endif
 			 break;
 		case TIMER9:
-#if MCU == APM32
 			RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR9);
-#endif
 			 break;
 		case TIMER10:
-#if MCU == APM32
 			RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR10);
-#endif
 		     break;
 		case TIMER11:
-#if MCU == APM32
 			RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR11);
-			#endif
 		     break;
 		case TIMER12:
-#if MCU == APM32
 			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR12);
-			#endif
 			 break;
 		case TIMER13:
-#if MCU == APM32
 			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR13);
-			#endif
 			 break;
 		case TIMER14:
-#if MCU == APM32
 			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR14);
 #endif
 		     break;
@@ -735,21 +710,11 @@ static uint32_t getTimerFreq( TimerName_t TimerName )
 #if MCU == CH32V2
 				return ( 72000000U);
 #endif
+#if MCU == APM32
 			case TIMER6:
-#if MCU == APM32
-				return  ( 84000000U );
-#endif
-#if MCU == CH32V2
-				return ( 72000000U);
-#endif
+			    return  ( 84000000U );
 			case TIMER7:
-#if MCU == APM32
 				return  ( 84000000U );
-#endif
-#if MCU == CH32V2
-				return ( 72000000U);
-#endif
-#if MCU == APM32
 			case TIMER8:
 				return  ( 168000000U );
 			case TIMER9:

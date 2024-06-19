@@ -485,7 +485,7 @@ static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, 
      uint16_t data = CO_getUint16(buf);
      if (stream->subIndex == 1)
      {
-         setReg(BIG_SEG, &data, 2);
+         setReg16(BIG_SEG, data );
      }
      else
      {

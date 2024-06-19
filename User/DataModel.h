@@ -11,7 +11,7 @@
 #include "system_init.h"
 
 
-#define VALID_CODE      0x44
+#define VALID_CODE      0x33
 #define VALID_CODE_ADDRES     0
 
 #define RGB_BRIGTH_ADR         (VALID_CODE_ADDRES +1)
@@ -191,10 +191,8 @@
 void DataModel_Init();
 void setReg32( u16 reg_adress, u32 data);
 void setReg16( u16 reg_adress, u16 data);
-
 void setReg8( u16 reg_adress, u8 data);
 u32 getReg32(u16 reg_adress );
-u16 setReg(u16 reg_adress, void * data, u8 len);
 u16 getReg16(u16 reg_adress );
 u8 getReg8( u16 reg_adress);
 void WriteReg( u16 reg_adress, void * data, u8 len);

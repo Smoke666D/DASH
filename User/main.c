@@ -32,19 +32,13 @@ int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
-    Delay_Init();
-    USART_Printf_Init(115200);
-    printf("Start\n");
+    //Delay_Init();
+    //USART_Printf_Init(115200);
     vInit_DeviceConfig( );
     vSYSeventInit ();
-    vSYSqueueInit ();
     vSYStaskInit ( );
-
     vTaskStartScheduler();
-    while(1)
-    {
-        printf("shouldn't run at here!!\n");
-    }
+    while(1);
 }
 
 

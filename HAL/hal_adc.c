@@ -10,9 +10,10 @@
 	#include "apm32f4xx_adc.h"
 	#include "apm32f4xx_rcm.h"
 	#include "apm32f4xx_dma.h"
+    static uint8_t ADC_INIT = 0;
 #endif
 
-static uint8_t ADC_INIT = 0;
+
 
 ADC_t adcs;
 

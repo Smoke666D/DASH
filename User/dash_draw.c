@@ -301,8 +301,14 @@ void vGetEdgeData(u16 addr,  u16 *high, u16 * low)
     *low  = getReg16(addr + 2 );
 }
 
-void vRGBMode( u8 i,  u16 bd)
+void vRGBMode( u8 i,  u8 index )
 {
+    if (index ==0 )
+    {
+       vRGBOff( i);
+       return;
+    }
+    u16 bd = getODValue(index,1);
     u16 low_edge, high_edge;
     LED_STATE_t state;
     u16 offset = RGB1_VALUE_GREEN_HIGH + i*6*2;
@@ -327,7 +333,7 @@ void vRGBMode( u8 i,  u16 bd)
     }
     else  // инвесный режим, попадаем на непопадание в окно
     {
-        state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
+         state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
     }
     SetRGB( i, RED_COLOR, state);
     vGetEdgeData( offset +8, &high_edge,&low_edge);
@@ -506,7 +512,7 @@ static void SeriveceMenuDraw( u8 * servece_menu_state)
                          SetSEG( (u16)0x5000, getODValue(chVERSION,0));
                          break;
                     case 8:
-                        SegPrint(0x79,0x76,0x06,0x78,0,0,0);
+                         SegPrint(0x79,0x76,0x06,0x78,0,0,0);
                          break;
                     default:
                          *servece_menu_state = 1;
@@ -736,16 +742,7 @@ void vRedrawTask( void * argument )
                  //Отрисовываем RGB пикторграммы
                  for ( u8 i = 0; i < RGB_DIOD_COUNT; i++ )
                  {
-                     data =  getReg8( RGBMAP1 + i);
-                     if (data==0 )
-                     {
-                         vRGBOff( i);
-                     }
-                     else
-                     {
-                         bd = getODValue(data,1);
-                         vRGBMode( i,  bd);
-                     }
+                     vRGBMode( i,  getReg8( RGBMAP1 + i));
                  }
                  //Вывод данных в бар
                  data =  getReg8(BARMAP);
