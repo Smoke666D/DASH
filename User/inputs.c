@@ -72,7 +72,7 @@ void ADC1_Init()
 {
     uint8_t ADC1_CHANNEL[5] = { ADC_CH_0,  ADC_CH_1, ADC_CH_2, ADC_CH_6,  ADC_CH_3};
     HAL_ADC_ContiniusScanCinvertionDMA( ADC_1 ,  5 ,  ADC1_CHANNEL);
-    HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(), 0, 1, 3, &ADC1_Event  );
+    HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(), 0, ADC_PRIOR , ADC_SUB_PRIOR, &ADC1_Event  );
 }
 /*
  *
@@ -168,6 +168,14 @@ void  vSetDoutState( OUT_NAME_TYPE ucCh, u8 BitVal )
    DMA_Cmd(DMA1_CH4, ENABLE);
 }
 
+ void CaptureDMACallBack(  )
+{
+   DMA_Cmd(DMA1_CH4, DISABLE);
+   DMA_SetCurrDataCounter(DMA1_CH4,  CC_BUFFER_SIZE);
+   RMPDataConvert(INPUT_1);
+   DMA_Cmd(DMA1_CH4, ENABLE);
+}
+
 /*
  *
  */
@@ -194,9 +202,9 @@ static void vDINInit()
     vInitRunAverga(&RPM_AVER_FILTER_STRUC[1],0.5);
     eRPMConfig(INPUT_1,RPM_CH1);
     eRPMConfig(INPUT_2,RPM_CH2);
-    HAL_TimeInitCaptureIT( TIMER1 , 2000, 60000, TIM_CHANNEL_4,0,5,&CaptureCallBack);
+  //  HAL_TimeInitCaptureIT(  TIMER1 , 2000, 60000, TIM_CHANNEL_4,TIM1_PRIOR ,TIN1_SUBPRIOR,&CaptureCallBack);
     HAL_TimeInitCaptureDMA( TIMER1 , 2000, 60000, TIM_CHANNEL_4);
-    HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1), 0, 1, 3, &CaptureCallBack );
+    HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1), 0, TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack );
     DMA_SetCurrDataCounter(DMA1_CH4,  CC_BUFFER_SIZE);
     DMA_Cmd(DMA1_CH4, ENABLE);
     HAL_TiemrEneblae(TIMER1);

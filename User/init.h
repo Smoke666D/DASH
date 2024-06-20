@@ -27,7 +27,24 @@
 #define PowerON_Pin         GPIO_Pin_4
 #define PowerON_Port        GPIOB
 
-
+#define CAN1_PRIOR        1
+#define CAN1_SUBPRIOR     3
+#define TIM1_PRIOR        0
+#define TIN1_SUBPRIOR     5
+#define ADC_PRIOR         1
+#define ADC_SUB_PRIOR     3
+#define RTC_PRIOR         1
+#define RTC_SUB_PRIOR     5
+#define TIM4_PRIOR        1
+#define TIM4_SUB_PRIOR    3
+#define I2C1_PRIOR        0
+#define I2C1_SUB_PRIOR    1
+#define TIM1_DMA_PRIOR    1
+#define TIM1_DMA_SUBPRIOR 3
+#define SPI1_DMA_PRIOR    1
+#define SPI1_DMA_SUBPRIOR 2
+#define SPI2_DMA_PRIOR    1
+#define SPI2_DMA_SUBPRIOR 2
 
 #define BASE_TIMER     TIM4
 #define PWM_TIMER_2    TIM4

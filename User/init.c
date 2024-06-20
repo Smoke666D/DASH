@@ -29,12 +29,12 @@ void vInit_DeviceConfig( void )
 	vAINInit();
     HAL_SPI_InitDMA(SPI1, SPI_16bit ,SPI_SOFT_NSS);
 	HAL_SPI_InitDMA(SPI2, SPI_16bit ,SPI_SOFT_NSS);
-	HAL_RTC_IT_Init(&vIncrementSystemCounters,1,5);
-	HAL_TIMER_InitIt( TIMER4, 1000000, 100, &vRGBProcess ,1,3);
+	HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR);
+	HAL_TIMER_InitIt( TIMER4, 1000000, 100, &vRGBProcess ,TIM4_PRIOR,TIM4_SUB_PRIOR);
 	HAL_TiemrEneblae( TIMER4);
 	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
 	HAL_TiemrEneblae( TIMER3);
-	vInitEEPROM(1,1);
+	vInitEEPROM(I2C1_PRIOR ,I2C1_SUB_PRIOR );
 	HAL_SetBit(PowerOn_Port, PowerOn_Pin);
 	vCanOpenInit(CAN1);;
 	return;

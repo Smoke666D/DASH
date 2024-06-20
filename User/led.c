@@ -279,11 +279,10 @@ void SPI2_DMA_Callback( void )
  */
 void vLedDriverStart(void)
 {
-	HAL_DMAInitIT(DMA1_Channel5,MTOP, DMA_HWORD  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,1,2,&SPI2_DMA_Callback);
-	HAL_DMAInitIT(DMA1_Channel3,MTOP, DMA_HWORD  ,(u32)&SPI1->DATAR, (u32)data,0,1,2,&SPI1_DMA_Callback);
+	HAL_DMAInitIT(DMA1_Channel5,MTOP, DMA_HWORD  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,SPI2_DMA_PRIOR,SPI2_DMA_SUBPRIOR ,&SPI2_DMA_Callback);
+	HAL_DMAInitIT(DMA1_Channel3,MTOP, DMA_HWORD  ,(u32)&SPI1->DATAR, (u32)data,     0,SPI1_DMA_PRIOR,SPI1_DMA_SUBPRIOR ,&SPI1_DMA_Callback);
 	return;
 }
-
 
 
 
