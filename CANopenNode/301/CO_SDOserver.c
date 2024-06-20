@@ -245,6 +245,7 @@ static ODR_t OD_write_1201_additional(OD_stream_t *stream, const void *buf,
     switch (stream->subIndex) {
         case 0: /* Highest sub-index supported */
             return ODR_READONLY;
+            break;
 
         case 1: { /* COB-ID client -> server */
             uint32_t COB_ID = CO_getUint32(buf);
@@ -349,7 +350,7 @@ CO_ReturnError_t CO_SDOserver_init(CO_SDOserver_t *SDO,
 
     if (OD_1200_SDOsrvPar == NULL) {
         /* configure default SDO channel */
-        if (nodeId < 1 || nodeId > 127) return CO_ERROR_ILLEGAL_ARGUMENT;
+        if (nodeId < 1 || nodeId > 127) { return CO_ERROR_ILLEGAL_ARGUMENT; }
 
         CanId_ClientToServer = CO_CAN_ID_SDO_CLI + nodeId;
         CanId_ServerToClient = CO_CAN_ID_SDO_SRV + nodeId;
@@ -360,7 +361,9 @@ CO_ReturnError_t CO_SDOserver_init(CO_SDOserver_t *SDO,
 
         if (OD_SDOsrvParIdx == OD_H1200_SDO_SERVER_1_PARAM) {
             /* configure default SDO channel and SDO server parameters for it */
-            if (nodeId < 1 || nodeId > 127) return CO_ERROR_ILLEGAL_ARGUMENT;
+            if (nodeId < 1 || nodeId > 127) {
+                return CO_ERROR_ILLEGAL_ARGUMENT;
+            }
 
             CanId_ClientToServer = CO_CAN_ID_SDO_CLI + nodeId;
             CanId_ServerToClient = CO_CAN_ID_SDO_SRV + nodeId;
@@ -386,7 +389,7 @@ CO_ReturnError_t CO_SDOserver_init(CO_SDOserver_t *SDO,
             if (odRet0 != ODR_OK || (maxSubIndex != 2 && maxSubIndex != 3)
                 || odRet1 != ODR_OK || odRet2 != ODR_OK
             ) {
-                if (errInfo != NULL) *errInfo = OD_SDOsrvParIdx;
+                if (errInfo != NULL) { *errInfo = OD_SDOsrvParIdx; }
                 return CO_ERROR_OD_PARAMETERS;
             }
 
@@ -403,7 +406,7 @@ CO_ReturnError_t CO_SDOserver_init(CO_SDOserver_t *SDO,
             ODR_t odRetE = OD_extension_init(OD_1200_SDOsrvPar,
                                             &SDO->OD_1200_extension);
             if (odRetE != ODR_OK) {
-                if (errInfo != NULL) *errInfo = OD_SDOsrvParIdx;
+                if (errInfo != NULL) { *errInfo = OD_SDOsrvParIdx; }
                 return CO_ERROR_OD_PARAMETERS;
             }
     #endif
@@ -525,6 +528,7 @@ static bool_t validateAndWriteToOD(CO_SDOserver_t *SDO,
             SDO->state = CO_SDO_ST_ABORT;
             return false;
         }
+        else { /* MISRA C 2004 14.10 */ }
     }
     else {
         /* Verify if size of data downloaded is not too large. */
@@ -551,12 +555,11 @@ static bool_t validateAndWriteToOD(CO_SDOserver_t *SDO,
 
     /* write data */
     OD_size_t countWritten = 0;
-    bool_t lock = OD_mappable(&SDO->OD_IO.stream);
 
-    if (lock) { CO_LOCK_OD(SDO->CANdevTx); }
+    CO_LOCK_OD(SDO->CANdevTx);
     ODR_t odRet = SDO->OD_IO.write(&SDO->OD_IO.stream, SDO->buf,
                                    SDO->bufOffsetWr, &countWritten);
-    if (lock) { CO_UNLOCK_OD(SDO->CANdevTx); }
+    CO_UNLOCK_OD(SDO->CANdevTx);
 
     SDO->bufOffsetWr = 0;
 
@@ -578,6 +581,7 @@ static bool_t validateAndWriteToOD(CO_SDOserver_t *SDO,
         SDO->state = CO_SDO_ST_ABORT;
         return false;
     }
+    else { /* MISRA C 2004 14.10 */ }
 
     return true;
 }
@@ -613,12 +617,11 @@ static bool_t readFromOd(CO_SDOserver_t *SDO,
         /* load data from OD variable into the buffer */
         OD_size_t countRd = 0;
         uint8_t *bufShifted = SDO->buf + countRemain;
-        bool_t lock = OD_mappable(&SDO->OD_IO.stream);
 
-        if (lock) { CO_LOCK_OD(SDO->CANdevTx); }
+        CO_LOCK_OD(SDO->CANdevTx);
         ODR_t odRet = SDO->OD_IO.read(&SDO->OD_IO.stream, bufShifted,
                                       countRdRequest, &countRd);
-        if (lock) { CO_UNLOCK_OD(SDO->CANdevTx); }
+        CO_UNLOCK_OD(SDO->CANdevTx);
 
         if (odRet != ODR_OK && odRet != ODR_PARTIAL) {
             *abortCode = (CO_SDO_abortCode_t)OD_getSDOabCode(odRet);
@@ -630,7 +633,7 @@ static bool_t readFromOd(CO_SDOserver_t *SDO,
         if (countRd > 0 && (SDO->OD_IO.stream.attribute & ODA_STR) != 0) {
             bufShifted[countRd] = 0; /* (SDO->buf is one byte larger) */
             OD_size_t countStr = (OD_size_t)strlen((char *)bufShifted);
-            if (countStr == 0) countStr = 1; /* zero length is not allowed */
+            if (countStr == 0) { countStr = 1; }/* zero length is not allowed */
             if (countStr < countRd) {
                 /* string terminator found, read is finished, shorten data */
                 countRd = countStr;
@@ -661,7 +664,7 @@ static bool_t readFromOd(CO_SDOserver_t *SDO,
                 reverseBytes(bufShifted, countRd);
             }
             else {
-                abortCode = CO_SDO_AB_PRAM_INCOMPAT;
+                *abortCode = CO_SDO_AB_PRAM_INCOMPAT;
                 SDO->state = CO_SDO_ST_ABORT;
                 return false;
             }
@@ -765,6 +768,7 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
                         abortCode = CO_SDO_AB_READONLY;
                         SDO->state = CO_SDO_ST_ABORT;
                     }
+                    else { /* MISRA C 2004 14.10 */ }
                 }
             }
 
@@ -789,6 +793,7 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
                             abortCode = CO_SDO_AB_DEVICE_INCOMPAT;
                             SDO->state = CO_SDO_ST_ABORT;
                         }
+                        else { /* MISRA C 2004 14.10 */ }
                     }
                     else {
                         /* If data type is string, size is not known */
@@ -801,7 +806,7 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
 #endif /* (CO_CONFIG_SDO_SRV) & CO_CONFIG_SDO_SRV_SEGMENTED */
         } /* (SDO->state == CO_SDO_ST_IDLE) */
 
-        if (SDO->state != CO_SDO_ST_IDLE && SDO->state != CO_SDO_ST_ABORT)
+        if (SDO->state != CO_SDO_ST_IDLE && SDO->state != CO_SDO_ST_ABORT) {
         switch (SDO->state) {
         case CO_SDO_ST_DOWNLOAD_INITIATE_REQ: {
             if (SDO->CANrxData[0] & 0x02) {
@@ -812,10 +817,13 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
 
                 /* Get SDO data size (indicated by SDO client or get from OD) */
                 OD_size_t dataSizeToWrite = 4;
-                if (SDO->CANrxData[0] & 0x01)
+                if (SDO->CANrxData[0] & 0x01) {
                     dataSizeToWrite -= (SDO->CANrxData[0] >> 2) & 0x03;
-                else if (sizeInOd > 0 && sizeInOd < 4)
+                }
+                else if (sizeInOd > 0 && sizeInOd < 4) {
                     dataSizeToWrite = sizeInOd;
+                }
+                else { /* MISRA C 2004 14.10 */ }
 
                 /* copy data to the temp buffer, swap data if necessary */
                 uint8_t buf[6] = {0};
@@ -847,15 +855,15 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
                     SDO->state = CO_SDO_ST_ABORT;
                     break;
                 }
+                else { /* MISRA C 2004 14.10 */ }
 
                 /* Copy data */
                 OD_size_t countWritten = 0;
-                bool_t lock = OD_mappable(&SDO->OD_IO.stream);
 
-                if (lock) { CO_LOCK_OD(SDO->CANdevTx); }
+                CO_LOCK_OD(SDO->CANdevTx);
                 ODR_t odRet = SDO->OD_IO.write(&SDO->OD_IO.stream, buf,
                                                dataSizeToWrite, &countWritten);
-                if (lock) { CO_UNLOCK_OD(SDO->CANdevTx); }
+                CO_UNLOCK_OD(SDO->CANdevTx);
 
                 if (odRet != ODR_OK) {
                     abortCode = (CO_SDO_abortCode_t)OD_getSDOabCode(odRet);
@@ -894,6 +902,7 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
                             SDO->state = CO_SDO_ST_ABORT;
                             break;
                         }
+                        else { /* MISRA C 2004 14.10 */ }
                      }
                 }
                 else {
@@ -941,8 +950,9 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
                 if (SDO->finished
                     || (CO_CONFIG_SDO_SRV_BUFFER_SIZE - SDO->bufOffsetWr)<(7+2)
                 ) {
-                    if (!validateAndWriteToOD(SDO, &abortCode, 0, 0))
+                    if (!validateAndWriteToOD(SDO, &abortCode, 0, 0)) {
                         break;
+                    }
                 }
 
                 SDO->state = CO_SDO_ST_DOWNLOAD_SEGMENT_RSP;
@@ -1154,14 +1164,17 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
             /* unknown message received */
             abortCode = CO_SDO_AB_CMD;
             SDO->state = CO_SDO_ST_ABORT;
+            break;
         }
         } /* switch (SDO->state) */
+        } /* if (SDO->state != CO_SDO_ST_IDLE && SDO->state != CO_SDO_ST_ABORT) */
 #if (CO_CONFIG_SDO_SRV) & CO_CONFIG_SDO_SRV_SEGMENTED
         SDO->timeoutTimer = 0;
 #endif
         timeDifference_us = 0;
         CO_FLAG_CLEAR(SDO->CANrxNew);
-    } /* if (isNew) */
+    } /* else if (isNew) */
+    else { /* MISRA C 2004 14.10 */ }
 
     /* Timeout timers and transmit bufferFull flag ****************************/
 #if (CO_CONFIG_SDO_SRV) & CO_CONFIG_SDO_SRV_SEGMENTED
@@ -1299,12 +1312,11 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
 #else /* Expedited transfer only */
             /* load data from OD variable */
             OD_size_t count = 0;
-            bool_t lock = OD_mappable(&SDO->OD_IO.stream);
 
-            if (lock) { CO_LOCK_OD(SDO->CANdevTx); }
+            CO_LOCK_OD(SDO->CANdevTx);
             ODR_t odRet = SDO->OD_IO.read(&SDO->OD_IO.stream,
                                           &SDO->CANtxBuff->data[4], 4, &count);
-            if (lock) { CO_UNLOCK_OD(SDO->CANdevTx); }
+            CO_UNLOCK_OD(SDO->CANdevTx);
 
             /* strings are allowed to be shorter */
             if (odRet == ODR_PARTIAL
@@ -1342,8 +1354,9 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
 #if (CO_CONFIG_SDO_SRV) & CO_CONFIG_SDO_SRV_SEGMENTED
         case CO_SDO_ST_UPLOAD_SEGMENT_RSP: {
             /* refill the data buffer if necessary */
-            if (!readFromOd(SDO, &abortCode, 7, false))
+            if (!readFromOd(SDO, &abortCode, 7, false)) {
                 break;
+            }
 
             /* SDO command specifier with toggle bit */
             SDO->CANtxBuff->data[0] = SDO->toggle;
@@ -1384,6 +1397,7 @@ CO_SDO_return_t CO_SDOserver_process(CO_SDOserver_t *SDO,
                     SDO->state = CO_SDO_ST_ABORT;
                     break;
                 }
+                else { /* MISRA C 2004 14.10 */ }
             }
 
             /* send message */

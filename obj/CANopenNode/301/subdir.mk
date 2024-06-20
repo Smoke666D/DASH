@@ -8,6 +8,7 @@ C_SRCS += \
 ../CANopenNode/301/CO_Emergency.c \
 ../CANopenNode/301/CO_HBconsumer.c \
 ../CANopenNode/301/CO_NMT_Heartbeat.c \
+../CANopenNode/301/CO_Node_Guarding.c \
 ../CANopenNode/301/CO_ODinterface.c \
 ../CANopenNode/301/CO_PDO.c \
 ../CANopenNode/301/CO_SDOclient.c \
@@ -21,6 +22,7 @@ OBJS += \
 ./CANopenNode/301/CO_Emergency.o \
 ./CANopenNode/301/CO_HBconsumer.o \
 ./CANopenNode/301/CO_NMT_Heartbeat.o \
+./CANopenNode/301/CO_Node_Guarding.o \
 ./CANopenNode/301/CO_ODinterface.o \
 ./CANopenNode/301/CO_PDO.o \
 ./CANopenNode/301/CO_SDOclient.o \
@@ -34,6 +36,7 @@ C_DEPS += \
 ./CANopenNode/301/CO_Emergency.d \
 ./CANopenNode/301/CO_HBconsumer.d \
 ./CANopenNode/301/CO_NMT_Heartbeat.d \
+./CANopenNode/301/CO_Node_Guarding.d \
 ./CANopenNode/301/CO_ODinterface.d \
 ./CANopenNode/301/CO_PDO.d \
 ./CANopenNode/301/CO_SDOclient.d \

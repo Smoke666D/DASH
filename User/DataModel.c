@@ -334,7 +334,6 @@ void WriteReg( u16 reg_adress, void * data, u8 len)
     switch (len)
     {
         case 1:
-          //  Buffer[0] = *((u8 *)data);
             DATA_MODEL_REGISTER[reg_adress] = Buffer[0];
             break;
         case 2:
@@ -353,7 +352,7 @@ void WriteReg( u16 reg_adress, void * data, u8 len)
  */
 uint16_t vGetBitrate()
 {
-   switch( bReadEEPROM( BITRATE_ADR,0 ) )
+   switch( bReadEEPROM( BITRATE_ADR,2 ) )
     {
         case 0x00:
             return (1000);

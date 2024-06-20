@@ -45,7 +45,7 @@ static ODR_t OD_write_dummy(OD_stream_t *stream, const void *buf,
                             OD_size_t count, OD_size_t *countWritten)
 {
     (void) stream; (void) buf;
-    if (countWritten != NULL) *countWritten = count;
+    if (countWritten != NULL) { *countWritten = count; }
     return ODR_OK;
 }
 
@@ -201,7 +201,7 @@ static CO_ReturnError_t PDO_initMapping(CO_PDO_common_t *PDO,
             /* indicate erroneous mapping in initialization phase */
             OD_IO->stream.dataLength = 0;
             OD_IO->stream.dataOffset = 0xFF;
-            if (*erroneousMap == 0) *erroneousMap = map;
+            if (*erroneousMap == 0) { *erroneousMap = map; }
         }
 
         if (i < mappedObjectsCount) {
@@ -211,7 +211,7 @@ static CO_ReturnError_t PDO_initMapping(CO_PDO_common_t *PDO,
     if (pdoDataLength > CO_PDO_MAX_SIZE
         || (pdoDataLength == 0 && mappedObjectsCount > 0)
     ) {
-        if (*erroneousMap == 0) *erroneousMap = 1;
+        if (*erroneousMap == 0) { *erroneousMap = 1; }
     }
 
     if (*erroneousMap == 0) {
@@ -279,7 +279,8 @@ static ODR_t OD_write_PDO_mapping(OD_stream_t *stream, const void *buf,
         PDO->mappedObjectsCount = mappedObjectsCount;
     }
     else {
-        ODR_t odRet = PDOconfigMap(PDO, CO_getUint32(buf), stream->subIndex-1,
+        uint32_t val = CO_getUint32(buf);
+        ODR_t odRet = PDOconfigMap(PDO, val, stream->subIndex-1,
                                    PDO->isRPDO, PDO->OD);
         if (odRet != ODR_OK) {
             return odRet;
@@ -427,7 +428,7 @@ static ODR_t OD_read_PDO_commParam(OD_stream_t *stream, void *buf,
         }
 
         /* If PDO is not valid, set bit 31 */
-        if (!PDO->valid) COB_ID |= 0x80000000;
+        if (!PDO->valid) { COB_ID |= 0x80000000; }
 
         CO_setUint32(buf, COB_ID);
     }
@@ -473,10 +474,10 @@ static void CO_PDO_receive(void *object, void *msg) {
         if (DLC >= PDO->dataLength) {
             /* indicate errors in PDO length */
             if (DLC == PDO->dataLength) {
-                if (err == CO_RPDO_RX_ACK_ERROR) err = CO_RPDO_RX_OK;
+                if (err == CO_RPDO_RX_ACK_ERROR) { err = CO_RPDO_RX_OK; }
             }
             else {
-                if (err == CO_RPDO_RX_ACK_NO_ERROR) err = CO_RPDO_RX_LONG;
+                if (err == CO_RPDO_RX_ACK_NO_ERROR) { err = CO_RPDO_RX_LONG; }
             }
 
             /* Determine, to which of the two rx buffers copy the message. */
@@ -504,6 +505,7 @@ static void CO_PDO_receive(void *object, void *msg) {
         else if (err == CO_RPDO_RX_ACK_NO_ERROR) {
             err = CO_RPDO_RX_SHORT;
         }
+        else { /* MISRA C 2004 14.10 */ }
     }
 
     RPDO->receiveError = err;
@@ -615,6 +617,9 @@ static ODR_t OD_write_14xx(OD_stream_t *stream, const void *buf,
         break;
     }
 #endif
+    default:
+        /* MISRA C 2004 15.3 */
+        break;
     }
 
     /* write value to the original location in the Object Dictionary */
@@ -682,7 +687,7 @@ CO_ReturnError_t CO_RPDO_init(CO_RPDO_t *RPDO,
     uint16_t CAN_ID = (uint16_t)(COB_ID & 0x7FF);
     if (valid && (PDO->mappedObjectsCount == 0 || CAN_ID == 0)) {
         valid = false;
-        if (erroneousMap == 0) erroneousMap = 1;
+        if (erroneousMap == 0) { erroneousMap = 1; }
     }
 
     if (erroneousMap != 0) {
@@ -803,8 +808,10 @@ void CO_RPDO_process(CO_RPDO_t *RPDO,
         /* Determine, which of the two rx buffers contains relevant message. */
         uint8_t bufNo = 0;
 #if (CO_CONFIG_PDO) & CO_CONFIG_PDO_SYNC_ENABLE
-        if (RPDO->synchronous && RPDO->SYNC != NULL && !RPDO->SYNC->CANrxToggle)
+        if (RPDO->synchronous && RPDO->SYNC != NULL
+            && !RPDO->SYNC->CANrxToggle) {
             bufNo = 1;
+        }
 #endif
 
         /* copy RPDO into OD variables according to mappings */
@@ -827,9 +834,9 @@ void CO_RPDO_process(CO_RPDO_t *RPDO,
 
                 /* length of OD variable may be larger than mappedLength */
                 OD_size_t ODdataLength = OD_IO->stream.dataLength;
-                if (ODdataLength > CO_PDO_MAX_SIZE)
+                if (ODdataLength > CO_PDO_MAX_SIZE) {
                     ODdataLength = CO_PDO_MAX_SIZE;
-
+                }
                 /* Prepare data for writing into OD variable. If mappedLength
                  * is smaller than ODdataLength, then use auxiliary buffer */
                 uint8_t buf[CO_PDO_MAX_SIZE];
@@ -897,7 +904,8 @@ void CO_RPDO_process(CO_RPDO_t *RPDO,
                                 CO_EMC_RPDO_TIMEOUT, RPDO->timeoutTimer);
                 }
             }
- #if (CO_CONFIG_SYNC) & CO_CONFIG_FLAG_TIMERNEXT
+            else { /* MISRA C 2004 14.10 */ }
+ #if (CO_CONFIG_PDO) & CO_CONFIG_FLAG_TIMERNEXT
             if (timerNext_us != NULL
                 && RPDO->timeoutTimer < RPDO->timeoutTime_us
             ) {
@@ -1055,6 +1063,9 @@ static ODR_t OD_write_18xx(OD_stream_t *stream, const void *buf,
         break;
     }
 #endif
+    default:
+        /* MISRA C 2004 15.3 */
+        break;
     }
 
     /* write value to the original location in the Object Dictionary */
@@ -1140,7 +1151,7 @@ CO_ReturnError_t CO_TPDO_init(CO_TPDO_t *TPDO,
     uint16_t CAN_ID = (uint16_t)(COB_ID & 0x7FF);
     if (valid && (PDO->mappedObjectsCount == 0 || CAN_ID == 0)) {
         valid = false;
-        if (erroneousMap == 0) erroneousMap = 1;
+        if (erroneousMap == 0) { erroneousMap = 1; }
     }
 
     if (erroneousMap != 0) {
@@ -1178,8 +1189,8 @@ CO_ReturnError_t CO_TPDO_init(CO_TPDO_t *TPDO,
     uint16_t eventTime = 0;
     odRet = OD_get_u16(OD_18xx_TPDOCommPar, 3, &inhibitTime, true);
     odRet = OD_get_u16(OD_18xx_TPDOCommPar, 5, &eventTime, true);
-    TPDO->inhibitTime_us = inhibitTime * 100;
-    TPDO->eventTime_us = eventTime * 1000;
+    TPDO->inhibitTime_us = (uint32_t)inhibitTime * 100;
+    TPDO->eventTime_us = (uint32_t)eventTime * 1000;
 #endif
 
 
@@ -1242,9 +1253,9 @@ static CO_ReturnError_t CO_TPDOsend(CO_TPDO_t *TPDO) {
 
         /* length of OD variable may be larger than mappedLength */
         OD_size_t ODdataLength = stream->dataLength;
-        if (ODdataLength > CO_PDO_MAX_SIZE)
+        if (ODdataLength > CO_PDO_MAX_SIZE) {
             ODdataLength = CO_PDO_MAX_SIZE;
-
+        }
         /* If mappedLength is smaller than ODdataLength, use auxiliary buffer */
         uint8_t buf[CO_PDO_MAX_SIZE];
         uint8_t *dataTPDOCopy;
@@ -1266,8 +1277,8 @@ static CO_ReturnError_t CO_TPDOsend(CO_TPDO_t *TPDO) {
         /* swap multibyte data if big-endian */
  #ifdef CO_BIG_ENDIAN
         if ((stream->attribute & ODA_MB) != 0) {
-            uint8_t *lo = dataOD;
-            uint8_t *hi = dataOD + ODdataLength - 1;
+            uint8_t *lo = dataTPDOCopy;
+            uint8_t *hi = dataTPDOCopy + ODdataLength - 1;
             while (lo < hi) {
                 uint8_t swap = *lo;
                 *lo++ = *hi;
@@ -1401,7 +1412,7 @@ void CO_TPDO_process(CO_TPDO_t *TPDO,
         else if (TPDO->SYNC != NULL && syncWas) {
             /* send synchronous acyclic TPDO */
             if (TPDO->transmissionType == CO_PDO_TRANSM_TYPE_SYNC_ACYCLIC) {
-                if (TPDO->sendRequest) CO_TPDOsend(TPDO);
+                if (TPDO->sendRequest) { CO_TPDOsend(TPDO); }
             }
             /* send synchronous cyclic TPDO */
             else {
@@ -1431,8 +1442,10 @@ void CO_TPDO_process(CO_TPDO_t *TPDO,
                     TPDO->syncCounter = TPDO->transmissionType;
                     CO_TPDOsend(TPDO);
                 }
+                else { /* MISRA C 2004 14.10 */ }
             }
         } /* else if (TPDO->SYNC && syncWas) */
+        else { /* MISRA C 2004 14.10 */ }
 #endif
 
     }

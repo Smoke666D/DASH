@@ -29,8 +29,7 @@ static ODR_t OD_writeRGB13(OD_stream_t *stream,const  void *buf, OD_size_t count
 static ODR_t OD_writeRGB14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_writeRGBMAP(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
-static ODR_t OD_writeV1_7(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
-static ODR_t OD_writeV8_14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
+static ODR_t OD_writeV1_14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_writeV15_17(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readDashParam (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 static ODR_t OD_writeDashParam(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
@@ -42,20 +41,29 @@ static ODR_t  OD_writeMenuMap(OD_stream_t *stream,const  void *buf, OD_size_t co
 static ODR_t  OD_writeBitrate(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t  OD_writeMenuSetup(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readMenuSetup (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
-
+static ODR_t OD_readRGB1 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB2 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB3 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB4 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB5 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB6 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB7 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB8 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB9 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB10 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB11 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB12 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB13 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_readRGB14 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 /* Variables used for triggering TPDO, see simulation in app_programRt(). */
 
 
-const OD_extension_t OD_V1_7_extension = {
+const OD_extension_t OD_V1_14_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
-    .write = OD_writeV1_7
+    .write = OD_writeV1_14
 };
-const  OD_extension_t OD_V8_14_extension = {
-    .object = NULL,
-    .read =  OD_readOriginal,
-    .write = OD_writeV8_14
-};
+
 const  OD_extension_t OD_V15_17_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
@@ -100,85 +108,85 @@ const OD_extension_t OD_BAR_extension = {
 
 const OD_extension_t OD_RGB1_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB1,
     .write = OD_writeRGB1
 };
 
 const OD_extension_t OD_RGB2_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB2,
     .write = OD_writeRGB2
 };
 
 const OD_extension_t OD_RGB3_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB3,
     .write = OD_writeRGB3
 };
 
 const OD_extension_t OD_RGB4_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB4,
     .write = OD_writeRGB4
 };
 
 const OD_extension_t OD_RGB5_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB5,
     .write = OD_writeRGB5
 };
 
 const OD_extension_t OD_RGB6_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB6,
     .write = OD_writeRGB6
 };
 
 const OD_extension_t OD_RGB7_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB7,
     .write = OD_writeRGB7
 };
 
 const OD_extension_t OD_RGB8_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB8,
     .write = OD_writeRGB8
 };
 
 const OD_extension_t OD_RGB9_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB9,
     .write = OD_writeRGB9
 };
 
 const OD_extension_t OD_RGB10_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB10,
     .write = OD_writeRGB10
 };
 
 const OD_extension_t OD_RGB11_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB11,
     .write = OD_writeRGB11
 };
 
 const OD_extension_t OD_RGB12_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB12,
     .write = OD_writeRGB12
 };
 
 const OD_extension_t OD_RGB13_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB13,
     .write = OD_writeRGB13
 };
 
 const OD_extension_t OD_RGB14_extension = {
     .object = NULL,
-    .read =  OD_readOriginal,
+    .read =  OD_readRGB14,
     .write = OD_writeRGB14
 };
 
@@ -206,7 +214,7 @@ const OD_extension_t  OD_AIN_RPM_extension = {
     };
 const OD_extension_t  OD_ERROR_REG_extension = {
         .object = NULL,
-        .read =  NULL,
+        .read =  OD_readOriginal,
         .write = OD_writeERROR_REG
     };
 
@@ -236,8 +244,7 @@ const OD_extension_t  OD_MENU_SETUP_extension= {
 
 void vProceesInit( void)
 {
-    OD_extension_init(OD_ENTRY_H2000, &OD_V1_7_extension);
-    OD_extension_init(OD_ENTRY_H2001, &OD_V8_14_extension);
+    OD_extension_init(OD_ENTRY_H2000, &OD_V1_14_extension);
     OD_extension_init(OD_ENTRY_H2002, &OD_V15_17_extension);
     OD_extension_init(OD_ENTRY_H2003, &OD_ERROR_REG_extension);
     OD_extension_init(OD_ENTRY_H2004, &OD_DASH_PARAM_extension);
@@ -271,7 +278,7 @@ void vProceesInit( void)
 }
 
 
-static ODR_t OD_writeV1_7(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
+static ODR_t OD_writeV1_14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
 
 #ifdef  DEBUF_OD_READ_WRITE
@@ -279,23 +286,13 @@ static ODR_t OD_writeV1_7(OD_stream_t *stream,const  void *buf, OD_size_t count,
         return (ODR_DEV_INCOMPAT);
 #endif
     uint16_t data = CO_getUint8(buf);
+    *countWritten = 1;
     WriteReg( V1 + (stream->subIndex -1),&data,1);
-    return ( OD_writeOriginal(stream, buf, count, countWritten) );
+    return (ODR_OK);
 
 
 }
-static ODR_t OD_writeV8_14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
-{
-#ifdef  DEBUF_OD_READ_WRITE
-    if ((stream == NULL) || (buf == NULL) || (countWritten == NULL))
-        return (ODR_DEV_INCOMPAT);
-#endif
-    uint16_t data = CO_getUint8(buf);
-    WriteReg( V8 + (stream->subIndex -1),&data,1);
-    return ( OD_writeOriginal(stream, buf, count, countWritten));
 
-
-}
 static ODR_t OD_writeV15_17(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
 #ifdef  DEBUF_OD_READ_WRITE
@@ -303,9 +300,22 @@ static ODR_t OD_writeV15_17(OD_stream_t *stream,const  void *buf, OD_size_t coun
         return (ODR_DEV_INCOMPAT);
 #endif
     uint16_t data = CO_getUint16(buf);
+    *countWritten = 2;
     WriteReg( V15 + (stream->subIndex -1),&data,2);
-    return ( OD_writeOriginal(stream, buf, count, countWritten) );
+    return (ODR_OK);
 
+}
+
+static ODR_t OD_writeERROR_REG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
+{
+#ifdef  DEBUF_OD_READ_WRITE
+    if (stream == NULL || buf == NULL || countRead == NULL) {
+            return ODR_DEV_INCOMPAT;
+        }
+#endif
+    vSetErrorReg( CO_getUint32(buf));
+    *countWritten = 4;
+    return (ODR_OK);
 }
 
 
@@ -370,23 +380,34 @@ static ODR_t OD_writeRPMConfig(OD_stream_t *stream,const  void *buf, OD_size_t c
            return ODR_DEV_INCOMPAT;
        }
 #endif
+      *countWritten = 4;
       uint8_t data =(uint8_t)CO_getUint32(buf);
       WriteReg( RPM1_COOF + (stream->subIndex -1)  ,&data, 1);
-      return ( OD_writeOriginal(stream, buf, count, countWritten) );
+      return (ODR_OK);
 }
 
 
-static ODR_t WriteRGB(uint16_t addr, OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
+/*
+static ODR_t OD_readReadRGB (uint16_t addr, OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
 {
 #ifdef  DEBUF_OD_READ_WRITE
        if (stream == NULL || buf == NULL || countRead == NULL) {
            return ODR_DEV_INCOMPAT;
        }
 #endif
-      uint16_t data = CO_getUint16(buf);
-      WriteReg( addr  + (stream->subIndex -1)*2 ,&data,2);
-      return (OD_writeOriginal(stream, buf, count, countWritten));
+       *countRead = 2;
+             u16 temp = (u16)getReg16(reg_adress)( chAIN1 -1 + stream->subIndex,1);
+             u8 *ptemp = (u8 * )buf;
+             ptemp[0] =  (u8)( temp & 0xFF);
+             ptemp[1] =  (u8)((temp >>8) & 0xFF);
+
+      return (ODR_OK);
 }
+*/
+
+
+
+
 
 
 static ODR_t OD_writeRGBMAP(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
@@ -405,73 +426,147 @@ static ODR_t OD_writeRGBMAP(OD_stream_t *stream,const  void *buf, OD_size_t coun
      return (ODR_VALUE_HIGH);
 }
 
+static ODR_t OD_readRGB (uint16_t addr, OD_stream_t *stream, void *buf, OD_size_t *countRead)
+{
+     *countRead = 2;
+     u16 temp = (u16)getReg16(addr);
+     u8 *ptemp = (u8 * )buf;
+     ptemp[0] =  (u8)( temp & 0xFF);
+     ptemp[1] =  (u8)((temp >>8) & 0xFF);
+     return (ODR_OK);
+}
+
+static ODR_t OD_readRGB1 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB1_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB2 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB2_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB3 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB3_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB4 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB4_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB5 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB5_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB6 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB6_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB7 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB7_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB8 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB8_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB9 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB9_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB10 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB10_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB11 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB11_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB12 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB12_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB13 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB13_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+static ODR_t OD_readRGB14 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    return (OD_readRGB(RGB14_VALUE_GREEN_HIGH,  stream, buf,  countRead));
+}
+
+static ODR_t WriteRGB(uint16_t addr, OD_stream_t *stream, const  void *buf, OD_size_t *countWritten)
+{
+      uint16_t data = CO_getUint16(buf);
+      *countWritten = 2;
+      WriteReg( addr  + (stream->subIndex -1)*2 ,&data,2);
+      return (ODR_OK);
+}
 
 static ODR_t OD_writeRGB1(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB1_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB1_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB2(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB2_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB2_VALUE_GREEN_HIGH,  stream, buf, countWritten) );
 }
 
 static ODR_t OD_writeRGB3(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB3_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB3_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB4(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB4_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB4_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 static ODR_t OD_writeRGB5(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB5_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB5_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB6(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB6_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB6_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB7(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB7_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB7_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB8(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB8_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB8_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB9(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB9_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB9_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 static ODR_t OD_writeRGB10(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB10_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB10_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB11(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB11_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB11_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB12(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB12_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB12_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB13(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB13_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB13_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeRGB14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    return ( WriteRGB( RGB14_VALUE_GREEN_HIGH,  stream, buf, count, countWritten) );
+    return ( WriteRGB( RGB14_VALUE_GREEN_HIGH,  stream, buf,  countWritten) );
 }
 
 static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
@@ -485,7 +580,7 @@ static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, 
      uint16_t data = CO_getUint16(buf);
      if (stream->subIndex == 1)
      {
-         setReg16(BIG_SEG, data );
+         setReg16(BIG_SEG, data);
      }
      else
      {
@@ -575,16 +670,7 @@ static ODR_t OD_writeADC3(OD_stream_t *stream, const void *buf, OD_size_t count,
     return ( res );
 }
 
-static ODR_t OD_writeERROR_REG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
-{
-#ifdef  DEBUF_OD_READ_WRITE
-    if (stream == NULL || buf == NULL || countRead == NULL) {
-            return ODR_DEV_INCOMPAT;
-        }
-#endif
-    vSetErrorReg( CO_getUint32(buf));
-    return ( OD_writeOriginal(stream, buf, count, countWritten));
-}
+
 
 
 static ODR_t  OD_writeMenuMap(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
@@ -662,8 +748,7 @@ static ODR_t OD_writeBrigth(OD_stream_t *stream, const void *buf, OD_size_t coun
        }
 #endif
     ODR_t res = ODR_DEV_INCOMPAT;
-    if ((stream != NULL) && (buf != NULL) && (countWritten != NULL))
-    {
+
         u8 temp = CO_getUint8(buf);
         if (temp > MAX_BRIGTH)
         {
@@ -671,23 +756,20 @@ static ODR_t OD_writeBrigth(OD_stream_t *stream, const void *buf, OD_size_t coun
         }
         else
         {
-            switch (stream->subIndex )
+            if (stream->subIndex == 1 )
             {
-                 case 1:
-                       vSetBrigth(RGB_CHANNEL, temp);
-                       WriteReg( RGB_BRIGTH_ADR, &temp, sizeof(temp));
-                       break;
-                 case 2:
-                       vSetBrigth(WHITE_CHANNEL, temp);
-                       WriteReg( WHITE_BRIGTH_ADR, &temp, sizeof(temp));
-                       break;
-                 default:
-                     return ( ODR_SUB_NOT_EXIST );
-                     break;
+                vSetBrigth(RGB_CHANNEL, temp);
+                WriteReg( RGB_BRIGTH_ADR, &temp, 1);
             }
-            res = OD_writeOriginal(stream, buf, count, countWritten);
+            else
+            {
+                vSetBrigth(WHITE_CHANNEL, temp);
+                WriteReg( WHITE_BRIGTH_ADR, &temp, 1);
+            }
+            *countWritten =1;
+            return (ODR_OK);
         }
-    }
+
     return ( res );
 }
 

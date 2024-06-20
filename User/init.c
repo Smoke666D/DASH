@@ -34,7 +34,7 @@ void vInit_DeviceConfig( void )
 	HAL_TiemrEneblae( TIMER4);
 	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
 	HAL_TiemrEneblae( TIMER3);
-	vInitEEPROM(1,5);
+	vInitEEPROM(1,1);
 	HAL_SetBit(PowerOn_Port, PowerOn_Pin);
 	vCanOpenInit(CAN1);;
 	return;

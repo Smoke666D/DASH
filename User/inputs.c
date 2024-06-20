@@ -217,8 +217,8 @@ void vInputsTask( void * argument )
   u8 data_send_dealy = 0;
   u16 data;
   uint8_t OD_Ain_flag;
-  OD_DIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2006);
-  OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
+ //OD_DIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2006);
+ // OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
   for(;;)
   {
     switch (state)
@@ -258,6 +258,7 @@ void vInputsTask( void * argument )
                         for (u8 i=0; i<4;i++)
                         {
                             data = getODValue( chAIN1 + i,1);
+                           // OD_set_value(OD_ENTRY_H2000_digitalInputModuleKeysStates,0x01,&data,1,true);
                             if (BufAIN[i]!= data)
                             {
                                 BufAIN[i] = data;
@@ -280,18 +281,18 @@ void vInputsTask( void * argument )
                                   OD_Ain_flag = SET;
                                 }
                             }
-                            uint8_t din_data;
-                            if (++data_send_dealy> 10)  data_send_dealy = 0;
+                           // uint8_t din_data;
+                           // if (++data_send_dealy> 10)  data_send_dealy = 0;
                             //Обработка дискрентого входа датчика давления масла
-                             if (( xGetDIN(INPUT_3,&din_data) == DIN_CHANGE ) || (data_send_dealy==0))
-                             {
-                                 OD_requestTPDO(OD_DIN_flagsPDO,1);
-                             }
-                             if ((OD_Ain_flag) || (data_send_dealy==0))
-                             {
-                                   OD_Ain_flag = RESET;
-                                   OD_requestTPDO(OD_AIN_flagsPDO,1);
-                             }
+                            //if (( xGetDIN(INPUT_3,&din_data) == DIN_CHANGE )) ///|| (data_send_dealy==0))
+                           //  {
+                            //     OD_requestTPDO(OD_DIN_flagsPDO,1);
+                           //  }
+                           //  if ((OD_Ain_flag))// || (data_send_dealy==0))
+                           //  {
+                           //        OD_Ain_flag = RESET;
+                                  OD_requestTPDO(OD_AIN_flagsPDO,1);
+                          //   }*/
                         }
                         else
                         {
