@@ -15,7 +15,7 @@
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2024-06-19" fileModificationTime="13:24:17.4765201+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2024-06-20" fileModificationTime="16:01:54.4047216+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <q1:DeviceIdentity>
         <q1:vendorName>SIDER</q1:vendorName>
         <q1:vendorID>2</q1:vendorID>
@@ -179,24 +179,8 @@
             <q1:subrange lowerLimit="0" upperLimit="3" />
             <USINT />
           </q1:array>
-          <q1:array name="Brigth Register" uniqueID="UID_ARR_202F">
+          <q1:array name="RPM Calibration Register" uniqueID="UID_ARR_2035">
             <q1:subrange lowerLimit="0" upperLimit="2" />
-            <USINT />
-          </q1:array>
-          <q1:array name="ADC 1 Calibraion register" uniqueID="UID_ARR_2030">
-            <q1:subrange lowerLimit="0" upperLimit="31" />
-            <UDINT />
-          </q1:array>
-          <q1:array name="ADC 2 Calibraion register" uniqueID="UID_ARR_2031">
-            <q1:subrange lowerLimit="0" upperLimit="31" />
-            <UDINT />
-          </q1:array>
-          <q1:array name="ADC 3 Calibraion register" uniqueID="UID_ARR_2032">
-            <q1:subrange lowerLimit="0" upperLimit="31" />
-            <UDINT />
-          </q1:array>
-          <q1:array name="RPM Calibration Register" uniqueID="UID_ARR_2033">
-            <q1:subrange lowerLimit="0" upperLimit="3" />
             <UINT />
           </q1:array>
           <q1:struct name="Identity" uniqueID="UID_REC_1018">
@@ -600,6 +584,236 @@
             </q1:varDeclaration>
             <q1:varDeclaration name="Application object 8" uniqueID="UID_RECSUB_1A0208">
               <UDINT />
+            </q1:varDeclaration>
+          </q1:struct>
+          <q1:struct name="BoardSettings" uniqueID="UID_REC_2025">
+            <q1:varDeclaration name="Highest sub-index supported" uniqueID="UID_RECSUB_202500">
+              <USINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Baud rate setting" uniqueID="UID_RECSUB_202501">
+              <USINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="RGB_BRIGTH" uniqueID="UID_RECSUB_202502">
+              <USINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="WHITE BRIGTH" uniqueID="UID_RECSUB_202503">
+              <USINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="DIN ACTIVE STATE" uniqueID="UID_RECSUB_202504">
+              <USINT />
+            </q1:varDeclaration>
+          </q1:struct>
+          <q1:struct name="ADC 1 Calibraion register" uniqueID="UID_REC_2032">
+            <q1:varDeclaration name="Highest sub-index supported" uniqueID="UID_RECSUB_203200">
+              <USINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Calibraton Piont Count" uniqueID="UID_RECSUB_203201">
+              <SINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="AIN Offset" uniqueID="UID_RECSUB_203202">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point1 Y/X" uniqueID="UID_RECSUB_203203">
+              <DINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point2 Y/X" uniqueID="UID_RECSUB_203204">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point3  Y/X" uniqueID="UID_RECSUB_203205">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point4  Y/X" uniqueID="UID_RECSUB_203206">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point5  Y/X" uniqueID="UID_RECSUB_203207">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point6  Y/X" uniqueID="UID_RECSUB_203208">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point7  Y/X" uniqueID="UID_RECSUB_203209">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point8  Y/X" uniqueID="UID_RECSUB_20320A">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point9  Y/X" uniqueID="UID_RECSUB_20320B">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point10  Y/X" uniqueID="UID_RECSUB_20320C">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point11  Y/X" uniqueID="UID_RECSUB_20320D">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point12  Y/X" uniqueID="UID_RECSUB_20320E">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point13  Y/X" uniqueID="UID_RECSUB_20320F">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point14  Y/X" uniqueID="UID_RECSUB_203210">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point15  Y/X" uniqueID="UID_RECSUB_203211">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point16  Y/X" uniqueID="UID_RECSUB_203212">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point17  Y/X" uniqueID="UID_RECSUB_203213">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point18  Y/X" uniqueID="UID_RECSUB_203214">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point19  Y/X" uniqueID="UID_RECSUB_203215">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point20  Y/X" uniqueID="UID_RECSUB_203216">
+              <INT />
+            </q1:varDeclaration>
+          </q1:struct>
+          <q1:struct name="ADC 2 Calibraion register" uniqueID="UID_REC_2033">
+            <q1:varDeclaration name="Highest sub-index supported" uniqueID="UID_RECSUB_203300">
+              <USINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Calibraton Piont Count" uniqueID="UID_RECSUB_203301">
+              <SINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="AIN Offset" uniqueID="UID_RECSUB_203302">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point1 Y/X" uniqueID="UID_RECSUB_203303">
+              <DINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point2 Y/X" uniqueID="UID_RECSUB_203304">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point3  Y/X" uniqueID="UID_RECSUB_203305">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point4  Y/X" uniqueID="UID_RECSUB_203306">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point5  Y/X" uniqueID="UID_RECSUB_203307">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point6  Y/X" uniqueID="UID_RECSUB_203308">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point7  Y/X" uniqueID="UID_RECSUB_203309">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point8  Y/X" uniqueID="UID_RECSUB_20330A">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point9  Y/X" uniqueID="UID_RECSUB_20330B">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point10  Y/X" uniqueID="UID_RECSUB_20330C">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point11  Y/X" uniqueID="UID_RECSUB_20330D">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point12  Y/X" uniqueID="UID_RECSUB_20330E">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point13  Y/X" uniqueID="UID_RECSUB_20330F">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point14  Y/X" uniqueID="UID_RECSUB_203310">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point15  Y/X" uniqueID="UID_RECSUB_203311">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point16  Y/X" uniqueID="UID_RECSUB_203312">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point17  Y/X" uniqueID="UID_RECSUB_203313">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point18  Y/X" uniqueID="UID_RECSUB_203314">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point19  Y/X" uniqueID="UID_RECSUB_203315">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point20  Y/X" uniqueID="UID_RECSUB_203316">
+              <INT />
+            </q1:varDeclaration>
+          </q1:struct>
+          <q1:struct name="ADC 3 Calibraion register" uniqueID="UID_REC_2034">
+            <q1:varDeclaration name="Highest sub-index supported" uniqueID="UID_RECSUB_203400">
+              <USINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Calibraton Piont Count" uniqueID="UID_RECSUB_203401">
+              <SINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="AIN Offset" uniqueID="UID_RECSUB_203402">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point1 Y/X" uniqueID="UID_RECSUB_203403">
+              <DINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point2 Y/X" uniqueID="UID_RECSUB_203404">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point3  Y/X" uniqueID="UID_RECSUB_203405">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point4  Y/X" uniqueID="UID_RECSUB_203406">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point5  Y/X" uniqueID="UID_RECSUB_203407">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point6  Y/X" uniqueID="UID_RECSUB_203408">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point7  Y/X" uniqueID="UID_RECSUB_203409">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point8  Y/X" uniqueID="UID_RECSUB_20340A">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point9  Y/X" uniqueID="UID_RECSUB_20340B">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point10  Y/X" uniqueID="UID_RECSUB_20340C">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point11  Y/X" uniqueID="UID_RECSUB_20340D">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point12  Y/X" uniqueID="UID_RECSUB_20340E">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point13  Y/X" uniqueID="UID_RECSUB_20340F">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point14  Y/X" uniqueID="UID_RECSUB_203410">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point15  Y/X" uniqueID="UID_RECSUB_203411">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point16  Y/X" uniqueID="UID_RECSUB_203412">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point17  Y/X" uniqueID="UID_RECSUB_203413">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point18  Y/X" uniqueID="UID_RECSUB_203414">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point19  Y/X" uniqueID="UID_RECSUB_203415">
+              <INT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="Point20  Y/X" uniqueID="UID_RECSUB_203416">
+              <INT />
             </q1:varDeclaration>
           </q1:struct>
         </q1:dataTypeList>
@@ -2167,7 +2381,7 @@ bit 0-31: Manufacturer specific</description>
             <USINT />
             <q1:defaultValue value="0x0A" />
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_200701" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_200701" access="readWriteOutput">
             <label lang="en">VALUE INDEX</label>
             <INT />
             <q1:allowedValues>
@@ -2177,7 +2391,7 @@ bit 0-31: Manufacturer specific</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_200702" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_200702" access="readWriteOutput">
             <label lang="en">VAL1 VIEW</label>
             <INT />
             <q1:allowedValues>
@@ -2187,7 +2401,7 @@ bit 0-31: Manufacturer specific</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_200703" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_200703" access="readWriteOutput">
             <label lang="en">VAL2 VIEW</label>
             <INT />
             <q1:allowedValues>
@@ -2197,7 +2411,7 @@ bit 0-31: Manufacturer specific</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_200704" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_200704" access="readWriteOutput">
             <label lang="en">VAL3 VIEW</label>
             <INT />
             <q1:allowedValues>
@@ -2207,7 +2421,7 @@ bit 0-31: Manufacturer specific</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_200705" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_200705" access="readWriteOutput">
             <label lang="en">VAL4 VIEW</label>
             <INT />
             <q1:allowedValues>
@@ -2217,7 +2431,7 @@ bit 0-31: Manufacturer specific</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_200706" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_200706" access="readWriteOutput">
             <label lang="en">VAL5 VIEW</label>
             <INT />
             <q1:allowedValues>
@@ -2227,7 +2441,7 @@ bit 0-31: Manufacturer specific</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_200707" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_200707" access="readWriteOutput">
             <label lang="en">VAL6 VIEW</label>
             <INT />
             <q1:allowedValues>
@@ -2237,7 +2451,7 @@ bit 0-31: Manufacturer specific</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_200708" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_200708" access="readWriteOutput">
             <label lang="en">VAL7 VIEW</label>
             <INT />
             <q1:allowedValues>
@@ -2247,7 +2461,7 @@ bit 0-31: Manufacturer specific</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_200709" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_200709" access="readWriteOutput">
             <label lang="en">VAL8 VIEW</label>
             <INT />
             <q1:allowedValues>
@@ -2257,7 +2471,7 @@ bit 0-31: Manufacturer specific</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20070A" access="readWriteInput">
+          <q1:parameter uniqueID="UID_SUB_20070A" access="readWriteOutput">
             <label lang="en">VAL9 VIEW</label>
             <INT />
             <q1:allowedValues>
@@ -3662,1029 +3876,424 @@ Thride byte - RGB WHITE NUMBER</description>
             <label lang="en">Set Home menu back time</label>
             <USINT />
           </q1:parameter>
-          <q1:parameter uniqueID="UID_OBJ_2024" access="write">
+          <q1:parameter uniqueID="UID_OBJ_2025">
+            <label lang="en">BoardSettings</label>
+            <q1:dataTypeIDRef uniqueIDRef="UID_REC_2025" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_202500">
+            <label lang="en">Highest sub-index supported</label>
+            <USINT />
+            <q1:defaultValue value="0x04" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_202501" access="readWrite">
             <label lang="en">Baud rate setting</label>
             <USINT />
             <q1:allowedValues>
               <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="0x07" />
+                <minValue value="0" />
+                <maxValue value="7" />
               </q1:range>
             </q1:allowedValues>
-            <q1:property name="CO_storageGroup" value="ROM" />
           </q1:parameter>
-          <q1:parameter uniqueID="UID_OBJ_202F">
-            <label lang="en">Brigth Register</label>
-            <q1:dataTypeIDRef uniqueIDRef="UID_ARR_202F" />
-            <q1:property name="CO_storageGroup" value="ROM" />
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_202F00">
-            <label lang="en">Highest sub-index supported</label>
-            <USINT />
-            <q1:defaultValue value="0x02" />
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_202F01" access="readWrite">
+          <q1:parameter uniqueID="UID_SUB_202502" access="readWrite">
             <label lang="en">RGB_BRIGTH</label>
             <USINT />
             <q1:allowedValues>
               <q1:range>
-                <minValue value="0x00" />
+                <minValue value="0" />
                 <maxValue value="15" />
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_202F02" access="readWrite">
+          <q1:parameter uniqueID="UID_SUB_202503" access="readWrite">
             <label lang="en">WHITE BRIGTH</label>
             <USINT />
             <q1:allowedValues>
               <q1:range>
-                <minValue value="0x00" />
+                <minValue value="0" />
                 <maxValue value="15" />
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_OBJ_2030">
-            <label lang="en">ADC 1 Calibraion register</label>
-            <q1:dataTypeIDRef uniqueIDRef="UID_ARR_2030" />
-            <q1:property name="CO_storageGroup" value="ROM" />
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203000">
-            <label lang="en">Highest sub-index supported</label>
+          <q1:parameter uniqueID="UID_SUB_202504" access="readWrite">
+            <label lang="en">DIN ACTIVE STATE</label>
             <USINT />
-            <q1:defaultValue value="0x1F" />
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203001" access="readWrite">
-            <label lang="en">offset</label>
-            <UDINT />
             <q1:allowedValues>
               <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203002" access="readWrite">
-            <label lang="en">Point count</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203003" access="readWrite">
-            <label lang="en">Point 1</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203004" access="readWrite">
-            <label lang="en">Point 2</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203005" access="readWrite">
-            <label lang="en">Point 2</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203006" access="readWrite">
-            <label lang="en">Point 3</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203007" access="readWrite">
-            <label lang="en">Point 3</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203008" access="readWrite">
-            <label lang="en">Point 4</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203009" access="readWrite">
-            <label lang="en">Point 4</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20300A" access="readWrite">
-            <label lang="en">Point 5</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20300B" access="readWrite">
-            <label lang="en">Point 5</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20300C" access="readWrite">
-            <label lang="en">Point 6</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20300D" access="readWrite">
-            <label lang="en">Point 6</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20300E" access="readWrite">
-            <label lang="en">Point 7</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20300F" access="readWrite">
-            <label lang="en">Point 7</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203010" access="readWrite">
-            <label lang="en">Point 8</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203011" access="readWrite">
-            <label lang="en">Point 8</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203012" access="readWrite">
-            <label lang="en">Point 9</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203013" access="readWrite">
-            <label lang="en">Point 9</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203014" access="readWrite">
-            <label lang="en">Point 10</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203015" access="readWrite">
-            <label lang="en">Point 11</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203016" access="readWrite">
-            <label lang="en">Point 12</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203017" access="readWrite">
-            <label lang="en">Point 13</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203018" access="readWrite">
-            <label lang="en">Point 14</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203019" access="readWrite">
-            <label lang="en">Point 15</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20301A" access="readWrite">
-            <label lang="en">Point 16</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20301B" access="readWrite">
-            <label lang="en">Point 17</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20301C" access="readWrite">
-            <label lang="en">Point 18</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20301D" access="readWrite">
-            <label lang="en">Point 19</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20301E" access="readWrite">
-            <label lang="en">Point 20</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20301F" access="readWrite">
-            <label lang="en">Point 20</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_OBJ_2031">
-            <label lang="en">ADC 2 Calibraion register</label>
-            <q1:dataTypeIDRef uniqueIDRef="UID_ARR_2031" />
-            <q1:property name="CO_storageGroup" value="ROM" />
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203100">
-            <label lang="en">Highest sub-index supported</label>
-            <USINT />
-            <q1:defaultValue value="0x1F" />
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203101" access="readWrite">
-            <label lang="en">offset</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203102" access="readWrite">
-            <label lang="en">Point count</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203103" access="readWrite">
-            <label lang="en">Point 1</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203104" access="readWrite">
-            <label lang="en">Point 1</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203105" access="readWrite">
-            <label lang="en">Point 2</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203106" access="readWrite">
-            <label lang="en">Point 2</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203107" access="readWrite">
-            <label lang="en">Point 3</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203108" access="readWrite">
-            <label lang="en">Point 3</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203109" access="readWrite">
-            <label lang="en">Point 4</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20310A" access="readWrite">
-            <label lang="en">Point 4</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20310B" access="readWrite">
-            <label lang="en">Point 5</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20310C" access="readWrite">
-            <label lang="en">Point 5</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20310D" access="readWrite">
-            <label lang="en">Point 6</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20310E" access="readWrite">
-            <label lang="en">Point 6</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20310F" access="readWrite">
-            <label lang="en">Point 7</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203110" access="readWrite">
-            <label lang="en">Point 7</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203111" access="readWrite">
-            <label lang="en">Point 8</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203112" access="readWrite">
-            <label lang="en">Point 8</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203113" access="readWrite">
-            <label lang="en">Point 9</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203114" access="readWrite">
-            <label lang="en">Point 9</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203115" access="readWrite">
-            <label lang="en">Point 10</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203116" access="readWrite">
-            <label lang="en">Point 11</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203117" access="readWrite">
-            <label lang="en">Point 12</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203118" access="readWrite">
-            <label lang="en">Point 13</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203119" access="readWrite">
-            <label lang="en">Point 14</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20311A" access="readWrite">
-            <label lang="en">Point 15</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20311B" access="readWrite">
-            <label lang="en">Point 16</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20311C" access="readWrite">
-            <label lang="en">Point 17</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20311D" access="readWrite">
-            <label lang="en">Point 18</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20311E" access="readWrite">
-            <label lang="en">Point 19</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20311F" access="readWrite">
-            <label lang="en">Point 20</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
+                <minValue value="0" />
+                <maxValue value="15" />
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
           <q1:parameter uniqueID="UID_OBJ_2032">
-            <label lang="en">ADC 3 Calibraion register</label>
-            <q1:dataTypeIDRef uniqueIDRef="UID_ARR_2032" />
-            <q1:property name="CO_storageGroup" value="ROM" />
+            <label lang="en">ADC 1 Calibraion register</label>
+            <q1:dataTypeIDRef uniqueIDRef="UID_REC_2032" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203200">
             <label lang="en">Highest sub-index supported</label>
             <USINT />
-            <q1:defaultValue value="0x1F" />
+            <q1:defaultValue value="0x16" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203201" access="readWrite">
-            <label lang="en">offset</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Calibraton Piont Count</label>
+            <SINT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203202" access="readWrite">
-            <label lang="en">Point count</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">AIN Offset</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203203" access="readWrite">
-            <label lang="en">Point 1</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <description lang="en">Y в старших 16 бит, X в младших</description>
+            <DINT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203204" access="readWrite">
-            <label lang="en">Point 1</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point2 Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203205" access="readWrite">
-            <label lang="en">Point 2</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point3  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203206" access="readWrite">
-            <label lang="en">Point 2</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point4  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203207" access="readWrite">
-            <label lang="en">Point 3</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point5  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203208" access="readWrite">
-            <label lang="en">Point 3</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point6  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203209" access="readWrite">
-            <label lang="en">Point 4</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point7  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_20320A" access="readWrite">
-            <label lang="en">Point 4</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point8  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_20320B" access="readWrite">
-            <label lang="en">Point 5</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point9  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_20320C" access="readWrite">
-            <label lang="en">Point 5</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point10  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_20320D" access="readWrite">
-            <label lang="en">Point 6</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point11  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_20320E" access="readWrite">
-            <label lang="en">Point 6</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point12  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_20320F" access="readWrite">
-            <label lang="en">Point 7</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point13  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203210" access="readWrite">
-            <label lang="en">Point 7</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point14  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203211" access="readWrite">
-            <label lang="en">Point 8</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point15  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203212" access="readWrite">
-            <label lang="en">Point 8</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point16  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203213" access="readWrite">
-            <label lang="en">Point 9</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point17  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203214" access="readWrite">
-            <label lang="en">Point 9</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point18  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203215" access="readWrite">
-            <label lang="en">Point 10</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point19  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203216" access="readWrite">
-            <label lang="en">Point 11</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203217" access="readWrite">
-            <label lang="en">Point 12</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203218" access="readWrite">
-            <label lang="en">Point 13</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203219" access="readWrite">
-            <label lang="en">Point 14</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20321A" access="readWrite">
-            <label lang="en">Point 15</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20321B" access="readWrite">
-            <label lang="en">Point 16</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20321C" access="readWrite">
-            <label lang="en">Point 17</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20321D" access="readWrite">
-            <label lang="en">Point 18</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20321E" access="readWrite">
-            <label lang="en">Point 19</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
-          </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_20321F" access="readWrite">
-            <label lang="en">Point 20</label>
-            <UDINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Point20  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_OBJ_2033">
-            <label lang="en">RPM Calibration Register</label>
-            <q1:dataTypeIDRef uniqueIDRef="UID_ARR_2033" />
-            <q1:property name="CO_storageGroup" value="ROM" />
+            <label lang="en">ADC 2 Calibraion register</label>
+            <q1:dataTypeIDRef uniqueIDRef="UID_REC_2033" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203300">
             <label lang="en">Highest sub-index supported</label>
             <USINT />
-            <q1:defaultValue value="0x03" />
+            <q1:defaultValue value="0x16" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203301" access="readWrite">
-            <label lang="en">RPM1 Coof</label>
-            <UINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="20" />
-              </q1:range>
-            </q1:allowedValues>
+            <label lang="en">Calibraton Piont Count</label>
+            <SINT />
+            <q1:defaultValue value="0" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_203302" access="readWrite">
-            <label lang="en">RPM2 Coof</label>
+            <label lang="en">AIN Offset</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203303" access="readWrite">
+            <description lang="en">Y в старших 16 бит, X в младших</description>
+            <DINT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203304" access="readWrite">
+            <label lang="en">Point2 Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203305" access="readWrite">
+            <label lang="en">Point3  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203306" access="readWrite">
+            <label lang="en">Point4  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203307" access="readWrite">
+            <label lang="en">Point5  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203308" access="readWrite">
+            <label lang="en">Point6  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203309" access="readWrite">
+            <label lang="en">Point7  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20330A" access="readWrite">
+            <label lang="en">Point8  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20330B" access="readWrite">
+            <label lang="en">Point9  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20330C" access="readWrite">
+            <label lang="en">Point10  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20330D" access="readWrite">
+            <label lang="en">Point11  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20330E" access="readWrite">
+            <label lang="en">Point12  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20330F" access="readWrite">
+            <label lang="en">Point13  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203310" access="readWrite">
+            <label lang="en">Point14  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203311" access="readWrite">
+            <label lang="en">Point15  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203312" access="readWrite">
+            <label lang="en">Point16  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203313" access="readWrite">
+            <label lang="en">Point17  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203314" access="readWrite">
+            <label lang="en">Point18  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203315" access="readWrite">
+            <label lang="en">Point19  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203316" access="readWrite">
+            <label lang="en">Point20  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_OBJ_2034">
+            <label lang="en">ADC 3 Calibraion register</label>
+            <q1:dataTypeIDRef uniqueIDRef="UID_REC_2034" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203400">
+            <label lang="en">Highest sub-index supported</label>
+            <USINT />
+            <q1:defaultValue value="0x16" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203401" access="readWrite">
+            <label lang="en">Calibraton Piont Count</label>
+            <SINT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203402" access="readWrite">
+            <label lang="en">AIN Offset</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203403" access="readWrite">
+            <description lang="en">Y в старших 16 бит, X в младших</description>
+            <DINT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203404" access="readWrite">
+            <label lang="en">Point2 Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203405" access="readWrite">
+            <label lang="en">Point3  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203406" access="readWrite">
+            <label lang="en">Point4  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203407" access="readWrite">
+            <label lang="en">Point5  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203408" access="readWrite">
+            <label lang="en">Point6  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203409" access="readWrite">
+            <label lang="en">Point7  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20340A" access="readWrite">
+            <label lang="en">Point8  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20340B" access="readWrite">
+            <label lang="en">Point9  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20340C" access="readWrite">
+            <label lang="en">Point10  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20340D" access="readWrite">
+            <label lang="en">Point11  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20340E" access="readWrite">
+            <label lang="en">Point12  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_20340F" access="readWrite">
+            <label lang="en">Point13  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203410" access="readWrite">
+            <label lang="en">Point14  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203411" access="readWrite">
+            <label lang="en">Point15  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203412" access="readWrite">
+            <label lang="en">Point16  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203413" access="readWrite">
+            <label lang="en">Point17  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203414" access="readWrite">
+            <label lang="en">Point18  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203415" access="readWrite">
+            <label lang="en">Point19  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203416" access="readWrite">
+            <label lang="en">Point20  Y/X</label>
+            <INT />
+            <q1:defaultValue value="0" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_OBJ_2035">
+            <description lang="en">Калиборвочные коофиценты для датчиков обортов. Содержат коофицент, с множетелем 1000</description>
+            <q1:dataTypeIDRef uniqueIDRef="UID_ARR_2035" />
+            <q1:property name="CO_storageGroup" value="ROM" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203500">
+            <label lang="en">Highest sub-index supported</label>
+            <USINT />
+            <q1:defaultValue value="0x02" />
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_203501" access="readWrite">
+            <description lang="en">Коофицент для датчика оборотов 1, умноженный на 1000</description>
             <UINT />
             <q1:allowedValues>
               <q1:range>
@@ -4693,8 +4302,8 @@ Thride byte - RGB WHITE NUMBER</description>
               </q1:range>
             </q1:allowedValues>
           </q1:parameter>
-          <q1:parameter uniqueID="UID_SUB_203303" access="readWrite">
-            <label lang="en">DIN ACTIVE STATE</label>
+          <q1:parameter uniqueID="UID_SUB_203502" access="readWrite">
+            <description lang="en">Коофицент для датчика оборотов 2, умноженный на 1000</description>
             <UINT />
             <q1:allowedValues>
               <q1:range>
@@ -4720,7 +4329,7 @@ Thride byte - RGB WHITE NUMBER</description>
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2024-06-19" fileModificationTime="13:24:17.4765201+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2024-06-20" fileModificationTime="16:01:54.4047216+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <ApplicationLayers>
         <q2:CANopenObjectList>
           <CANopenObject index="1000" name="Device type" objectType="7" PDOmapping="no" uniqueIDRef="UID_OBJ_1000" />
@@ -5209,119 +4818,92 @@ Thride byte - RGB WHITE NUMBER</description>
             <CANopenSubObject subIndex="02" name="Set Default Menu Position" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201B02" />
             <CANopenSubObject subIndex="03" name="Set Home menu back time" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201B03" />
           </CANopenObject>
-          <CANopenObject index="2024" name="Baud rate setting" objectType="7" PDOmapping="no" uniqueIDRef="UID_OBJ_2024" />
-          <CANopenObject index="202F" name="Brigth Register" objectType="8" uniqueIDRef="UID_OBJ_202F" subNumber="3">
-            <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202F00" />
-            <CANopenSubObject subIndex="01" name="RGB_BRIGTH" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202F01" />
-            <CANopenSubObject subIndex="02" name="WHITE BRIGTH" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202F02" />
+          <CANopenObject index="2025" name="BoardSettings" objectType="9" uniqueIDRef="UID_OBJ_2025" subNumber="5">
+            <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202500" />
+            <CANopenSubObject subIndex="01" name="Baud rate setting" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202501" />
+            <CANopenSubObject subIndex="02" name="RGB_BRIGTH" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202502" />
+            <CANopenSubObject subIndex="03" name="WHITE BRIGTH" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202503" />
+            <CANopenSubObject subIndex="04" name="DIN ACTIVE STATE" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202504" />
           </CANopenObject>
-          <CANopenObject index="2030" name="ADC 1 Calibraion register" objectType="8" uniqueIDRef="UID_OBJ_2030" subNumber="32">
-            <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203000" />
-            <CANopenSubObject subIndex="01" name="offset" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203001" />
-            <CANopenSubObject subIndex="02" name="Point count" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203002" />
-            <CANopenSubObject subIndex="03" name="Point 1" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203003" />
-            <CANopenSubObject subIndex="04" name="Point 2" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203004" />
-            <CANopenSubObject subIndex="05" name="Point 2" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203005" />
-            <CANopenSubObject subIndex="06" name="Point 3" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203006" />
-            <CANopenSubObject subIndex="07" name="Point 3" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203007" />
-            <CANopenSubObject subIndex="08" name="Point 4" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203008" />
-            <CANopenSubObject subIndex="09" name="Point 4" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203009" />
-            <CANopenSubObject subIndex="0A" name="Point 5" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20300A" />
-            <CANopenSubObject subIndex="0B" name="Point 5" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20300B" />
-            <CANopenSubObject subIndex="0C" name="Point 6" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20300C" />
-            <CANopenSubObject subIndex="0D" name="Point 6" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20300D" />
-            <CANopenSubObject subIndex="0E" name="Point 7" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20300E" />
-            <CANopenSubObject subIndex="0F" name="Point 7" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20300F" />
-            <CANopenSubObject subIndex="10" name="Point 8" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203010" />
-            <CANopenSubObject subIndex="11" name="Point 8" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203011" />
-            <CANopenSubObject subIndex="12" name="Point 9" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203012" />
-            <CANopenSubObject subIndex="13" name="Point 9" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203013" />
-            <CANopenSubObject subIndex="14" name="Point 10" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203014" />
-            <CANopenSubObject subIndex="15" name="Point 11" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203015" />
-            <CANopenSubObject subIndex="16" name="Point 12" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203016" />
-            <CANopenSubObject subIndex="17" name="Point 13" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203017" />
-            <CANopenSubObject subIndex="18" name="Point 14" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203018" />
-            <CANopenSubObject subIndex="19" name="Point 15" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203019" />
-            <CANopenSubObject subIndex="1A" name="Point 16" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20301A" />
-            <CANopenSubObject subIndex="1B" name="Point 17" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20301B" />
-            <CANopenSubObject subIndex="1C" name="Point 18" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20301C" />
-            <CANopenSubObject subIndex="1D" name="Point 19" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20301D" />
-            <CANopenSubObject subIndex="1E" name="Point 20" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20301E" />
-            <CANopenSubObject subIndex="1F" name="Point 20" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20301F" />
-          </CANopenObject>
-          <CANopenObject index="2031" name="ADC 2 Calibraion register" objectType="8" uniqueIDRef="UID_OBJ_2031" subNumber="32">
-            <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203100" />
-            <CANopenSubObject subIndex="01" name="offset" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203101" />
-            <CANopenSubObject subIndex="02" name="Point count" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203102" />
-            <CANopenSubObject subIndex="03" name="Point 1" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203103" />
-            <CANopenSubObject subIndex="04" name="Point 1" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203104" />
-            <CANopenSubObject subIndex="05" name="Point 2" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203105" />
-            <CANopenSubObject subIndex="06" name="Point 2" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203106" />
-            <CANopenSubObject subIndex="07" name="Point 3" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203107" />
-            <CANopenSubObject subIndex="08" name="Point 3" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203108" />
-            <CANopenSubObject subIndex="09" name="Point 4" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203109" />
-            <CANopenSubObject subIndex="0A" name="Point 4" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20310A" />
-            <CANopenSubObject subIndex="0B" name="Point 5" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20310B" />
-            <CANopenSubObject subIndex="0C" name="Point 5" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20310C" />
-            <CANopenSubObject subIndex="0D" name="Point 6" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20310D" />
-            <CANopenSubObject subIndex="0E" name="Point 6" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20310E" />
-            <CANopenSubObject subIndex="0F" name="Point 7" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20310F" />
-            <CANopenSubObject subIndex="10" name="Point 7" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203110" />
-            <CANopenSubObject subIndex="11" name="Point 8" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203111" />
-            <CANopenSubObject subIndex="12" name="Point 8" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203112" />
-            <CANopenSubObject subIndex="13" name="Point 9" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203113" />
-            <CANopenSubObject subIndex="14" name="Point 9" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203114" />
-            <CANopenSubObject subIndex="15" name="Point 10" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203115" />
-            <CANopenSubObject subIndex="16" name="Point 11" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203116" />
-            <CANopenSubObject subIndex="17" name="Point 12" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203117" />
-            <CANopenSubObject subIndex="18" name="Point 13" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203118" />
-            <CANopenSubObject subIndex="19" name="Point 14" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203119" />
-            <CANopenSubObject subIndex="1A" name="Point 15" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20311A" />
-            <CANopenSubObject subIndex="1B" name="Point 16" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20311B" />
-            <CANopenSubObject subIndex="1C" name="Point 17" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20311C" />
-            <CANopenSubObject subIndex="1D" name="Point 18" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20311D" />
-            <CANopenSubObject subIndex="1E" name="Point 19" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20311E" />
-            <CANopenSubObject subIndex="1F" name="Point 20" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20311F" />
-          </CANopenObject>
-          <CANopenObject index="2032" name="ADC 3 Calibraion register" objectType="8" uniqueIDRef="UID_OBJ_2032" subNumber="32">
+          <CANopenObject index="2032" name="ADC 1 Calibraion register" objectType="9" uniqueIDRef="UID_OBJ_2032" subNumber="23">
             <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203200" />
-            <CANopenSubObject subIndex="01" name="offset" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203201" />
-            <CANopenSubObject subIndex="02" name="Point count" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203202" />
-            <CANopenSubObject subIndex="03" name="Point 1" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203203" />
-            <CANopenSubObject subIndex="04" name="Point 1" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203204" />
-            <CANopenSubObject subIndex="05" name="Point 2" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203205" />
-            <CANopenSubObject subIndex="06" name="Point 2" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203206" />
-            <CANopenSubObject subIndex="07" name="Point 3" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203207" />
-            <CANopenSubObject subIndex="08" name="Point 3" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203208" />
-            <CANopenSubObject subIndex="09" name="Point 4" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203209" />
-            <CANopenSubObject subIndex="0A" name="Point 4" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320A" />
-            <CANopenSubObject subIndex="0B" name="Point 5" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320B" />
-            <CANopenSubObject subIndex="0C" name="Point 5" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320C" />
-            <CANopenSubObject subIndex="0D" name="Point 6" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320D" />
-            <CANopenSubObject subIndex="0E" name="Point 6" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320E" />
-            <CANopenSubObject subIndex="0F" name="Point 7" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320F" />
-            <CANopenSubObject subIndex="10" name="Point 7" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203210" />
-            <CANopenSubObject subIndex="11" name="Point 8" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203211" />
-            <CANopenSubObject subIndex="12" name="Point 8" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203212" />
-            <CANopenSubObject subIndex="13" name="Point 9" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203213" />
-            <CANopenSubObject subIndex="14" name="Point 9" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203214" />
-            <CANopenSubObject subIndex="15" name="Point 10" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203215" />
-            <CANopenSubObject subIndex="16" name="Point 11" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203216" />
-            <CANopenSubObject subIndex="17" name="Point 12" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203217" />
-            <CANopenSubObject subIndex="18" name="Point 13" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203218" />
-            <CANopenSubObject subIndex="19" name="Point 14" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203219" />
-            <CANopenSubObject subIndex="1A" name="Point 15" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20321A" />
-            <CANopenSubObject subIndex="1B" name="Point 16" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20321B" />
-            <CANopenSubObject subIndex="1C" name="Point 17" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20321C" />
-            <CANopenSubObject subIndex="1D" name="Point 18" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20321D" />
-            <CANopenSubObject subIndex="1E" name="Point 19" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20321E" />
-            <CANopenSubObject subIndex="1F" name="Point 20" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20321F" />
+            <CANopenSubObject subIndex="01" name="Calibraton Piont Count" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203201" />
+            <CANopenSubObject subIndex="02" name="AIN Offset" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203202" />
+            <CANopenSubObject subIndex="03" name="Point1 Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203203" />
+            <CANopenSubObject subIndex="04" name="Point2 Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203204" />
+            <CANopenSubObject subIndex="05" name="Point3  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203205" />
+            <CANopenSubObject subIndex="06" name="Point4  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203206" />
+            <CANopenSubObject subIndex="07" name="Point5  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203207" />
+            <CANopenSubObject subIndex="08" name="Point6  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203208" />
+            <CANopenSubObject subIndex="09" name="Point7  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203209" />
+            <CANopenSubObject subIndex="0A" name="Point8  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320A" />
+            <CANopenSubObject subIndex="0B" name="Point9  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320B" />
+            <CANopenSubObject subIndex="0C" name="Point10  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320C" />
+            <CANopenSubObject subIndex="0D" name="Point11  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320D" />
+            <CANopenSubObject subIndex="0E" name="Point12  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320E" />
+            <CANopenSubObject subIndex="0F" name="Point13  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20320F" />
+            <CANopenSubObject subIndex="10" name="Point14  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203210" />
+            <CANopenSubObject subIndex="11" name="Point15  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203211" />
+            <CANopenSubObject subIndex="12" name="Point16  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203212" />
+            <CANopenSubObject subIndex="13" name="Point17  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203213" />
+            <CANopenSubObject subIndex="14" name="Point18  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203214" />
+            <CANopenSubObject subIndex="15" name="Point19  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203215" />
+            <CANopenSubObject subIndex="16" name="Point20  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203216" />
           </CANopenObject>
-          <CANopenObject index="2033" name="RPM Calibration Register" objectType="8" uniqueIDRef="UID_OBJ_2033" subNumber="4">
+          <CANopenObject index="2033" name="ADC 2 Calibraion register" objectType="9" uniqueIDRef="UID_OBJ_2033" subNumber="23">
             <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203300" />
-            <CANopenSubObject subIndex="01" name="RPM1 Coof" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203301" />
-            <CANopenSubObject subIndex="02" name="RPM2 Coof" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203302" />
-            <CANopenSubObject subIndex="03" name="DIN ACTIVE STATE" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203303" />
+            <CANopenSubObject subIndex="01" name="Calibraton Piont Count" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203301" />
+            <CANopenSubObject subIndex="02" name="AIN Offset" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203302" />
+            <CANopenSubObject subIndex="03" name="Point1 Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203303" />
+            <CANopenSubObject subIndex="04" name="Point2 Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203304" />
+            <CANopenSubObject subIndex="05" name="Point3  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203305" />
+            <CANopenSubObject subIndex="06" name="Point4  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203306" />
+            <CANopenSubObject subIndex="07" name="Point5  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203307" />
+            <CANopenSubObject subIndex="08" name="Point6  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203308" />
+            <CANopenSubObject subIndex="09" name="Point7  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203309" />
+            <CANopenSubObject subIndex="0A" name="Point8  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20330A" />
+            <CANopenSubObject subIndex="0B" name="Point9  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20330B" />
+            <CANopenSubObject subIndex="0C" name="Point10  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20330C" />
+            <CANopenSubObject subIndex="0D" name="Point11  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20330D" />
+            <CANopenSubObject subIndex="0E" name="Point12  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20330E" />
+            <CANopenSubObject subIndex="0F" name="Point13  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20330F" />
+            <CANopenSubObject subIndex="10" name="Point14  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203310" />
+            <CANopenSubObject subIndex="11" name="Point15  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203311" />
+            <CANopenSubObject subIndex="12" name="Point16  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203312" />
+            <CANopenSubObject subIndex="13" name="Point17  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203313" />
+            <CANopenSubObject subIndex="14" name="Point18  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203314" />
+            <CANopenSubObject subIndex="15" name="Point19  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203315" />
+            <CANopenSubObject subIndex="16" name="Point20  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203316" />
+          </CANopenObject>
+          <CANopenObject index="2034" name="ADC 3 Calibraion register" objectType="9" uniqueIDRef="UID_OBJ_2034" subNumber="23">
+            <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203400" />
+            <CANopenSubObject subIndex="01" name="Calibraton Piont Count" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203401" />
+            <CANopenSubObject subIndex="02" name="AIN Offset" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203402" />
+            <CANopenSubObject subIndex="03" name="Point1 Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203403" />
+            <CANopenSubObject subIndex="04" name="Point2 Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203404" />
+            <CANopenSubObject subIndex="05" name="Point3  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203405" />
+            <CANopenSubObject subIndex="06" name="Point4  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203406" />
+            <CANopenSubObject subIndex="07" name="Point5  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203407" />
+            <CANopenSubObject subIndex="08" name="Point6  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203408" />
+            <CANopenSubObject subIndex="09" name="Point7  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203409" />
+            <CANopenSubObject subIndex="0A" name="Point8  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20340A" />
+            <CANopenSubObject subIndex="0B" name="Point9  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20340B" />
+            <CANopenSubObject subIndex="0C" name="Point10  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20340C" />
+            <CANopenSubObject subIndex="0D" name="Point11  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20340D" />
+            <CANopenSubObject subIndex="0E" name="Point12  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20340E" />
+            <CANopenSubObject subIndex="0F" name="Point13  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_20340F" />
+            <CANopenSubObject subIndex="10" name="Point14  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203410" />
+            <CANopenSubObject subIndex="11" name="Point15  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203411" />
+            <CANopenSubObject subIndex="12" name="Point16  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203412" />
+            <CANopenSubObject subIndex="13" name="Point17  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203413" />
+            <CANopenSubObject subIndex="14" name="Point18  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203414" />
+            <CANopenSubObject subIndex="15" name="Point19  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203415" />
+            <CANopenSubObject subIndex="16" name="Point20  Y/X" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203416" />
+          </CANopenObject>
+          <CANopenObject index="2035" name="RPM Calibration Register" objectType="8" uniqueIDRef="UID_OBJ_2035" subNumber="3">
+            <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203500" />
+            <CANopenSubObject subIndex="01" name="RPM1 Coof" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203501" />
+            <CANopenSubObject subIndex="02" name="RPM2 Coof" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203502" />
           </CANopenObject>
         </q2:CANopenObjectList>
         <dummyUsage>

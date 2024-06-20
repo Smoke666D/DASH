@@ -30,8 +30,10 @@ static StackType_t InputsTaskBuffer[INPUTS_TASK_STACK_SIZE];
 static StaticTask_t defaultTaskControlBlock;
 static StaticTask_t InputsTaskControlBlock;
 static TaskHandle_t DefautTask_Handler;
-//uint8_t ucQueueStorageArea[  16U * sizeof( KeyEvent ) ];
-//static StaticQueue_t xStaticQueue;
+
+static uint8_t ucQueueStorageArea[  16U * sizeof( EEPROM_REG_Q_t ) ];
+static StaticQueue_t xStaticQueue;
+
 /*
  * 妤快把快技快扶扶抑快
  */
@@ -73,7 +75,7 @@ void vSYStaskInit ( void )
   = xTaskCreateStatic( vCanOpenProcess, "CanOpenProcessTask", CAN_OPEN_STK_SIZE , ( void * ) 1, CAN_OPEN_TASK_PRIO ,
   (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );
   (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, INPUT_TASK_PRIO, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
-  DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, 3, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
+  DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, DEFAULT_TASK_PRIOR, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
   vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
   vTaskSuspend( *xCanOpenProcessTaskHandle());
   return;
@@ -81,7 +83,7 @@ void vSYStaskInit ( void )
 
 void vSYSqueueInit ( void )
 {
-    //*( xKeyboardQueue()) = xQueueCreateStatic( 16U, sizeof( KeyEvent ),ucQueueStorageArea, &xStaticQueue );;
+    *( xDataRegQueue()) = xQueueCreateStatic( 16U, sizeof( EEPROM_REG_Q_t ),ucQueueStorageArea, &xStaticQueue );;
 }
 /*----------------------------------------------------------------------------*/
 void vSYSeventInit ( void )

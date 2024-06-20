@@ -38,7 +38,24 @@ const uint16_t CalPoint[18][2] = {
 static u16 secondcounter;
 static u32 odometr;
 static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
+static QueueHandle_t    pDataRegQueue;
 
+
+QueueHandle_t * xDataRegQueue( void )
+{
+  return  (&pDataRegQueue);
+}
+
+
+void vDataModelRegDelayWrite()
+{
+    if ( uxQueueMessagesWaiting(pDataRegQueue) != 0)
+    {
+        EEPROM_REG_Q_t reg_data;
+        xQueueReceive( pDataRegQueue, &reg_data,portMAX_DELAY );
+        eEEPROMWr(reg_data.addr, &DATA_MODEL_REGISTER[reg_data.addr],reg_data.len,2);
+    }
+}
 
  void DataModel_Init()
 {
@@ -198,7 +215,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              setReg32( MENU9_MAP ,0);
              setReg32( MENU10_MAP , 0);
              DATA_MODEL_REGISTER[MENU_DEF_POS]             = 0;
-             DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      =10;
+             DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      = 5;
              DATA_MODEL_REGISTER[DIN_ACTIVE_STATE]         = 0;
              eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,2);
              memset(DATA_MODEL_REGISTER,0,EEPROM_REGISER_COUNT);
@@ -225,7 +242,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              POINT_t point[2];
              u8 cal_point_count  = DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT];
              u32 data32 = (u32) cal_point_count;
-             OD_set_value(OD_ENTRY_H2030, 2 ,&data32, 4, true);
+
              if ( eAinCalDataConfig(AIN1,cal_point_count -1 ) == CAL_SUCCESS)
              {
                  for (u8 i = 0; i< cal_point_count - 1 ;i++)
@@ -243,7 +260,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
              }
              cal_point_count  = DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT];
              data32 = (u32) cal_point_count;
-             OD_set_value(OD_ENTRY_H2031, 1 ,&data32, 4, true);
+
              if ( eAinCalDataConfig(AIN2,cal_point_count ) == CAL_SUCCESS)
              {
                     for (u8 i = 1; i<= cal_point_count;i++)
@@ -262,7 +279,7 @@ static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
                }
               cal_point_count  = DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT];
               data32 = (u32) cal_point_count;
-              OD_set_value(OD_ENTRY_H2032, 1 ,&data32, 4, true);
+
               if ( eAinCalDataConfig(AIN2,cal_point_count ) == CAL_SUCCESS)
               {
                     for (u8 i = 1; i<= cal_point_count;i++)
@@ -325,6 +342,33 @@ u32 getReg32(u16 reg_adress )
 u8 getReg8( u16 reg_adress)
 {
     return DATA_MODEL_REGISTER[reg_adress];
+}
+
+
+void WriteRegAfterDelay( u16 reg_adress, void * data, u8 len)
+{
+    u8 Buffer[4];
+
+    memcpy(Buffer,data,len);
+    switch (len)
+    {
+        case 1:
+            DATA_MODEL_REGISTER[reg_adress] = Buffer[0];
+            break;
+        case 2:
+            setReg16(reg_adress, *((u16 *)Buffer));
+            break;
+        case 4:
+            setReg32(reg_adress, *((u32 *)Buffer));
+            break;
+    }
+    if (reg_adress < EEPROM_REGISER_COUNT)
+    {
+        EEPROM_REG_Q_t reg_data;
+        reg_data.addr = reg_adress;
+        reg_data.len = len;
+        xQueueSend(  pDataRegQueue, &reg_data, portMAX_DELAY );
+    }
 }
 
 void WriteReg( u16 reg_adress, void * data, u8 len)

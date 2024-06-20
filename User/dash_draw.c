@@ -175,7 +175,7 @@ u8 SetDefault( u8 menu_item)
    if (menu_item <= MAX_MENU_COUNT )
    {
        menu.home_menu  =  menu_item;
-       WriteReg( MENU_DEF_POS  ,&menu.home_menu,1);
+       WriteRegAfterDelay(MENU_DEF_POS  ,&menu.home_menu,1);
        return 0;
    }
    return 1;
@@ -688,6 +688,7 @@ void vRedrawTask( void * argument )
     KeyDelayState_t SystemDelayState = SYSTEM_IDLE;
     while(1)
     {
+
         switch(state)
         {
             case STATE_IDLE:

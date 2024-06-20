@@ -95,6 +95,7 @@ encoding//Peripheral/src/ch32v20x_rcc.c=GBK
 encoding//Peripheral/src/ch32v20x_rtc.c=GBK
 encoding//Peripheral/src/ch32v20x_spi.c=GBK
 encoding//Peripheral/src/ch32v20x_tim.c=GBK
+encoding//Peripheral/src/ch32v20x_usart.c=GBK
 encoding//Startup/startup_ch32v20x_D6.S=GBK
 encoding//User/CanOpenNode.c=UTF-8
 encoding//User/CanOpenNode.h=GBK

@@ -16,7 +16,7 @@
 
         Created:      31.01.2017 17:13:00
         Created By:   Smoke666
-        Modified:     19.06.2024 13:24:17
+        Modified:     20.06.2024 15:19:52
         Modified By:  rOBIN 2
 
     Device Info:
@@ -69,11 +69,7 @@
 #define OD_CNT_ARR_2019 7
 #define OD_CNT_ARR_201A 10
 #define OD_CNT_ARR_201B 3
-#define OD_CNT_ARR_202F 2
-#define OD_CNT_ARR_2030 31
-#define OD_CNT_ARR_2031 31
-#define OD_CNT_ARR_2032 31
-#define OD_CNT_ARR_2033 3
+#define OD_CNT_ARR_2035 2
 
 
 /*******************************************************************************
@@ -183,11 +179,7 @@ typedef struct {
     uint8_t x201A_MENU_MAP_REGISTER_sub0;
     uint32_t x201A_MENU_MAP_REGISTER[OD_CNT_ARR_201A];
     uint8_t x201B_MENU_SETUP_REGISTER_sub0;
-    uint8_t x202F_brigthRegister_sub0;
-    uint8_t x2030_ADC1CalibraionRegister_sub0;
-    uint8_t x2031_ADC2CalibraionRegister_sub0;
-    uint8_t x2032_ADC3CalibraionRegister_sub0;
-    uint8_t x2033_RPM_CalibrationRegister_sub0;
+    uint8_t x2035_RPM_CalibrationRegister_sub0;
 } OD_ROM_t;
 
 typedef struct {
@@ -214,6 +206,84 @@ typedef struct {
     uint8_t x2002_virtualChannelV15_V17_sub0;
     uint8_t x2004_DACH_PARAMETR_sub0;
     uint8_t x2005_AIN_RPM_sub0;
+    struct {
+        uint8_t highestSub_indexSupported;
+    } x2025_boardSettings;
+    struct {
+        uint8_t highestSub_indexSupported;
+        int8_t calibratonPiontCount;
+        int16_t AIN_Offset;
+        int32_t point1Y_X;
+        int16_t point2Y_X;
+        int16_t point3Y_X;
+        int16_t point4Y_X;
+        int16_t point5Y_X;
+        int16_t point6Y_X;
+        int16_t point7Y_X;
+        int16_t point8Y_X;
+        int16_t point9Y_X;
+        int16_t point10Y_X;
+        int16_t point11Y_X;
+        int16_t point12Y_X;
+        int16_t point13Y_X;
+        int16_t point14Y_X;
+        int16_t point15Y_X;
+        int16_t point16Y_X;
+        int16_t point17Y_X;
+        int16_t point18Y_X;
+        int16_t point19Y_X;
+        int16_t point20Y_X;
+    } x2032_ADC1CalibraionRegister;
+    struct {
+        uint8_t highestSub_indexSupported;
+        int8_t calibratonPiontCount;
+        int16_t AIN_Offset;
+        int32_t point1Y_X;
+        int16_t point2Y_X;
+        int16_t point3Y_X;
+        int16_t point4Y_X;
+        int16_t point5Y_X;
+        int16_t point6Y_X;
+        int16_t point7Y_X;
+        int16_t point8Y_X;
+        int16_t point9Y_X;
+        int16_t point10Y_X;
+        int16_t point11Y_X;
+        int16_t point12Y_X;
+        int16_t point13Y_X;
+        int16_t point14Y_X;
+        int16_t point15Y_X;
+        int16_t point16Y_X;
+        int16_t point17Y_X;
+        int16_t point18Y_X;
+        int16_t point19Y_X;
+        int16_t point20Y_X;
+    } x2033_ADC2CalibraionRegister;
+    struct {
+        uint8_t highestSub_indexSupported;
+        int8_t calibratonPiontCount;
+        int16_t AIN_Offset;
+        int32_t point1Y_X;
+        int16_t point2Y_X;
+        int16_t point3Y_X;
+        int16_t point4Y_X;
+        int16_t point5Y_X;
+        int16_t point6Y_X;
+        int16_t point7Y_X;
+        int16_t point8Y_X;
+        int16_t point9Y_X;
+        int16_t point10Y_X;
+        int16_t point11Y_X;
+        int16_t point12Y_X;
+        int16_t point13Y_X;
+        int16_t point14Y_X;
+        int16_t point15Y_X;
+        int16_t point16Y_X;
+        int16_t point17Y_X;
+        int16_t point18Y_X;
+        int16_t point19Y_X;
+        int16_t point20Y_X;
+    } x2034_ADC3CalibraionRegister;
 } OD_RAM_t;
 
 typedef struct {
@@ -342,12 +412,11 @@ extern OD_ATTR_OD OD_t *OD;
 #define OD_ENTRY_H2019 &OD->list[47]
 #define OD_ENTRY_H201A &OD->list[48]
 #define OD_ENTRY_H201B &OD->list[49]
-#define OD_ENTRY_H2024 &OD->list[50]
-#define OD_ENTRY_H202F &OD->list[51]
-#define OD_ENTRY_H2030 &OD->list[52]
-#define OD_ENTRY_H2031 &OD->list[53]
-#define OD_ENTRY_H2032 &OD->list[54]
-#define OD_ENTRY_H2033 &OD->list[55]
+#define OD_ENTRY_H2025 &OD->list[50]
+#define OD_ENTRY_H2032 &OD->list[51]
+#define OD_ENTRY_H2033 &OD->list[52]
+#define OD_ENTRY_H2034 &OD->list[53]
+#define OD_ENTRY_H2035 &OD->list[54]
 
 
 /*******************************************************************************
@@ -403,12 +472,11 @@ extern OD_ATTR_OD OD_t *OD;
 #define OD_ENTRY_H2019_BAR_SETUP_REGISTER &OD->list[47]
 #define OD_ENTRY_H201A_MENU_MAP_REGISTER &OD->list[48]
 #define OD_ENTRY_H201B_MENU_SETUP_REGISTER &OD->list[49]
-#define OD_ENTRY_H2024_baudRateSetting &OD->list[50]
-#define OD_ENTRY_H202F_brigthRegister &OD->list[51]
-#define OD_ENTRY_H2030_ADC1CalibraionRegister &OD->list[52]
-#define OD_ENTRY_H2031_ADC2CalibraionRegister &OD->list[53]
-#define OD_ENTRY_H2032_ADC3CalibraionRegister &OD->list[54]
-#define OD_ENTRY_H2033_RPM_CalibrationRegister &OD->list[55]
+#define OD_ENTRY_H2025_boardSettings &OD->list[50]
+#define OD_ENTRY_H2032_ADC1CalibraionRegister &OD->list[51]
+#define OD_ENTRY_H2033_ADC2CalibraionRegister &OD->list[52]
+#define OD_ENTRY_H2034_ADC3CalibraionRegister &OD->list[53]
+#define OD_ENTRY_H2035_RPM_CalibrationRegister &OD->list[54]
 
 
 /*******************************************************************************

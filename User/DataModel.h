@@ -11,7 +11,7 @@
 #include "system_init.h"
 
 
-#define VALID_CODE      0x55
+#define VALID_CODE      0x77
 #define VALID_CODE_ADDRES     0
 
 #define RGB_BRIGTH_ADR         (VALID_CODE_ADDRES +1)
@@ -137,8 +137,8 @@
 #define BIG_SEGVAL8             (BIG_SEGVAL7   + 2)
 #define BIG_SEGVAL9             (BIG_SEGVAL8   + 2)
 #define AIN1_CAL_POINT_COUNT    (BIG_SEGVAL9   + 2)
-#define AIN1_OFFSET           (AIN1_CAL_POINT_COUNT  + 1 )
-#define AIN2_CAL_POINT_COUNT  (AIN1_OFFSET  + 2 )
+#define AIN1_OFFSET             (AIN1_CAL_POINT_COUNT  + 1 )
+#define AIN2_CAL_POINT_COUNT    (AIN1_OFFSET  + 2 )
 #define AIN2_OFFSET           (AIN2_CAL_POINT_COUNT  + 1 )
 #define AIN3_CAL_POINT_COUNT  (AIN2_OFFSET  + 2 )
 #define AIN3_OFFSET           (AIN3_CAL_POINT_COUNT  + 1 )
@@ -188,7 +188,17 @@
 
 #define TOTAL_REGISTER_COUNT  (V17 +2 )
 
+
+typedef struct
+{
+    u8 len;
+    u16 addr;
+} EEPROM_REG_Q_t;
+
+
+QueueHandle_t * xDataRegQueue( void );
 void DataModel_Init();
+void vDataModelRegDelayWrite();
 void setReg32( u16 reg_adress, u32 data);
 void setReg16( u16 reg_adress, u16 data);
 void setReg8( u16 reg_adress, u8 data);
@@ -198,7 +208,7 @@ u8 getReg8( u16 reg_adress);
 void WriteReg( u16 reg_adress, void * data, u8 len);
 uint16_t vGetBitrate();
 void vIncrementSystemCounters();
-void WriteRegToEEPROM( u16 reg_adress, void * data, u8 len);
+void WriteRegAfterDelay( u16 reg_adress, void * data, u8 len);
 uint8_t vGetNodeId( void );
 void vSaveData();
 u32 getOdometr();

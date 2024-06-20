@@ -246,6 +246,7 @@ void vInputsTask( void * argument )
             break;
         case  STATE_RUN:
             HAL_ADC_StartDMA(DMA1_CH1,getADC1Buffer(),ADC1_CHANNELS * ADC_FRAME_SIZE);
+            vDataModelRegDelayWrite();
             vTaskDelay(10);
             if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) & ADC1_DATA_READY)
             {

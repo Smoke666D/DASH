@@ -148,6 +148,7 @@ void vCanOpenProcess(void *argument)
             /* Get current tick time */
             time_old = time_current = xTaskGetTickCount();
             max_sleep_time_us = 0;              /* Get first sleep time */
+
             while (reset == CO_RESET_NOT) {
                 uint32_t timeDifference_us;
 

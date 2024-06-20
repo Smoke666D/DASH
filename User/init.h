@@ -37,7 +37,7 @@
 #define RTC_SUB_PRIOR     5
 #define TIM4_PRIOR        1
 #define TIM4_SUB_PRIOR    3
-#define I2C1_PRIOR        0
+#define I2C1_PRIOR        1
 #define I2C1_SUB_PRIOR    1
 #define TIM1_DMA_PRIOR    1
 #define TIM1_DMA_SUBPRIOR 3

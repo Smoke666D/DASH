@@ -124,11 +124,7 @@ OD_ATTR_ROM OD_ROM_t OD_ROM = {
     .x201A_MENU_MAP_REGISTER_sub0 = 0x0A,
     .x201A_MENU_MAP_REGISTER = {0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF, 0x0000FFFF},
     .x201B_MENU_SETUP_REGISTER_sub0 = 0x03,
-    .x202F_brigthRegister_sub0 = 0x02,
-    .x2030_ADC1CalibraionRegister_sub0 = 0x1F,
-    .x2031_ADC2CalibraionRegister_sub0 = 0x1F,
-    .x2032_ADC3CalibraionRegister_sub0 = 0x1F,
-    .x2033_RPM_CalibrationRegister_sub0 = 0x03
+    .x2035_RPM_CalibrationRegister_sub0 = 0x02
 };
 
 OD_ATTR_RAM OD_RAM_t OD_RAM = {
@@ -154,7 +150,85 @@ OD_ATTR_RAM OD_RAM_t OD_RAM = {
     .x2000_virtualChannelV1_V14_sub0 = 0x0E,
     .x2002_virtualChannelV15_V17_sub0 = 0x03,
     .x2004_DACH_PARAMETR_sub0 = 0x04,
-    .x2005_AIN_RPM_sub0 = 0x06
+    .x2005_AIN_RPM_sub0 = 0x06,
+    .x2025_boardSettings = {
+        .highestSub_indexSupported = 0x04
+    },
+    .x2032_ADC1CalibraionRegister = {
+        .highestSub_indexSupported = 0x16,
+        .calibratonPiontCount = 0,
+        .AIN_Offset = 0,
+        .point1Y_X = 0,
+        .point2Y_X = 0,
+        .point3Y_X = 0,
+        .point4Y_X = 0,
+        .point5Y_X = 0,
+        .point6Y_X = 0,
+        .point7Y_X = 0,
+        .point8Y_X = 0,
+        .point9Y_X = 0,
+        .point10Y_X = 0,
+        .point11Y_X = 0,
+        .point12Y_X = 0,
+        .point13Y_X = 0,
+        .point14Y_X = 0,
+        .point15Y_X = 0,
+        .point16Y_X = 0,
+        .point17Y_X = 0,
+        .point18Y_X = 0,
+        .point19Y_X = 0,
+        .point20Y_X = 0
+    },
+    .x2033_ADC2CalibraionRegister = {
+        .highestSub_indexSupported = 0x16,
+        .calibratonPiontCount = 0,
+        .AIN_Offset = 0,
+        .point1Y_X = 0,
+        .point2Y_X = 0,
+        .point3Y_X = 0,
+        .point4Y_X = 0,
+        .point5Y_X = 0,
+        .point6Y_X = 0,
+        .point7Y_X = 0,
+        .point8Y_X = 0,
+        .point9Y_X = 0,
+        .point10Y_X = 0,
+        .point11Y_X = 0,
+        .point12Y_X = 0,
+        .point13Y_X = 0,
+        .point14Y_X = 0,
+        .point15Y_X = 0,
+        .point16Y_X = 0,
+        .point17Y_X = 0,
+        .point18Y_X = 0,
+        .point19Y_X = 0,
+        .point20Y_X = 0
+    },
+    .x2034_ADC3CalibraionRegister = {
+        .highestSub_indexSupported = 0x16,
+        .calibratonPiontCount = 0,
+        .AIN_Offset = 0,
+        .point1Y_X = 0,
+        .point2Y_X = 0,
+        .point3Y_X = 0,
+        .point4Y_X = 0,
+        .point5Y_X = 0,
+        .point6Y_X = 0,
+        .point7Y_X = 0,
+        .point8Y_X = 0,
+        .point9Y_X = 0,
+        .point10Y_X = 0,
+        .point11Y_X = 0,
+        .point12Y_X = 0,
+        .point13Y_X = 0,
+        .point14Y_X = 0,
+        .point15Y_X = 0,
+        .point16Y_X = 0,
+        .point17Y_X = 0,
+        .point18Y_X = 0,
+        .point19Y_X = 0,
+        .point20Y_X = 0
+    }
 };
 
 OD_ATTR_PERSIST_COMM OD_PERSIST_COMM_t OD_PERSIST_COMM = {
@@ -260,12 +334,11 @@ typedef struct {
     OD_obj_array_t o_2019_BAR_SETUP_REGISTER;
     OD_obj_array_t o_201A_MENU_MAP_REGISTER;
     OD_obj_array_t o_201B_MENU_SETUP_REGISTER;
-    OD_obj_var_t o_2024_baudRateSetting;
-    OD_obj_array_t o_202F_brigthRegister;
-    OD_obj_array_t o_2030_ADC1CalibraionRegister;
-    OD_obj_array_t o_2031_ADC2CalibraionRegister;
-    OD_obj_array_t o_2032_ADC3CalibraionRegister;
-    OD_obj_array_t o_2033_RPM_CalibrationRegister;
+    OD_obj_record_t o_2025_boardSettings[5];
+    OD_obj_record_t o_2032_ADC1CalibraionRegister[23];
+    OD_obj_record_t o_2033_ADC2CalibraionRegister[23];
+    OD_obj_record_t o_2034_ADC3CalibraionRegister[23];
+    OD_obj_array_t o_2035_RPM_CalibrationRegister;
 } ODObjs_t;
 
 static CO_PROGMEM ODObjs_t ODObjs = {
@@ -1161,45 +1234,460 @@ static CO_PROGMEM ODObjs_t ODObjs = {
         .dataElementLength = 1,
         .dataElementSizeof = sizeof(uint8_t)
     },
-    .o_2024_baudRateSetting = {
-        .dataOrig = NULL,
-        .attribute = ODA_SDO_W,
-        .dataLength = 1
+    .o_2025_boardSettings = {
+        {
+            .dataOrig = &OD_RAM.x2025_boardSettings.highestSub_indexSupported,
+            .subIndex = 0,
+            .attribute = ODA_SDO_R,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 1,
+            .attribute = ODA_SDO_RW,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 2,
+            .attribute = ODA_SDO_RW,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 3,
+            .attribute = ODA_SDO_RW,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 4,
+            .attribute = ODA_SDO_RW,
+            .dataLength = 1
+        }
     },
-    .o_202F_brigthRegister = {
-        .dataOrig0 = &OD_ROM.x202F_brigthRegister_sub0,
-        .dataOrig = NULL,
-        .attribute0 = ODA_SDO_R,
-        .attribute = ODA_SDO_RW,
-        .dataElementLength = 1,
-        .dataElementSizeof = sizeof(uint8_t)
+    .o_2032_ADC1CalibraionRegister = {
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.highestSub_indexSupported,
+            .subIndex = 0,
+            .attribute = ODA_SDO_R,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.calibratonPiontCount,
+            .subIndex = 1,
+            .attribute = ODA_SDO_RW,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.AIN_Offset,
+            .subIndex = 2,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point1Y_X,
+            .subIndex = 3,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 4
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point2Y_X,
+            .subIndex = 4,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point3Y_X,
+            .subIndex = 5,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point4Y_X,
+            .subIndex = 6,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point5Y_X,
+            .subIndex = 7,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point6Y_X,
+            .subIndex = 8,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point7Y_X,
+            .subIndex = 9,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point8Y_X,
+            .subIndex = 10,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point9Y_X,
+            .subIndex = 11,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point10Y_X,
+            .subIndex = 12,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point11Y_X,
+            .subIndex = 13,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point12Y_X,
+            .subIndex = 14,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point13Y_X,
+            .subIndex = 15,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point14Y_X,
+            .subIndex = 16,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point15Y_X,
+            .subIndex = 17,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point16Y_X,
+            .subIndex = 18,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point17Y_X,
+            .subIndex = 19,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point18Y_X,
+            .subIndex = 20,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point19Y_X,
+            .subIndex = 21,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2032_ADC1CalibraionRegister.point20Y_X,
+            .subIndex = 22,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        }
     },
-    .o_2030_ADC1CalibraionRegister = {
-        .dataOrig0 = &OD_ROM.x2030_ADC1CalibraionRegister_sub0,
-        .dataOrig = NULL,
-        .attribute0 = ODA_SDO_R,
-        .attribute = ODA_SDO_RW | ODA_MB,
-        .dataElementLength = 4,
-        .dataElementSizeof = sizeof(uint32_t)
+    .o_2033_ADC2CalibraionRegister = {
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.highestSub_indexSupported,
+            .subIndex = 0,
+            .attribute = ODA_SDO_R,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.calibratonPiontCount,
+            .subIndex = 1,
+            .attribute = ODA_SDO_RW,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.AIN_Offset,
+            .subIndex = 2,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point1Y_X,
+            .subIndex = 3,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 4
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point2Y_X,
+            .subIndex = 4,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point3Y_X,
+            .subIndex = 5,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point4Y_X,
+            .subIndex = 6,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point5Y_X,
+            .subIndex = 7,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point6Y_X,
+            .subIndex = 8,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point7Y_X,
+            .subIndex = 9,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point8Y_X,
+            .subIndex = 10,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point9Y_X,
+            .subIndex = 11,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point10Y_X,
+            .subIndex = 12,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point11Y_X,
+            .subIndex = 13,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point12Y_X,
+            .subIndex = 14,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point13Y_X,
+            .subIndex = 15,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point14Y_X,
+            .subIndex = 16,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point15Y_X,
+            .subIndex = 17,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point16Y_X,
+            .subIndex = 18,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point17Y_X,
+            .subIndex = 19,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point18Y_X,
+            .subIndex = 20,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point19Y_X,
+            .subIndex = 21,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2033_ADC2CalibraionRegister.point20Y_X,
+            .subIndex = 22,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        }
     },
-    .o_2031_ADC2CalibraionRegister = {
-        .dataOrig0 = &OD_ROM.x2031_ADC2CalibraionRegister_sub0,
-        .dataOrig = NULL,
-        .attribute0 = ODA_SDO_R,
-        .attribute = ODA_SDO_RW | ODA_MB,
-        .dataElementLength = 4,
-        .dataElementSizeof = sizeof(uint32_t)
+    .o_2034_ADC3CalibraionRegister = {
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.highestSub_indexSupported,
+            .subIndex = 0,
+            .attribute = ODA_SDO_R,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.calibratonPiontCount,
+            .subIndex = 1,
+            .attribute = ODA_SDO_RW,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.AIN_Offset,
+            .subIndex = 2,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point1Y_X,
+            .subIndex = 3,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 4
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point2Y_X,
+            .subIndex = 4,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point3Y_X,
+            .subIndex = 5,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point4Y_X,
+            .subIndex = 6,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point5Y_X,
+            .subIndex = 7,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point6Y_X,
+            .subIndex = 8,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point7Y_X,
+            .subIndex = 9,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point8Y_X,
+            .subIndex = 10,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point9Y_X,
+            .subIndex = 11,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point10Y_X,
+            .subIndex = 12,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point11Y_X,
+            .subIndex = 13,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point12Y_X,
+            .subIndex = 14,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point13Y_X,
+            .subIndex = 15,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point14Y_X,
+            .subIndex = 16,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point15Y_X,
+            .subIndex = 17,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point16Y_X,
+            .subIndex = 18,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point17Y_X,
+            .subIndex = 19,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point18Y_X,
+            .subIndex = 20,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point19Y_X,
+            .subIndex = 21,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2034_ADC3CalibraionRegister.point20Y_X,
+            .subIndex = 22,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        }
     },
-    .o_2032_ADC3CalibraionRegister = {
-        .dataOrig0 = &OD_ROM.x2032_ADC3CalibraionRegister_sub0,
-        .dataOrig = NULL,
-        .attribute0 = ODA_SDO_R,
-        .attribute = ODA_SDO_RW | ODA_MB,
-        .dataElementLength = 4,
-        .dataElementSizeof = sizeof(uint32_t)
-    },
-    .o_2033_RPM_CalibrationRegister = {
-        .dataOrig0 = &OD_ROM.x2033_RPM_CalibrationRegister_sub0,
+    .o_2035_RPM_CalibrationRegister = {
+        .dataOrig0 = &OD_ROM.x2035_RPM_CalibrationRegister_sub0,
         .dataOrig = NULL,
         .attribute0 = ODA_SDO_R,
         .attribute = ODA_SDO_RW | ODA_MB,
@@ -1263,12 +1751,11 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x2019, 0x08, ODT_ARR, &ODObjs.o_2019_BAR_SETUP_REGISTER, NULL},
     {0x201A, 0x0B, ODT_ARR, &ODObjs.o_201A_MENU_MAP_REGISTER, NULL},
     {0x201B, 0x04, ODT_ARR, &ODObjs.o_201B_MENU_SETUP_REGISTER, NULL},
-    {0x2024, 0x01, ODT_VAR, &ODObjs.o_2024_baudRateSetting, NULL},
-    {0x202F, 0x03, ODT_ARR, &ODObjs.o_202F_brigthRegister, NULL},
-    {0x2030, 0x20, ODT_ARR, &ODObjs.o_2030_ADC1CalibraionRegister, NULL},
-    {0x2031, 0x20, ODT_ARR, &ODObjs.o_2031_ADC2CalibraionRegister, NULL},
-    {0x2032, 0x20, ODT_ARR, &ODObjs.o_2032_ADC3CalibraionRegister, NULL},
-    {0x2033, 0x04, ODT_ARR, &ODObjs.o_2033_RPM_CalibrationRegister, NULL},
+    {0x2025, 0x05, ODT_REC, &ODObjs.o_2025_boardSettings, NULL},
+    {0x2032, 0x17, ODT_REC, &ODObjs.o_2032_ADC1CalibraionRegister, NULL},
+    {0x2033, 0x17, ODT_REC, &ODObjs.o_2033_ADC2CalibraionRegister, NULL},
+    {0x2034, 0x17, ODT_REC, &ODObjs.o_2034_ADC3CalibraionRegister, NULL},
+    {0x2035, 0x03, ODT_ARR, &ODObjs.o_2035_RPM_CalibrationRegister, NULL},
     {0x0000, 0x00, 0, NULL, NULL}
 };
 
