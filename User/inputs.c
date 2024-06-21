@@ -176,6 +176,14 @@ void  vSetDoutState( OUT_NAME_TYPE ucCh, u8 BitVal )
    DMA_Cmd(DMA1_CH4, ENABLE);
 }
 
+ void CaptureDMACallBack_1(  )
+{
+   DMA_Cmd(DMA1_CH7, DISABLE);
+   DMA_SetCurrDataCounter(DMA1_CH7,  CC_BUFFER_SIZE);
+   RMPDataConvert(INPUT_2);
+   DMA_Cmd(DMA1_CH7, ENABLE);
+}
+
 /*
  *
  */
@@ -204,10 +212,15 @@ static void vDINInit()
     eRPMConfig(INPUT_2,RPM_CH2);
   //  HAL_TimeInitCaptureIT(  TIMER1 , 2000, 60000, TIM_CHANNEL_4,TIM1_PRIOR ,TIN1_SUBPRIOR,&CaptureCallBack);
     HAL_TimeInitCaptureDMA( TIMER1 , 2000, 60000, TIM_CHANNEL_4);
+    HAL_TimeInitCaptureDMA( TIMER2 , 2000, 60000, TIM_CHANNEL_2);
     HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1), 0, TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack );
+    HAL_DMAInitIT( DMA1_CH7,PTOM, DMA_HWORD , (u32)&TIM2->CH2CVR, (u32) getCaputreBuffer(INPUT_2), 0, TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack_1 );
+    DMA_SetCurrDataCounter(DMA1_CH7,  CC_BUFFER_SIZE);
     DMA_SetCurrDataCounter(DMA1_CH4,  CC_BUFFER_SIZE);
     DMA_Cmd(DMA1_CH4, ENABLE);
+    DMA_Cmd(DMA1_CH7, ENABLE);
     HAL_TiemrEneblae(TIMER1);
+    HAL_TiemrEneblae(TIMER2);
 
 }
 

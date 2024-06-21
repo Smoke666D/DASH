@@ -12,7 +12,7 @@
 #include "hal_config.h"
 
 #define MCU CH32V2
-//#define WDT
-#define EEPROM_I2C  I2C1
+#define WDT
+
 
 #endif /* HAL_BOARD_DEFINE_H_ */

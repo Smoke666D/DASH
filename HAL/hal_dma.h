@@ -72,7 +72,7 @@ typedef struct
 
 } DMA_CFG_t;
 
-
+void HAL_DMA_SetCouterAndEnable(DMA_Stram_t stream, uint32_t counter );
 void HAL_DMA_Enable(DMA_Stram_t stream  );
 void HAL_DMA_Disable(DMA_Stram_t stream  );
 void HAL_DMA_SetCounter( DMA_Stram_t stream, uint32_t counter );

@@ -473,17 +473,13 @@ void HAL_TimeInitCaptureDMA( TimerName_t TimerName , uint32_t freq_in_hz, uint32
 
      if (( channel == TIM_CHANNEL_1 ) || ( channel == TIM_CHANNEL_2 ))
      {
-         TIM_ICInitStructure.TIM_Channel = TIM_Channel_1;
-         TIM_ICInitStructure.TIM_ICPolarity=  (channel == TIM_CHANNEL_1) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
-         TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_1) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
-         TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
+
          TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;
          TIM_ICInitStructure.TIM_ICPolarity= (channel == TIM_CHANNEL_2) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
          TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_2) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
          TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
-         TIM_ITConfig(timers[TimerName],TIM_IT_CC1,ENABLE);
          TIM_ITConfig(timers[TimerName],TIM_IT_CC2,ENABLE);
-        // TIM_SelectInputTrigger(TIM1, (channel == TIM_CHANNEL_1) ? TIM_TS_TI1FP1 : TIM_TS_TI2FP1);
+
      }
      if (( channel == TIM_CHANNEL_3 ) || ( channel == TIM_CHANNEL_4 ))
          {

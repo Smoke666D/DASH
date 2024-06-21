@@ -49,6 +49,7 @@
 #define BASE_TIMER     TIM4
 #define PWM_TIMER_2    TIM4
 #define PWM_TIMER_1    TIM3
+#define EEPROM_I2C  I2C1
 
 #define PWM_TIM_PERIOD   1000
 uint32_t GetDelay( uint32_t start_delay);

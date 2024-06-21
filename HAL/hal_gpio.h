@@ -67,7 +67,7 @@ typedef enum
 #endif
 } GPIO_MODE_t;
 
-void HAL_InitGpioLib();
+
 void HAL_InitGpioIn(PortName_t PORT, uint16_t Pin);
 void HAL_InitGpioAF(PortName_t PORT, uint16_t Pin, uint32_t AF , GPIO_MODE_t mode );
 void HAL_InitGpioInPUP(PortName_t PORT, uint16_t Pin);

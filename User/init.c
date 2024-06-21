@@ -34,7 +34,7 @@ void vInit_DeviceConfig( void )
 	HAL_TiemrEneblae( TIMER4);
 	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
 	HAL_TiemrEneblae( TIMER3);
-	vInitEEPROM(I2C1_PRIOR ,I2C1_SUB_PRIOR );
+	InitI2CDMA(EEPROM_I2C, I2C1_PRIOR ,I2C1_SUB_PRIOR );
 	HAL_SetBit(PowerOn_Port, PowerOn_Pin);
 	vCanOpenInit(CAN1);;
 	return;
@@ -47,7 +47,7 @@ void vInit_DeviceConfig( void )
 */
 static void MX_GPIO_Init(void)
 {
-   HAL_InitGpioLib();
+  // HAL_InitGpioLib();
   /*Configure GPIO pin Output Level */
    HAL_ResetBit(PORT_A, GPIO_8);
 	

@@ -206,10 +206,11 @@ void SetSEG( u16 mask, u32 value)
   for (u8 i = 0;i<dc;i++)
   {
      u8 digit = val % 10;
-     SPI2_DATA[1] |= 0x0400; //Ставим точку
+
      SetSegDirect(i,DigitMask[digit]);
      val = val/10;
   }
+  SPI2_DATA[1] |= 0x0400; //Ставим точку
   if ( min )
   {
       SetSegDirect(dc,0x40);
@@ -294,8 +295,7 @@ void vLedDriverStart(void)
 void vLedProcess( void )
 {
    HAL_ResetBit(  SPI2_Port , SPI2_NSS_Pin);
-   HAL_DMA_SetCounter(DMA1_CH5, SPI2_CHIP_COUNT);
-   HAL_DMA_Enable(DMA1_CH5);
+   HAL_DMA_SetCouterAndEnable(DMA1_CH5, SPI2_CHIP_COUNT);
    return;
 }
 
@@ -328,6 +328,5 @@ void vRGBProcess()
           data[2]&=0x56DB;
        }
     HAL_ResetBit(  SPI1_Port , SPI1_NSS_Pin);
-    HAL_DMA_SetCounter(DMA1_CH3, SPI1_CHIP_COUNT);
-    HAL_DMA_Enable(DMA1_CH3);
+    HAL_DMA_SetCouterAndEnable(DMA1_CH3, SPI1_CHIP_COUNT);
 }

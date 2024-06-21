@@ -18,45 +18,16 @@
 #endif
 #include "string.h"
 
-PortInitState_t InitPort[MAX_GPIO_PORT +1] = {0};
+
 
 
 static void HAL_InitRCC(PortName_t PORT );
 
-void HAL_InitGpioLib()
-{
-	memset(InitPort,0x00, MAX_GPIO_PORT + 1 );
-}
+
 
 /*
  * API Функция иницилазиации тактирования порта. Сохраняет флаг, что бы не было повторонй инициализации
  */
-void HAL_InitGpioRCC( PortName_t PORT  )
-{
-
-	uint8_t port_index = 0;
-    if ( PORT == PORT_B )  port_index = 1;
-    else
-    if ( PORT == PORT_C )  port_index = 2;
-    else
-    if ( PORT == PORT_D )  port_index = 3;
-    else
-    if ( PORT == PORT_E )  port_index = 4;
-    else
-    if ( PORT == PORT_F )  port_index = 5;
-    else
-    if ( PORT == PORT_G )  port_index = 6;
-    if  (InitPort[port_index]==PORT_NOTINIT)
-    {
-        HAL_InitRCC( PORT);
-        InitPort[port_index ] = PORT_INIT;
-    }
-
-	return;
-}
-
-
-
 /*
  * Инициализация прота в режиме выхода
  */
@@ -68,7 +39,7 @@ void HAL_InitGpioOut( PortName_t PORT, uint16_t Pin  )
 #if MCU == CH32V2
 	GPIO_InitTypeDef gpioConfigStruct;
 #endif
-	HAL_InitGpioRCC( PORT );
+	 HAL_InitRCC( PORT);
 #if MCU == APM32
 	gpioConfigStruct.mode = GPIO_MODE_OUT;
 	gpioConfigStruct.pin = Pin;
@@ -96,7 +67,7 @@ void HAL_InitGpioAIN(PortName_t PORT, uint16_t Pin )
 #if MCU == CH32V2
 	GPIO_InitTypeDef gpioConfigStruct;
 #endif
-	HAL_InitGpioRCC(PORT );
+	 HAL_InitRCC( PORT);
 #if MCU == APM32
 	gpioConfigStruct.mode = GPIO_MODE_AN;
 	gpioConfigStruct.pin =Pin;
@@ -122,7 +93,7 @@ void HAL_InitGpioInPUP(PortName_t PORT, uint16_t Pin)
 #if MCU == CH32V2
 	GPIO_InitTypeDef gpioConfigStruct;
 #endif
-	HAL_InitGpioRCC(PORT );
+	 HAL_InitRCC( PORT);
 #if MCU == APM32
 	gpioConfigStruct.mode = GPIO_MODE_IN;
     gpioConfigStruct.pin = Pin;
@@ -150,7 +121,7 @@ void HAL_InitGpioIn(PortName_t PORT, uint16_t Pin)
 #if MCU == CH32V2
 	GPIO_InitTypeDef gpioConfigStruct;
 #endif
-	HAL_InitGpioRCC(PORT );
+	 HAL_InitRCC( PORT);
 #if MCU == APM32
 	gpioConfigStruct.mode = GPIO_MODE_IN;
     gpioConfigStruct.pin = Pin;
@@ -232,7 +203,7 @@ void HAL_InitGpioAF(PortName_t PORT, uint16_t Pin, uint32_t AF ,  GPIO_MODE_t mo
 #if MCU == CH32V2
 	GPIO_InitTypeDef gpioConfigStruct;
 #endif
-	HAL_InitGpioRCC(PORT );
+	 HAL_InitRCC( PORT);
 #if MCU == APM32
 	GPIO_ConfigPinAF(PORT ,  pin_source , AF);
 	gpioConfigStruct.mode = GPIO_MODE_AF;
@@ -281,8 +252,6 @@ void HAL_SetBit(  PortName_t  port, uint16_t pin )
 #endif
 }
 
-
-
 /*
  * Получить бит порта
  */
@@ -313,12 +282,13 @@ void HAL_ResetBit(  PortName_t  port, uint16_t pin )
  */
 static void HAL_InitRCC(PortName_t PORT )
 {
+    u32 RCC_GPIO_MASK;
 	if (PORT ==  PORT_A)
 #if MCU == APM32
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOA);
 #endif
 #if MCU == CH32V2
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
+	RCC_GPIO_MASK = RCC_APB2Periph_GPIOA;
 #endif
 	else
 	if (PORT ==  PORT_B)
@@ -326,7 +296,7 @@ static void HAL_InitRCC(PortName_t PORT )
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOB);
 #endif
 #if MCU == CH32V2
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+	RCC_GPIO_MASK = RCC_APB2Periph_GPIOB;
 #endif
 	else
 	if (PORT ==  PORT_C)
@@ -334,7 +304,7 @@ static void HAL_InitRCC(PortName_t PORT )
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOC);
 #endif
 #if MCU == CH32V2
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+	RCC_GPIO_MASK = RCC_APB2Periph_GPIOC;
 #endif
 	else
 	if (PORT ==  PORT_D)
@@ -342,7 +312,7 @@ static void HAL_InitRCC(PortName_t PORT )
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOD);
 #endif
 #if MCU == CH32V2
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+	RCC_GPIO_MASK = RCC_APB2Periph_GPIOD;
 #endif
 	else
 	if (PORT ==  PORT_E)
@@ -350,7 +320,7 @@ static void HAL_InitRCC(PortName_t PORT )
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOE);
 #endif
 #if MCU == CH32V2
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE);
+	RCC_GPIO_MASK = RCC_APB2Periph_GPIOE;
 #endif
 #if MCU == APM32
 			else
@@ -362,5 +332,8 @@ static void HAL_InitRCC(PortName_t PORT )
 	else
 	if (PORT ==  PORT_G)
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOG);
+#endif
+#if MCU == CH32V2
+	RCC->APB2PCENR |= RCC_GPIO_MASK;
 #endif
 }
