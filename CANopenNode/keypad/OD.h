@@ -16,7 +16,7 @@
 
         Created:      31.01.2017 17:13:00
         Created By:   Smoke666
-        Modified:     20.06.2024 15:19:52
+        Modified:     21.06.2024 12:59:55
         Modified By:  rOBIN 2
 
     Device Info:
@@ -45,8 +45,6 @@
     Sizes of OD arrays
 *******************************************************************************/
 #define OD_CNT_ARR_1003 16
-#define OD_CNT_ARR_2000 14
-#define OD_CNT_ARR_2002 3
 #define OD_CNT_ARR_2004 4
 #define OD_CNT_ARR_2005 6
 #define OD_CNT_ARR_2006 2
@@ -202,8 +200,9 @@ typedef struct {
         uint32_t applicationObject7;
         uint32_t applicationObject8;
     } x1600_RPDOMappingParameter;
-    uint8_t x2000_virtualChannelV1_V14_sub0;
-    uint8_t x2002_virtualChannelV15_V17_sub0;
+    struct {
+        uint8_t highestSub_indexSupported;
+    } x2001_virtualRegisters;
     uint8_t x2004_DACH_PARAMETR_sub0;
     uint8_t x2005_AIN_RPM_sub0;
     struct {
@@ -387,36 +386,34 @@ extern OD_ATTR_OD OD_t *OD;
 #define OD_ENTRY_H1A00 &OD->list[22]
 #define OD_ENTRY_H1A01 &OD->list[23]
 #define OD_ENTRY_H1A02 &OD->list[24]
-#define OD_ENTRY_H2000 &OD->list[25]
-#define OD_ENTRY_H2002 &OD->list[26]
-#define OD_ENTRY_H2003 &OD->list[27]
-#define OD_ENTRY_H2004 &OD->list[28]
-#define OD_ENTRY_H2005 &OD->list[29]
-#define OD_ENTRY_H2006 &OD->list[30]
-#define OD_ENTRY_H2007 &OD->list[31]
-#define OD_ENTRY_H2008 &OD->list[32]
-#define OD_ENTRY_H2009 &OD->list[33]
-#define OD_ENTRY_H200A &OD->list[34]
-#define OD_ENTRY_H200B &OD->list[35]
-#define OD_ENTRY_H200C &OD->list[36]
-#define OD_ENTRY_H200D &OD->list[37]
-#define OD_ENTRY_H200E &OD->list[38]
-#define OD_ENTRY_H200F &OD->list[39]
-#define OD_ENTRY_H2010 &OD->list[40]
-#define OD_ENTRY_H2011 &OD->list[41]
-#define OD_ENTRY_H2012 &OD->list[42]
-#define OD_ENTRY_H2013 &OD->list[43]
-#define OD_ENTRY_H2014 &OD->list[44]
-#define OD_ENTRY_H2015 &OD->list[45]
-#define OD_ENTRY_H2016 &OD->list[46]
-#define OD_ENTRY_H2019 &OD->list[47]
-#define OD_ENTRY_H201A &OD->list[48]
-#define OD_ENTRY_H201B &OD->list[49]
-#define OD_ENTRY_H2025 &OD->list[50]
-#define OD_ENTRY_H2032 &OD->list[51]
-#define OD_ENTRY_H2033 &OD->list[52]
-#define OD_ENTRY_H2034 &OD->list[53]
-#define OD_ENTRY_H2035 &OD->list[54]
+#define OD_ENTRY_H2001 &OD->list[25]
+#define OD_ENTRY_H2004 &OD->list[26]
+#define OD_ENTRY_H2005 &OD->list[27]
+#define OD_ENTRY_H2006 &OD->list[28]
+#define OD_ENTRY_H2007 &OD->list[29]
+#define OD_ENTRY_H2008 &OD->list[30]
+#define OD_ENTRY_H2009 &OD->list[31]
+#define OD_ENTRY_H200A &OD->list[32]
+#define OD_ENTRY_H200B &OD->list[33]
+#define OD_ENTRY_H200C &OD->list[34]
+#define OD_ENTRY_H200D &OD->list[35]
+#define OD_ENTRY_H200E &OD->list[36]
+#define OD_ENTRY_H200F &OD->list[37]
+#define OD_ENTRY_H2010 &OD->list[38]
+#define OD_ENTRY_H2011 &OD->list[39]
+#define OD_ENTRY_H2012 &OD->list[40]
+#define OD_ENTRY_H2013 &OD->list[41]
+#define OD_ENTRY_H2014 &OD->list[42]
+#define OD_ENTRY_H2015 &OD->list[43]
+#define OD_ENTRY_H2016 &OD->list[44]
+#define OD_ENTRY_H2019 &OD->list[45]
+#define OD_ENTRY_H201A &OD->list[46]
+#define OD_ENTRY_H201B &OD->list[47]
+#define OD_ENTRY_H2025 &OD->list[48]
+#define OD_ENTRY_H2032 &OD->list[49]
+#define OD_ENTRY_H2033 &OD->list[50]
+#define OD_ENTRY_H2034 &OD->list[51]
+#define OD_ENTRY_H2035 &OD->list[52]
 
 
 /*******************************************************************************
@@ -447,36 +444,34 @@ extern OD_ATTR_OD OD_t *OD;
 #define OD_ENTRY_H1A00_TPDOMappingParameter &OD->list[22]
 #define OD_ENTRY_H1A01_TPDOMappingParameter &OD->list[23]
 #define OD_ENTRY_H1A02_TPDOMappingParameter &OD->list[24]
-#define OD_ENTRY_H2000_virtualChannelV1_V14 &OD->list[25]
-#define OD_ENTRY_H2002_virtualChannelV15_V17 &OD->list[26]
-#define OD_ENTRY_H2003_errorRegisterCH28 &OD->list[27]
-#define OD_ENTRY_H2004_DACH_PARAMETR &OD->list[28]
-#define OD_ENTRY_H2005_AIN_RPM &OD->list[29]
-#define OD_ENTRY_H2006_DIN_DATA &OD->list[30]
-#define OD_ENTRY_H2007_BIG_SEG_CONFIG &OD->list[31]
-#define OD_ENTRY_H2008_RGB_MAP_REGISTER &OD->list[32]
-#define OD_ENTRY_H2009_RGB1SETUP_REGISTER &OD->list[33]
-#define OD_ENTRY_H200A_RGB2SETUP_REGISTER &OD->list[34]
-#define OD_ENTRY_H200B_RGB3SETUP_REGISTER &OD->list[35]
-#define OD_ENTRY_H200C_RGB4SETUP_REGISTER &OD->list[36]
-#define OD_ENTRY_H200D_RGB5SETUP_REGISTER &OD->list[37]
-#define OD_ENTRY_H200E_RGB6SETUP_REGISTER &OD->list[38]
-#define OD_ENTRY_H200F_RGB7SETUP_REGISTER &OD->list[39]
-#define OD_ENTRY_H2010_RGB8SETUP_REGISTER &OD->list[40]
-#define OD_ENTRY_H2011_RGB9SETUP_REGISTER &OD->list[41]
-#define OD_ENTRY_H2012_RGB10SETUP_REGISTER &OD->list[42]
-#define OD_ENTRY_H2013_RGB11SETUP_REGISTER &OD->list[43]
-#define OD_ENTRY_H2014_RGB12SETUP_REGISTER &OD->list[44]
-#define OD_ENTRY_H2015_RGB13SETUP_REGISTER &OD->list[45]
-#define OD_ENTRY_H2016_RGB14SETUP_REGISTER &OD->list[46]
-#define OD_ENTRY_H2019_BAR_SETUP_REGISTER &OD->list[47]
-#define OD_ENTRY_H201A_MENU_MAP_REGISTER &OD->list[48]
-#define OD_ENTRY_H201B_MENU_SETUP_REGISTER &OD->list[49]
-#define OD_ENTRY_H2025_boardSettings &OD->list[50]
-#define OD_ENTRY_H2032_ADC1CalibraionRegister &OD->list[51]
-#define OD_ENTRY_H2033_ADC2CalibraionRegister &OD->list[52]
-#define OD_ENTRY_H2034_ADC3CalibraionRegister &OD->list[53]
-#define OD_ENTRY_H2035_RPM_CalibrationRegister &OD->list[54]
+#define OD_ENTRY_H2001_virtualRegisters &OD->list[25]
+#define OD_ENTRY_H2004_DACH_PARAMETR &OD->list[26]
+#define OD_ENTRY_H2005_AIN_RPM &OD->list[27]
+#define OD_ENTRY_H2006_DIN_DATA &OD->list[28]
+#define OD_ENTRY_H2007_BIG_SEG_CONFIG &OD->list[29]
+#define OD_ENTRY_H2008_RGB_MAP_REGISTER &OD->list[30]
+#define OD_ENTRY_H2009_RGB1SETUP_REGISTER &OD->list[31]
+#define OD_ENTRY_H200A_RGB2SETUP_REGISTER &OD->list[32]
+#define OD_ENTRY_H200B_RGB3SETUP_REGISTER &OD->list[33]
+#define OD_ENTRY_H200C_RGB4SETUP_REGISTER &OD->list[34]
+#define OD_ENTRY_H200D_RGB5SETUP_REGISTER &OD->list[35]
+#define OD_ENTRY_H200E_RGB6SETUP_REGISTER &OD->list[36]
+#define OD_ENTRY_H200F_RGB7SETUP_REGISTER &OD->list[37]
+#define OD_ENTRY_H2010_RGB8SETUP_REGISTER &OD->list[38]
+#define OD_ENTRY_H2011_RGB9SETUP_REGISTER &OD->list[39]
+#define OD_ENTRY_H2012_RGB10SETUP_REGISTER &OD->list[40]
+#define OD_ENTRY_H2013_RGB11SETUP_REGISTER &OD->list[41]
+#define OD_ENTRY_H2014_RGB12SETUP_REGISTER &OD->list[42]
+#define OD_ENTRY_H2015_RGB13SETUP_REGISTER &OD->list[43]
+#define OD_ENTRY_H2016_RGB14SETUP_REGISTER &OD->list[44]
+#define OD_ENTRY_H2019_BAR_SETUP_REGISTER &OD->list[45]
+#define OD_ENTRY_H201A_MENU_MAP_REGISTER &OD->list[46]
+#define OD_ENTRY_H201B_MENU_SETUP_REGISTER &OD->list[47]
+#define OD_ENTRY_H2025_boardSettings &OD->list[48]
+#define OD_ENTRY_H2032_ADC1CalibraionRegister &OD->list[49]
+#define OD_ENTRY_H2033_ADC2CalibraionRegister &OD->list[50]
+#define OD_ENTRY_H2034_ADC3CalibraionRegister &OD->list[51]
+#define OD_ENTRY_H2035_RPM_CalibrationRegister &OD->list[52]
 
 
 /*******************************************************************************

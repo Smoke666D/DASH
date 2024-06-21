@@ -52,31 +52,31 @@ OD_ATTR_ROM OD_ROM_t OD_ROM = {
     },
     .x1601_RPDOMappingParameter = {
         .numberOfMappedApplicationObjectsInPDO = 0x06,
-        .applicationObject1 = 0x20000308,
-        .applicationObject2 = 0x20000408,
-        .applicationObject3 = 0x20000508,
-        .applicationObject4 = 0x20000608,
-        .applicationObject5 = 0x20000708,
-        .applicationObject6 = 0x20000808,
+        .applicationObject1 = 0x20010308,
+        .applicationObject2 = 0x20010408,
+        .applicationObject3 = 0x20010508,
+        .applicationObject4 = 0x20010608,
+        .applicationObject5 = 0x20010708,
+        .applicationObject6 = 0x20010808,
         .applicationObject7 = 0x00000000,
         .applicationObject8 = 0x00000000
     },
     .x1602_RPDOMappingParameter = {
         .numberOfMappedApplicationObjectsInPDO = 0x06,
-        .applicationObject1 = 0x20000908,
-        .applicationObject2 = 0x20000A08,
-        .applicationObject3 = 0x20000B08,
-        .applicationObject4 = 0x20000C08,
-        .applicationObject5 = 0x20000D08,
-        .applicationObject6 = 0x20000E08,
+        .applicationObject1 = 0x20010908,
+        .applicationObject2 = 0x20010A08,
+        .applicationObject3 = 0x20010B08,
+        .applicationObject4 = 0x20010C08,
+        .applicationObject5 = 0x20010D08,
+        .applicationObject6 = 0x20010E08,
         .applicationObject7 = 0x00000000,
         .applicationObject8 = 0x00000000
     },
     .x1603_RPDOMappingParameter = {
         .numberOfMappedApplicationObjectsInPDO = 0x03,
-        .applicationObject1 = 0x20020110,
-        .applicationObject2 = 0x20020210,
-        .applicationObject3 = 0x20020310,
+        .applicationObject1 = 0x20010F10,
+        .applicationObject2 = 0x20011010,
+        .applicationObject3 = 0x20011110,
         .applicationObject4 = 0x00000000,
         .applicationObject5 = 0x00000000,
         .applicationObject6 = 0x00000000,
@@ -138,17 +138,18 @@ OD_ATTR_RAM OD_RAM_t OD_RAM = {
     },
     .x1600_RPDOMappingParameter = {
         .numberOfMappedApplicationObjectsInPDO = 0x04,
-        .applicationObject1 = 0x20030020,
-        .applicationObject2 = 0x20000108,
-        .applicationObject3 = 0x20000208,
+        .applicationObject1 = 0x20011220,
+        .applicationObject2 = 0x20010108,
+        .applicationObject3 = 0x20010208,
         .applicationObject4 = 0x20070110,
         .applicationObject5 = 0x00000000,
         .applicationObject6 = 0x00000000,
         .applicationObject7 = 0x00000000,
         .applicationObject8 = 0x00000000
     },
-    .x2000_virtualChannelV1_V14_sub0 = 0x0E,
-    .x2002_virtualChannelV15_V17_sub0 = 0x03,
+    .x2001_virtualRegisters = {
+        .highestSub_indexSupported = 0x12
+    },
     .x2004_DACH_PARAMETR_sub0 = 0x04,
     .x2005_AIN_RPM_sub0 = 0x06,
     .x2025_boardSettings = {
@@ -309,9 +310,7 @@ typedef struct {
     OD_obj_record_t o_1A00_TPDOMappingParameter[9];
     OD_obj_record_t o_1A01_TPDOMappingParameter[9];
     OD_obj_record_t o_1A02_TPDOMappingParameter[9];
-    OD_obj_array_t o_2000_virtualChannelV1_V14;
-    OD_obj_array_t o_2002_virtualChannelV15_V17;
-    OD_obj_var_t o_2003_errorRegisterCH28;
+    OD_obj_record_t o_2001_virtualRegisters[19];
     OD_obj_array_t o_2004_DACH_PARAMETR;
     OD_obj_array_t o_2005_AIN_RPM;
     OD_obj_array_t o_2006_DIN_DATA;
@@ -1037,26 +1036,121 @@ static CO_PROGMEM ODObjs_t ODObjs = {
             .dataLength = 4
         }
     },
-    .o_2000_virtualChannelV1_V14 = {
-        .dataOrig0 = &OD_RAM.x2000_virtualChannelV1_V14_sub0,
-        .dataOrig = NULL,
-        .attribute0 = ODA_SDO_R,
-        .attribute = ODA_SDO_W | ODA_RPDO,
-        .dataElementLength = 1,
-        .dataElementSizeof = sizeof(uint8_t)
-    },
-    .o_2002_virtualChannelV15_V17 = {
-        .dataOrig0 = &OD_RAM.x2002_virtualChannelV15_V17_sub0,
-        .dataOrig = NULL,
-        .attribute0 = ODA_SDO_R,
-        .attribute = ODA_SDO_W | ODA_RPDO | ODA_MB,
-        .dataElementLength = 2,
-        .dataElementSizeof = sizeof(int16_t)
-    },
-    .o_2003_errorRegisterCH28 = {
-        .dataOrig = NULL,
-        .attribute = ODA_SDO_R | ODA_RPDO | ODA_MB,
-        .dataLength = 4
+    .o_2001_virtualRegisters = {
+        {
+            .dataOrig = &OD_RAM.x2001_virtualRegisters.highestSub_indexSupported,
+            .subIndex = 0,
+            .attribute = ODA_SDO_R,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 1,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 2,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 3,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 4,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 5,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 6,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 7,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 8,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 9,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 10,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 11,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 12,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 13,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 14,
+            .attribute = ODA_SDO_W | ODA_RPDO,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 15,
+            .attribute = ODA_SDO_W | ODA_RPDO | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 16,
+            .attribute = ODA_SDO_W | ODA_RPDO | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 17,
+            .attribute = ODA_SDO_W | ODA_RPDO | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 18,
+            .attribute = ODA_SDO_W | ODA_RPDO | ODA_MB,
+            .dataLength = 4
+        }
     },
     .o_2004_DACH_PARAMETR = {
         .dataOrig0 = &OD_RAM.x2004_DACH_PARAMETR_sub0,
@@ -1726,9 +1820,7 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x1A00, 0x09, ODT_REC, &ODObjs.o_1A00_TPDOMappingParameter, NULL},
     {0x1A01, 0x09, ODT_REC, &ODObjs.o_1A01_TPDOMappingParameter, NULL},
     {0x1A02, 0x09, ODT_REC, &ODObjs.o_1A02_TPDOMappingParameter, NULL},
-    {0x2000, 0x0F, ODT_ARR, &ODObjs.o_2000_virtualChannelV1_V14, NULL},
-    {0x2002, 0x04, ODT_ARR, &ODObjs.o_2002_virtualChannelV15_V17, NULL},
-    {0x2003, 0x01, ODT_VAR, &ODObjs.o_2003_errorRegisterCH28, NULL},
+    {0x2001, 0x13, ODT_REC, &ODObjs.o_2001_virtualRegisters, NULL},
     {0x2004, 0x05, ODT_ARR, &ODObjs.o_2004_DACH_PARAMETR, NULL},
     {0x2005, 0x07, ODT_ARR, &ODObjs.o_2005_AIN_RPM, NULL},
     {0x2006, 0x03, ODT_ARR, &ODObjs.o_2006_DIN_DATA, NULL},

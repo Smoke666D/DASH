@@ -14,11 +14,9 @@ static ODR_t OD_writeBAR(OD_stream_t *stream,const  void *buf, OD_size_t count, 
 
 static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_writeV1_14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
-static ODR_t OD_writeV15_17(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readDashParam (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 static ODR_t OD_writeDashParam(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readAIN_RPM (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
-static ODR_t OD_writeERROR_REG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readDIN (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 static ODR_t  OD_writeMenuMap(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readMenuMap (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
@@ -69,17 +67,13 @@ static ODR_t OD_readRPMConfig (OD_stream_t *stream, void *buf, OD_size_t count, 
 /* Variables used for triggering TPDO, see simulation in app_programRt(). */
 
 
-const OD_extension_t OD_V1_14_extension = {
+const OD_extension_t OD_VRegiters_extension = {
     .object = NULL,
     .read =  OD_readOriginal,
     .write = OD_writeV1_14
 };
 
-const  OD_extension_t OD_V15_17_extension = {
-    .object = NULL,
-    .read =  OD_readOriginal,
-    .write = OD_writeV15_17
-};
+
 
 const OD_extension_t  OD_DASH_PARAM_extension = {
        .read =  OD_readDashParam,
@@ -199,11 +193,7 @@ const OD_extension_t  OD_AIN_RPM_extension = {
         .read =  OD_readAIN_RPM,
         .write = OD_writeOriginal
     };
-const OD_extension_t  OD_ERROR_REG_extension = {
-        .object = NULL,
-        .read =  OD_readOriginal,
-        .write = OD_writeERROR_REG
-    };
+
 
 
 const OD_extension_t  OD_DIN_extension= {
@@ -256,9 +246,7 @@ const OD_extension_t  OD_RPMCONFIG_extension = {
 
 void vProceesInit( void)
 {
-    OD_extension_init(OD_ENTRY_H2000, &OD_V1_14_extension);
-    OD_extension_init(OD_ENTRY_H2002, &OD_V15_17_extension);
-    OD_extension_init(OD_ENTRY_H2003, &OD_ERROR_REG_extension);
+    OD_extension_init(OD_ENTRY_H2001, &OD_VRegiters_extension);
     OD_extension_init(OD_ENTRY_H2004, &OD_DASH_PARAM_extension);
     OD_extension_init(OD_ENTRY_H2005, &OD_AIN_RPM_extension);
     OD_extension_init(OD_ENTRY_H2006, &OD_DIN_extension);
@@ -291,65 +279,65 @@ void vProceesInit( void)
 
 static ODR_t OD_writeV1_14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    uint8_t data = CO_getUint8(buf);
-    *countWritten = sizeof(data);
-    setReg8( V1 + (stream->subIndex-1 ) * sizeof(data) ,data);
+    if ( stream->subIndex <= 15 )
+    {
+        uint8_t data = CO_getUint8(buf);
+        *countWritten = sizeof(data);
+        setReg8( V1 + (stream->subIndex-1 ) * sizeof(data) ,data);
+    }
+    else if (stream->subIndex <=17 )
+    {
+        uint16_t data = CO_getUint16(buf);
+        *countWritten = sizeof(data);
+        setReg16( V15 + (stream->subIndex -1) * sizeof(data) ,data);
+    }
+    else {
+        uint32_t data = CO_getUint32(buf);
+        *countWritten = sizeof(data);
+        vSetErrorReg( data);
+    }
     return (ODR_OK);
 }
 
-static ODR_t OD_writeV15_17(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
-{
-    uint16_t data = CO_getUint16(buf);
-    *countWritten = sizeof(data);
-    setReg16( V15 + (stream->subIndex -1) * sizeof(data) ,data);
-    return (ODR_OK);
-}
-
-static ODR_t OD_writeERROR_REG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
-{
-    uint32_t data = CO_getUint32(buf);
-    *countWritten = sizeof(data);
-    vSetErrorReg( data);
-    return (ODR_OK);
-}
 
 
 static ODR_t OD_readDashParam (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
 {
-       *countRead = 4;
-
+     u32 temp;
+     *countRead = sizeof(temp);
        switch (stream->subIndex)
        {
                case 1:
-                   *((uint32_t *)buf) =  getOdometr();
+                   temp =  getOdometr();
                    break;
                case 2:
-                   *((uint32_t *)buf) =  getReg32(HOUR_COUNTER_ADR);
+                   temp =  getReg32(HOUR_COUNTER_ADR);
                    break;
                case 3:
-                   *((uint32_t *)buf) =  (u32)getReg8( ODOMETR_MAP);
+                   temp =  (u32)getReg8( ODOMETR_MAP);
                    break;
                default:
-                   *((uint32_t *)buf) =  getReg32(VERSION_REG);
+                   temp =  getReg32(VERSION_REG);
                    break;
        }
+       CO_setUint32((void *)buf,temp );
        return (ODR_OK);
 }
 
 static ODR_t OD_writeDashParam(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-      *countWritten = 4;
+      *countWritten = sizeof(u32);
       if (stream->subIndex == 3)
       {
              uint8_t data =(uint8_t)CO_getUint32(buf);
-             WriteRegAfterDelay( ODOMETR_MAP ,&data, 1);
+             WriteRegAfterDelay( ODOMETR_MAP ,&data, sizeof(data));
              return (ODR_OK);
       }
       else
       if (stream->subIndex == 4)
       {
           uint32_t data =CO_getUint32(buf);
-          WriteRegAfterDelay(VERSION_REG ,&data, 4);
+          WriteRegAfterDelay(VERSION_REG ,&data, sizeof(data));
           return (ODR_OK);
       }
       else
@@ -679,29 +667,21 @@ static ODR_t OD_writeBoardSettings(OD_stream_t *stream, const void *buf, OD_size
       switch( stream->subIndex )
         {
             case 2:
+            case 3:
                 if (temp <= MAX_BRIGTH)
                 {
-                    vSetBrigth(RGB_CHANNEL, temp);
-                    WriteRegAfterDelay( RGB_BRIGTH_ADR, &temp, 1);
+                    vSetBrigth(stream->subIndex  - 2 , sizeof(temp));
+                    WriteRegAfterDelay(RGB_BRIGTH_ADR + (stream->subIndex -2 ), &temp, sizeof(temp));
                     res =  ODR_OK;
-                    *countWritten =1;
-                 }
-                break;
-           case 3:
-                if (temp <= MAX_BRIGTH)
-                {
-                    vSetBrigth(WHITE_CHANNEL, temp);
-                    WriteRegAfterDelay( WHITE_BRIGTH_ADR, &temp, 1);
-                    res =  ODR_OK;
-                    *countWritten =1;
-                 }
+                    *countWritten =sizeof(temp);
+                }
                 break;
            case 1:
                  if (temp <= 7)
                  {
                     WriteRegAfterDelay(  BITRATE_ADR  ,&temp,1);
                     res =  ODR_OK;
-                    *countWritten =1;
+                    *countWritten =sizeof(temp);
                 }
                 break;
            default:
@@ -709,7 +689,7 @@ static ODR_t OD_writeBoardSettings(OD_stream_t *stream, const void *buf, OD_size
                {
                   WriteRegAfterDelay(  DIN_ACTIVE_STATE  ,&temp,1);
                   res =  ODR_OK;
-                  *countWritten =1;
+                  *countWritten =sizeof(temp);
                }
                break;
    }
@@ -724,12 +704,8 @@ static ODR_t OD_readAIN_RPM (OD_stream_t *stream, void *buf, OD_size_t count, OD
             return ODR_DEV_INCOMPAT;
         }
 #endif
-        *countRead = 2;
-        u16 temp = (u16)getODValue( chAIN1 -1 + stream->subIndex,1);
-        u8 *ptemp = (u8 * )buf;
-        ptemp[0] =  (u8)( temp & 0xFF);
-        ptemp[1] =  (u8)((temp >>8) & 0xFF);
-
+        *countRead = sizeof(u16);
+        CO_setUint16( (void *) buf,(u16)getODValue( chAIN1 -1 + stream->subIndex,1) );
         return (ODR_OK);
 }
 
@@ -754,22 +730,22 @@ static ODR_t writeADC(OD_stream_t *stream, const void *buf,AIN_NAME_t name,OD_si
         if  (eAinCalDataConfig(name,CO_getUint8(buf))!=CAL_SUCCESS)
             return ( ODR_INVALID_VALUE );
         else {
-            *countWritten = 1;
             u8 temp = CO_getUint8(buf);
-            WriteRegAfterDelay(AIN1_CAL_POINT_COUNT + name*3  ,&temp,1 );
+            *countWritten = sizeof(temp);
+            WriteRegAfterDelay(AIN1_CAL_POINT_COUNT + name*3  ,&temp,sizeof(temp) );
         }
     }
     else if ( stream->subIndex == 2 )
     {
-        *countWritten = 2;
         u16 temp = CO_getUint16(buf);
-        WriteRegAfterDelay(AIN1_OFFSET + name*3  ,&temp,2 ) ;
+        *countWritten = sizeof(temp);
+        WriteRegAfterDelay(AIN1_OFFSET + name*3  ,&temp,  sizeof(temp) ) ;
     }
     else
     {
-        *countWritten = 4;
         u32 temp = CO_getUint32(buf);
-        WriteRegAfterDelay(AIN1_CAL_POINT_BEGIN + (stream->subIndex -3)*4 + name * MAX_CAL_POINT * 4  ,&temp,4);
+        *countWritten = sizeof(temp);
+        WriteRegAfterDelay(AIN1_CAL_POINT_BEGIN + (stream->subIndex -3)* sizeof(temp) + name * MAX_CAL_POINT *  sizeof(temp)  ,&temp,  sizeof(temp));
         POINT_t cal_point;
         cal_point.X = (float)(temp & 0xFFFF);
         cal_point.Y = ((float)(temp >>16))/10;
@@ -831,7 +807,9 @@ static ODR_t OD_readADC3 (OD_stream_t *stream, void *buf, OD_size_t count, OD_si
     return (readADC(stream,buf,AIN3,countRead));
 }
 
-
+/*
+ * Функции для работы с объектом 2035
+ */
 static ODR_t OD_writeRPMConfig(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
    uint16_t data =(uint8_t)CO_getUint16(buf);
