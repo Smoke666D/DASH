@@ -51,9 +51,9 @@ void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r )
    return;
 }
 
-static const u8 offset_mask[]={2,2,1,1,0,0,2,2,1,1,0,0,2,0};
-static const u8 step_masl[] = {0,3,0,3,0,3,9,6,13,10,12,9,12,6};
-
+static const u8 offset_mask[] = {2,2,1,1,0,0,2,2,1,1,0,0,2,0};
+static const u8 step_mask[]   = {0,3,0,3,0,3,9,6,13,10,12,9,12,6};
+static const u8 color_mask[]  = {0x01,0x02,0x04};
 /*
  * Функция вывода в RGB светодиод. Из-за неравномернго распределения
  * светодидов по драйверу, нуобходимо вычилить номер драйвера и биты
@@ -62,55 +62,8 @@ static const u8 step_masl[] = {0,3,0,3,0,3,9,6,13,10,12,9,12,6};
 void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state)
 {
    u8 offset =offset_mask[number] ;
-   u8 step   = step_masl[number];
-   /*switch (number)
-   {
-       case 0:
-       case 1:
-           offset   = 2;
-           step     = number*3;
-           break;
-       case 2:
-       case 3:
-           offset  = 1;
-           step =   (number-2)*3;
-           break;
-       case 4:
-       case 5:
-           offset   = 0;
-           step     = (number-4)*3;
-           break;
-       case 6:
-           offset   = 2;
-           step     = 9;
-           break;
-       case 7:
-           offset   = 2;
-           step     = 6;
-           break;
-       case 8:
-           offset   = 1;
-           step     = 13;
-           break;
-       case 9:
-           offset   = 1;
-           step     = 10;
-           break;
-       case 12:
-       case 10:
-            offset   = (number - 10);
-            step     = 12;
-            break;
-       case 11:
-           offset   = 0;
-           step     = 9;
-           break;
-       case 13:
-           offset   = 0;
-           step     = 6;
-           break;
-   }*/
-   u16 mask = (color == BLUE_COLOR) ? 0x04 : ( (color==GREEN_COLOR) ? 0x02 : 0x01 );
+   u8 step= step_mask[number];
+   u16 mask = color_mask[color - 1 ];
    if ( state == STATE_ON )
    {
          SPI1_DATA[offset]   |= mask << step;
@@ -120,6 +73,7 @@ void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state)
          SPI1_DATA[offset] &= ~(mask << step );
    }
 }
+
 /*
  *
  */
@@ -321,11 +275,11 @@ void vRGBProcess()
           data[4]&=0x5555;
       }
       if (counterRGB >= BrigthG[10])
-       {
+      {
           data[0]&=0x36DB;
           data[1]&=0x6FDB;
           data[2]&=0x56DB;
-       }
+      }
     HAL_ResetBit(  SPI1_Port , SPI1_NSS_Pin);
     HAL_DMA_SetCouterAndEnable(DMA1_CH3, SPI1_CHIP_COUNT);
 }

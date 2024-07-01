@@ -9,9 +9,10 @@
 #include "CO_ODinterface.h"
 #include "OD.h"
 #include "hw_lib_din.h"
-#include "hw_lib_keyboard.h"
+//#include "hw_lib_keyboard.h"
 #include "inputs.h"
 #include "HW_API.h"
+#include "hal_gpio.h"
 
 static Menu_Object_t menu;
 static u32 ErrorRegister = 0;
@@ -159,7 +160,7 @@ void GoToHome()
 void SetCurMenuHome()
 {
     menu.home_menu = menu.current_menu;
-    WriteReg( MENU_DEF_POS  ,&menu.home_menu,1);
+    WriteReg( MENU_DEF_POS  ,&menu.home_menu, 1 );
 
 }
 
@@ -238,7 +239,7 @@ void vDashDrawInit()
     //Проверяем скокльо в меню индекосв
     for (u8 i=0;i< MAX_MENU_COUNT;i++)
     {
-        u32 menu_mask =  getReg32( MENU1_MAP + i*4);
+        u32 menu_mask =  getReg32( MENU1_MAP  +  i*4 );
         menu.menu_draw[i] = menu_mask;
         if ( CheckMenuChannel( (menu_mask & 0xFF ),i) == LAST_ITEM)
         {
@@ -496,49 +497,37 @@ static void SegPrint(u8 s1,u8 s2,u8 s3,u8 s4,u8 s5,u8 s6,u8 s7)
     SetSegDirect(0,s7);
 }
 
+static const u8 dm[9][7]= { {0x6D,0x6E,0x6D,0,0,0,0},
+                          {0x50,0x73,0x06,0,0,0,0},
+                          {0x50,0x73,0x5B,0,0,0,0},
+                          {0x77,0x06,0x54,0x06,0,0,0},
+                          {0x77,0x06,0x54,0x5B,0,0,0},
+                          {0x77,0x06,0x54,0x4F,0,0,0},
+                          {0x6D,0x77,0x3E,0x79,0,0,0},
+                          {0,0,0,0,0,0,0},
+                          {0x79,0x76,0x06,0x78,0,0,0},
+};
+
 static void SeriveceMenuDraw( u8 * servece_menu_state)
 {
+    u8 i = *servece_menu_state;
+    if (i >8)
+        *servece_menu_state = 1;
+    else if
+        (i == 7) SetSEG( (u16)0x5000, getODValue(chVERSION,0),0);
+    else
+        SegPrint(dm[i][0],dm[i][1],dm[i][2],dm[i][3],dm[i][4],dm[i][5],dm[i][6]);
 
-    switch (*servece_menu_state )
-    {
-                     case 0:
-                         SegPrint(0x6D,0x6E,0x6D,0,0,0,0);
-                         break;
-                     case 1:
-                         SegPrint(0x50,0x73,0x06,0,0,0,0);
-                         break;
-                    case 2:
-                         SegPrint(0x50,0x73,0x5B,0,0,0,0);
-                         break;
-                    case 3:
-                         SegPrint(0x77,0x06,0x54,0x06,0,0,0);
-                         break;
-                    case 4:
-                         SegPrint(0x77,0x06,0x54,0x5B,0,0,0);
-                         break;
-                    case 5:
-                         SegPrint(0x77,0x06,0x54,0x4F,0,0,0);
-                         break;
-                    case 6:
-                         SegPrint(0x6D,0x77,0x3E,0x79,0,0,0);
-                         break;
-                    case 7:
-                         SetSEG( (u16)0x5000, getODValue(chVERSION,0),0);
-                         break;
-                    case 8:
-                         SegPrint(0x79,0x76,0x06,0x78,0,0,0);
-                         break;
-                    default:
-                         *servece_menu_state = 1;
-                         break;
-    }
     SetSegPoint( RESET );
 }
 
 
+static const u16 ain_view_mask[]={ (u16)0x0600,(u16)0x05B00,(u16)0x4F00};
+static const u16 rpm_view_mask[]={(u16)0x2306,(u16)0x635B};
 static void SystemMenuDraw()
 {
     u32 buffer32;
+    u16 data16;
     u8 data,index;
     if ( MenuSatate == WORK_MENU_STATE )
     {
@@ -606,39 +595,37 @@ static void SystemMenuDraw()
     }
     else
     {
-        if (( coof_view_flag == 1 ) && Keys.key_press_state)
-        {
-            MenuSatate = SYS_MENU_STATE;
-            coof_view_flag  = 0;
-        }
         menu.blink = ( Keys.SystemDelayState == SYSTEM_ENTER )   ? MENU_BLINK : MENU_NOT_BLINK;
-        if ((Keys.key_press_state) &&  (Keys.SystemDelayState == SYSTEM_EDIT))
+        if ( MenuSatate >= AIN1_VIEW_STATE )
         {
-            if ( (MenuSatate == RPM1_UP_MENU_STATE) ||( MenuSatate == RPM1_DOWN_MENU_STATE))
-            {
-                SetSEG( (u16)0x2306,  getReg16(RPM1_COOF),0 );
-                coof_view_flag = 1;
-            }
-            if ( (MenuSatate == RPM2_UP_MENU_STATE) ||( MenuSatate == RPM2_DOWN_MENU_STATE))
-            {
-                SetSEG( (u16)0x635B,  getReg16(RPM2_COOF) ,0);
-                coof_view_flag = 1;
-            }
+            index = (MenuSatate - AIN1_VIEW_STATE);
+            SetSEG( ain_view_mask[index], (int32_t) GetAIN(index )*10,1);
+            if ( Keys.key_press_state) MenuSatate = SYS_MENU_STATE;
         }
-        if (coof_view_flag==0)
+        else
         {
-
-            switch (MenuSatate)
+            if (( coof_view_flag == 1 ) && Keys.key_press_state)
             {
-                 case AIN1_VIEW_STATE:
-                     SetSEG( (u16)0x0600, (int32_t) GetAIN(0 )*10,1);
-                     break;
-                 case AIN2_VIEW_STATE:
-                     SetSEG( (u16)0x05B00, (int32_t) GetAIN(1)*10,1);
-                     break;
-                 case  AIN3_VIEW_STATE:
-                     SetSEG( (u16)0x4F00, (int32_t) GetAIN(2)*10,1);
-                     break;
+                       MenuSatate = SYS_MENU_STATE;
+                       coof_view_flag  = 0;
+            }
+            if ((Keys.key_press_state) &&  (Keys.SystemDelayState == SYSTEM_EDIT))
+            {
+                 coof_view_flag  = 1;
+                 if ( (MenuSatate == RPM1_UP_MENU_STATE) ||( MenuSatate == RPM1_DOWN_MENU_STATE))
+                 {
+                      SetSEG( (u16)0x2306,  getReg16(RPM1_COOF),0 );
+                  }
+                  else
+                  {
+                     SetSEG( (u16)0x635B,  getReg16(RPM2_COOF) ,0);
+                  }
+            }
+            if (coof_view_flag  ==0)
+            {
+                switch (MenuSatate)
+                {
+
                  case RPM1_UP_MENU_STATE:
                  case RPM2_UP_MENU_STATE:
                       index = (MenuSatate - RPM1_UP_MENU_STATE);
@@ -651,8 +638,8 @@ static void SystemMenuDraw()
                           }
                           if (Keys.SystemDelayState == SYSTEM_IDLE)
                           {
-                             data =  getReg16( RPM1_COOF + index) + 1;
-                             setReg16( RPM1_COOF +index , data);
+                             data16 =  getReg16( RPM1_COOF + index *2 ) + 1;
+                             setReg16( RPM1_COOF + index * 2 , data);
                           }
                       }
                      break;
@@ -668,61 +655,59 @@ static void SystemMenuDraw()
                          }
                          if  (Keys.SystemDelayState == SYSTEM_IDLE)
                          {
-                             data =  getReg16(RPM1_COOF +  index ) - 1;
+                             data16 =  getReg16(RPM1_COOF +  index ) - 1;
                              setReg16(RPM1_COOF +index,data);
                          }
                      }
                      break;
-            }
+            }}
         }
     }
     vMenuBlink();
-      if ( Keys.key_press_state == KEY_CHANGE_STATE )
-      {
-           Keys.key_press_state = KEY_NOT_CHANGED;
-           Keys.SystemDelayState = SYSTEM_IDLE;
-      }
+    if ( Keys.key_press_state == KEY_CHANGE_STATE )
+    {
+        Keys.key_press_state = KEY_NOT_CHANGED;
+        Keys.SystemDelayState = SYSTEM_IDLE;
+    }
 }
 
-
-/*
- * Функция фиксации отжатия клавиши
- */
-static void vResetKeyState()
-{
-   if (Keys.key_status  != KEY_STATUS_IDLE)
-   {
-       Keys.key_press_state = KEY_CHANGE_STATE;
-       Keys.key_status      = KEY_STATUS_IDLE;
-       Keys.key_counter      = 0;
-   }
-}
 /*
  * Функция проверки состояния клавиши и фиксация ее удрежания
  */
-static void vCheckKeySatate()
+static void vCheckKeySatate(  BitState_t key)
 {
-    Keys.key_counter++;
-    if (( Keys.key_status == KEY_STATUS_IDLE) && ( Keys.key_counter >= 5))
+    if ( key== KEY_OFF_STATE )
     {
-        Keys.key_status = KEY_STATUS_PRESS;
+        if (Keys.key_status  != KEY_STATUS_IDLE)
+        {
+           Keys.key_press_state = KEY_CHANGE_STATE;
+           Keys.key_status      = KEY_STATUS_IDLE;
+           Keys.key_counter      = 0;
+        }
     }
-    else  if (  Keys.key_status == KEY_STATUS_PRESS )
+    else
     {
-         if (  Keys.key_counter >= SERVICE_MODE_TIME_OUT )
-         {
-              Keys.SystemDelayState = SYSTEM_EDIT;
-              Keys.key_press_state = KEY_CHANGE_STATE;
-              Keys.key_status = KEY_STATUS_HOLD;
-         }
-         else if (  Keys.key_counter >= SERVICE_MODE_EXIT  )
-         {
-            Keys.SystemDelayState = SYSTEM_EXIT;
-         }
-         else if ( Keys.key_counter >= SERVICE_MODE_ENTER   )
-         {
-            Keys.SystemDelayState = SYSTEM_ENTER;
-         }
+       Keys.key_counter++;
+       if ( Keys.key_status == KEY_STATUS_IDLE)
+       {
+                    if  ( Keys.key_counter >= 5)
+                    {
+                       Keys.key_status = KEY_STATUS_PRESS;
+                    }
+       }
+       if ( Keys.key_status ==   KEY_STATUS_PRESS)
+       {
+                if (  Keys.key_counter >= SERVICE_MODE_TIME_OUT )
+                {
+                    Keys.SystemDelayState = SYSTEM_EDIT;
+                    Keys.key_press_state = KEY_CHANGE_STATE;
+                    Keys.key_status = KEY_STATUS_HOLD;
+                }
+                else if (  Keys.key_counter >= SERVICE_MODE_EXIT  )
+                    Keys.SystemDelayState = SYSTEM_EXIT;
+                else if ( Keys.key_counter >= SERVICE_MODE_ENTER   )
+                    Keys.SystemDelayState = SYSTEM_ENTER;
+        }
     }
 }
 /*
@@ -763,14 +748,7 @@ void vRedrawTask( void * argument )
                 break;
             case STATE_RUN:
                  vTaskDelay(10);
-                 if ( HAL_GetBit( Din3_4_5_Port ,Din4_Pin ) == KEY_OFF_STATE)
-                 {
-                     vResetKeyState();
-                 }
-                 else
-                 {
-                     vCheckKeySatate();
-                 }
+                 vCheckKeySatate(HAL_GetBit( Din3_4_5_Port ,Din4_Pin ));
                  // Отображение меню
                  SystemMenuDraw();
                  //Отрисовываем RGB пикторграммы
