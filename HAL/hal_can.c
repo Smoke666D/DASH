@@ -78,7 +78,9 @@ void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
 #if MCU == CH32V2
      NVIC_InitTypeDef      NVIC_InitStructure = {0};
      CAN_InitTypeDef       CAN_InitSturcture = {0};
-     RCC_APB1PeriphClockCmd(RCC_APB1Periph_CAN1, ENABLE);
+     RCC->APB1PCENR |= RCC_APB1Periph_CAN1;
+     RCC->APB1PCENR &= ~RCC_APB1Periph_CAN1;
+     RCC->APB1PCENR |= RCC_APB1Periph_CAN1;
      CAN_InitSturcture.CAN_Mode = CAN_Mode_Normal;
      CAN_InitSturcture.CAN_SJW  = CAN_SJW_4tq;
      CAN_InitSturcture.CAN_BS1  = CAN_BS1_12tq;

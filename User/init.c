@@ -27,8 +27,8 @@ void vInit_DeviceConfig( void )
     //Настройка тактирования всех устрйоств
 	MX_GPIO_Init( );
 	vAINInit();
-    HAL_SPI_InitDMA(SPI1, SPI_16bit ,SPI_SOFT_NSS);
-	HAL_SPI_InitDMA(SPI2, SPI_16bit ,SPI_SOFT_NSS);
+    HAL_SPI_InitDMA(SPI1, SPI_16bit );
+	HAL_SPI_InitDMA(SPI2, SPI_16bit );
 	HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR);
 	HAL_TIMER_InitIt( TIMER4, 1000000, 100, &vRGBProcess ,TIM4_PRIOR,TIM4_SUB_PRIOR);
 	HAL_TiemrEneblae( TIMER4);

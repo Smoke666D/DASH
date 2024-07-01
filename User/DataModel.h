@@ -11,18 +11,18 @@
 #include "system_init.h"
 
 
-#define VALID_CODE      0x77
+#define VALID_CODE      0x59
 #define VALID_CODE_ADDRES     0
 
-#define RGB_BRIGTH_ADR         (VALID_CODE_ADDRES +1)
+#define BITRATE_ADR            (VALID_CODE_ADDRES + 1)
+#define RGB_BRIGTH_ADR         (BITRATE_ADR  +1)
 #define WHITE_BRIGTH_ADR       (RGB_BRIGTH_ADR + 1)
 #define NODE_ID                (WHITE_BRIGTH_ADR + 1)
-#define BITRATE_ADR            (NODE_ID + 1)
-#define HOUR_COUNTER_ADR       (BITRATE_ADR +1 )
+#define BAR_MODE               (NODE_ID  + 1 )
+#define HOUR_COUNTER_ADR       (BAR_MODE +1 )
 #define ODOMETR_ADR            (HOUR_COUNTER_ADR + 4 )
 #define ODOMETR_MAP            (ODOMETR_ADR  + 4 )
-#define BAR_MODE               (ODOMETR_MAP  + 1 )
-#define BAR_VALUE_HIGH         (BAR_MODE  + 1 )
+#define BAR_VALUE_HIGH         (ODOMETR_MAP  + 1 )
 #define BAR_VALUE_LOW          (BAR_VALUE_HIGH  + 2 )
 #define BAR_VALUE_RED_HIGH     (BAR_VALUE_LOW  + 2 )
 #define BAR_VALUE_RED_LOW      (BAR_VALUE_RED_HIGH + 2 )

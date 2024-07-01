@@ -76,7 +76,7 @@ typedef struct
 	void CAN1_TX_IRQHandler (void);
 #endif
 
-#if MCU == CH32
+#if MCU == CH32V2
 
 	void   USB_HP_CAN1_TX_IRQHandler(void);
 	void   USB_LP_CAN1_RX0_IRQHandler(void);

@@ -36,7 +36,7 @@ typedef enum
 	#define HAL_SPI_t SPI_TypeDef *
 #endif
 
-void HAL_SPI_InitDMA(HAL_SPI_t spi , SPI_DATA_Size_t data_size , SPI_NSS_t nss);
+void HAL_SPI_InitDMA(HAL_SPI_t spi , SPI_DATA_Size_t data_size );
 void HAL_SPI_RXOveleyClear(HAL_SPI_t spi );
 uint8_t HAL_SPI_GetBusy(HAL_SPI_t spi );
 

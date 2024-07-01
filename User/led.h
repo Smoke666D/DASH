@@ -63,7 +63,7 @@
 extern const u8 DigitMask[];
 void SetSegPoint( u8 on);
 void SetSegDirect( u8 number, u8 mask);
-void SetSEG( u16 mask, u32 value);
+void SetSEG( u16 mask, u32 value, u8 point);
 void vSetInitBrigth(BRIGTH_CHANNEL_t ch, u8 brigth);
 void vSetBrigth( BRIGTH_CHANNEL_t ch, u8 brigth);
 void SetBigSeg( u16 mask);

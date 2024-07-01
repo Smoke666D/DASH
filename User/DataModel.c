@@ -57,6 +57,8 @@ void vDataModelRegDelayWrite()
     }
 }
 
+static const u8 default_data[]= { VALID_CODE, 2, 13, 14, 0x20 ,1};
+
  void DataModel_Init()
 {
     memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
@@ -64,12 +66,13 @@ void vDataModelRegDelayWrite()
     {
          if (DATA_MODEL_REGISTER[VALID_CODE_ADDRES]!=VALID_CODE )
          {
-             DATA_MODEL_REGISTER[BITRATE_ADR ]                = 2;
-             DATA_MODEL_REGISTER[NODE_ID]                     = 0x20;
-             DATA_MODEL_REGISTER[VALID_CODE_ADDRES]           = VALID_CODE;
-             DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]            = 12;
-             DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]              = 12;
-             DATA_MODEL_REGISTER[BAR_MODE]   = 1;
+             memcpy(DATA_MODEL_REGISTER,default_data,6);
+           //  DATA_MODEL_REGISTER[BITRATE_ADR ]                = 2;
+            // DATA_MODEL_REGISTER[NODE_ID]                     = 0x20;
+            // DATA_MODEL_REGISTER[VALID_CODE_ADDRES]           = VALID_CODE;
+          //   DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]            = 14;
+           //  DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]              = 13;
+          //   DATA_MODEL_REGISTER[BAR_MODE]   = 1;
              setReg16(BAR_VALUE_HIGH        ,36);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,5);

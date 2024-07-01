@@ -51,6 +51,8 @@ void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r )
    return;
 }
 
+static const u8 offset_mask[]={2,2,1,1,0,0,2,2,1,1,0,0,2,0};
+static const u8 step_masl[] = {0,3,0,3,0,3,9,6,13,10,12,9,12,6};
 
 /*
  * Функция вывода в RGB светодиод. Из-за неравномернго распределения
@@ -59,9 +61,9 @@ void SetBarState( u8 start_g, u8 count_g, u8 start_r, u8 count_r )
  */
 void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state)
 {
-   u8 offset;
-   u8 step;
-   switch (number)
+   u8 offset =offset_mask[number] ;
+   u8 step   = step_masl[number];
+   /*switch (number)
    {
        case 0:
        case 1:
@@ -103,12 +105,11 @@ void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state)
            offset   = 0;
            step     = 9;
            break;
-
        case 13:
            offset   = 0;
            step     = 6;
            break;
-   }
+   }*/
    u16 mask = (color == BLUE_COLOR) ? 0x04 : ( (color==GREEN_COLOR) ? 0x02 : 0x01 );
    if ( state == STATE_ON )
    {
@@ -122,7 +123,6 @@ void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state)
 /*
  *
  */
-
 void SetSegDirect( u8 number, u8 mask)
 {
     switch (number)
@@ -172,7 +172,7 @@ void SetSegPoint( u8 on)
    return;
 }
 
-void SetSEG( u16 mask, u32 value)
+void SetSEG( u16 mask, u32 value, u8 point)
 {
   int32_t val = value;
   u8 min = 0;
@@ -210,13 +210,12 @@ void SetSEG( u16 mask, u32 value)
      SetSegDirect(i,DigitMask[digit]);
      val = val/10;
   }
-  SPI2_DATA[1] |= 0x0400; //Ставим точку
+  SetSegPoint(point);//Ставим точку
   if ( min )
   {
       SetSegDirect(dc,0x40);
       dc++;
   }
-
   for (u8 i=(dc);i<7;i++)
   {
       SetSegDirect(i,0);
@@ -299,28 +298,28 @@ void vLedProcess( void )
    return;
 }
 
+
+
 void vRGBProcess()
 {
      memcpy(data,SPI1_DATA,SPI1_CHIP_COUNT*2);
-     if (++counterRGB >= PWM_TIM_PERIOD/2) counterRGB = 0;
-
-      if (counterRGB++ >=BrigthR[10])
-      {
+     if (++counterRGB >= PWM_TIM_PERIOD/5) counterRGB = 0;
+     if (counterRGB >=BrigthR[10])
+     {
           data[0]&=0x6DB6;
           data[1]&=0xDBF6;
           data[2]&=0x6DB6;
           data[3]&=0xAAAA;
           data[4]&=0xAAAA;
-      }
-     if (counterRGB++ >=BrigthG[10])
-      {
+     }
+     if (counterRGB >=BrigthG[10])
+     {
           data[0]&=0x5B6D;
           data[1]&=0xB7ED;
           data[2]&=0x5B6D;
           data[3]&=0x5555;
           data[4]&=0x5555;
-
-       }
+      }
       if (counterRGB >= BrigthG[10])
        {
           data[0]&=0x36DB;

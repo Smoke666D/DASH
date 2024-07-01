@@ -55,6 +55,13 @@ typedef enum
     chVERSION       = 29
 } VIRTUAL_CHANNEL_t;
 
+
+typedef enum
+{
+    MENU_NOT_BLINK,
+    MENU_BLINK,
+} MENU_BLINK_t;
+
 typedef struct
 {
   u32 menu_draw[ MAX_MENU_COUNT];
@@ -67,16 +74,46 @@ typedef struct
   u32 buffer_error_register;
   u8 max_menu_index;
   u8 cur_dispaly_error;
-} Menu_Object_t;
+  MENU_BLINK_t blink;
+  u8 blink_counter;
 
+} Menu_Object_t;
 
 typedef enum
 {
-  SYSTEM_IDLE,
-  SYSTEM_EDIT,
-  SYSTEM_ENTER,
-  SYSTEM_EXIT,
+    KEY_NOT_CHANGED = 0,
+    KEY_CHANGE_STATE = 1
+} KEY_PRESS_t;
+
+typedef enum
+{
+   KEY_STATUS_IDLE = 0,
+   KEY_STATUS_PRESS = 1,
+   KEY_STATUS_HOLD  = 2,
+} KEY_STATUS_t;
+
+
+#define SERVICE_MODE_TIME_OUT 600
+#define SERVICE_MODE_EXIT     400
+#define SERVICE_MODE_ENTER    200
+
+typedef enum
+{
+  SYSTEM_IDLE =  0,
+  SYSTEM_ENTER = 1,
+  SYSTEM_EXIT  = 2,
+  SYSTEM_EDIT =  3,
 } KeyDelayState_t;
+
+typedef struct
+{
+    KEY_PRESS_t key_press_state;
+    KEY_STATUS_t key_status;
+    u16          key_counter;
+    KeyDelayState_t SystemDelayState;
+} KeyState_t;
+
+
 
 typedef enum
 {
@@ -92,6 +129,10 @@ typedef enum
   AIN3_VIEW_STATE,
   VER_VIEW_STATE,
 } MenuState_t;
+
+
+
+
 
 TaskHandle_t * xProcessTaskHandle ();
 void RedrawNotifyTaskToInit();

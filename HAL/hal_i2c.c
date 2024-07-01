@@ -33,13 +33,17 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 
 #if	MCU == CH32V2
 	NVIC_InitTypeDef      NVIC_InitStructure = {0};
-	I2C_DeInit(i2c);
+
 	if ( i2c == I2C_1)
 	{
+	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, ENABLE );
+	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, DISABLE );
 		RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, ENABLE );
 	}
 	else
 	{
+	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C2, ENABLE );
+	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C2, DISABLE );
 	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C2, ENABLE );
 	}
     I2C_InitTypeDef I2C_InitTSturcture={0};

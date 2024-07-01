@@ -16,15 +16,23 @@
 static Menu_Object_t menu;
 static u32 ErrorRegister = 0;
 static u8 keystate = 0;
+static KeyState_t Keys;
 static median_filter_data_t      AIN_MIDIAN_FILTER_STRUC[1];
-
 static TaskHandle_t  pProcessTaskHandle ;
+static const u16 RMPMAUP[] =   { (u16)0x2306,  (u16)0x635B};
+static const u16 RMPMADOWN[] = { (u16)0x1C06,  (u16)0x3F5B};
+static const MenuState_t MenuStateCross[]={RPM1_UP_MENU_STATE,RPM2_UP_MENU_STATE,AIN1_VIEW_STATE,AIN2_VIEW_STATE,AIN3_VIEW_STATE};
+static MenuState_t  MenuSatate = WORK_MENU_STATE;
+static u8           ServieModeFSM = 0;
+static u8 coof_view_flag =  0;
 
+static void SegClear();
 
 TaskHandle_t * xProcessTaskHandle ()
 {
     return  &pProcessTaskHandle ;
 }
+
 
 void vSetErrorReg( u32 data)
 {
@@ -239,7 +247,18 @@ void vDashDrawInit()
     }
     menu.buffer_error_register = 0;
     menu.cur_dispaly_error = 0;
+    menu.blink = MENU_NOT_BLINK;
+    menu.blink_counter = 0;
     return;
+}
+
+void vMenuBlink()
+{
+    if (menu.blink)
+        {
+             if (++menu.blink_counter>40) menu.blink_counter = 0;
+              if (menu.blink_counter>21)  SegClear();
+        }
 }
 
 void vAcceptError()
@@ -451,19 +470,13 @@ void RedrawNotifyTaskToInit()
 
 
 
-//static TaskHandle_t  pKeybardTaskHandle ;
-static uint8_t  STATUS = 0;
-
-
 BitState_t fPortStateKey (uint8_t i)
 {
 
      return HAL_GetBit( Din3_4_5_Port ,Din4_Pin );
 
 }
-#define SERVICE_MODE_TIME_OUT 600
-#define SERVICE_MODE_EXIT     400
-#define SERVICE_MODE_ENTER    200
+
 
 static void SegClear()
 {
@@ -485,6 +498,7 @@ static void SegPrint(u8 s1,u8 s2,u8 s3,u8 s4,u8 s5,u8 s6,u8 s7)
 
 static void SeriveceMenuDraw( u8 * servece_menu_state)
 {
+
     switch (*servece_menu_state )
     {
                      case 0:
@@ -500,7 +514,7 @@ static void SeriveceMenuDraw( u8 * servece_menu_state)
                          SegPrint(0x77,0x06,0x54,0x06,0,0,0);
                          break;
                     case 4:
-                        SegPrint(0x77,0x06,0x54,0x5B,0,0,0);
+                         SegPrint(0x77,0x06,0x54,0x5B,0,0,0);
                          break;
                     case 5:
                          SegPrint(0x77,0x06,0x54,0x4F,0,0,0);
@@ -509,7 +523,7 @@ static void SeriveceMenuDraw( u8 * servece_menu_state)
                          SegPrint(0x6D,0x77,0x3E,0x79,0,0,0);
                          break;
                     case 7:
-                         SetSEG( (u16)0x5000, getODValue(chVERSION,0));
+                         SetSEG( (u16)0x5000, getODValue(chVERSION,0),0);
                          break;
                     case 8:
                          SegPrint(0x79,0x76,0x06,0x78,0,0,0);
@@ -518,163 +532,209 @@ static void SeriveceMenuDraw( u8 * servece_menu_state)
                          *servece_menu_state = 1;
                          break;
     }
+    SetSegPoint( RESET );
 }
 
-static MenuState_t  MenuSatate = WORK_MENU_STATE;
-static u8           ServieModeFSM = 0;
-static u16          ServiceModeCounter = 0;
-static u8           MenuViewBlink = 0;
 
-static void SystemMenuDraw(u8 key_press_flag, KeyDelayState_t SystemDelayState)
+static void SystemMenuDraw()
 {
     u32 buffer32;
-    u8 data;
+    u8 data,index;
     if ( MenuSatate == WORK_MENU_STATE )
     {
-        MenuViewBlink = 0;
-        MenuBackHomeCheck( 10);
-        if (key_press_flag )
+        menu.blink = (( Keys.SystemDelayState > SYSTEM_IDLE) || (menu.show_error_flag)) ? MENU_BLINK : MENU_NOT_BLINK ;
+        MenuBackHomeCheck( 10 );
+        if (Keys.key_press_state  == KEY_CHANGE_STATE )   //Проверяем нажатие клавиши
         {
-           switch (SystemDelayState)
-           {
-               case SYSTEM_EDIT:
-                    MenuSatate = SYS_MENU_STATE;
-                    break;
-              case SYSTEM_EXIT:
-              case SYSTEM_ENTER:
-                    SetCurMenuHome();
-                    break;
-              default:
-                    IncMenuIndex();
-                    break;
-          }
-        }
+           if ( Keys.SystemDelayState       ==  SYSTEM_IDLE )  //Если было короткое переходим по меню
+               IncMenuIndex();
+           else if ( Keys.SystemDelayState  == SYSTEM_EDIT )   //Если длинное, входим в сервисное меню
+               MenuSatate = SYS_MENU_STATE;
+           else
+               SetCurMenuHome();                              //Если средней длительности, то фиксируем новый домашний экран
+       }
+        /*Отображение регистра ошибок*/
        SetErrorRegiter(ErrorRegister);
        buffer32 = uGetCurrMenu();
        if ((buffer32 & 0xFF) == chErrorRegister )
        {
-           if  (ErrorRegister!=0)
+           if  (ErrorRegister!=0)  /*Если при пролистывании попали на регистр ошибок, то оборажаем только если они есть*/
            {
                u8 code = (getErrorCode() + 1);
                SegPrint(0x79,0x50,0x50,0x00,0x00,DigitMask[code/10],DigitMask[code%10]);
-               SetSegPoint( RESET);
-               if (menu.show_error_flag)
-               MenuViewBlink = 1;
-
-
+               SetSegPoint( RESET );
            }
-           else
+           else   /*Иначе листаем дальше*/
            {
                IncMenuIndex();
            }
         }
         else
-        {
-            SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),0)  );
-
-        }
+            SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),0) ,1 );
     }
     else if (MenuSatate ==SYS_MENU_STATE )
     {
-        MenuViewBlink = 1;
-        if ( key_press_flag )
+        menu.blink = ( Keys.SystemDelayState > SYSTEM_IDLE ) ? MENU_NOT_BLINK : MENU_BLINK;
+        if ( Keys.key_press_state == KEY_CHANGE_STATE )
         {
-              if ( SystemDelayState == SYSTEM_IDLE )ServieModeFSM++;
+              if ( Keys.SystemDelayState == SYSTEM_IDLE   )
+                  ServieModeFSM++;
               else
               {
                  switch (ServieModeFSM)
                  {
-                                  case 1:
-                                     MenuSatate= RPM1_UP_MENU_STATE;
-                                     break;
-                                 case 2:
-                                     MenuSatate= RPM2_UP_MENU_STATE;
-                                     break;
-                                 case 3:
-                                     MenuSatate =AIN1_VIEW_STATE;
-                                     break;
-                                 case 4:
-                                     MenuSatate =AIN2_VIEW_STATE;
-                                     break;
-                                 case 5:
-                                     MenuSatate =AIN3_VIEW_STATE;
-                                     break;
-                                case 6:
-                                     SaveReg16(RPM1_COOF, 2);
-                                     SaveReg16(RPM2_COOF, 2);
-                                     ServieModeFSM = 0;
-                                     break;
-                                case 8:
-                                    GoToHome(); MenuSatate = WORK_MENU_STATE;
-                                    break;
-                              }
-                       }
+                       case 1:
+                       case 2:
+                       case 3:
+                       case 4:
+                       case 5:
+                          MenuSatate= MenuStateCross[ServieModeFSM-1];
+                          break;
+                       case 6:
+                          SaveReg16(RPM1_COOF, 2);
+                          SaveReg16(RPM2_COOF, 2);
+                          ServieModeFSM = 0;
+                          break;
+                       case 8:
+                          GoToHome();
+                          MenuSatate = WORK_MENU_STATE;
+                          break;
+                  }
             }
-            SeriveceMenuDraw(&ServieModeFSM );
+        }
+        SeriveceMenuDraw(&ServieModeFSM );
     }
     else
     {
-        if (key_press_flag)
+        if (( coof_view_flag == 1 ) && Keys.key_press_state)
         {
-            if ((SystemDelayState == SYSTEM_EDIT) || (SystemDelayState == SYSTEM_EXIT))
+            MenuSatate = SYS_MENU_STATE;
+            coof_view_flag  = 0;
+        }
+        menu.blink = ( Keys.SystemDelayState == SYSTEM_ENTER )   ? MENU_BLINK : MENU_NOT_BLINK;
+        if ((Keys.key_press_state) &&  (Keys.SystemDelayState == SYSTEM_EDIT))
+        {
+            if ( (MenuSatate == RPM1_UP_MENU_STATE) ||( MenuSatate == RPM1_DOWN_MENU_STATE))
             {
-                MenuSatate = SYS_MENU_STATE;
+                SetSEG( (u16)0x2306,  getReg16(RPM1_COOF),0 );
+                coof_view_flag = 1;
+            }
+            if ( (MenuSatate == RPM2_UP_MENU_STATE) ||( MenuSatate == RPM2_DOWN_MENU_STATE))
+            {
+                SetSEG( (u16)0x635B,  getReg16(RPM2_COOF) ,0);
+                coof_view_flag = 1;
             }
         }
-        switch (MenuSatate)
-          {
+        if (coof_view_flag==0)
+        {
 
-             case AIN1_VIEW_STATE:
-                 SetSEG( (u16)0x0600, (int32_t) GetAIN(0 )*10);
-                 break;
-             case AIN2_VIEW_STATE:
-                 SetSEG( (u16)0x05B00, (int32_t) GetAIN(1)*10);
-                 break;
-             case  AIN3_VIEW_STATE:
-                 SetSEG( (u16)0x4F00, (int32_t) GetAIN(2)*10);
-                 break;
-             case RPM1_UP_MENU_STATE:
-             case RPM2_UP_MENU_STATE:
-                 if (MenuSatate == RPM1_UP_MENU_STATE)
-                      SetSEG( (u16)0x2306,  getODValue(chRPM1,0) );
-                 else
-                      SetSEG( (u16)0x635B,  getODValue(chRPM2,0) );
-                  if ((key_press_flag) && (SystemDelayState == SYSTEM_ENTER))
-                  {
-                      MenuSatate = (MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_DOWN_MENU_STATE: RPM2_DOWN_MENU_STATE;
-                  }
-                  if ((key_press_flag) && (SystemDelayState == SYSTEM_IDLE))
-                  {
-                      data =  getReg16((MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_COOF :  RPM2_COOF ) + 1;
-                      setReg16((MenuSatate == RPM1_UP_MENU_STATE) ? RPM1_COOF :  RPM2_COOF, data);
-                   }
-                   break;
-              case RPM1_DOWN_MENU_STATE:
-              case RPM2_DOWN_MENU_STATE:
-                  if (MenuSatate == RPM1_DOWN_MENU_STATE)
-                      SetSEG( (u16)0x1C06,  getODValue(chRPM1,0) );
-                  else
-                      SetSEG( (u16)0x3F5B,  getODValue(chRPM2,0) );
-                  if ((key_press_flag) && (SystemDelayState == SYSTEM_ENTER))
-                  {
-                      MenuSatate = (MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_UP_MENU_STATE: RPM2_UP_MENU_STATE;
-                  }
-                  if ((key_press_flag) && (SystemDelayState == SYSTEM_IDLE))
-                  {
-                     data =  getReg16((MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_COOF :  RPM2_COOF ) - 1;
-                     setReg16((MenuSatate == RPM1_DOWN_MENU_STATE) ? RPM1_COOF :  RPM2_COOF,data);
-                  }
-                  break;
-           }
+            switch (MenuSatate)
+            {
+                 case AIN1_VIEW_STATE:
+                     SetSEG( (u16)0x0600, (int32_t) GetAIN(0 )*10,1);
+                     break;
+                 case AIN2_VIEW_STATE:
+                     SetSEG( (u16)0x05B00, (int32_t) GetAIN(1)*10,1);
+                     break;
+                 case  AIN3_VIEW_STATE:
+                     SetSEG( (u16)0x4F00, (int32_t) GetAIN(2)*10,1);
+                     break;
+                 case RPM1_UP_MENU_STATE:
+                 case RPM2_UP_MENU_STATE:
+                      index = (MenuSatate - RPM1_UP_MENU_STATE);
+                      SetSEG( RMPMAUP[index],  getODValue(chRPM1+index,0),1 );
+                      if (Keys.key_press_state)
+                      {
+                          if (Keys.SystemDelayState == SYSTEM_ENTER)
+                          {
+                             MenuSatate = RPM1_DOWN_MENU_STATE + index;
+                          }
+                          if (Keys.SystemDelayState == SYSTEM_IDLE)
+                          {
+                             data =  getReg16( RPM1_COOF + index) + 1;
+                             setReg16( RPM1_COOF +index , data);
+                          }
+                      }
+                     break;
+                 case RPM1_DOWN_MENU_STATE:
+                 case RPM2_DOWN_MENU_STATE:
+                     index = (MenuSatate - RPM1_DOWN_MENU_STATE);
+                     SetSEG( RMPMADOWN[index],  getODValue(chRPM1+index,0),1 );
+                     if (Keys.key_press_state)
+                     {
+                         if  (Keys.SystemDelayState == SYSTEM_ENTER)
+                         {
+                             MenuSatate =  RPM1_UP_MENU_STATE + index;
+                         }
+                         if  (Keys.SystemDelayState == SYSTEM_IDLE)
+                         {
+                             data =  getReg16(RPM1_COOF +  index ) - 1;
+                             setReg16(RPM1_COOF +index,data);
+                         }
+                     }
+                     break;
+            }
+        }
     }
-      if (MenuViewBlink)
+    vMenuBlink();
+      if ( Keys.key_press_state == KEY_CHANGE_STATE )
       {
-           if (++ServiceModeCounter>40) ServiceModeCounter = 0;
-            if (ServiceModeCounter>21)  SegClear();
+           Keys.key_press_state = KEY_NOT_CHANGED;
+           Keys.SystemDelayState = SYSTEM_IDLE;
       }
 }
 
-static uint16_t COUNTER = 0;
+
+/*
+ * Функция фиксации отжатия клавиши
+ */
+static void vResetKeyState()
+{
+   if (Keys.key_status  != KEY_STATUS_IDLE)
+   {
+       Keys.key_press_state = KEY_CHANGE_STATE;
+       Keys.key_status      = KEY_STATUS_IDLE;
+       Keys.key_counter      = 0;
+   }
+}
+/*
+ * Функция проверки состояния клавиши и фиксация ее удрежания
+ */
+static void vCheckKeySatate()
+{
+    Keys.key_counter++;
+    if (( Keys.key_status == KEY_STATUS_IDLE) && ( Keys.key_counter >= 5))
+    {
+        Keys.key_status = KEY_STATUS_PRESS;
+    }
+    else  if (  Keys.key_status == KEY_STATUS_PRESS )
+    {
+         if (  Keys.key_counter >= SERVICE_MODE_TIME_OUT )
+         {
+              Keys.SystemDelayState = SYSTEM_EDIT;
+              Keys.key_press_state = KEY_CHANGE_STATE;
+              Keys.key_status = KEY_STATUS_HOLD;
+         }
+         else if (  Keys.key_counter >= SERVICE_MODE_EXIT  )
+         {
+            Keys.SystemDelayState = SYSTEM_EXIT;
+         }
+         else if ( Keys.key_counter >= SERVICE_MODE_ENTER   )
+         {
+            Keys.SystemDelayState = SYSTEM_ENTER;
+         }
+    }
+}
+/*
+ *   Функция инииалзации клавитуры
+ */
+static void vInitKeys()
+{
+    Keys.key_press_state   = KEY_NOT_CHANGED;
+    Keys.key_status        = KEY_STATUS_IDLE;
+    Keys.key_counter       = 0;
+    Keys.SystemDelayState  = SYSTEM_IDLE;
+}
 /*
  *
  */
@@ -684,11 +744,8 @@ void vRedrawTask( void * argument )
     TaskFSM_t  state = STATE_IDLE;
     u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r,bd;
     u8 data;
-    uint8_t key_press_flag = 0;
-    KeyDelayState_t SystemDelayState = SYSTEM_IDLE;
     while(1)
     {
-
         switch(state)
         {
             case STATE_IDLE:
@@ -696,6 +753,7 @@ void vRedrawTask( void * argument )
                 if ((ulNotifiedValue & TASK_INIT_NOTIFY) !=0)
                 {
                     vDashDrawInit();
+                    vInitKeys();
                     state = STATE_INIT;
                 }
                 break;
@@ -707,39 +765,14 @@ void vRedrawTask( void * argument )
                  vTaskDelay(10);
                  if ( HAL_GetBit( Din3_4_5_Port ,Din4_Pin ) == KEY_OFF_STATE)
                  {
-                     if  (STATUS!=0)
-                     {
-                         key_press_flag = 1;
-                         STATUS = 0;
-                         COUNTER = 0;
-                     }
+                     vResetKeyState();
                  }
                  else
                  {
-                     COUNTER++;
-                     if (( STATUS == 0) && (COUNTER >= 5))
-                     {
-                         STATUS = 1;
-                     }
-                     if ( STATUS == 1 )
-                     {
-                         if ( COUNTER >= SERVICE_MODE_TIME_OUT )
-                         {
-                             SystemDelayState = SYSTEM_EDIT;
-                             key_press_flag = 1;
-                             STATUS = 2;
-                         }
-                         else if ( COUNTER >= SERVICE_MODE_EXIT  )
-                         {
-                             SystemDelayState = SYSTEM_EXIT;
-
-                         }
-                         else if ( COUNTER >= SERVICE_MODE_ENTER   )
-                         {
-                             SystemDelayState = SYSTEM_ENTER;
-                         }
-                     }
+                     vCheckKeySatate();
                  }
+                 // Отображение меню
+                 SystemMenuDraw();
                  //Отрисовываем RGB пикторграммы
                  for ( u8 i = 0; i < RGB_DIOD_COUNT; i++ )
                  {
@@ -781,15 +814,6 @@ void vRedrawTask( void * argument )
                  }
                  SetBarState( startG, countG, startR, countR );
                  //Конец вывода данных в бар
-
-                 // Отображение меню
-                 SystemMenuDraw(key_press_flag ,SystemDelayState);
-                 if ( key_press_flag )
-                 {
-                      key_press_flag = 0;
-                      SystemDelayState = SYSTEM_IDLE;
-                 }
-
                   //Отображение большого сегменета
                   data = getReg16(BIG_SEG);
                   u16 seg_view = 0;
