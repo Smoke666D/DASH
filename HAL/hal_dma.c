@@ -199,15 +199,10 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   IRQn_Type  irq;
 	  /* Enable DMA clock */
 	   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
-	   switch (direction)
-	   {
-	   	   case MTOP:
-	   		   dmaConfig.DMA_DIR =  DMA_DIR_PeripheralDST;
-	   		   break;
-	   	   case PTOM:
-	   		   dmaConfig.DMA_DIR = DMA_DIR_PeripheralSRC;
-	   		   break;
-	   }
+
+	   dmaConfig.DMA_DIR = ( direction== MTOP ) ?DMA_DIR_PeripheralDST : DMA_DIR_PeripheralSRC;
+
+
 	   switch (dma_size)
 	   {
 	   	   case DMA_BYTE:

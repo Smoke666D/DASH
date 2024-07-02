@@ -14,10 +14,6 @@
 static void MX_GPIO_Init( void );
 
 
-
-
-
-
 /*
 Функция инициализации перефирии устройства
 */
@@ -47,14 +43,11 @@ void vInit_DeviceConfig( void )
 */
 static void MX_GPIO_Init(void)
 {
-  // HAL_InitGpioLib();
-  /*Configure GPIO pin Output Level */
-   HAL_ResetBit(PORT_A, GPIO_8);
-	
-  //Конфигурируем порты в
 
-  //Конфигурируем порты выхода
-  HAL_InitGpioOut(PowerOn_Port , PowerOn_Pin);
+
+
+
+
 //Конфигурируем порты DIN
   HAL_InitGpioIn( Din3_4_5_Port,Din3_Pin | Din4_Pin | Din5_Pin );
   /*
@@ -65,7 +58,7 @@ static void MX_GPIO_Init(void)
   /*
    * Порты яроксти ШИМ
    */
-  HAL_InitGpioAF( nOE_Port , nOE1_Pin | nOE2_Pin  , 0 , GPIO_Mode_AF_PP);
+ // HAL_InitGpioAF( nOE_Port , nOE1_Pin | nOE2_Pin  , 0 , GPIO_Mode_AF_PP);
 /*
  * Порты ADC
  */
@@ -75,9 +68,9 @@ static void MX_GPIO_Init(void)
    *
    */
   HAL_InitGpioAF(  SPI1_Port , SPI1_SCK_Pin   | SPI1_MOSI_Pin  , 0, GPIO_Mode_AF_PP);
-  HAL_InitGpioAF(  SPI2_Port , SPI2_SCK_Pin   | SPI2_MOSI_Pin  , 0, GPIO_Mode_AF_PP );
+  HAL_InitGpioAF(  SPI2_Port , SPI2_SCK_Pin   | SPI2_MOSI_Pin |  nOE1_Pin | nOE2_Pin , 0, GPIO_Mode_AF_PP );
   HAL_InitGpioOut(  SPI1_Port , SPI1_NSS_Pin);
-  HAL_InitGpioOut(  SPI2_Port , SPI2_NSS_Pin);
+  HAL_InitGpioOut(  SPI2_Port , SPI2_NSS_Pin | PowerOn_Pin);
  /*
   * Порты CAN
   */

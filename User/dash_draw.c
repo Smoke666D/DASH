@@ -20,8 +20,8 @@ static u8 keystate = 0;
 static KeyState_t Keys;
 static median_filter_data_t      AIN_MIDIAN_FILTER_STRUC[1];
 static TaskHandle_t  pProcessTaskHandle ;
-static const u16 RMPMAUP[] =   { (u16)0x2306,  (u16)0x635B};
-static const u16 RMPMADOWN[] = { (u16)0x1C06,  (u16)0x3F5B};
+static const u16 RMPMAUP[] =   { (u16)0x2306,  (u16)0x235B};
+static const u16 RMPMADOWN[] = { (u16)0x1C06,  (u16)0x1C5B};
 static const MenuState_t MenuStateCross[]={RPM1_UP_MENU_STATE,RPM2_UP_MENU_STATE,AIN1_VIEW_STATE,AIN2_VIEW_STATE,AIN3_VIEW_STATE};
 static MenuState_t  MenuSatate = WORK_MENU_STATE;
 static u8           ServieModeFSM = 0;
@@ -74,6 +74,7 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case chAKB  :
         return ( (int32_t)( GetAIN(AIN4 ) * 10 ));
     case chRPM1  :
+
         data16 = GetRPM(INPUT_1);
         float coof1 = (float)getReg16(RPM1_COOF)/RMP_OFFSET;
         return ( (u32)((data16 *coof1)*10.0) );
@@ -153,13 +154,13 @@ void IncMenuIndex( )
 
 void GoToHome()
 {
-    menu.current_timer_ms = 0;
-    menu.current_menu = menu.home_menu;
+    menu.current_timer_ms   = 0;
+    menu.current_menu       = menu.home_menu;
 }
 
 void SetCurMenuHome()
 {
-    menu.home_menu = menu.current_menu;
+    menu.home_menu          = menu.current_menu;
     WriteReg( MENU_DEF_POS  ,&menu.home_menu, 1 );
 
 }
@@ -232,9 +233,9 @@ MENU_CHECK_CHANNEL_t  CheckMenuChannel( u8 menu_item, u8 index)
 void vDashDrawInit()
 {
     vInitMedianFilter(&AIN_MIDIAN_FILTER_STRUC[0]);
-    menu.home_menu = getReg8(MENU_DEF_POS);
-    menu.home_menu_back_time_s = getReg8(MENU_HOME_BACK_TIME );
-    menu.current_menu = menu.home_menu;
+    menu.home_menu              = getReg8(MENU_DEF_POS);
+    menu.home_menu_back_time_s  = getReg8(MENU_HOME_BACK_TIME );
+    menu.current_menu           = menu.home_menu;
     menu.max_menu_index  = 0;
     //Проверяем скокльо в меню индекосв
     for (u8 i=0;i< MAX_MENU_COUNT;i++)
@@ -303,15 +304,6 @@ u32 uGetCurrMenu()
 /*
  * Конец API для работыс меню
  */
-
-void vRGBOff( u8 ch)
-{
-    SetRGB( ch, GREEN_COLOR, STATE_OFF);
-    SetRGB( ch, BLUE_COLOR, STATE_OFF);
-    SetRGB( ch, RED_COLOR, STATE_OFF);
-}
-
-
 /*
  *
  */
@@ -321,53 +313,43 @@ void vGetEdgeData(u16 addr,  u16 *high, u16 * low)
     *low  = getReg16(addr + 2 );
 }
 
+static LED_STATE_t checkLedState( u16 addr, u16 bd)
+{
+    u16 he;
+    u16 le;
+    vGetEdgeData( addr,  &he, &le);
+    LED_STATE_t state = STATE_OFF;
+    if ((le !=0) && (he !=0))
+    {
+       if (le <= he)   //Обычный режим, проверяем на попадание в окно.
+            {
+               if ((bd >= le) && (bd <= he)) state = STATE_ON;
+            }
+            else  // инвесный режим, попадаем на непопадание в окно
+            {
+                if ((bd >= le) || (bd <= he)) state = STATE_ON;
+            }
+    }
+    return (state);
+}
+
+/*
+ *
+ */
 void vRGBMode( u8 i,  u8 index )
 {
     if (index ==0 )
     {
-       vRGBOff( i);
-       return;
+        SetRGB( i, GREEN_COLOR, STATE_OFF);
+        SetRGB( i, BLUE_COLOR,  STATE_OFF);
+        SetRGB( i, RED_COLOR,   STATE_OFF);
+        return;
     }
-    u16 bd = getODValue(index,1);
-    u16 low_edge, high_edge;
-    LED_STATE_t state;
-    u16 offset = RGB1_VALUE_GREEN_HIGH + i*6*2;
-    vGetEdgeData( offset, &high_edge,&low_edge);
-    if ((low_edge ==0) && (high_edge ==0)) state = STATE_OFF;
-    else
-    if (low_edge <= high_edge)   //Обычный режим, проверяем на попадание в окно.
-    {
-         state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
-    }
-    else  // инвесный режим, попадаем на непопадание в окно
-    {
-         state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
-    }
-    SetRGB( i, GREEN_COLOR, state);
-    vGetEdgeData( offset +4 , &high_edge,&low_edge);
-    if ((low_edge ==0) && (high_edge ==0)) state = STATE_OFF;
-    else
-    if (low_edge <= high_edge)   //Обычный режим, проверяем на попадание в окно.
-    {
-         state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
-    }
-    else  // инвесный режим, попадаем на непопадание в окно
-    {
-         state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
-    }
-    SetRGB( i, RED_COLOR, state);
-    vGetEdgeData( offset +8, &high_edge,&low_edge);
-    if ((low_edge ==0) && (high_edge ==0)) state = STATE_OFF;
-    else
-    if (low_edge <= high_edge)   //Обычный режим, проверяем на попадание в окно.
-    {
-        state = ((bd >= low_edge) && (bd <= high_edge)) ? STATE_ON : STATE_OFF;
-    }
-    else  // инвесный режим, попадаем на непопадание в окно
-    {
-        state = ((bd >= low_edge) || (bd <= high_edge)) ? STATE_ON : STATE_OFF;
-    }
-    SetRGB( i, BLUE_COLOR, state);
+    u16 bd = getODValue( index, 1 );
+    u16 offset = RGB1_VALUE_GREEN_HIGH + i*6*sizeof(u16);
+    SetRGB( i, GREEN_COLOR, checkLedState(offset   , bd ) );
+    SetRGB( i, RED_COLOR,   checkLedState(offset+4 , bd ) );
+    SetRGB( i, BLUE_COLOR,  checkLedState(offset+8 , bd ) );
 }
 
 
@@ -454,8 +436,6 @@ void vBarMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge
         }
      }
 }
-
-
 static TaskHandle_t  pTaskToNotifykHandle;
 
 void RedrawNotifyTaskToStop()
@@ -467,15 +447,6 @@ void RedrawNotifyTaskToInit()
 {
     pTaskToNotifykHandle = xTaskGetCurrentTaskHandle();
     xTaskNotify(pProcessTaskHandle, TASK_INIT_NOTIFY , eSetValueWithOverwrite);
-}
-
-
-
-BitState_t fPortStateKey (uint8_t i)
-{
-
-     return HAL_GetBit( Din3_4_5_Port ,Din4_Pin );
-
 }
 
 
@@ -527,7 +498,6 @@ static const u16 rpm_view_mask[]={(u16)0x2306,(u16)0x635B};
 static void SystemMenuDraw()
 {
     u32 buffer32;
-    u16 data16;
     u8 data,index;
     if ( MenuSatate == WORK_MENU_STATE )
     {
@@ -612,61 +582,52 @@ static void SystemMenuDraw()
             if ((Keys.key_press_state) &&  (Keys.SystemDelayState == SYSTEM_EDIT))
             {
                  coof_view_flag  = 1;
-                 if ( (MenuSatate == RPM1_UP_MENU_STATE) ||( MenuSatate == RPM1_DOWN_MENU_STATE))
-                 {
-                      SetSEG( (u16)0x2306,  getReg16(RPM1_COOF),0 );
-                  }
-                  else
-                  {
-                     SetSEG( (u16)0x635B,  getReg16(RPM2_COOF) ,0);
-                  }
+                 index =  ( MenuSatate & RMP1_UP_MASK ) ? 0 : 1;
+                 SetSEG( rpm_view_mask[index],  getReg16(RPM1_COOF +index *sizeof(u16) ),0 );
             }
             if (coof_view_flag  ==0)
             {
-                switch (MenuSatate)
+                if  ( MenuSatate & RMP1_UP_MASK )
                 {
-
-                 case RPM1_UP_MENU_STATE:
-                 case RPM2_UP_MENU_STATE:
-                      index = (MenuSatate - RPM1_UP_MENU_STATE);
+                      index = (MenuSatate == RPM1_UP_MENU_STATE)? 0 : 1;
                       SetSEG( RMPMAUP[index],  getODValue(chRPM1+index,0),1 );
                       if (Keys.key_press_state)
                       {
                           if (Keys.SystemDelayState == SYSTEM_ENTER)
                           {
-                             MenuSatate = RPM1_DOWN_MENU_STATE + index;
+                             MenuSatate++;
                           }
                           if (Keys.SystemDelayState == SYSTEM_IDLE)
                           {
-                             data16 =  getReg16( RPM1_COOF + index *2 ) + 1;
-                             setReg16( RPM1_COOF + index * 2 , data);
+                             u16 data16 =  getReg16( RPM1_COOF + index *2 ) + 1;
+                             setReg16( RPM1_COOF + index * 2 , data16);
                           }
                       }
-                     break;
-                 case RPM1_DOWN_MENU_STATE:
-                 case RPM2_DOWN_MENU_STATE:
-                     index = (MenuSatate - RPM1_DOWN_MENU_STATE);
+                }
+                else
+                {
+                     index = (MenuSatate == RPM1_DOWN_MENU_STATE)? 0 : 1;
                      SetSEG( RMPMADOWN[index],  getODValue(chRPM1+index,0),1 );
                      if (Keys.key_press_state)
                      {
                          if  (Keys.SystemDelayState == SYSTEM_ENTER)
                          {
-                             MenuSatate =  RPM1_UP_MENU_STATE + index;
+                             MenuSatate--;
                          }
                          if  (Keys.SystemDelayState == SYSTEM_IDLE)
                          {
-                             data16 =  getReg16(RPM1_COOF +  index ) - 1;
-                             setReg16(RPM1_COOF +index,data);
+                             u16 data16 =  getReg16(RPM1_COOF +  index ) - 1;
+                             setReg16(RPM1_COOF +index,data16);
                          }
                      }
-                     break;
+
             }}
         }
     }
     vMenuBlink();
     if ( Keys.key_press_state == KEY_CHANGE_STATE )
     {
-        Keys.key_press_state = KEY_NOT_CHANGED;
+        Keys.key_press_state  = KEY_NOT_CHANGED;
         Keys.SystemDelayState = SYSTEM_IDLE;
     }
 }

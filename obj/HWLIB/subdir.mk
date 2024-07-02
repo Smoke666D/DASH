@@ -7,20 +7,17 @@
 C_SRCS += \
 ../HWLIB/hw_lib_adc.c \
 ../HWLIB/hw_lib_din.c \
-../HWLIB/hw_lib_eeprom.c \
-../HWLIB/hw_lib_keyboard.c 
+../HWLIB/hw_lib_eeprom.c 
 
 OBJS += \
 ./HWLIB/hw_lib_adc.o \
 ./HWLIB/hw_lib_din.o \
-./HWLIB/hw_lib_eeprom.o \
-./HWLIB/hw_lib_keyboard.o 
+./HWLIB/hw_lib_eeprom.o 
 
 C_DEPS += \
 ./HWLIB/hw_lib_adc.d \
 ./HWLIB/hw_lib_din.d \
-./HWLIB/hw_lib_eeprom.d \
-./HWLIB/hw_lib_keyboard.d 
+./HWLIB/hw_lib_eeprom.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

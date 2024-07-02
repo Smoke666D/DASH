@@ -13,6 +13,10 @@
 #include "filters.h"
 #include "types.h"
 
+#define KEY_ON_STATE       ( HAL_BIT_RESET  )
+#define KEY_OFF_STATE      ( HAL_BIT_SET )
+
+
 #define RGB_DIOD_COUNT 14
 #define MAX_MENU_COUNT 9
 typedef enum
@@ -113,21 +117,20 @@ typedef struct
     KeyDelayState_t SystemDelayState;
 } KeyState_t;
 
-
+#define RMP1_UP_MASK  (RPM1_UP_MENU_STATE & RPM2_UP_MENU_STATE)
 
 typedef enum
 {
-  WORK_MENU_STATE,
-  SYS_MENU_STATE,
-  ERROR_MENU_STATE,
-  RPM1_UP_MENU_STATE,
-  RPM2_UP_MENU_STATE,
-  RPM1_DOWN_MENU_STATE,
-  RPM2_DOWN_MENU_STATE,
-  AIN1_VIEW_STATE,
-  AIN2_VIEW_STATE,
-  AIN3_VIEW_STATE,
-  VER_VIEW_STATE,
+  WORK_MENU_STATE = 0,
+  SYS_MENU_STATE  = 1,
+  ERROR_MENU_STATE = 2,
+  RPM1_UP_MENU_STATE = 3,
+  RPM1_DOWN_MENU_STATE= 4,
+  RPM2_UP_MENU_STATE  = 5,
+  RPM2_DOWN_MENU_STATE = 6,
+  AIN1_VIEW_STATE  = 7,
+  AIN2_VIEW_STATE = 8,
+  AIN3_VIEW_STATE = 9,
 } MenuState_t;
 
 

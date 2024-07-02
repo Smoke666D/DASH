@@ -113,10 +113,7 @@ void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
               break;
       }
      CAN_Init(CAN1, &CAN_InitSturcture);
-     CAN_ClearITPendingBit(CAN1, CAN_IT_BOF);
-     CAN_ClearITPendingBit(CAN1, CAN_IT_TME );
-     CAN_ClearITPendingBit(CAN1, CAN_IT_FMP0);
-     CAN_ClearITPendingBit(CAN1, CAN_IT_FMP1);
+
      CAN_ITConfig(CAN1, CAN_IT_TME | CAN_IT_BOF | CAN_IT_FMP0 | CAN_IT_FMP1 ,ENABLE);
      NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
      NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;

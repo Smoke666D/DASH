@@ -90,6 +90,7 @@ void RTC_IRQHandler ( void )
 #if MCU == CH32V2
         RTC_ClearITPendingBit(RTC_FLAG_SEC);
     }
+    RTC_WaitForLastTask();
 #endif
     return;
 
