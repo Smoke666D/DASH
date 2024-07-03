@@ -11,7 +11,7 @@
 #include "system_init.h"
 
 
-#define VALID_CODE      0x65
+#define VALID_CODE      0x22
 #define VALID_CODE_ADDRES     0
 
 #define BITRATE_ADR            (VALID_CODE_ADDRES + 1)
@@ -139,13 +139,13 @@
 #define AIN1_CAL_POINT_COUNT    (BIG_SEGVAL9   + 2)
 #define AIN1_OFFSET             (AIN1_CAL_POINT_COUNT  + 1 )
 #define AIN2_CAL_POINT_COUNT    (AIN1_OFFSET  + 2 )
-#define AIN2_OFFSET           (AIN2_CAL_POINT_COUNT  + 1 )
-#define AIN3_CAL_POINT_COUNT  (AIN2_OFFSET  + 2 )
-#define AIN3_OFFSET           (AIN3_CAL_POINT_COUNT  + 1 )
-#define AIN1_CAL_POINT_BEGIN  (AIN3_OFFSET  + 2 )
-#define AIN2_CAL_POINT_BEGIN  (AIN1_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
-#define AIN3_CAL_POINT_BEGIN  (AIN2_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
-#define RPM1_COOF             (AIN3_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
+#define AIN2_OFFSET             (AIN2_CAL_POINT_COUNT  + 1 )
+#define AIN3_CAL_POINT_COUNT    (AIN2_OFFSET  + 2 )
+#define AIN3_OFFSET             (AIN3_CAL_POINT_COUNT  + 1 )
+#define AIN1_CAL_POINT_BEGIN    (AIN3_OFFSET  + 2 )
+#define AIN2_CAL_POINT_BEGIN    (AIN1_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
+#define AIN3_CAL_POINT_BEGIN    (AIN2_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
+#define RPM1_COOF               (AIN3_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
 #define RPM2_COOF            ( RPM1_COOF+2)
 #define MENU1_MAP             (RPM2_COOF+2)
 #define MENU2_MAP             (MENU1_MAP + 4)

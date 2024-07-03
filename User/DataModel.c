@@ -36,7 +36,7 @@ static const uint16_t CalPoint[18][2] = {
 };
 
 
-static const uint16_t CalPoint1[2][2] = {
+static const uint16_t CalPoint1[4][2] = {
                                   {0,0},
                                   {20,25},
                                   {25,50},
@@ -201,7 +201,7 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
              DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 18;
              setReg16(AIN2_OFFSET,AIN_OFFSET );
              DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT] = 4;
-             setReg16(AIN3_OFFSET,AIN_OFFSET );
+             //setReg16(AIN3_OFFSET,0 );
              for (u8 i=0; i< 18;i++)
              {
                  setReg16(AIN1_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
@@ -209,7 +209,7 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4 + 2, CalPoint[i][1]);
              }
-             for (u8 i=0; i< 2;i++)
+             for (u8 i=0; i< 4;i++)
              {
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint1[i][0]);
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
@@ -234,27 +234,87 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
              vTaskDelay(10);
              eEEPROMRd(0x00 ,DATA_MODEL_REGISTER , EEPROM_REGISER_COUNT,2);
          }
-         POINT_t point[2];
-         for (u8 k = 0; k< 3; k++)
-         {
-             u8 cal_point_count  = DATA_MODEL_REGISTER[cal_point_count_index[k]];
-             if ( eAinCalDataConfig( AIN1+ k, cal_point_count  ) == CAL_SUCCESS)
+
+             POINT_t point[2];
+
+             for (u8 k = 0; k < 3 ;k++)
              {
-                   u16 offset = cal_point_index[k];
-                   for (u8 i = 0; i< cal_point_count -1 ;i++)
-                   {
-                       int16_t data16  = (int16_t)getReg16(offset+ i*4);
-                       point[0].Y = (float)data16;
-                       u16 udata16 = getReg16(offset + i*4 + 2);
-                       point[0].X = (float)udata16;
-                       data16  = (int16_t)getReg16(offset + i*4 + 4);
-                       point[1].Y = (float)data16;
-                       udata16 = getReg16(offset + i*4 + 6);
-                       point[1].X = (float)udata16;
-                       eSetAinCalPoint(AIN1 + k  ,&point, i);
-                   }
-              }
-         }
+
+                 u8 cal_point_count  = DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT + k *3 ];
+                 if ( eAinCalDataConfig(AIN1+ k,cal_point_count -1 ) == CAL_SUCCESS)
+                 {
+                                  for (u8 i = 0; i< cal_point_count - 1 ;i++)
+                                  {
+                                      int16_t data16  = (int16_t)getReg16(cal_point_index[k] + i*4);
+                                      point[0].Y = (float)data16;
+                                      u16 udata16 = getReg16(cal_point_index[k] + i*4 + 2);
+                                      point[0].X = (float)udata16;
+                                      data16  = (int16_t)getReg16(cal_point_index[k] + i*4 + 4);
+                                      point[1].Y = (float)data16;
+                                      udata16 = getReg16(cal_point_index[k] + i*4 + 6);
+                                      point[1].X = (float)udata16;
+                                      eSetAinCalPoint(AIN1+k,&point, i);
+                                  }
+                  }
+
+             }
+
+             /*u8 cal_point_count  = DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT];
+
+
+             if ( eAinCalDataConfig(AIN1,cal_point_count -1 ) == CAL_SUCCESS)
+             {
+                 for (u8 i = 0; i< cal_point_count - 1 ;i++)
+                 {
+                     int16_t data16  = (int16_t)getReg16(AIN1_CAL_POINT_BEGIN + i*4);
+                     point[0].Y = (float)data16;
+                     u16 udata16 = getReg16(AIN1_CAL_POINT_BEGIN + i*4 + 2);
+                     point[0].X = (float)udata16;
+                     data16  = (int16_t)getReg16(AIN1_CAL_POINT_BEGIN + i*4 + 4);
+                     point[1].Y = (float)data16;
+                     udata16 = getReg16(AIN1_CAL_POINT_BEGIN + i*4 + 6);
+                     point[1].X = (float)udata16;
+                     eSetAinCalPoint(AIN1,&point, i);
+                 }
+             }
+             cal_point_count  = DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT];
+
+
+             if ( eAinCalDataConfig(AIN2,cal_point_count-1 ) == CAL_SUCCESS)
+             {
+                    for (u8 i = 1; i<= cal_point_count;i++)
+                    {
+                        int16_t data16  = (int16_t)getReg16(AIN2_CAL_POINT_BEGIN + i*4);
+                        point[0].Y = (float)data16;
+                        u16 udata16 = getReg16(AIN2_CAL_POINT_BEGIN + i*4 + 2);
+                        point[0].X = (float)udata16;
+                        data16  = (int16_t)getReg16(AIN2_CAL_POINT_BEGIN + i*4 + 4);
+                        point[1].Y = (float)data16;
+                        udata16 = getReg16(AIN2_CAL_POINT_BEGIN + i*4 + 6);
+                        point[1].X = (float)udata16;
+                        eSetAinCalPoint(AIN2, &point, i);
+                     }
+
+               }
+              cal_point_count  = DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT];
+
+
+              if ( eAinCalDataConfig(AIN3,cal_point_count -1 ) == CAL_SUCCESS)
+              {
+                    for (u8 i = 1; i<= cal_point_count;i++)
+                    {
+                        int16_t data16  = (int16_t)getReg16(AIN3_CAL_POINT_BEGIN + i*4);
+                        point[0].Y = (float)data16;
+                        u16 udata16 = getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2);
+                        point[0].X = (float)udata16;
+                        data16  = (int16_t)getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 4);
+                        point[1].Y = (float)data16;
+                        udata16 = getReg16(AIN3_CAL_POINT_BEGIN + i*4 + 6);
+                        point[1].X = (float)udata16;
+                        eSetAinCalPoint(AIN3,&point, i);
+                    }
+               }*/
+
     }
     secondcounter = 0;
 }

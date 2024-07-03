@@ -43,6 +43,7 @@ void vSetErrorReg( u32 data)
 int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
 {
   u16 data16 = 0;
+  u8 index;
   int32_t out_data;
   switch (virtualchannel)
   {
@@ -66,10 +67,19 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case vCHANNEL17:
         return ( (u32) getReg16(V1 + virtualchannel -1 ) );
     case chAIN1 :
+
+              //  out_data= fGetAinCalData( AIN1 , GetAIN( AIN1  ))*10;
+              //  if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET  );
+              //  return  (out_data);
     case chAIN2 :
+
+               // out_data= fGetAinCalData( AIN2 , GetAIN( AIN2 ))*10;
+               // if (offset_enable) out_data= out_data + getReg16(AIN2_OFFSET );
+               // return  (out_data);
     case chAIN3 :
-        out_data= fGetAinCalData( 0 , GetAIN(virtualchannel -chAIN1 ))*10;
-        if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET);
+                index = (virtualchannel - chAIN1);
+                out_data= fGetAinCalData( AIN1+index , GetAIN( AIN1+index ))*10;
+               if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET + 3*index  );
         return  (out_data);
     case chAKB  :
         return ( (int32_t)( GetAIN(AIN4 ) * 10 ));
