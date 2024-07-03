@@ -233,16 +233,49 @@ HAL_CAN_ERROR_t HAL_CANGetRXMessage( HAL_CAN_RX_FIFO_NUMBER_t fifo,  CAN_FRAME_T
    }
 #endif
 #if MCU == CH32V2
-   CanRxMsg rcvMsg;
-       CAN_Receive(CAN1, (fifo == HAL_RX_FIFO0) ? CAN_FIFO0 : CAN_FIFO1,  &rcvMsg);
+   //CanRxMsg rcvMsg;
+       //CAN_Receive(CAN1, (fifo == HAL_RX_FIFO0) ? CAN_FIFO0 : CAN_FIFO1,  &rcvMsg);
+           u8 FIFONumber = (fifo == HAL_RX_FIFO0) ? CAN_FIFO0 : CAN_FIFO1;
+              u32 StdId;
+           u8 IDE = (uint8_t)0x04 & CAN1->sFIFOMailBox[FIFONumber].RXMIR;
+
+           if (IDE == CAN_Id_Standard)
+           {
+               StdId = (uint32_t)0x000007FF & (CAN1->sFIFOMailBox[FIFONumber].RXMIR >> 21);
+           }
+           //else
+           //{
+           //    ExtId = (uint32_t)0x1FFFFFFF & (CANx->sFIFOMailBox[FIFONumber].RXMIR >> 3);
+           //}
+
+           u8 RTR = (uint8_t)0x02 & CAN1->sFIFOMailBox[FIFONumber].RXMIR;
+           rx_message->DLC = (uint8_t)0x0F & CAN1->sFIFOMailBox[FIFONumber].RXMDTR;
+          // RxMessage->FMI = (uint8_t)0xFF & (CANx->sFIFOMailBox[FIFONumber].RXMDTR >> 8);
+           rx_message->data[0] = (uint8_t)0xFF &  CAN1->sFIFOMailBox[FIFONumber].RXMDLR;
+           rx_message->data[1] = (uint8_t)0xFF & (CAN1->sFIFOMailBox[FIFONumber].RXMDLR >> 8);
+           rx_message->data[2] = (uint8_t)0xFF & (CAN1->sFIFOMailBox[FIFONumber].RXMDLR >> 16);
+           rx_message->data[3] = (uint8_t)0xFF & (CAN1->sFIFOMailBox[FIFONumber].RXMDLR >> 24);
+           rx_message->data[4] = (uint8_t)0xFF &  CAN1->sFIFOMailBox[FIFONumber].RXMDHR;
+           rx_message->data[5] = (uint8_t)0xFF & (CAN1->sFIFOMailBox[FIFONumber].RXMDHR >> 8);
+           rx_message->data[6] = (uint8_t)0xFF & (CAN1->sFIFOMailBox[FIFONumber].RXMDHR >> 16);
+           rx_message->data[7] = (uint8_t)0xFF & (CAN1->sFIFOMailBox[FIFONumber].RXMDHR >> 24);
+
+           if (FIFONumber == CAN_FIFO0)
+           {
+               CAN1->RFIFO0 |= CAN_RFIFO0_RFOM0;
+           }
+           else
+           {
+               CAN1->RFIFO1 |= CAN_RFIFO1_RFOM1;
+           }
 
 
        //if ( rcvMsg.RTR != CAN_RTR_Remote )
        //{
-         	rx_message->ident = (rcvMsg.StdId & CAN_SFID_MASK) | ((rcvMsg.RTR == CAN_RTR_Remote) ? FLAG_RTR : 0x00)   ;
-         	rx_message->DLC   = rcvMsg.DLC;;
+         	rx_message->ident = (StdId & CAN_SFID_MASK) | ((RTR == CAN_RTR_Remote) ? FLAG_RTR : 0x00)   ;
+         	//rx_message->DLC   = rcvMsg.DLC;;
          	rx_message->filter_id = 0;
-         	memcpy(rx_message->data,rcvMsg.Data, 8 );
+         	//memcpy(rx_message->data,rcvMsg.Data, 8 );
          	res = HAL_CAN_OK;
       // }
 #endif

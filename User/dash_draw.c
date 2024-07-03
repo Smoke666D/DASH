@@ -67,19 +67,11 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case vCHANNEL17:
         return ( (u32) getReg16(V1 + virtualchannel -1 ) );
     case chAIN1 :
-
-              //  out_data= fGetAinCalData( AIN1 , GetAIN( AIN1  ))*10;
-              //  if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET  );
-              //  return  (out_data);
     case chAIN2 :
-
-               // out_data= fGetAinCalData( AIN2 , GetAIN( AIN2 ))*10;
-               // if (offset_enable) out_data= out_data + getReg16(AIN2_OFFSET );
-               // return  (out_data);
     case chAIN3 :
                 index = (virtualchannel - chAIN1);
                 out_data= fGetAinCalData( AIN1+index , GetAIN( AIN1+index ))*10;
-               if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET + 3*index  );
+                if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET + 3*index  );
         return  (out_data);
     case chAKB  :
         return ( (int32_t)( GetAIN(AIN4 ) * 10 ));
@@ -97,7 +89,7 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
       case chDIN1   :
           return ( (u32) uGetDIN(INPUT_3) );
       case chODOMETR:
-          return ( getOdometr() );
+          return ( getOdometr());
       case  chHOUR:
           return ( getReg32(HOUR_COUNTER_ADR) );
       case chErrorRegister:
@@ -592,7 +584,7 @@ static void SystemMenuDraw()
             if ((Keys.key_press_state) &&  (Keys.SystemDelayState == SYSTEM_EDIT))
             {
                  coof_view_flag  = 1;
-                 index =  ( MenuSatate & RMP1_UP_MASK ) ? 0 : 1;
+                 index =  (( MenuSatate == RPM1_UP_MENU_STATE ) || (MenuSatate == RPM1_DOWN_MENU_STATE)) ? 0 : 1;
                  SetSEG( rpm_view_mask[index],  getReg16(RPM1_COOF +index *sizeof(u16) ),0 );
             }
             if (coof_view_flag  ==0)

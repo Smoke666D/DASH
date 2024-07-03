@@ -470,30 +470,25 @@ void HAL_TimeInitCaptureDMA( TimerName_t TimerName , uint32_t freq_in_hz, uint32
      TIM_InternalClockConfig(timers[TimerName]);
      TIM_ICInitStructure.TIM_ICFilter = 4;
      TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
-
-     if (( channel == TIM_CHANNEL_1 ) || ( channel == TIM_CHANNEL_2 ))
+     TIM_ICInitStructure.TIM_ICPolarity= TIM_ICPolarity_Rising;
+     TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
+     if ( channel == TIM_CHANNEL_2 )
      {
 
          TIM_ICInitStructure.TIM_Channel = TIM_Channel_2;
-         TIM_ICInitStructure.TIM_ICPolarity= (channel == TIM_CHANNEL_2) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
-         TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_2) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
          TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
          TIM_ITConfig(timers[TimerName],TIM_IT_CC2,ENABLE);
+         TIM_DMACmd(timers[TimerName],TIM_DMA_CC2,ENABLE);
 
      }
-     if (( channel == TIM_CHANNEL_3 ) || ( channel == TIM_CHANNEL_4 ))
-         {
+     if ( channel == TIM_CHANNEL_4 )
+     {
+          TIM_ICInitStructure.TIM_Channel = TIM_Channel_4;
+          TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
+          TIM_ITConfig(timers[TimerName],TIM_IT_CC4,ENABLE);
+          TIM_DMACmd(timers[TimerName],TIM_DMA_CC4,ENABLE);
+      }
 
-             TIM_ICInitStructure.TIM_Channel = TIM_Channel_4;
-             TIM_ICInitStructure.TIM_ICPolarity= (channel == TIM_CHANNEL_4) ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling ;
-             TIM_ICInitStructure.TIM_ICSelection = (channel == TIM_CHANNEL_4) ? TIM_ICSelection_DirectTI : TIM_ICSelection_IndirectTI;
-             TIM_ICInit(timers[TimerName],&TIM_ICInitStructure);
-             TIM_ITConfig(timers[TimerName],TIM_IT_CC4,ENABLE);
-         }
-     TIM_DMACmd(timers[TimerName],TIM_DMA_CC4,ENABLE);
-
-    // TIM_SelectSlaveMode(timers[TimerName], TIM_SlaveMode_Reset);
-     //TIM_SelectMasterSlaveMode(timers[TimerName], TIM_MasterSlaveMode_Enable);
 #endif
 
 }

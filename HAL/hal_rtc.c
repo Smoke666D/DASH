@@ -51,7 +51,7 @@ void HAL_RTC_IT_Init(  void (* rtc_it_callback) ( void ), uint8_t prior, uint8_t
 	  while(RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET && temp < 250)
 	  {
 	            temp++;
-	            Delay_Ms(20);
+	            vTaskDelay(20);
 	  }
 	  if(temp >= 250)
 	  return;

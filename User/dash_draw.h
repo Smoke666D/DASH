@@ -18,7 +18,7 @@
 
 
 #define RGB_DIOD_COUNT 14
-#define MAX_MENU_COUNT 9
+#define MAX_MENU_COUNT 10
 typedef enum
 {
   MENU_ORDINARY = 0,

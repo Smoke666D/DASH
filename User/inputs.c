@@ -160,13 +160,7 @@ void  vSetDoutState( OUT_NAME_TYPE ucCh, u8 BitVal )
 }
 
 
- void CaptureCallBack( u8 ch, u16 data )
-{
-   DMA_Cmd(DMA1_CH4, DISABLE);
-   DMA_SetCurrDataCounter(DMA1_CH4,  CC_BUFFER_SIZE);
-   RMPDataConvert(INPUT_1);
-   DMA_Cmd(DMA1_CH4, ENABLE);
-}
+
 
  void CaptureDMACallBack(  )
 {
@@ -210,7 +204,6 @@ static void vDINInit()
     vInitRunAverga(&RPM_AVER_FILTER_STRUC[1],0.5);
     eRPMConfig(INPUT_1,RPM_CH1);
     eRPMConfig(INPUT_2,RPM_CH2);
-  //  HAL_TimeInitCaptureIT(  TIMER1 , 2000, 60000, TIM_CHANNEL_4,TIM1_PRIOR ,TIN1_SUBPRIOR,&CaptureCallBack);
     HAL_TimeInitCaptureDMA( TIMER1 , 2000, 60000, TIM_CHANNEL_4);
     HAL_TimeInitCaptureDMA( TIMER2 , 2000, 60000, TIM_CHANNEL_2);
     HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1), 0, TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack );
@@ -225,7 +218,7 @@ static void vDINInit()
 }
 
 u16 BufAIN[4]={0};
-
+static void SaveData();
 /*---------------------------------------------------------------------------------------------------*/
 /*
  * Задача обработки клавиш
@@ -273,7 +266,8 @@ void vInputsTask( void * argument )
                     case RUN_STATE_INIT:
                         vSetBrigth( RGB_CHANNEL,    getReg8(RGB_BRIGTH_ADR) );
                         vSetBrigth( WHITE_CHANNEL,  getReg8(WHITE_BRIGTH_ADR));
-                        eSetDUT(OUT_1, SET);
+                        HAL_SetBit(PowerON_Port,PowerON_Pin);
+                       // eSetDUT(OUT_1, SET);
                         InitState = RUN_STATE;
                         break;
                     case RUN_STATE:
@@ -291,8 +285,8 @@ void vInputsTask( void * argument )
                         {
                             if ( uGetDIN(INPUT_4)== RESET)
                             {
-                                eSetDUT(OUT_1, SET);
-                                InitState = SAVE_STATE;
+                                SaveData();
+                                InitState = START_UP_STATE;
                                 break;
                             }
                             for (u8 i =0;i<2;i++)
@@ -310,23 +304,17 @@ void vInputsTask( void * argument )
                            //  {
                             //     OD_requestTPDO(OD_DIN_flagsPDO,1);
                            //  }
-                           //  if ((OD_Ain_flag))// || (data_send_dealy==0))
-                           //  {
-                           //        OD_Ain_flag = RESET;
+                             if ((OD_Ain_flag))// || (data_send_dealy==0))
+                             {
+                                  OD_Ain_flag = RESET;
                                   OD_requestTPDO(OD_AIN_flagsPDO,1);
-                          //   }*/
+                             }
                         }
                         else
                         {
-                            InitState = SAVE_STATE;
+                            SaveData();
+                            InitState = START_UP_STATE;
                         }
-                        break;
-                    case SAVE_STATE:
-                        vSetBrigth( RGB_CHANNEL,    0 );
-                        vSetBrigth( WHITE_CHANNEL,  0 );
-                        vSaveData();
-                        eSetDUT(OUT_1, RESET);
-                        InitState = START_UP_STATE;
                         break;
                 }
             }
@@ -336,6 +324,16 @@ void vInputsTask( void * argument )
 }
 
 
+static void SaveData()
+{
+    vSetBrigth( RGB_CHANNEL,    0 );
+    vSetBrigth( WHITE_CHANNEL,  0 );
+    vSaveData();
+    vTaskDelay(10);
+    HAL_ResetBit(PowerON_Port,PowerON_Pin);
+   // eSetDUT(OUT_1, RESET);
 
+
+}
 
 
