@@ -91,7 +91,8 @@ User/system_init.o: ../User/system_init.c ../User/system_init.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode/305/CO_LSSmaster.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode/303/CO_LEDs.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode/extra/CO_trace.h \
- C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/OD.h
+ C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/OD.h \
+ C:\MRS_DATA\workspace\DASH\HAL/hal_rtc.h
 
 ../User/system_init.h:
 
@@ -292,3 +293,5 @@ C:\MRS_DATA\workspace\DASH\CANopenNode/303/CO_LEDs.h:
 C:\MRS_DATA\workspace\DASH\CANopenNode/extra/CO_trace.h:
 
 C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/OD.h:
+
+C:\MRS_DATA\workspace\DASH\HAL/hal_rtc.h:

@@ -254,18 +254,12 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   		   irq = DMA1_Channel6_IRQn;
 	   		   DMA_CALLback[5].CallBack = f;
 	   }
-	   else if  (stream == DMA1_CH7)
-	{
-		   		   flag = DMA1_IT_GL7;
-		   		   irq = DMA1_Channel7_IRQn;
-		   		   DMA_CALLback[6].CallBack = f;
-	    }
-	   else if  (stream == DMA1_CH8)
-		   {
-		   		   flag = DMA1_IT_GL8;
-		   		   irq = DMA1_Channel8_IRQn;
-		   		   DMA_CALLback[7].CallBack = f;
-		   }
+	   else
+	   {
+		   	flag = DMA1_IT_GL7;
+		    irq = DMA1_Channel7_IRQn;
+		   	DMA_CALLback[6].CallBack = f;
+	   }
 	   dmaConfig.DMA_MemoryInc		    = DMA_MemoryInc_Enable;
 	   dmaConfig.DMA_PeripheralInc 	    = DMA_PeripheralInc_Disable;
 	   dmaConfig.DMA_Mode		   		= DMA_Mode_Normal;

@@ -8,6 +8,7 @@
 #include "hal_wdt.h"
 #include "inputs.h"
 #include "process.h"
+#include "hal_rtc.h"
 
 static void StartDefaultTask(void *argument);
 static StaticTask_t xIdleTaskTCB                                     __SECTION(RAM_SECTION_CCMRAM);
@@ -102,6 +103,7 @@ void StartDefaultTask(void *argument)
       switch( DeafaultTaskFSM)
       {
           case STATE_INIT:
+              HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR);
               DataModel_Init();
               vLedDriverStart();
               InputsNotifyTaskToInit();
