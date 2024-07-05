@@ -384,14 +384,13 @@ void vIncrementSystemCounters()
         secondcounter = 0;
     }
     setReg32(ODOMETR_ADR, getReg32(ODOMETR_ADR) + ((float)getODValue( DATA_MODEL_REGISTER[ODOMETR_MAP],0))/10.0/3.6);
-    printf("%i",odometr);
     return;
 }
 
 void vSaveData()
 {
   //  setReg32(ODOMETR_ADR, odometr/100);
-    eEEPROMWr(HOUR_COUNTER_ADR,&DATA_MODEL_REGISTER[HOUR_COUNTER_ADR],8,0);
+    eEEPROMWrFast(HOUR_COUNTER_ADR,&DATA_MODEL_REGISTER[HOUR_COUNTER_ADR],8);
 }
 
 u32 getOdometr()

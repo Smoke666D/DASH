@@ -21,21 +21,44 @@ static void MX_GPIO_Init( void );
 void vInit_DeviceConfig( void )
 {	
     //Настройка тактирования всех устрйоств
+    HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR);
 	MX_GPIO_Init( );
+	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
+    HAL_TiemrEneblae( TIMER3);
+    vSetBrigth(RGB_CHANNEL,0);
+    vSetBrigth(WHITE_CHANNEL,0);
+	while (HAL_GetBit(  Din3_4_5_Port , Din5_Pin)== RESET);
 	vAINInit();
     HAL_SPI_InitDMA(SPI1, SPI_16bit );
 	HAL_SPI_InitDMA(SPI2, SPI_16bit );
-
 	HAL_TIMER_InitIt( TIMER4, 1000000, 100, &vRGBProcess ,TIM4_PRIOR,TIM4_SUB_PRIOR);
 	HAL_TiemrEneblae( TIMER4);
-	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
-	HAL_TiemrEneblae( TIMER3);
+
 	InitI2CDMA(EEPROM_I2C, I2C1_PRIOR ,I2C1_SUB_PRIOR );
 	HAL_SetBit(PowerOn_Port, PowerOn_Pin);
 	vCanOpenInit(CAN1);;
 	return;
 }
 
+void HardwareDeinit()
+{
+
+    vSetBrigth(RGB_CHANNEL,0);
+    vSetBrigth(WHITE_CHANNEL,0);
+    HAL_TiemrDisable( TIMER4);
+   // HAL_TiemrEneblae( TIMER3);
+    HAL_TiemrEneblae( TIMER2);
+    HAL_TiemrEneblae( TIMER1);
+  //  HAL_InitGpioOut(  SPI2_Port ,  nOE1_Pin | nOE2_Pin );
+  //  HAL_SetBit(SPI2_Port,  nOE1_Pin | nOE2_Pin);
+}
+
+
+void SoftwareReset()
+{
+
+    PFIC->SCTLR |= 0x80000000;
+}
 
 
 /*

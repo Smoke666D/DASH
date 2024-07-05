@@ -9,6 +9,7 @@
 #include "inputs.h"
 #include "process.h"
 #include "hal_rtc.h"
+#include "debug.h"
 
 static void StartDefaultTask(void *argument);
 static StaticTask_t xIdleTaskTCB                                     __SECTION(RAM_SECTION_CCMRAM);
@@ -61,7 +62,12 @@ void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
  *
  */
 
-
+void vSystemStopProcess()
+{
+   // vTaskSuspend(* xProcessTaskHandle ());
+    vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
+    vTaskSuspend( *xCanOpenProcessTaskHandle());
+}
 
 void vSYStaskInit ( void )
 {
@@ -77,8 +83,7 @@ void vSYStaskInit ( void )
   (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );
   (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, INPUT_TASK_PRIO, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
   DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, DEFAULT_TASK_PRIOR, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
-  vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
-  vTaskSuspend( *xCanOpenProcessTaskHandle());
+  vSystemStopProcess();
   return;
 }
 
@@ -103,7 +108,6 @@ void StartDefaultTask(void *argument)
       switch( DeafaultTaskFSM)
       {
           case STATE_INIT:
-              HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR);
               DataModel_Init();
               vLedDriverStart();
               InputsNotifyTaskToInit();
@@ -123,6 +127,8 @@ void StartDefaultTask(void *argument)
               break;
           case STATE_RUN:
               vTaskDelay(500);
+            // printf("SystemClk\r\n");
+
               HAL_WDTReset();
               break;
       }

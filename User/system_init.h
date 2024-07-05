@@ -51,6 +51,7 @@ typedef enum
     STATE_IDLE,
     STATE_RUN,
     STATE_WHAIT_TO_RAEDY,
+    STATE_SAVE_DATA,
 } TaskFSM_t;
 
 void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
@@ -60,7 +61,7 @@ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
 void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
                                      StackType_t **ppxTimerTaskStackBuffer,
                                      uint32_t *pulTimerTaskStackSize );
-
+void vSystemStopProcess();
 void vSYStaskInit ( void );
 void vSYSqueueInit ( void );
 void vSYSeventInit ( void );

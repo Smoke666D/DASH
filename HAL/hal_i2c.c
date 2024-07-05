@@ -25,7 +25,7 @@ static EERPOM_ERROR_CODE_t I2C_Master_ReviceDMA(  u8 DevAdrees, u16 data_addres,
 static EERPOM_ERROR_CODE_t I2C_Master_TransmitDMA(  u8 DevAdrees,  u8 * data, u16 data_size, u32 timeout,uint8_t TNI  );
 static EERPOM_ERROR_CODE_t I2C_Master_ReviceIT(  u8 DevAdrees, u16 data_addres,  u8 * data, u16 data_size, u32 timeout,uint8_t TNI  );
 static EERPOM_ERROR_CODE_t I2C_Master_TransmitIT(  u8 DevAdrees, u16 data_addres, u8 * data, u16 data_size, u32 timeout,uint8_t TNI  );
-
+static EERPOM_ERROR_CODE_t I2C_Master_TransmitFast( u8 DevAdrees, u16 data_addres,  u8 * data, u16 data_size  );
 
 
 void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
@@ -84,6 +84,7 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 #if MODE_I2C == MODE_IT
    pEEPROM->I2C_Master_Recive_func =    I2C_Master_ReviceIT;
    pEEPROM->I2C_Master_Transmit_func =  I2C_Master_TransmitIT;
+   pEEPROM->I2C_Master_Transmit_func_fast = I2C_Master_TransmitFast;
 
 #endif
 #if MCU == CH32V2
@@ -167,6 +168,38 @@ static EERPOM_ERROR_CODE_t I2C_Master_ReviceIT( u8 DevAdrees, u16 data_addres,  
 
 }
 
+static EERPOM_ERROR_CODE_t I2C_Master_TransmitFast( u8 DevAdrees, u16 data_addres,  u8 * data, u16 data_size  )
+{
+
+   I2C_Cmd(pEEPROM->dev,ENABLE);
+   while( I2C_GetFlagStatus( pEEPROM->dev, I2C_FLAG_BUSY ) != RESET );
+   I2C_GenerateSTART( pEEPROM->dev, ENABLE );
+
+   while( !I2C_CheckEvent(pEEPROM->dev, I2C_EVENT_MASTER_MODE_SELECT ) );
+   I2C_Send7bitAddress(  pEEPROM->dev, DevAdrees, I2C_Direction_Transmitter );
+
+
+   while( !I2C_CheckEvent( pEEPROM->dev, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED ) );
+
+
+   I2C_SendData( pEEPROM->dev, (u8)((data_addres >>  8) & 0x1F ) );
+   while( !I2C_CheckEvent( pEEPROM->dev, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
+
+   I2C_SendData( pEEPROM->dev , data_addres & 0xFF );
+   while( !I2C_CheckEvent( pEEPROM->dev, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
+
+   for (u8 i = 0;i<data_size;i++)
+   {
+      // if( I2C_GetFlagStatus( pEEPROM->dev, I2C_FLAG_TXE ) !=  RESET )
+     //  {
+           I2C_SendData( pEEPROM->dev, data[i]);
+     //  }
+       while( !I2C_CheckEvent( pEEPROM->dev, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
+   }
+
+   I2C_GenerateSTOP( pEEPROM->dev, ENABLE );
+   return (EEPROM_OK);
+}
 
 
 

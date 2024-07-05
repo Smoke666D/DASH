@@ -228,15 +228,18 @@ void vInputsTask( void * argument )
   TaskFSM_t  state = STATE_IDLE;
   INPUTS_FSM_t InitState = START_UP_STATE;
   uint32_t ulNotifiedValue;
-  u8 data_send_dealy = 0;
   u16 data;
   uint8_t OD_Ain_flag;
  //OD_DIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2006);
- // OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
+  OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
   for(;;)
   {
     switch (state)
     {
+        case  STATE_SAVE_DATA:
+            SaveData();
+            state = STATE_IDLE;
+            break;
         case  STATE_IDLE:
             xTaskNotifyWait(0,0xFF ,&ulNotifiedValue,portMAX_DELAY);
             if ((ulNotifiedValue & TASK_INIT_NOTIFY) !=0)
@@ -253,7 +256,7 @@ void vInputsTask( void * argument )
         case  STATE_RUN:
             HAL_ADC_StartDMA(DMA1_CH1,getADC1Buffer(),ADC1_CHANNELS * ADC_FRAME_SIZE);
             vDataModelRegDelayWrite();
-            vTaskDelay(10);
+            vTaskDelay(1);
             if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) & ADC1_DATA_READY)
             {
                 ADC_FSM();
@@ -285,8 +288,8 @@ void vInputsTask( void * argument )
                         {
                             if ( uGetDIN(INPUT_4)== RESET)
                             {
-                                SaveData();
-                                InitState = START_UP_STATE;
+                                //SaveData();
+                                state = STATE_SAVE_DATA;
                                 break;
                             }
                             for (u8 i =0;i<2;i++)
@@ -312,8 +315,8 @@ void vInputsTask( void * argument )
                         }
                         else
                         {
-                            SaveData();
-                            InitState = START_UP_STATE;
+
+                            state = STATE_SAVE_DATA;
                         }
                         break;
                 }
@@ -326,12 +329,12 @@ void vInputsTask( void * argument )
 
 static void SaveData()
 {
-    vSetBrigth( RGB_CHANNEL,    0 );
-    vSetBrigth( WHITE_CHANNEL,  0 );
+    HardwareDeinit();
+    vSystemStopProcess();
     vSaveData();
     vTaskDelay(10);
     HAL_ResetBit(PowerON_Port,PowerON_Pin);
-   // eSetDUT(OUT_1, RESET);
+    SoftwareReset();
 
 
 }

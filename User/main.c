@@ -19,6 +19,7 @@
 #include "process.h"
 #include "HW_API.h"
 #include "system_init.h"
+#include "debug.h"
 
 /* Global Variable */
 /*********************************************************************
@@ -33,11 +34,14 @@ int main(void)
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     SystemCoreClockUpdate();
     Delay_Init();
-    USART_Printf_Init(115200);
+   // USART_Printf_Init(115200);
+   // printf("System Start%d\r\n",SystemCoreClock);
     vInit_DeviceConfig( );
     vSYSqueueInit (  );
     vSYStaskInit ( );
+
     vTaskStartScheduler();
+
     while(1);
 }
 

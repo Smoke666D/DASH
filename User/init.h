@@ -53,6 +53,8 @@
 
 #define PWM_TIM_PERIOD   1000
 uint32_t GetDelay( uint32_t start_delay);
+void SoftwareReset();
+void HardwareDeinit();
 void vCaptureTimerInit();
 void vInit_DeviceConfig( void  );
 void DMA_Tx_Init(DMA_Channel_TypeDef *DMA_CHx, u32 ppadr, u32 memadr, u16 bufsize);
