@@ -53,6 +53,28 @@ typedef enum
 #define I2C_1  I2C1
 #define I2C_2  I2C2
 #define I2C_NAME_t I2C_TypeDef *
+
+/* I2C START mask */
+#define CTLR1_START_Set          ((uint16_t)0x0100)
+#define CTLR1_START_Reset        ((uint16_t)0xFEFF)
+
+/* I2C ADD0 mask */
+#define OADDR1_ADD0_Set          ((uint16_t)0x0001)
+#define OADDR1_ADD0_Reset        ((uint16_t)0xFFFE)
+/* I2C SPE mask */
+#define CTLR1_PE_Set             ((uint16_t)0x0001)
+#define CTLR1_PE_Reset           ((uint16_t)0xFFFE)
+/* I2C ACK mask */
+#define CTLR1_ACK_Set            ((uint16_t)0x0400)
+#define CTLR1_ACK_Reset          ((uint16_t)0xFBFF)
+#define EEPROM_I2C_DISABLE        pEEPROM->dev->CTLR1 &= CTLR1_PE_Reset
+/* I2C ENDUAL mask */
+#define OADDR2_ENDUAL_Set        ((uint16_t)0x0001)
+#define OADDR2_ENDUAL_Reset      ((uint16_t)0xFFFE)
+#define EEPROM_I2C_DUALADDR_DISABLE       pEEPROM->dev->OADDR2 &= OADDR2_ENDUAL_Reset
+/* I2C STOP mask */
+#define CTLR1_STOP_Set           ((uint16_t)0x0200)
+#define CTLR1_STOP_Reset         ((uint16_t)0xFDFF)
 #endif
 
 void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior);

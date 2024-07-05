@@ -56,6 +56,7 @@ encoding//HAL/hal_i2c.c=GBK
 encoding//HAL/hal_i2c.h=GBK
 encoding//HAL/hal_rtc.c=UTF-8
 encoding//HAL/hal_rtc.h=GBK
+encoding//HAL/hal_spi.c=GBK
 encoding//HAL/hal_timers.c=UTF-8
 encoding//HWLIB/HW_API.h=UTF-8
 encoding//HWLIB/hw_lib_adc.c=UTF-8
