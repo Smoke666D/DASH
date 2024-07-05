@@ -114,4 +114,6 @@ typedef enum
 #define TIM3_UP_ENABLE 0
 #define TIM4_UP_ENABLE 1
 
+#define ADC_1_2_ENABLE 0
+
 #endif /* HAL_HAL_CONFIG_H_ */

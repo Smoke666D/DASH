@@ -14,6 +14,12 @@
 
 typedef enum
 {
+    ADC_1 = 0,
+    ADC_2 = 1,
+} ADC_NUMBER_t;
+
+typedef enum
+{
     ADC_CH_0 = 0,  /*!< ADC Channel 0 */
     ADC_CH_1 = 1,  /*!< ADC Channel 1 */
     ADC_CH_2 = 2,  /*!< ADC Channel 2 */
@@ -49,13 +55,29 @@ typedef struct
 	#define ADC_3  ADC3
 #endif
 #if MCU == CH32V2
-	#define ADC_NUMBER_t ADC_TypeDef*
-	#define	ADC_1  ADC1
-	#define ADC_2  ADC2
+
+
    u16 Get_ConversionVal(s16 val);
+   /* ADC ADON mask */
+   #define CTLR2_ADON_Set                   ((uint32_t)0x00000001)
+   #define CTLR2_ADON_Reset                 ((uint32_t)0xFFFFFFFE)
+   /* ADC DMA mask */
+   #define CTLR2_DMA_Set                    ((uint32_t)0x00000100)
+   #define CTLR2_DMA_Reset                  ((uint32_t)0xFFFFFEFF)
+   /* ADC Software start mask */
+   #define CTLR2_EXTTRIG_SWSTART_Set        ((uint32_t)0x00500000)
+   #define CTLR2_EXTTRIG_SWSTART_Reset      ((uint32_t)0xFFAFFFFF)
+   /* ADC RSTCAL mask */
+   #define CTLR2_RSTCAL_Set                 ((uint32_t)0x00000008)
+   /* ADC CAL mask */
+   #define CTLR2_CAL_Set                    ((uint32_t)0x00000004)
+   /* ADC EXTTRIG mask */
+   #define CTLR2_EXTTRIG_Set                ((uint32_t)0x00100000)
+   #define CTLR2_EXTTRIG_Reset              ((uint32_t)0xFFEFFFFF)
 #endif
 
-
+void ADC_Enable_and_Start( ADC_NUMBER_t adc  );
+void ADC_Clear_Pending_and_DMA_EN( ADC_NUMBER_t adc );
 void HAL_ADC_CommonConfig();
 void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count, uint8_t * channel_nmber);
 void HAL_ADC_TempEnable();

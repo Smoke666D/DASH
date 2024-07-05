@@ -190,26 +190,19 @@ static EERPOM_ERROR_CODE_t I2C_Master_TransmitFast( u8 DevAdrees, u16 data_addre
 {
    EEPROM_I2C_ENABLE();
    while( I2C_GetFlagStatus( pEEPROM->dev, I2C_FLAG_BUSY ) != RESET );
-
    EEPROM_I2C_START();
-
    while( !I2C_CheckEvent(pEEPROM->dev, I2C_EVENT_MASTER_MODE_SELECT ) );
    EERPOM_I2C_SEND_ADDR_TRANS( DevAdrees );
-
    while( !I2C_CheckEvent( pEEPROM->dev, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED ) );
-
    EEPROM_I2C_SEND( (u8)((data_addres >>  8) & 0x1F ));   //I2C_SendData
    while( !I2C_CheckEvent( pEEPROM->dev, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
-
    EEPROM_I2C_SEND( data_addres & 0xFF) ;
    while( !I2C_CheckEvent( pEEPROM->dev, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
-
    for (u8 i = 0;i<data_size;i++)
    {
        EEPROM_I2C_SEND( data[i] );
        while( !I2C_CheckEvent( pEEPROM->dev, I2C_EVENT_MASTER_BYTE_TRANSMITTED ) );
    }
-
    EEPROM_I2C_STOP();
    return (EEPROM_OK);
 }
@@ -220,8 +213,6 @@ static EERPOM_ERROR_CODE_t I2C_Master_TransmitIT(  u8 DevAdrees, u16 data_addres
 {
 	EERPOM_ERROR_CODE_t res = EEPROM_ACCESS_ERROR;
 	uint32_t exit_code;
-
-
 	pEEPROM->ucTaskNatificationIndex = TNI;
 	pEEPROM->Index          = 0;
 	pEEPROM->DataLength     = data_size;

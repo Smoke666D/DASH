@@ -6,6 +6,7 @@
  */
 
 #include "hal_dma.h"
+#include "hal_adc.h"
 #if MCU == APM32
 	#include "apm32f4xx_dma.h"
 	#include "apm32f4xx_rcm.h"
@@ -330,12 +331,11 @@ void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size)
 	DMA_ClearITPendingBit( DMA1_IT_GL1 );
 	chanel->CNTR  = size;
 	chanel->MADDR = (u32)data;
-	ADC_DMACmd(ADC1, ENABLE);
-	ADC_ClearITPendingBit(ADC1,ADC_IT_EOC);
+	ADC_Clear_Pending_and_DMA_EN(ADC_1);
 	chanel->CFGR |=DMA_IT_TC;
 	chanel->CFGR |= DMA_CFGR1_EN;
-	ADC_Cmd(ADC1, ENABLE);
-	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+	ADC_Enable_and_Start(ADC_1);
+
 #endif
 }
 

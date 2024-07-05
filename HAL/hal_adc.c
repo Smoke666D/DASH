@@ -27,8 +27,9 @@ static s16 Calibrattion_Val = 0;
 static const  uint8_t ADC_chennel_ref[]={  ADC_Channel_0,  ADC_Channel_1,  ADC_Channel_2, ADC_Channel_3, ADC_Channel_4,  ADC_Channel_5,  ADC_Channel_6,  ADC_Channel_7,  ADC_Channel_8,  ADC_Channel_9,  ADC_Channel_10,
 		ADC_Channel_11, ADC_Channel_12, ADC_Channel_13, ADC_Channel_14, ADC_Channel_15,  ADC_Channel_16,  ADC_Channel_17} ;
 
+#if ADC_1_2_ENABLE == 1
 void ADC1_2_IRQHandler(void) __attribute__((interrupt()));
-
+#endif
 u16 Get_ConversionVal(s16 val)
 {
     if((val+Calibrattion_Val)<0|| val==0) return 0;
@@ -36,11 +37,33 @@ u16 Get_ConversionVal(s16 val)
     return (val+Calibrattion_Val);
 }
 
+static ADC_TypeDef* ADCS[]={ADC1,ADC2};
+static inline void ADC_ENABLE( ADC_NUMBER_t adc )  {  ADCS[adc]->CTLR2 |= CTLR2_ADON_Set; }
+static inline void ADC_DISABLE (ADC_NUMBER_t adc  ) { ADCS[adc]->CTLR2 &= CTLR2_ADON_Reset;}
+static inline void ADC_BUFFER_ENABLE ( ADC_NUMBER_t adc ) {   ADCS[adc]->CTLR1 |= (1 << 26);  }
+static inline void ADC_BUFFER_DISABLE ( ADC_NUMBER_t adc ) {  ADCS[adc]->CTLR1 &= ~(1 << 26);  }
+static inline void ADC_DMA_ENABLE ( ADC_NUMBER_t adc ) {  ADCS[adc]->CTLR2 |= CTLR2_DMA_Set; }
+static inline void ADC_DMA_DISABLE ( ADC_NUMBER_t adc ) {  ADCS[adc]->CTLR2  &= CTLR2_DMA_Reset; }
+static inline void ADC_RESET_CAL( ADC_NUMBER_t adc  )  { ADCS[adc]->CTLR2 |= CTLR2_RSTCAL_Set; }
+static inline void ADC_START_CAL ( ADC_NUMBER_t adc  )     {ADCS[adc]->CTLR2 |= CTLR2_CAL_Set; }
+static inline void ADC_EXT_TRIG_ENABLE ( ADC_NUMBER_t adc )  {ADCS[adc]->CTLR2 |= CTLR2_EXTTRIG_Set;}
+
 #endif
 
 
 
 
+void  ADC_Enable_and_Start( ADC_NUMBER_t adc  )
+{
+    ADC_ENABLE(adc);
+    ADCS[adc]->CTLR2 |= CTLR2_EXTTRIG_SWSTART_Set;
+}
+
+void ADC_Clear_Pending_and_DMA_EN( ADC_NUMBER_t adc )
+{
+    ADC_DMA_ENABLE (adc);
+    ADC_ClearITPendingBit(ADCS[adc],ADC_IT_EOC);
+}
 
 void HAL_ADC_CommonConfig()
  {
@@ -77,10 +100,17 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
 #if MCU == CH32V2
 	ADC_InitTypeDef  adcConfig;
 	if ( adc == ADC_1)
-		 	 RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
-		else
-			 RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC2, ENABLE);
-
+	{
+	    RCC->APB2PRSTR |= RCC_APB2Periph_ADC1;
+	    RCC->APB2PRSTR &= ~RCC_APB2Periph_ADC1;
+	    RCC->APB2PCENR |= RCC_APB2Periph_ADC1;
+	}
+    else
+    {
+        RCC->APB2PRSTR |= RCC_APB2Periph_ADC2;
+        RCC->APB2PRSTR &= ~RCC_APB2Periph_ADC2;
+        RCC->APB2PCENR |= RCC_APB2Periph_ADC2;
+    }
 #endif
 	 HAL_ADC_CommonConfig();
 
@@ -105,7 +135,6 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
 
 
 #if MCU==CH32V2
-	 ADC_DeInit(adc);
 	 adcConfig.ADC_Mode = ADC_Mode_Independent;
 	 adcConfig.ADC_ScanConvMode =ENABLE;
 	 adcConfig.ADC_ContinuousConvMode = ENABLE;
@@ -114,22 +143,21 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
 	 adcConfig.ADC_NbrOfChannel = ADC_CHANNEL;
 	 adcConfig.ADC_OutputBuffer = ADC_OutputBuffer_Disable;
 	 adcConfig.ADC_Pga = ADC_Pga_1;
-	 ADC_Init(adc, &adcConfig);
-
+	 ADC_Init(ADCS[adc], &adcConfig);
 	 for (u8 i=0; i< (channel_count) ;i++)
 	 {
-		 ADC_RegularChannelConfig(adc,ADC_chennel_ref[channel_nmber[ i  ]], i + 1,  ADC_SampleTime_239Cycles5 );
+		 ADC_RegularChannelConfig(ADCS[adc],ADC_chennel_ref[channel_nmber[ i  ]], i + 1,  ADC_SampleTime_239Cycles5 );
 	 }
-	 ADC_ExternalTrigConvCmd(ADC1,ENABLE);
-	 ADC_DMACmd(adc, ENABLE);
-	 ADC_Cmd(adc, ENABLE);
-	 ADC_BufferCmd(adc, DISABLE); //disable buffer
-	 ADC_ResetCalibration(adc);
-	 while(ADC_GetResetCalibrationStatus(adc));
-	 ADC_StartCalibration(adc);
-	 while(ADC_GetCalibrationStatus(adc));
-	 Calibrattion_Val = Get_CalibrationValue(adc);
-	 ADC_BufferCmd(adc, ENABLE);
+	 ADC_EXT_TRIG_ENABLE( adc);
+	 ADC_DMA_ENABLE (adc);
+	 ADC_ENABLE(adc);
+	 ADC_BUFFER_DISABLE(adc);
+	 ADC_RESET_CAL(adc);
+	 while(ADC_GetResetCalibrationStatus(ADCS[adc]));
+	 ADC_START_CAL(adc);
+	 while(ADC_GetCalibrationStatus(ADCS[adc]));
+	 Calibrattion_Val = Get_CalibrationValue(ADCS[adc]);
+	 ADC_BUFFER_ENABLE(adc);
 #endif
 
  }
@@ -173,12 +201,12 @@ void HAL_ADC_AWDT_IT_Init( ADC_NUMBER_t adc, uint8_t channel,u16 low, u16 high, 
 	adcs.awdt_callback = f;
 #if MCU == CH32V2
 	NVIC_InitTypeDef      NVIC_InitStructure = {0};
-	ADC_Cmd(adc, DISABLE);
-    ADC_AnalogWatchdogThresholdsConfig(adc, high, low);
-    ADC_AnalogWatchdogSingleChannelConfig( adc,  channel);
-    ADC_AnalogWatchdogCmd( adc, ADC_AnalogWatchdog_SingleRegEnable);
-    ADC_ITConfig( adc, ADC_IT_AWD, ENABLE);
-    ADC_Cmd(adc, ENABLE);
+	ADC_DISABLE(adc);
+    ADC_AnalogWatchdogThresholdsConfig(ADCS[adc], high, low);
+    ADC_AnalogWatchdogSingleChannelConfig( ADCS[adc],  channel);
+    ADC_AnalogWatchdogCmd( ADCS[adc], ADC_AnalogWatchdog_SingleRegEnable);
+    ADC_ITConfig( ADCS[adc], ADC_IT_AWD, ENABLE);
+    ADC_ENABLE(adc);
     NVIC_InitStructure.NVIC_IRQChannel =  ADC_IRQn;
    	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
    	NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
@@ -189,6 +217,8 @@ void HAL_ADC_AWDT_IT_Init( ADC_NUMBER_t adc, uint8_t channel,u16 low, u16 high, 
 
 #if MCU == CH32V2
 
+#if ADC_1_2_ENABLE == 1
+
 void ADC1_2_IRQHandler(void)
 {
     if(ADC_GetITStatus( ADC1, ADC_IT_AWD))
@@ -197,6 +227,7 @@ void ADC1_2_IRQHandler(void)
         adcs.awdt_callback();
     }
 }
+#endif
 #endif
 
 
