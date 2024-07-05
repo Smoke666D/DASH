@@ -1,7 +1,7 @@
 /*
  * hal_dma.h
  *
- *  Created on: 25 апр. 2024 г.
+ *  Created on: 25 邪锌褉. 2024 谐.
  *      Author: i.dymov
  */
 

@@ -1,7 +1,7 @@
 /*
  * hal_config.h
  *
- *  Created on: 8 мая 2024 г.
+ *  Created on: 8 灞戦偑瑜� 2024 璋�.
  *      Author: i.dymov
  */
 
@@ -96,5 +96,22 @@ typedef enum
 
 #define HAL_SET   1
 #define HAL_RESET 0
+
+#define DMA1_CH1_ENABLE 1
+#define DMA1_CH2_ENABLE 0
+#define DMA1_CH3_ENABLE 1
+#define DMA1_CH4_ENABLE 1
+#define DMA1_CH5_ENABLE 1
+#define DMA1_CH6_ENABLE 0
+#define DMA1_CH7_ENABLE 1
+
+
+#define I2C1_ENABLE  1
+#define I2C2_ENABLE  0
+
+#define TIM1_UP_ENABLE 0
+#define TIM2_UP_ENABLE 0
+#define TIM3_UP_ENABLE 0
+#define TIM4_UP_ENABLE 1
 
 #endif /* HAL_HAL_CONFIG_H_ */

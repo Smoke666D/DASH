@@ -17,7 +17,7 @@
 /*                        0     1    2    3    4   5    6    7    8   9*/
 const u8 DigitMask[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
 //                                       0  1  2  3 4  5  6  7  8  9 10   11  12 13   14
-static const u16 Brigth[MAX_BRIGTH] =  { 0, 2, 3, 5,8,13,21,34,55,89,144,233,350,610,PWM_TIM_PERIOD+1};
+static const u16 Brigth[MAX_BRIGTH] =  { 0, 2, 3, 5,8,100,200,300,400,500,600,700,800,900,PWM_TIM_PERIOD+1};
 static uint16_t SPI1_DATA[SPI1_CHIP_COUNT];
 static uint16_t data[SPI1_CHIP_COUNT];
 static uint16_t SPI2_DATA[SPI2_CHIP_COUNT];
@@ -211,8 +211,8 @@ void vSetBrigth( BRIGTH_CHANNEL_t ch, u8 brigth)
 void SPI1_DMA_Callback( void )
 {
     HAL_DMA_Disable(DMA1_CH3);
-    HAL_SPI_RXOveleyClear(SPI1 );
-    while (HAL_SPI_GetBusy(SPI1) == HAL_SET);
+    HAL_SPI_RXOveleyClear(HAL_SPI1 );
+    while (HAL_SPI_GetBusy(HAL_SPI1) == HAL_SET);
     HAL_SetBit(  SPI1_Port , SPI1_NSS_Pin);
     return;
 }
@@ -220,8 +220,8 @@ void SPI1_DMA_Callback( void )
 void SPI2_DMA_Callback( void )
 {
     HAL_DMA_Disable(DMA1_CH5);
-    HAL_SPI_RXOveleyClear(SPI2 );
-    while (HAL_SPI_GetBusy(SPI2) == HAL_SET);
+    HAL_SPI_RXOveleyClear( HAL_SPI2 );
+    while (HAL_SPI_GetBusy( HAL_SPI2 ) == HAL_SET);
     HAL_SetBit(  SPI2_Port , SPI2_NSS_Pin);
     return;
 }

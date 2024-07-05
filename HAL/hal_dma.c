@@ -16,11 +16,28 @@
 	#include "ch32v20x_adc.h"
 	#include "ch32v20x_rcc.h"
 
+
+#if DMA1_CH1_ENABLE == 1
 void     DMA1_Channel1_IRQHandler(void)   __attribute__((interrupt()));
+#endif
+#if DMA1_CH2_ENABLE == 1
+void     DMA1_Channel2_IRQHandler(void)   __attribute__((interrupt()));
+#endif
+#if DMA1_CH3_ENABLE == 1
 void     DMA1_Channel3_IRQHandler(void)   __attribute__((interrupt()));
+#endif
+#if DMA1_CH4_ENABLE == 1
 void     DMA1_Channel4_IRQHandler(void)   __attribute__((interrupt()));
+#endif
+#if DMA1_CH5_ENABLE == 1
 void     DMA1_Channel5_IRQHandler(void)   __attribute__((interrupt()));
+#endif
+#if DMA1_CH6_ENABLE == 1
+void     DMA1_Channel6_IRQHandler(void)   __attribute__((interrupt()));
+#endif
+#if DMA1_CH7_ENABLE == 1
 void     DMA1_Channel7_IRQHandler(void)   __attribute__((interrupt()));
+#endif
 #endif
 
 DMA_CFG_t DMA_CALLback[7]   __SECTION(RAM_SECTION_CCMRAM);
@@ -195,10 +212,9 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 #if MCU== CH32V2
 	   DMA_InitTypeDef  dmaConfig;
 	   NVIC_InitTypeDef      NVIC_InitStructure = {0};
-	   uint32_t flag;
 	   IRQn_Type  irq;
 	  /* Enable DMA clock */
-	   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
+	   RCC->AHBPCENR |= RCC_AHBPeriph_DMA1;
 
 	   dmaConfig.DMA_DIR = ( direction== MTOP ) ?DMA_DIR_PeripheralDST : DMA_DIR_PeripheralSRC;
 
@@ -213,50 +229,49 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   		   dmaConfig.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
 	   		   dmaConfig.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
 	   		   break;
-	   	   case DMA_WORD:
+	   	   default:
 	   		   dmaConfig.DMA_MemoryDataSize = DMA_MemoryDataSize_Word ;
 	   		   dmaConfig.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word ;
 	   		   break;
 	   }
 	   if (stream == DMA1_CH1)
 	   {
-	   		   flag = DMA1_IT_GL1;
 	   		   irq = DMA1_Channel1_IRQn;
 	   		   DMA_CALLback[0].CallBack = f;
 	   }
 	   else if  (stream == DMA1_CH2)
 	   {
-	   		   flag = DMA1_IT_GL2;
+
 	   		   irq = DMA1_Channel2_IRQn;
 	   		   DMA_CALLback[1].CallBack = f;
 	   }
 	   else if  (stream == DMA1_CH3)
 	   {
-	   		   flag = DMA1_IT_GL3;
+
 	   		   irq = DMA1_Channel3_IRQn;
 	   		   DMA_CALLback[2].CallBack = f;
 	   }
 	   else if  (stream == DMA1_CH4)
 	   {
-	   		   flag = DMA1_IT_GL4;
+
 	   		   irq = DMA1_Channel4_IRQn;
 	   		   DMA_CALLback[3].CallBack = f;
 	   }
 	   else if  (stream == DMA1_CH5)
 	   {
-	   		   flag = DMA1_IT_GL5;
+
 	   		   irq = DMA1_Channel5_IRQn;
 	   		   DMA_CALLback[4].CallBack = f;
 	   }
 	   else if  (stream == DMA1_CH6)
 	   {
-	   		   flag = DMA1_IT_GL6;
+
 	   		   irq = DMA1_Channel6_IRQn;
 	   		   DMA_CALLback[5].CallBack = f;
 	   }
 	   else
 	{
-		   		   flag = DMA1_IT_GL7;
+
 		   		   irq = DMA1_Channel7_IRQn;
 		   		   DMA_CALLback[6].CallBack = f;
 	    }
@@ -268,9 +283,9 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   dmaConfig.DMA_PeripheralBaseAddr = paddr;
 	   dmaConfig.DMA_MemoryBaseAddr     = memadr;
 	   dmaConfig.DMA_M2M 		        = DMA_M2M_Disable;
+	   HAL_DMA_Disable(stream);
 	   DMA_Init(stream , &dmaConfig);
-	   DMA_ITConfig(stream ,DMA_IT_TC,ENABLE);
-	   DMA_ClearITPendingBit( flag);
+	   stream->CFGR |= DMA_IT_TC;
 	   NVIC_InitStructure.NVIC_IRQChannel =  irq;
 	   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
 	   NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
@@ -317,7 +332,7 @@ void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size)
 	chanel->MADDR = (u32)data;
 	ADC_DMACmd(ADC1, ENABLE);
 	ADC_ClearITPendingBit(ADC1,ADC_IT_EOC);
-	DMA_ITConfig(chanel,DMA_IT_TC, ENABLE);
+	chanel->CFGR |=DMA_IT_TC;
 	chanel->CFGR |= DMA_CFGR1_EN;
 	ADC_Cmd(ADC1, ENABLE);
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
@@ -357,55 +372,67 @@ void DMA2_STR0_IRQHandler( void )
 
 #if MCU == CH32V2
 
-void DMA1_Channel1_IRQHandler(void)
+static void DMA_IRQ( u8 ch)
 {
-
-    if(DMA_GetITStatus(DMA1_IT_TC1)==SET )
-       {
-    	   DMA_CALLback[0].CallBack();
-
-          DMA_ClearITPendingBit(DMA1_IT_GL1); //Сбрасываем флаг
-       }
-       return;
-
-}
-
-void DMA1_Channel3_IRQHandler(void)
-{
-    if(DMA_GetITStatus(DMA1_IT_TC3)==SET )
+    if ( DMA_GetITStatus(DMA1_IT_TC1<<(4*ch))==SET )
     {
-    	DMA_CALLback[2].CallBack();
-        DMA_ClearITPendingBit(DMA1_IT_GL3); //Сбрасываем флаг
+         DMA_CALLback[ch].CallBack();
+         DMA_ClearITPendingBit(DMA1_IT_GL1<<(4*ch)); //Сбрасываем флаг
     }
     return;
 
 }
 
-void  DMA1_Channel5_IRQHandler(void)
+#if DMA1_CH1_ENABLE == 1
+void DMA1_Channel1_IRQHandler(void)
 {
-    if (DMA_GetITStatus(DMA1_IT_TC5)==SET)
-    {
-    	DMA_CALLback[4].CallBack();
-        DMA_ClearITPendingBit(DMA1_IT_GL5);
-    }
+    DMA_IRQ(0);
+    return;
 }
+#endif
+#if DMA1_CH2_ENABLE == 1
+void DMA1_Channel2_IRQHandler(void)
+{
+    DMA_IRQ(1);
+    return;
+}
+#endif
+#if DMA1_CH3_ENABLE == 1
+void DMA1_Channel3_IRQHandler(void)
+{
+    DMA_IRQ(2);
+    return;
+}
+#endif
+#if DMA1_CH4_ENABLE == 1
 void  DMA1_Channel4_IRQHandler(void)
 {
-    if (DMA_GetITStatus(DMA1_IT_TC4)==SET)
-    {
-    	 DMA_CALLback[3].CallBack();
-         DMA_ClearITPendingBit(DMA1_IT_GL4);
-    }
+    DMA_IRQ(3);
+    return;
 }
-
+#endif
+#if DMA1_CH5_ENABLE == 1
+void  DMA1_Channel5_IRQHandler(void)
+{
+    DMA_IRQ(4);
+    return;
+}
+#endif
+#if DMA1_CH6_ENABLE == 1
+void  DMA1_Channel6_IRQHandler(void)
+{
+    DMA_IRQ(5);
+    return;
+}
+#endif
+#if DMA1_CH7_ENABLE == 1
 void DMA1_Channel7_IRQHandler(void)
 {
-    if (DMA_GetITStatus(DMA1_IT_TC7)==SET)
-     {
-    	 DMA_CALLback[6].CallBack();
-         DMA_ClearITPendingBit(DMA1_IT_GL7);
-    }
+    DMA_IRQ(6);
+    return;
 }
+#endif
 
 
 #endif
+

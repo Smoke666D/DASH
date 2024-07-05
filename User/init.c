@@ -29,11 +29,11 @@ void vInit_DeviceConfig( void )
     vSetBrigth(WHITE_CHANNEL,0);
 	while (HAL_GetBit(  Din3_4_5_Port , Din5_Pin)== RESET);
 	vAINInit();
-    HAL_SPI_InitDMA(SPI1, SPI_16bit );
-	HAL_SPI_InitDMA(SPI2, SPI_16bit );
+    HAL_SPI_InitDMA(HAL_SPI1, SPI_16bit );
+	HAL_SPI_InitDMA(HAL_SPI2, SPI_16bit );
 	HAL_TIMER_InitIt( TIMER4, 1000000, 100, &vRGBProcess ,TIM4_PRIOR,TIM4_SUB_PRIOR);
 	HAL_TiemrEneblae( TIMER4);
-
+	HAL_WDT_Init1s();
 	InitI2CDMA(EEPROM_I2C, I2C1_PRIOR ,I2C1_SUB_PRIOR );
 	HAL_SetBit(PowerOn_Port, PowerOn_Pin);
 	vCanOpenInit(CAN1);;

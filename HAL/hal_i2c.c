@@ -12,10 +12,14 @@
 #include "apm32f4xx_dma.h"
 #endif
 #if MCU == CH32V2
+#if I2C1_ENABLE == 1
 void   I2C1_EV_IRQHandler(void)  __attribute__((interrupt()));  /* USB HP and CAN1 TX */
 void   I2C1_ER_IRQHandler(void)  __attribute__((interrupt()));/* USB LP and CAN1RX0 */
+#endif
+#if I2C2_ENABLE == 1
 void   I2C2_EV_IRQHandler(void)  __attribute__((interrupt()));        /* CAN1 RX1 */
 void   I2C2_ER_IRQHandler(void)  __attribute__((interrupt()));     /* CAN1 SCE */
+#endif
 #endif
 
 
@@ -692,7 +696,7 @@ static void I2C_FSM()
 
 
 
-
+#if I2C1_ENABLE == 1
 void I2C1_EV_IRQHandler( void )
 {
 	I2C_FSM();
@@ -701,6 +705,8 @@ void I2C1_ER_IRQHandler ( void )
 {
 	I2C_FSM();
 }
+#endif
+#if I2C2_ENABLE == 1
 void  I2C2_EV_IRQHandler( void )
 {
 	I2C_FSM();
@@ -709,4 +715,4 @@ void I2C2_ER_IRQHandler ( void )
 {
 	I2C_FSM();
 }
-
+#endif

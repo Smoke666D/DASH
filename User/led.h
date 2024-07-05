@@ -18,7 +18,7 @@
 #define MAX_BRIGTH  15
 #define BRIGTH_CONTER 200
 #define BRIGTH_R 200
-#define BRIGTH_G 100
+#define BRIGTH_G 80
 #define BRIGTH_B 150
 
 

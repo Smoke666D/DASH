@@ -43,31 +43,28 @@ void HAL_RTC_IT_Init(  void (* rtc_it_callback) ( void ), uint8_t prior, uint8_t
 #if MCU == CH32V2
 	  NVIC_InitTypeDef      NVIC_InitStructure = {0};
 	  uint8_t temp = 0;
-	  RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
-	  PWR_BackupAccessCmd(ENABLE);
-	  /* Is it the first configuration */
-	  BKP_DeInit();
+	  RCC->APB1PCENR |=(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP);   //Разрешаем тактирование
+	  PWR->CTLR |= (1 << 8);
+	  RCC->BDCTLR |= (1<<16);    //Сборс модуля Buckup
+	  RCC->BDCTLR &= ~(1<<16);
+
 	  RCC_LSEConfig(RCC_LSE_ON);
+
 	  while(RCC_GetFlagStatus(RCC_FLAG_LSERDY) == RESET && temp < 250)
 	  {
 	            temp++;
 	            Delay_Ms(20);
 	  }
-	  if(temp >= 250)
-	  return;
-
-	  RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);
-	  RCC_RTCCLKCmd(ENABLE);
+	  if(temp >= 250) return;
+	  RCC->BDCTLR |=RCC_RTCCLKSource_LSE;
+	  RCC->BDCTLR |= (1<<15); //This function must be used only after the RTC clock was selected
+	                          // using the RCC_RTCCLKConfig function.
 	  RTC_WaitForLastTask();
 	  RTC_WaitForSynchro();
-
-	  RTC_ITConfig(RTC_IT_SEC, ENABLE);
+	  RTC->CTLRH |= RTC_IT_SEC;   //Разрешаем прерывание
 	  RTC_WaitForLastTask();
-	  RTC_EnterConfigMode();
 	  RTC_SetPrescaler(32767);
 	  RTC_WaitForLastTask();
-	  RTC_ExitConfigMode();
-
 	  NVIC_InitStructure.NVIC_IRQChannel =  RTC_IRQn;
 	  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
 	  NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
@@ -86,9 +83,9 @@ void RTC_IRQHandler ( void )
     {
 #endif
         func();
-    	// vIncrementSystemCounters();
 #if MCU == CH32V2
-        RTC_ClearITPendingBit(RTC_FLAG_SEC);
+        RTC->CTLRL &= (uint16_t)~RTC_FLAG_SEC;
+
     }
     RTC_WaitForLastTask();
 #endif
