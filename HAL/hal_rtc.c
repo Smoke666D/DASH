@@ -5,6 +5,7 @@
  *      Author: i.dymov
  */
 #include "hal_rtc.h"
+#include "hal_irq.h"
 
 #if MCU == APM32
 	#include "apm32f4xx.h"
@@ -41,7 +42,7 @@ void vRTCInit()
 void HAL_RTC_IT_Init(  void (* rtc_it_callback) ( void ), uint8_t prior, uint8_t subprior )
 {
 #if MCU == CH32V2
-	  NVIC_InitTypeDef      NVIC_InitStructure = {0};
+
 	  uint8_t temp = 0;
 	  RCC->APB1PCENR |=(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP);   //Разрешаем тактирование
 	  PWR->CTLR |= (1 << 8);
@@ -65,11 +66,9 @@ void HAL_RTC_IT_Init(  void (* rtc_it_callback) ( void ), uint8_t prior, uint8_t
 	  RTC_WaitForLastTask();
 	  RTC_SetPrescaler(32767);
 	  RTC_WaitForLastTask();
-	  NVIC_InitStructure.NVIC_IRQChannel =  RTC_IRQn;
-	  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
-	  NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
-	  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	  NVIC_Init(&NVIC_InitStructure);
+	  PFIC_IRQ_ENABLE_PG1(RTC_IRQn,prior,subprior);
+
+
 #endif
 	  func = rtc_it_callback;
 	  return;

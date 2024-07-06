@@ -63,7 +63,8 @@ HAL/hal_i2c.o: ../HAL/hal_i2c.c ../HAL/hal_i2c.h \
  C:\MRS_DATA\workspace\DASH\User/inputs.h \
  C:\MRS_DATA\workspace\DASH\User/system_init.h ../HAL/hal_config.h \
  C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_eeprom.h \
- C:\MRS_DATA\workspace\DASH\HAL/hal_i2c.h ../HAL/hal_gpio.h
+ C:\MRS_DATA\workspace\DASH\HAL/hal_i2c.h ../HAL/hal_gpio.h \
+ ../HAL/hal_irq.h
 
 ../HAL/hal_i2c.h:
 
@@ -200,3 +201,5 @@ C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_eeprom.h:
 C:\MRS_DATA\workspace\DASH\HAL/hal_i2c.h:
 
 ../HAL/hal_gpio.h:
+
+../HAL/hal_irq.h:

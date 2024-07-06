@@ -5,6 +5,7 @@
  *      Author: i.dymov
  */
 #include "hal_can.h"
+#include "hal_irq.h"
 #include "string.h"
 
 static HAL_CAN_t CAN;
@@ -78,7 +79,7 @@ void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
      NVIC_EnableIRQRequest(CAN1_SCE_IRQn, prior, subprior);
 #endif
 #if MCU == CH32V2
-     NVIC_InitTypeDef      NVIC_InitStructure = {0};
+
 
      u16 CAN_Prescaler;
      RCC->APB1PRSTR |= RCC_APB1Periph_CAN1;
@@ -144,17 +145,14 @@ void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
          {
 
              CAN_IT_ENABLE( CAN_IT_TME | CAN_IT_BOF | CAN_IT_FMP0 | CAN_IT_FMP1 );
-             NVIC_InitStructure.NVIC_IRQChannel = USB_LP_CAN1_RX0_IRQn;
-             NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-             NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
-             NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
-             NVIC_Init(&NVIC_InitStructure);
-             NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX1_IRQn;
-             NVIC_Init(&NVIC_InitStructure);
-             NVIC_InitStructure.NVIC_IRQChannel = USB_HP_CAN1_TX_IRQn;
-             NVIC_Init(&NVIC_InitStructure);
-             NVIC_InitStructure.NVIC_IRQChannel = CAN1_SCE_IRQn;
-             NVIC_Init(&NVIC_InitStructure);
+
+             PFIC_IRQ_ENABLE_PG1(USB_LP_CAN1_RX0_IRQn,prior,subprior);
+             PFIC_IRQ_ENABLE_PG1(CAN1_RX1_IRQn,prior,subprior);
+             PFIC_IRQ_ENABLE_PG1(USB_HP_CAN1_TX_IRQn,prior,subprior);
+             PFIC_IRQ_ENABLE_PG1(CAN1_SCE_IRQn,prior,subprior);
+
+
+
 
          }
       }

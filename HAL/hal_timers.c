@@ -7,6 +7,7 @@
 
 
 #include "hal_timers.h"
+#include "hal_irq.h"
 //#include "hw_lib_din.h"
 
 
@@ -64,7 +65,7 @@ void vHW_L_LIB_FreeRunInit( TimerName_t TimerName, uint32_t freq_in_hz  )
 void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Period, void (*f)() ,uint8_t prior, uint8_t subprior )
 {
 #if MCU == CH32V2
-    NVIC_InitTypeDef      NVIC_InitStructure = {0};
+
 	uint32_t Freq = getTimerFreq( TimerName );
 	vTimerInitRCC(TimerName) ;
 	config[TimerName].Period = Period;
@@ -89,11 +90,8 @@ void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Peri
 			irq = TIM4_IRQn;
 			break;
 	}
-    NVIC_InitStructure.NVIC_IRQChannel =  irq;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior ;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
+	PFIC_IRQ_ENABLE_PG1(irq,prior,subprior);
+
 #endif
 }
 

@@ -6,6 +6,7 @@
  */
 
 #include "hal_adc.h"
+#include "hal_irq.h"
 #if MCU == APM32
 	#include "apm32f4xx_adc.h"
 	#include "apm32f4xx_rcm.h"
@@ -198,18 +199,15 @@ void HAL_ADC_AWDT_IT_Init( ADC_NUMBER_t adc, uint8_t channel,u16 low, u16 high, 
 {
 	adcs.awdt_callback = f;
 #if MCU == CH32V2
-	NVIC_InitTypeDef      NVIC_InitStructure = {0};
 	ADC_DISABLE(adc);
     ADC_AnalogWatchdogThresholdsConfig(ADCS[adc], high, low);
     ADC_AnalogWatchdogSingleChannelConfig( ADCS[adc],  channel);
     ADC_AnalogWatchdogCmd( ADCS[adc], ADC_AnalogWatchdog_SingleRegEnable);
     ADC_ITConfig( ADCS[adc], ADC_IT_AWD, ENABLE);
     ADC_ENABLE(adc);
-    NVIC_InitStructure.NVIC_IRQChannel =  ADC_IRQn;
-   	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
-   	NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
-   	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-   	NVIC_Init(&NVIC_InitStructure);
+
+    PFIC_IRQ_ENABLE_PG1( ADC_IRQn,prior,subprior);
+
 #endif
 }
 
