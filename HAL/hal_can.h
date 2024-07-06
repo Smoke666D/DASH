@@ -23,6 +23,14 @@
 #if MCU == CH32V2
 #include "ch32v20x_can.h"
 #include "ch32v20x_rcc.h"
+
+/* Time out for INAK bit */
+#define INAK_TIMEOUT                 ((uint32_t)0x0000FFFF)
+#define CAN_MODE_MASK                ((uint32_t) 0x00000003)
+/* CAN Mailbox Transmit Request */
+#define TMIDxR_TXRQ                  ((uint32_t)0x00000001)
+/* CAN FCTLR Register bits */
+#define FCTLR_FINIT                  ((uint32_t)0x00000001)
 #endif
 
 typedef enum

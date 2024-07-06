@@ -51,8 +51,6 @@ static inline void ADC_EXT_TRIG_ENABLE ( ADC_NUMBER_t adc )  {ADCS[adc]->CTLR2 |
 #endif
 
 
-
-
 void  ADC_Enable_and_Start( ADC_NUMBER_t adc  )
 {
     ADC_ENABLE(adc);
