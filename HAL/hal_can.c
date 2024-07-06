@@ -140,20 +140,13 @@ void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
           {
                   wait_ack++;
           }
-
          if ((CAN1->STATR & CAN_STATR_INAK) != CAN_STATR_INAK)
          {
-
              CAN_IT_ENABLE( CAN_IT_TME | CAN_IT_BOF | CAN_IT_FMP0 | CAN_IT_FMP1 );
-
              PFIC_IRQ_ENABLE_PG1(USB_LP_CAN1_RX0_IRQn,prior,subprior);
              PFIC_IRQ_ENABLE_PG1(CAN1_RX1_IRQn,prior,subprior);
              PFIC_IRQ_ENABLE_PG1(USB_HP_CAN1_TX_IRQn,prior,subprior);
              PFIC_IRQ_ENABLE_PG1(CAN1_SCE_IRQn,prior,subprior);
-
-
-
-
          }
       }
 

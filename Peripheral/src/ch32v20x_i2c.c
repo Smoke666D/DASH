@@ -916,7 +916,6 @@ FlagStatus I2C_GetFlagStatus(I2C_TypeDef *I2Cx, uint32_t I2C_FLAG)
 void I2C_ClearFlag(I2C_TypeDef *I2Cx, uint32_t I2C_FLAG)
 {
     uint32_t flagpos = 0;
-
     flagpos = I2C_FLAG & FLAG_Mask;
     I2Cx->STAR1 = (uint16_t)~flagpos;
 }

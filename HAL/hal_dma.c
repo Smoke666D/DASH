@@ -65,18 +65,17 @@ void HAL_DMA_Disable(DMA_Stram_t stream  )
 
 void HAL_DMA_SetCounter( DMA_Stram_t stream, uint32_t counter )
 {
-	#if MCU == CH32V2
-     stream->CNTR = counter;
-	#endif
-
+#if MCU == CH32V2
+    stream->CNTR = counter;
+#endif
 }
 
 void HAL_DMA_SetCouterAndEnable(DMA_Stram_t stream, uint32_t counter )
 {
 #if MCU == CH32V2
-     stream->CNTR = counter;
-     stream->CFGR |= DMA_CFGR1_EN;
-    #endif
+    stream->CNTR = counter;
+    stream->CFGR |= DMA_CFGR1_EN;
+ #endif
 }
 
 
@@ -377,7 +376,7 @@ static void DMA_IRQ( u8 ch)
     if ( DMA_GetITStatus(DMA1_IT_TC1<<(4*ch))==SET )
     {
          DMA_CALLback[ch].CallBack();
-         DMA_ClearITPendingBit(DMA1_IT_GL1<<(4*ch)); //Сбрасываем флаг
+         DMA1->INTFCR = (DMA1_IT_GL1<<(4*ch)); //Сбрасываем флаг
     }
     return;
 
