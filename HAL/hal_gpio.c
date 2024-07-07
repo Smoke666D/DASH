@@ -24,10 +24,91 @@
 static void HAL_InitRCC(PortName_t PORT );
 
 
+void HAL_InitGPIO(GPIO_TypeDef *GPIOx,    uint16_t GPIO_Pin, GPIOSpeed_TypeDef GPIO_Speed,
+    GPIOMode_TypeDef GPIO_Mode)
+{
+    uint32_t currentmode = 0x00, currentpin = 0x00, pinpos = 0x00, pos = 0x00;
+    uint32_t tmpreg = 0x00, pinmask = 0x00;
 
-/*
- * API Функция иницилазиации тактирования порта. Сохраняет флаг, что бы не было повторонй инициализации
- */
+    currentmode = ((uint32_t)GPIO_Mode) & ((uint32_t)0x0F);
+
+    if((((uint32_t)GPIO_Mode) & ((uint32_t)0x10)) != 0x00)
+    {
+        currentmode |= (uint32_t)GPIO_Speed;
+    }
+#ifdef PORT_C_ENABLE
+#if defined (CH32V20x_D6)
+    if(((*(uint32_t *) 0x40022030) & 0x0F000000) == 0)
+    {
+        MCU_Version = 1;
+    }
+
+    if((GPIOx == GPIOC) && MCU_Version){
+        GPIO_InitStruct->GPIO_Pin = GPIO_InitStruct->GPIO_Pin >> 13;
+    }
+
+#endif
+#endif
+
+
+    if(((uint32_t)GPIO_Pin & ((uint32_t)0x00FF)) != 0x00)
+    {
+        tmpreg = GPIOx->CFGLR;
+        for(pinpos = 0x00; pinpos < 0x08; pinpos++)
+        {
+            pos = ((uint32_t)0x01) << pinpos;
+            currentpin = (GPIO_Pin) & pos;
+            if(currentpin == pos)
+            {
+                pos = pinpos << 2;
+                pinmask = ((uint32_t)0x0F) << pos;
+                tmpreg &= ~pinmask;
+                tmpreg |= (currentmode << pos);
+                if(GPIO_Mode == GPIO_Mode_IPD)
+                {
+                    GPIOx->BCR = (((uint32_t)0x01) << pinpos);
+                }
+                else
+                {
+                    if(GPIO_Mode == GPIO_Mode_IPU)
+                    {
+                        GPIOx->BSHR = (((uint32_t)0x01) << pinpos);
+                    }
+                }
+            }
+        }
+        GPIOx->CFGLR = tmpreg;
+    }
+
+    if(GPIO_Pin > 0x00FF)
+    {
+        tmpreg = GPIOx->CFGHR;
+
+        for(pinpos = 0x00; pinpos < 0x08; pinpos++)
+        {
+            pos = (((uint32_t)0x01) << (pinpos + 0x08));
+            currentpin = ((GPIO_Pin) & pos);
+            if(currentpin == pos)
+            {
+                pos = pinpos << 2;
+                pinmask = ((uint32_t)0x0F) << pos;
+                tmpreg &= ~pinmask;
+                tmpreg |= (currentmode << pos);
+                if(GPIO_Mode == GPIO_Mode_IPD)
+                {
+                    GPIOx->BCR = (((uint32_t)0x01) << (pinpos + 0x08));
+                }
+                if(GPIO_Mode == GPIO_Mode_IPU)
+                {
+                    GPIOx->BSHR = (((uint32_t)0x01) << (pinpos + 0x08));
+                }
+            }
+        }
+        GPIOx->CFGHR = tmpreg;
+    }
+}
+
+
 /*
  * Инициализация прота в режиме выхода
  */
@@ -37,9 +118,8 @@ void HAL_InitGpioOut( PortName_t PORT, uint16_t Pin  )
 	GPIO_Config_T gpioConfigStruct;
 #endif
 #if MCU == CH32V2
-	GPIO_InitTypeDef gpioConfigStruct;
 #endif
-	 HAL_InitRCC( PORT);
+	HAL_InitRCC( PORT);
 #if MCU == APM32
 	gpioConfigStruct.mode = GPIO_MODE_OUT;
 	gpioConfigStruct.pin = Pin;
@@ -49,10 +129,11 @@ void HAL_InitGpioOut( PortName_t PORT, uint16_t Pin  )
 	GPIO_Config(PORT, &gpioConfigStruct);
 #endif
 #if MCU == CH32V2
-	gpioConfigStruct.GPIO_Pin =  Pin;
-	gpioConfigStruct.GPIO_Mode =GPIO_Mode_Out_PP ;
-	gpioConfigStruct.GPIO_Speed = GPIO_Speed_2MHz;
-	GPIO_Init( PORT, &gpioConfigStruct);
+	//gpioConfigStruct.GPIO_Pin =  Pin;
+	//gpioConfigStruct.GPIO_Mode =GPIO_Mode_Out_PP ;
+	//gpioConfigStruct.GPIO_Speed = GPIO_Speed_2MHz;
+	HAL_InitGPIO( PORT, Pin,GPIO_Speed_2MHz, GPIO_Mode_Out_PP );
+	//GPIO_Init( PORT, &gpioConfigStruct);
 #endif
 }
 
@@ -65,9 +146,9 @@ void HAL_InitGpioAIN(PortName_t PORT, uint16_t Pin )
 	GPIO_Config_T gpioConfigStruct;
 #endif
 #if MCU == CH32V2
-	GPIO_InitTypeDef gpioConfigStruct;
+
 #endif
-	 HAL_InitRCC( PORT);
+	HAL_InitRCC( PORT);
 #if MCU == APM32
 	gpioConfigStruct.mode = GPIO_MODE_AN;
 	gpioConfigStruct.pin =Pin;
@@ -75,10 +156,9 @@ void HAL_InitGpioAIN(PortName_t PORT, uint16_t Pin )
 	GPIO_Config(PORT, &gpioConfigStruct);
 #endif
 #if MCU == CH32V2
-	gpioConfigStruct.GPIO_Pin =  Pin;
-	gpioConfigStruct.GPIO_Mode =GPIO_Mode_AIN ;
-	gpioConfigStruct.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init( PORT, &gpioConfigStruct);
+
+	HAL_InitGPIO( PORT, Pin,GPIO_Speed_50MHz, GPIO_Mode_AIN );
+
 #endif
 }
 
@@ -91,9 +171,9 @@ void HAL_InitGpioInPUP(PortName_t PORT, uint16_t Pin)
 	GPIO_Config_T gpioConfigStruct;
 #endif
 #if MCU == CH32V2
-	GPIO_InitTypeDef gpioConfigStruct;
+
 #endif
-	 HAL_InitRCC( PORT);
+	HAL_InitRCC( PORT);;
 #if MCU == APM32
 	gpioConfigStruct.mode = GPIO_MODE_IN;
     gpioConfigStruct.pin = Pin;
@@ -101,10 +181,9 @@ void HAL_InitGpioInPUP(PortName_t PORT, uint16_t Pin)
     GPIO_Config(PORT, &gpioConfigStruct);
 #endif
 #if MCU == CH32V2
-	gpioConfigStruct.GPIO_Pin   =  Pin;
-	gpioConfigStruct.GPIO_Mode  = GPIO_Mode_IPU;
-	gpioConfigStruct.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init( PORT, &gpioConfigStruct);
+
+	HAL_InitGPIO( PORT, Pin,GPIO_Speed_50MHz, GPIO_Mode_IPU );
+
 #endif
 }
 
@@ -119,9 +198,9 @@ void HAL_InitGpioIn(PortName_t PORT, uint16_t Pin)
 	GPIO_Config_T gpioConfigStruct;
 #endif
 #if MCU == CH32V2
-	GPIO_InitTypeDef gpioConfigStruct;
+
 #endif
-	 HAL_InitRCC( PORT);
+	HAL_InitRCC( PORT);
 #if MCU == APM32
 	gpioConfigStruct.mode = GPIO_MODE_IN;
     gpioConfigStruct.pin = Pin;
@@ -129,10 +208,9 @@ void HAL_InitGpioIn(PortName_t PORT, uint16_t Pin)
     GPIO_Config(PORT, &gpioConfigStruct);
 #endif
 #if MCU == CH32V2
-	gpioConfigStruct.GPIO_Pin   =  Pin;
-	gpioConfigStruct.GPIO_Mode  = GPIO_Mode_IN_FLOATING ;
-	gpioConfigStruct.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init( PORT, &gpioConfigStruct);
+
+	HAL_InitGPIO( PORT, Pin,GPIO_Speed_50MHz,GPIO_Mode_IN_FLOATING );
+
 #endif
 }
 
@@ -201,28 +279,25 @@ void HAL_InitGpioAF(PortName_t PORT, uint16_t Pin, uint32_t AF ,  GPIO_MODE_t mo
 	GPIO_Config_T gpioConfigStruct;
 #endif
 #if MCU == CH32V2
-	GPIO_InitTypeDef gpioConfigStruct;
+
 #endif
-	 HAL_InitRCC( PORT);
+	HAL_InitRCC( PORT);
 #if MCU == APM32
 	GPIO_ConfigPinAF(PORT ,  pin_source , AF);
 	gpioConfigStruct.mode = GPIO_MODE_AF;
     gpioConfigStruct.pin = Pin;
     gpioConfigStruct.otype = mode;//GPIO_OTYPE_PP;
-	gpioConfigStruct.pupd  = GPIO_PUPD_NOPULL;
-	gpioConfigStruct.speed = GPIO_SPEED_50MHz  ;
+	gpioConfigStruct.pupd  =  GPIO_PUPD_NOPULL;
+	gpioConfigStruct.speed = GPIO_SPEED_100MHz  ;
     GPIO_Config(PORT, &gpioConfigStruct);
 #endif
 #if MCU == CH32V2
     if (AF != 0 )
     {
-    	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+        RCC->APB2PCENR |= RCC_APB2Periph_AFIO;
     	GPIO_PinRemapConfig(AF,ENABLE);
     }
-    gpioConfigStruct.GPIO_Pin   =  Pin;
-    gpioConfigStruct.GPIO_Mode  = mode;
-    gpioConfigStruct.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init( PORT, &gpioConfigStruct);
+    HAL_InitGPIO( PORT, Pin,GPIO_Speed_50MHz,mode );
 #endif
 
 }
@@ -235,7 +310,11 @@ BitState_t HAL_GetBit( PortName_t  port, uint16_t pin)
 	return (GPIO_ReadInputBit( port , pin));
 #endif
 #if MCU == CH32V2
+#ifdef PORT_C_ENABLE
 	return ( GPIO_ReadInputDataBit(port, pin));
+#else
+    return (!( port->INDR & pin))? (uint8_t)Bit_SET : (uint8_t)Bit_RESET;
+#endif
 #endif
 }
 
@@ -248,9 +327,15 @@ void HAL_SetBit(  PortName_t  port, uint16_t pin )
 	GPIO_SetBit(port, pin);
 #endif
 #if MCU == CH32V2
+#ifdef PORT_C_ENABLE
 	GPIO_SetBits(port, pin);
+#else
+	 port->BSHR = pin;
+#endif
 #endif
 }
+
+
 
 /*
  * Получить бит порта
@@ -261,7 +346,11 @@ BitState_t xHAL_GetOutBit( PortName_t  port, uint16_t pin)
 	return (GPIO_ReadOutputBit( port , pin));
 #endif
 #if MCU == CH32V2
+#ifdef PORT_C_ENABLE
 	return ( GPIO_ReadOutputDataBit(port, pin));
+#else
+	return ( ! (port->OUTDR & pin) )? (uint8_t)Bit_SET :  (uint8_t)Bit_RESET;
+#endif
 #endif
 }
 
@@ -274,7 +363,11 @@ void HAL_ResetBit(  PortName_t  port, uint16_t pin )
 	GPIO_ResetBit(port, pin);
 #endif
 #if MCU == CH32V2
+#ifdef PORT_C_ENABLE
 	GPIO_ResetBits(port, pin);
+#else
+	port->BCR = pin;
+#endif
 #endif
 }
 /*
@@ -282,13 +375,12 @@ void HAL_ResetBit(  PortName_t  port, uint16_t pin )
  */
 static void HAL_InitRCC(PortName_t PORT )
 {
-    u32 RCC_GPIO_MASK;
 	if (PORT ==  PORT_A)
 #if MCU == APM32
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOA);
 #endif
 #if MCU == CH32V2
-	RCC_GPIO_MASK = RCC_APB2Periph_GPIOA;
+	    RCC->APB2PCENR |= RCC_APB2Periph_GPIOA;
 #endif
 	else
 	if (PORT ==  PORT_B)
@@ -296,7 +388,8 @@ static void HAL_InitRCC(PortName_t PORT )
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOB);
 #endif
 #if MCU == CH32V2
-	RCC_GPIO_MASK = RCC_APB2Periph_GPIOB;
+	RCC->APB2PCENR |= RCC_APB2Periph_GPIOB;
+
 #endif
 	else
 	if (PORT ==  PORT_C)
@@ -304,25 +397,19 @@ static void HAL_InitRCC(PortName_t PORT )
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOC);
 #endif
 #if MCU == CH32V2
-	RCC_GPIO_MASK = RCC_APB2Periph_GPIOC;
+#ifdef PORT_C_ENALBE
+	RCC->APB2PCENR |= RCC_APB2Periph_GPIOC;
 #endif
+#ifndef PORT_C_ENABLE
+	{}
+#endif
+#endif
+#if MCU == APM32
 	else
 	if (PORT ==  PORT_D)
-#if MCU == APM32
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOD);
-#endif
-#if MCU == CH32V2
-	RCC_GPIO_MASK = RCC_APB2Periph_GPIOD;
-#endif
-	else
 	if (PORT ==  PORT_E)
-#if MCU == APM32
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOE);
-#endif
-#if MCU == CH32V2
-	RCC_GPIO_MASK = RCC_APB2Periph_GPIOE;
-#endif
-#if MCU == APM32
 			else
 	if (PORT ==  PORT_F)
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOF);
@@ -332,8 +419,5 @@ static void HAL_InitRCC(PortName_t PORT )
 	else
 	if (PORT ==  PORT_G)
 			RCM_EnableAHB1PeriphClock(RCM_AHB1_PERIPH_GPIOG);
-#endif
-#if MCU == CH32V2
-	RCC->APB2PCENR |= RCC_GPIO_MASK;
 #endif
 }

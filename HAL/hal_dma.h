@@ -1,7 +1,7 @@
 /*
  * hal_dma.h
  *
- *  Created on: 25 邪锌褉. 2024 谐.
+ *  Created on: 25 閭攲瑜�. 2024 璋�.
  *      Author: i.dymov
  */
 
@@ -27,16 +27,18 @@
 #define DMA2_CH8  	DMA2_Stream8
 #endif
 #if MCU == CH32V2
-#define DMA_Stram_t DMA_Channel_TypeDef *
 
-#define DMA1_CH1  	DMA1_Channel1
-#define DMA1_CH2  	DMA1_Channel2
-#define DMA1_CH3  	DMA1_Channel3
-#define DMA1_CH4  	DMA1_Channel4
-#define DMA1_CH5  	DMA1_Channel5
-#define DMA1_CH6  	DMA1_Channel6
-#define DMA1_CH7  	DMA1_Channel7
-#define DMA1_CH8  	DMA1_Channel8
+typedef enum
+{
+    DMA1_CH1 =0,
+    DMA1_CH2 =0,
+    DMA1_CH3 =0,
+    DMA1_CH4 =0,
+    DMA1_CH5 =0,
+    DMA1_CH6 =0,
+    DMA1_CH7 =0,
+}
+DMA_Stram_t;
 #endif
 
 typedef enum

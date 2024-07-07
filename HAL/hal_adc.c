@@ -28,6 +28,13 @@ static s16 Calibrattion_Val = 0;
 static const  uint8_t ADC_chennel_ref[]={  ADC_Channel_0,  ADC_Channel_1,  ADC_Channel_2, ADC_Channel_3, ADC_Channel_4,  ADC_Channel_5,  ADC_Channel_6,  ADC_Channel_7,  ADC_Channel_8,  ADC_Channel_9,  ADC_Channel_10,
 		ADC_Channel_11, ADC_Channel_12, ADC_Channel_13, ADC_Channel_14, ADC_Channel_15,  ADC_Channel_16,  ADC_Channel_17} ;
 
+/* CTLR1 register Mask */
+#define CTLR1_CLEAR_Mask                 ((uint32_t)0xE0F0FEFF)
+/* CTLR2 register Mask */
+#define CTLR2_CLEAR_Mask                 ((uint32_t)0xFFF1F7FD)
+/* RSQR1 register Mask */
+#define RSQR1_CLEAR_Mask                 ((uint32_t)0xFF0FFFFF)
+
 #if ADC_1_2_ENABLE == 1
 void ADC1_2_IRQHandler(void) __attribute__((interrupt()));
 #endif
@@ -97,7 +104,7 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
 	   RCM_EnableAPB2PeriphClock( RCM_APB2_PERIPH_ADC3 );
 #endif
 #if MCU == CH32V2
-	ADC_InitTypeDef  adcConfig;
+	//ADC_InitTypeDef  adcConfig;
 	if ( adc == ADC_1)
 	{
 	    RCC->APB2PRSTR |= RCC_APB2Periph_ADC1;
@@ -134,15 +141,29 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
 
 
 #if MCU==CH32V2
-	 adcConfig.ADC_Mode = ADC_Mode_Independent;
-	 adcConfig.ADC_ScanConvMode =ENABLE;
-	 adcConfig.ADC_ContinuousConvMode = ENABLE;
-	 adcConfig.ADC_ExternalTrigConv =ADC_ExternalTrigConv_None;
-	 adcConfig.ADC_DataAlign = ADC_DataAlign_Right;
-	 adcConfig.ADC_NbrOfChannel = ADC_CHANNEL;
-	 adcConfig.ADC_OutputBuffer = ADC_OutputBuffer_Disable;
-	 adcConfig.ADC_Pga = ADC_Pga_1;
-	 ADC_Init(ADCS[adc], &adcConfig);
+
+	 ADC_TypeDef * ADCx = ADCS[adc];
+
+	 uint32_t tmpreg1 = 0;
+	 uint8_t  tmpreg2 = 0;
+
+	 tmpreg1 = ADCx->CTLR1;
+	 tmpreg1 &= CTLR1_CLEAR_Mask;
+	 tmpreg1 |= (uint32_t)(ADC_Mode_Independent | (uint32_t)ADC_OutputBuffer_Disable |(uint32_t)ADC_Pga_1 | ((uint32_t)ENABLE<< 8));
+	 ADCx->CTLR1 = tmpreg1;
+
+	 tmpreg1 = ADCx->CTLR2;
+	 tmpreg1 &= CTLR2_CLEAR_Mask;
+	 tmpreg1 |= (uint32_t)( ADC_DataAlign_Right | ADC_ExternalTrigConv_None | ((uint32_t)ENABLE<< 1));
+	 ADCx->CTLR2 = tmpreg1;
+
+	 tmpreg1 = ADCx->RSQR1;
+	 tmpreg1 &= RSQR1_CLEAR_Mask;
+	 tmpreg2 |= (uint8_t)(ADC_CHANNEL - (uint8_t)1);
+	 tmpreg1 |= (uint32_t)tmpreg2 << 20;
+	 ADCx->RSQR1 = tmpreg1;
+
+
 	 for (u8 i=0; i< (channel_count) ;i++)
 	 {
 		 ADC_RegularChannelConfig(ADCS[adc],ADC_chennel_ref[channel_nmber[ i  ]], i + 1,  ADC_SampleTime_239Cycles5 );
