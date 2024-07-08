@@ -203,7 +203,7 @@ void SetBigSeg( u16 mask)
 void vSetBrigth( BRIGTH_CHANNEL_t ch, u8 brigth)
 {
     HAL_TIMER_SetPWMPulse(TIMER3, (ch == RGB_CHANNEL) ? TIM_CHANNEL_3 :  TIM_CHANNEL_4 , Brigth[brigth]);
-    HAL_TIMER_EnablePWMCH(TIMER3,0);
+    HAL_TIMER_EnablePWMCH(TIMER3);
     return;
 }
 
@@ -232,8 +232,8 @@ void SPI2_DMA_Callback( void )
  */
 void vLedDriverStart(void)
 {
-	HAL_DMAInitIT(DMA1_CH5,MTOP, DMA_HWORD  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,0,SPI2_DMA_PRIOR,SPI2_DMA_SUBPRIOR ,&SPI2_DMA_Callback);
-	HAL_DMAInitIT(DMA1_CH3,MTOP, DMA_HWORD  ,(u32)&SPI1->DATAR, (u32)data,     0,SPI1_DMA_PRIOR,SPI1_DMA_SUBPRIOR ,&SPI1_DMA_Callback);
+	HAL_DMAInitIT(DMA1_CH5,MTOP, DMA_HWORD  ,(u32)&SPI2->DATAR, (u32)SPI2_DATA,SPI2_DMA_PRIOR,SPI2_DMA_SUBPRIOR ,&SPI2_DMA_Callback);
+	HAL_DMAInitIT(DMA1_CH3,MTOP, DMA_HWORD  ,(u32)&SPI1->DATAR, (u32)data,     SPI1_DMA_PRIOR,SPI1_DMA_SUBPRIOR ,&SPI1_DMA_Callback);
 	return;
 }
 

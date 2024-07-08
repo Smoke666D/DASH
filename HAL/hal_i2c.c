@@ -298,7 +298,7 @@ static EERPOM_ERROR_CODE_t I2C_Master_TransmitIT(  u8 DevAdrees, u16 data_addres
 	EEPROM_I2C_DISABLE();
 #endif
 	res = (exit_code > 0  )? (EEPROM_OK) : (EEPROM_READ_ERROR);
-	//}
+
 	return (res) ;
 
 

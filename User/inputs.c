@@ -72,7 +72,7 @@ void ADC1_Init()
 {
     uint8_t ADC1_CHANNEL[5] = { ADC_CH_0,  ADC_CH_1, ADC_CH_2, ADC_CH_6,  ADC_CH_3};
     HAL_ADC_ContiniusScanCinvertionDMA( ADC_1 ,  5 ,  ADC1_CHANNEL);
-    HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(), 0, ADC_PRIOR , ADC_SUB_PRIOR, &ADC1_Event  );
+    HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(),  ADC_PRIOR , ADC_SUB_PRIOR, &ADC1_Event  );
 }
 /*
  *
@@ -97,7 +97,6 @@ void ADC_FSM()
               case AIN3:
                   Vx = (float)ADC_Buffer*AIN_COOF*K;
                   OurVData[i]= (Vx*Rpup)/(OurVData[AIN5]-Vx);
-
                   break;
               case AIN5:
                   OurVData[i]= (float)ADC_Buffer*VADD_COOF*K;
@@ -207,8 +206,8 @@ static void vDINInit()
     eRPMConfig(INPUT_2,RPM_CH2);
     HAL_TimeInitCaptureDMA( TIMER1 , 2000, 60000, TIM_CHANNEL_4);
     HAL_TimeInitCaptureDMA( TIMER2 , 2000, 60000, TIM_CHANNEL_2);
-    HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1), 0, TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack );
-    HAL_DMAInitIT( DMA1_CH7,PTOM, DMA_HWORD , (u32)&TIM2->CH2CVR, (u32) getCaputreBuffer(INPUT_2), 0, TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack_1 );
+    HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack );
+    HAL_DMAInitIT( DMA1_CH7,PTOM, DMA_HWORD , (u32)&TIM2->CH2CVR, (u32) getCaputreBuffer(INPUT_2),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack_1 );
     HAL_DMA_SetCouterAndEnable(DMA1_CH7,  CC_BUFFER_SIZE);
     HAL_DMA_SetCouterAndEnable(DMA1_CH4,  CC_BUFFER_SIZE);
 
@@ -254,7 +253,7 @@ void vInputsTask( void * argument )
             xTaskNotifyGiveIndexed(pTaskToNotifykHandle,0);
             break;
         case  STATE_RUN:
-            HAL_ADC_StartDMA(DMA1_CH1,getADC1Buffer(),ADC1_CHANNELS * ADC_FRAME_SIZE);
+            HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
             vDataModelRegDelayWrite();
             vTaskDelay(1);
             if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) & ADC1_DATA_READY)

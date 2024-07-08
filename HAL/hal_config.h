@@ -116,4 +116,13 @@ typedef enum
 #define TIM3_UP_ENABLE 0
 #define TIM4_UP_ENABLE 1
 
+#if MCU == CH32V2
+#define ADC_1_ENABLE  1
+#define ADC_2_ENABLE  0
+#define ADC_CHANNEL_NUMBER_0_9   1
+#define ADC_CHANNEL_NUMBER_10_16 0
+#define ADC_CHANNELRANK_0_6  1
+#define ADC_CHANNELRANK_7_12  0
+#define ADC_CHANNELRANK_13_16 0
+#endif
 #endif /* HAL_HAL_CONFIG_H_ */
