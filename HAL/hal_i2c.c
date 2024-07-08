@@ -7,7 +7,7 @@
 #include "hal_i2c.h"
 #include "hw_lib_eeprom.h"
 #include "hal_gpio.h"
-
+#include "hal_irq.h"
 #if MCU == APM32
 #include "apm32f4xx_dma.h"
 #endif
@@ -36,7 +36,6 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 {
 
 #if	MCU == CH32V2
-	NVIC_InitTypeDef      NVIC_InitStructure = {0};
 
 #if I2C1_ENABLE == 1
     if ( i2c == I2C_1)
@@ -96,22 +95,18 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 
 #endif
 #if MCU == CH32V2
-   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
-   NVIC_InitStructure.NVIC_IRQChannelSubPriority        =  subprior;
-   NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;
+
    if (i2c == I2C_1)
    {
-	   NVIC_InitStructure.NVIC_IRQChannel =  I2C1_EV_IRQn ;
-	   NVIC_Init(&NVIC_InitStructure);
-	   NVIC_InitStructure.NVIC_IRQChannel =  I2C1_ER_IRQn;
-	   NVIC_Init(&NVIC_InitStructure);
+
+	   PFIC_IRQ_ENABLE_PG1(I2C1_EV_IRQn ,prior,subprior);
+	     PFIC_IRQ_ENABLE_PG1(I2C1_ER_IRQn ,prior,subprior);
    }
    else
    {
-       NVIC_InitStructure.NVIC_IRQChannel =  I2C2_EV_IRQn ;
-       NVIC_Init(&NVIC_InitStructure);
-       NVIC_InitStructure.NVIC_IRQChannel =  I2C2_ER_IRQn;
-       NVIC_Init(&NVIC_InitStructure);
+       PFIC_IRQ_ENABLE_PG1(I2C2_EV_IRQn ,prior,subprior);
+       PFIC_IRQ_ENABLE_PG1(I2C2_ER_IRQn ,prior,subprior);
+
    }
    I2C_DualAddressCmd(pEEPROM->dev,DISABLE);
    I2C_Cmd(pEEPROM->dev,ENABLE);

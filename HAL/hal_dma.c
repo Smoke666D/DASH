@@ -211,7 +211,7 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 #endif
 #if MCU== CH32V2
 	   DMA_InitTypeDef  dmaConfig;
-	   NVIC_InitTypeDef      NVIC_InitStructure = {0};
+
 	   IRQn_Type  irq;
 	  /* Enable DMA clock */
 	   RCC->AHBPCENR |= RCC_AHBPeriph_DMA1;
@@ -286,11 +286,9 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   HAL_DMA_Disable(stream);
 	   DMA_Init(stream , &dmaConfig);
 	   stream->CFGR |= DMA_IT_TC;
-	   NVIC_InitStructure.NVIC_IRQChannel =  irq;
-	   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
-	   NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior;
-	   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	   NVIC_Init(&NVIC_InitStructure);
+	   PFIC_IRQ_ENABLE_PG1(irq ,prior,subprior);
+
+
 #endif
 }
 
