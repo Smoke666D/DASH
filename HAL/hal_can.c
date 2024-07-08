@@ -268,9 +268,8 @@ void HAL_CANSetFiters(uint8_t filter_index, uint32_t f1,uint32_t f2,uint32_t f3,
 	CAN_ConfigFilter(& sFilterConfig);
 #endif
 #if MCU == CH32V2
-
-    u16 CAN_FilterIdLow       =   f1 <<5;
-    u16 CAN_FilterIdHigh      =  f3 <<5;
+    u16 CAN_FilterIdLow       = f1 <<5;
+    u16 CAN_FilterIdHigh      = f3 <<5;
     u16 CAN_FilterMaskIdLow   = f2 <<5;
     u16 CAN_FilterMaskIdHigh  = f4 <<5;
     uint16_t CAN_FilterFIFOAssignment =  (FIFO  == FILTER_FIFO_0) ?  CAN_Filter_FIFO0 :  CAN_Filter_FIFO1 ;
@@ -282,22 +281,18 @@ void HAL_CANSetFiters(uint8_t filter_index, uint32_t f1,uint32_t f2,uint32_t f3,
     CAN1->sFilterRegister[filter_index].FR1 =
             ((0x0000FFFF & (uint32_t)CAN_FilterMaskIdLow) << 16) |
                     (0x0000FFFF & (uint32_t)CAN_FilterIdLow);
-
             CAN1->sFilterRegister[filter_index].FR2 =
             ((0x0000FFFF & (uint32_t)CAN_FilterMaskIdHigh) << 16) |
                     (0x0000FFFF & (uint32_t)CAN_FilterIdHigh);
-
     #if defined (CH32V20x_D6)||defined (CH32V20x_D8)
         if(((*(uint32_t *) 0x40022030) & 0x0F000000) == 0)
         {
             uint32_t i;
-
             for(i = 0; i < 64; i++)
             {
                 *(__IO uint16_t *)(0x40006000 + 512 + 4 * i) = *(__IO uint16_t *)(0x40006000 + 768 + 4 * i);
             }
         }
-
     #endif
     CAN1->FMCFGR |= (uint32_t)filter_number_bit_pos;
     if (CAN_FilterFIFOAssignment == CAN_Filter_FIFO0)

@@ -25,7 +25,8 @@ HAL/hal_rtc.o: ../HAL/hal_rtc.c ../HAL/hal_rtc.h ../HAL/hal_config.h \
  C:\MRS_DATA\workspace\DASH\User/ch32v20x_it.h \
  C:\MRS_DATA\workspace\DASH\Debug/debug.h \
  C:\MRS_DATA\workspace\DASH\Peripheral\inc/ch32v20x.h \
- C:\MRS_DATA\workspace\DASH\Peripheral\inc/ch32v20x_misc.h
+ C:\MRS_DATA\workspace\DASH\Peripheral\inc/ch32v20x_misc.h \
+ ../HAL/hal_irq.h
 
 ../HAL/hal_rtc.h:
 
@@ -84,3 +85,5 @@ C:\MRS_DATA\workspace\DASH\Debug/debug.h:
 C:\MRS_DATA\workspace\DASH\Peripheral\inc/ch32v20x.h:
 
 C:\MRS_DATA\workspace\DASH\Peripheral\inc/ch32v20x_misc.h:
+
+../HAL/hal_irq.h:

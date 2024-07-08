@@ -7,7 +7,8 @@
 
 
 #include "hal_timers.h"
-//#include "hw_lib_din.h"
+#include "hal_irq.h"
+
 
 
 static void vTimerInitRCC(TimerName_t TimerName);
@@ -51,9 +52,10 @@ void vHAL_SetTimerFreq( TimerName_t TimerName, uint32_t freq_in_hz  )
 
 void vHW_L_LIB_FreeRunInit( TimerName_t TimerName, uint32_t freq_in_hz  )
 {
-	uint32_t Freq= getTimerFreq( TimerName );
+
 	vTimerInitRCC(TimerName );
 #if MCU == APM32
+	uint32_t Freq= getTimerFreq( TimerName );
 	config[TimerName].Period = 0xFFFF;
 	config[TimerName].Div = (Freq /freq_in_hz);
 #endif
@@ -64,7 +66,6 @@ void vHW_L_LIB_FreeRunInit( TimerName_t TimerName, uint32_t freq_in_hz  )
 void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Period, void (*f)() ,uint8_t prior, uint8_t subprior )
 {
 #if MCU == CH32V2
-    NVIC_InitTypeDef      NVIC_InitStructure = {0};
 	uint32_t Freq = getTimerFreq( TimerName );
 	vTimerInitRCC(TimerName) ;
 	config[TimerName].Period = Period;
@@ -89,11 +90,7 @@ void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Peri
 			irq = TIM4_IRQn;
 			break;
 	}
-    NVIC_InitStructure.NVIC_IRQChannel =  irq;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = prior;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = subprior ;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
+	PFIC_IRQ_ENABLE_PG1(irq,prior,subprior);
 #endif
 }
 
@@ -172,7 +169,7 @@ u32 HAL_GetTimerCounterRegAdres(TimerName_t TimerName , uint8_t ch )
 			return (timers[TimerName]->CH2CVR);
 		case TIM_CHANNEL_3:
 			return (timers[TimerName]->CH3CVR);
-		case TIM_CHANNEL_4:
+		default:
 			return (timers[TimerName]->CH4CVR);
 
 	}
@@ -286,7 +283,6 @@ void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32
 	 timers[TimerName]->CTLR1 |= TIM_ARPE;
 	 timers[TimerName]->BDTR |= TIM_MOE;
 
-	// TIM_Cmd(timers[TimerName],ENABLE);
 #endif
 }
 
@@ -502,158 +498,125 @@ uint32_t uGetFreeRuningTimer(TimerName_t TimerName )
  */
 static void vTimerInitRCC(TimerName_t TimerName)
 {
-	switch (TimerName)
-	{
-		case TIMER1:
+    switch (TimerName)
+    {
+        case TIMER1:
 #if MCU == APM32
-			RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR1);
+            RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR1);
 #endif
 #if MCU == CH32V2
-			RCC->APB2PRSTR |= RCC_APB2Periph_TIM1;
-			RCC->APB2PRSTR &= ~RCC_APB2Periph_TIM1;
-			RCC->APB2PCENR |= RCC_APB2Periph_TIM1;
+            RCC->APB2PRSTR |= RCC_APB2Periph_TIM1;
+            RCC->APB2PRSTR &= ~RCC_APB2Periph_TIM1;
+            RCC->APB2PCENR |= RCC_APB2Periph_TIM1;
+#endif
+            break;
+        case TIMER2:
+#if MCU == APM32
+            RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR2);
+#endif
+#if MCU == CH32V2
+            RCC->APB1PRSTR |= RCC_APB1Periph_TIM2;
+            RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM2;
+            RCC->APB1PCENR |= RCC_APB1Periph_TIM2;
+#endif
+            break;
+        case TIMER3:
+#if MCU == APM32
+            RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR3);
+#endif
+#if MCU == CH32V2
+            RCC->APB1PRSTR |= RCC_APB1Periph_TIM3;
+            RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM3;
+            RCC->APB1PCENR |= RCC_APB1Periph_TIM3;
+#endif
+            break;
+#if MCU == APM32
+        case TIMER4:
+            RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR4);
+            break;
+        case TIMER5:
+            RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR5);
+        case TIMER6:
+            RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR6);
+             break;
+        case TIMER7:
+            RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR7);
+             break;
+        case TIMER8:
+            RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR8);
+             break;
+        case TIMER9:
+            RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR9);
+             break;
+        case TIMER10:
+            RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR10);
+             break;
+        case TIMER11:
+            RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR11);
+             break;
+        case TIMER12:
+            RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR12);
+             break;
+        case TIMER13:
+            RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR13);
+             break;
+        case TIMER14:
+            RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR14);
 
+             break;
 #endif
-			break;
-		case TIMER2:
-#if MCU == APM32
-			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR2);
-#endif
+        default:
 #if MCU == CH32V2
-			RCC->APB1PRSTR |= RCC_APB1Periph_TIM2;
-			RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM2;
-			RCC->APB1PCENR |= RCC_APB1Periph_TIM2;
+            RCC->APB1PRSTR |= RCC_APB1Periph_TIM4;
+            RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM4;
+            RCC->APB1PCENR |= RCC_APB1Periph_TIM4;
 #endif
-		    break;
-		case TIMER3:
-#if MCU == APM32
-			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR3);
-#endif
-#if MCU == CH32V2
-		    RCC->APB1PRSTR |= RCC_APB1Periph_TIM3;
-		    RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM3;
-			RCC->APB1PCENR |= RCC_APB1Periph_TIM3;
-#endif
-		    break;
-		case TIMER4:
-#if MCU == APM32
-			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR4);
-#endif
-#if MCU == CH32V2
-		    RCC->APB1PRSTR |= RCC_APB1Periph_TIM4;
-		    RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM4;
-			RCC->APB1PCENR |= RCC_APB1Periph_TIM4;
-#endif
-			break;
-#if MCU == APM32
-		case TIMER5:
+            break;
 
-		RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR5);
-#endif
-#if MCU == CH32V2
-		default:
-		    RCC->APB1PRSTR |= RCC_APB1Periph_TIM5;
-		    RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM5;
-		    RCC->APB1PCENR |= RCC_APB1Periph_TIM5;
-#endif
-		     break;
-#if MCU == APM32
-		case TIMER6:
-			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR6);
-			 break;
-		case TIMER7:
-			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR7);
-			 break;
-		case TIMER8:
-			RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR8);
-			 break;
-		case TIMER9:
-			RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR9);
-			 break;
-		case TIMER10:
-			RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR10);
-		     break;
-		case TIMER11:
-			RCM_EnableAPB2PeriphClock(RCM_APB2_PERIPH_TMR11);
-		     break;
-		case TIMER12:
-			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR12);
-			 break;
-		case TIMER13:
-			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR13);
-			 break;
-		case TIMER14:
-			RCM_EnableAPB1PeriphClock(RCM_APB1_PERIPH_TMR14);
-
-		     break;
-		default:
-			break;
-#endif
-	}
+    }
 }
 
 
 static uint32_t getTimerFreq( TimerName_t TimerName )
 {
-	switch (TimerName)
-		{
-			case TIMER1:
-#if MCU == APM32
-				return  ( 168000000U );
-#endif
 #if MCU == CH32V2
-				return ( 72000000U);
-#endif
-			case TIMER2:
-#if MCU == APM32
-				return  ( 84000000U );
-#endif
-#if MCU == CH32V2
-				return ( 72000000U);
-#endif
-			case TIMER3:
-#if MCU == APM32
-				return  ( 84000000U );
-#endif
-#if MCU == CH32V2
-				return ( 72000000U);
-#endif
-			case TIMER4:
-#if MCU == APM32
-				return  ( 84000000U );
-#endif
-#if MCU == CH32V2
-				return ( 72000000U);
-#endif
-			case TIMER5:
-#if MCU == APM32
-				return  ( 84000000U );
-#endif
-#if MCU == CH32V2
-				return ( 72000000U);
+                return ( 72000000U);
 #endif
 #if MCU == APM32
-			case TIMER6:
-			    return  ( 84000000U );
-			case TIMER7:
-				return  ( 84000000U );
-			case TIMER8:
-				return  ( 168000000U );
-			case TIMER9:
-				return  ( 168000000U );
-			case TIMER10:
-				return  ( 168000000U );
-			case TIMER11:
-			     return  ( 168000000U );
-			case TIMER12:
-				return  ( 84000000U );
-			case TIMER13:
-				return  ( 84000000U );
-			case TIMER14:
-				return  ( 84000000U );
+    switch (TimerName)
+        {
+            case TIMER1:
+                return  ( 168000000U );
+            case TIMER2:
+                return  ( 84000000U );
+            case TIMER3:
+                return  ( 84000000U );
+            case TIMER4:
+                return  ( 84000000U );
+            case TIMER5:
+                return  ( 84000000U );
+            case TIMER6:
+                return  ( 84000000U );
+            case TIMER7:
+                return  ( 84000000U );
+            case TIMER8:
+                return  ( 168000000U );
+            case TIMER9:
+                return  ( 168000000U );
+            case TIMER10:
+                return  ( 168000000U );
+            case TIMER11:
+                 return  ( 168000000U );
+            case TIMER12:
+                return  ( 84000000U );
+            case TIMER13:
+                return  ( 84000000U );
+            case TIMER14:
+                return  ( 84000000U );
+
+        }
+    return 0;
 #endif
-		}
-	return 0;
 }
 
 

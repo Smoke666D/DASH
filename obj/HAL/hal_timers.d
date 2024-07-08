@@ -60,7 +60,8 @@ HAL/hal_timers.o: ../HAL/hal_timers.c ../HAL/hal_timers.h \
  C:\MRS_DATA\workspace\DASH\User/led.h \
  C:\MRS_DATA\workspace\DASH\User/init.h \
  C:\MRS_DATA\workspace\DASH\User/DataModel.h \
- C:\MRS_DATA\workspace\DASH\User/inputs.h ../HAL/hal_config.h
+ C:\MRS_DATA\workspace\DASH\User/inputs.h ../HAL/hal_config.h \
+ ../HAL/hal_irq.h
 
 ../HAL/hal_timers.h:
 
@@ -189,3 +190,5 @@ C:\MRS_DATA\workspace\DASH\User/DataModel.h:
 C:\MRS_DATA\workspace\DASH\User/inputs.h:
 
 ../HAL/hal_config.h:
+
+../HAL/hal_irq.h:
