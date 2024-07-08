@@ -12,6 +12,40 @@
 #include "apm32f4xx_dma.h"
 #endif
 #if MCU == CH32V2
+static I2C_TypeDef * I2C[]={I2C1,I2C2};
+/* I2C START mask */
+#define CTLR1_START_Set          ((uint16_t)0x0100)
+#define CTLR1_START_Reset        ((uint16_t)0xFEFF)
+
+/* I2C ADD0 mask */
+#define OADDR1_ADD0_Set          ((uint16_t)0x0001)
+#define OADDR1_ADD0_Reset        ((uint16_t)0xFFFE)
+/* I2C SPE mask */
+#define CTLR1_PE_Set             ((uint16_t)0x0001)
+#define CTLR1_PE_Reset           ((uint16_t)0xFFFE)
+/* I2C ACK mask */
+#define CTLR1_ACK_Set            ((uint16_t)0x0400)
+#define CTLR1_ACK_Reset          ((uint16_t)0xFBFF)
+#define EEPROM_I2C_DISABLE        I2C[pEEPROM->dev]->CTLR1 &= CTLR1_PE_Reset
+/* I2C ENDUAL mask */
+#define OADDR2_ENDUAL_Set        ((uint16_t)0x0001)
+#define OADDR2_ENDUAL_Reset      ((uint16_t)0xFFFE)
+#define EEPROM_I2C_DUALADDR_DISABLE       I2C[pEEPROM->dev]->OADDR2 &= OADDR2_ENDUAL_Reset
+/* I2C STOP mask */
+#define CTLR1_STOP_Set           ((uint16_t)0x0200)
+#define CTLR1_STOP_Reset         ((uint16_t)0xFDFF)
+/* I2C FREQ mask */
+#define CTLR2_FREQ_Reset         ((uint16_t)0xFFC0)
+/* I2C F/S mask */
+#define CKCFGR_FS_Set            ((uint16_t)0x8000)
+/* I2C registers Masks */
+#define CTLR1_CLEAR_Mask         ((uint16_t)0xFBF5)
+/* I2C CCR mask */
+#define CKCFGR_CCR_Set           ((uint16_t)0x0FFF)
+/* I2C FLAG mask */
+#define FLAG_Mask                ((uint32_t)0x00FFFFFF)
+
+
 #if I2C1_ENABLE == 1
 void   I2C1_EV_IRQHandler(void)  __attribute__((interrupt()));  /* USB HP and CAN1 TX */
 void   I2C1_ER_IRQHandler(void)  __attribute__((interrupt()));/* USB LP and CAN1RX0 */
@@ -36,7 +70,7 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 {
 
 #if	MCU == CH32V2
-
+    I2C_TypeDef *  I2Cx = i2c;
 #if I2C1_ENABLE == 1
     if ( i2c == I2C_1)
     {
@@ -53,14 +87,35 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
         RCC->APB1PCENR |= RCC_APB1Periph_I2C2;
     }
 #endif
-    I2C_InitTypeDef I2C_InitTSturcture={0};
-    I2C_InitTSturcture.I2C_ClockSpeed          = 400000;
-    I2C_InitTSturcture.I2C_Mode                = I2C_Mode_I2C;
-    I2C_InitTSturcture.I2C_DutyCycle           = I2C_DutyCycle_16_9;
-    I2C_InitTSturcture.I2C_Ack                 = I2C_Ack_Enable;
-    I2C_InitTSturcture.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
-    I2C_Init(i2c, &I2C_InitTSturcture );
-    I2C_Cmd( i2c, ENABLE );
+    uint16_t tmpreg = 0, freqrange = 0;
+    uint16_t result = 0x04;
+    uint32_t pclk1 = 8000000;
+    RCC_ClocksTypeDef rcc_clocks;
+    tmpreg = I2Cx->CTLR2;
+    tmpreg &= CTLR2_FREQ_Reset;
+    RCC_GetClocksFreq(&rcc_clocks);
+    pclk1 = rcc_clocks.PCLK1_Frequency;
+    freqrange = (uint16_t)(pclk1 / 1000000);
+    tmpreg |= freqrange;
+    I2Cx->CTLR2 = tmpreg;
+    I2Cx->CTLR1 &= CTLR1_PE_Reset;
+    tmpreg = 0;
+    result = (uint16_t)(pclk1 / ( 400000 * 25));
+    result |= I2C_DutyCycle_16_9;
+    if((result & CKCFGR_CCR_Set) == 0)
+    {
+       result |= (uint16_t)0x0001;
+    }
+    tmpreg |= (uint16_t)(result | CKCFGR_FS_Set);
+    I2Cx->RTR = (uint16_t)(((freqrange * (uint16_t)300) / (uint16_t)1000) + (uint16_t)1);
+    I2Cx->CKCFGR = tmpreg;
+    I2Cx->CTLR1 |= CTLR1_PE_Set;
+    tmpreg = I2Cx->CTLR1;
+    tmpreg &= CTLR1_CLEAR_Mask;
+    tmpreg |= (uint16_t)((uint32_t)I2C_Mode_I2C | I2C_Ack_Enable);
+    I2Cx->CTLR1 = tmpreg;
+    I2Cx->OADDR1 = I2C_AcknowledgedAddress_7bit ;
+
 #endif
 #if MCU == APM32
     if ( i2c == I2C_1)
@@ -230,8 +285,6 @@ static EERPOM_ERROR_CODE_t I2C_Master_TransmitIT(  u8 DevAdrees, u16 data_addres
 
 #if MCU == CH32V2
 	I2C_Cmd(pEEPROM->dev,ENABLE);
-	//xTaskNotifyStateClearIndexed( pEEPROM->NotifyTaskHeandle,pEEPROM->ucTaskNatificationIndex);
-	//I2C_SoftwareResetCmd(pEEPROM->dev,ENABLE);
 	I2C_ITConfig(pEEPROM->dev, I2C_IT_BUF | I2C_IT_EVT | I2C_IT_ERR, DISABLE );
 	while( I2C_GetFlagStatus( pEEPROM->dev, I2C_FLAG_BUSY ) != RESET );
 	I2C_ITConfig(pEEPROM->dev, I2C_IT_BUF | I2C_IT_EVT | I2C_IT_ERR, ENABLE );
