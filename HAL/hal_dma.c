@@ -7,6 +7,7 @@
 
 #include "hal_dma.h"
 #include "hal_irq.h"
+#include "hal_adc.h"
 #if MCU == APM32
 	#include "apm32f4xx_dma.h"
 	#include "apm32f4xx_rcm.h"
@@ -16,7 +17,8 @@
     #include "ch32v20x_dma.h"
 	#include "ch32v20x_adc.h"
 	#include "ch32v20x_rcc.h"
-
+/* DMA registers Masks */
+#define CFGR_CLEAR_Mask          ((uint32_t)0xFFFF800F)
 DMA_Channel_TypeDef * DMACH[]={DMA1_Channel1,DMA1_Channel2,DMA1_Channel3,DMA1_Channel4,DMA1_Channel5,DMA1_Channel6,DMA1_Channel7};
 #if DMA1_CH1_ENABLE == 1
 void     DMA1_Channel1_IRQHandler(void)   __attribute__((interrupt()));
@@ -211,81 +213,42 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   NVIC_EnableIRQRequest( irq, prior , subprior);
 #endif
 #if MCU== CH32V2
-	   DMA_InitTypeDef  dmaConfig;
+	   /* Enable DMA clock */
+	          RCC->AHBPCENR |= RCC_AHBPeriph_DMA1;
 
-	   IRQn_Type  irq;
-	  /* Enable DMA clock */
-	   RCC->AHBPCENR |= RCC_AHBPeriph_DMA1;
-	   dmaConfig.DMA_DIR = ( direction== MTOP ) ?DMA_DIR_PeripheralDST : DMA_DIR_PeripheralSRC;
+	          u32 DMA_DIR = ( direction== MTOP ) ?DMA_DIR_PeripheralDST : DMA_DIR_PeripheralSRC;
+	          u32 DMA_MemoryDataSize;
+	          u32 DMA_PeripheralDataSize;
+	          switch (dma_size)
+	          {
+	              case DMA_BYTE:
+	                  DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+	                  DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+	                  break;
+	              case DMA_HWORD:
+	                  DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+	                  DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+	                  break;
+	              default:
+	                  DMA_MemoryDataSize = DMA_MemoryDataSize_Word ;
+	                  DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word ;
+	                  break;
+	          }
 
+	          DMA_CALLback[stream].CallBack = f;
+	          HAL_DMA_Disable(stream);
+	          uint32_t tmpreg = 0;
+	          tmpreg = DMACH[stream]->CFGR;
+	          tmpreg &= CFGR_CLEAR_Mask;
+	          tmpreg |= DMA_DIR | DMA_Mode_Normal | DMA_PeripheralInc_Disable | DMA_MemoryInc_Enable |
+	                       DMA_PeripheralDataSize | DMA_MemoryDataSize |DMA_Priority_Medium | DMA_M2M_Disable;
 
-	   switch (dma_size)
-	   {
-	   	   case DMA_BYTE:
-	   		   dmaConfig.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
-	   		   dmaConfig.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
-	   		   break;
-	   	   case DMA_HWORD:
-	   		   dmaConfig.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
-	   		   dmaConfig.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
-	   		   break;
-	   	   default:
-	   		   dmaConfig.DMA_MemoryDataSize = DMA_MemoryDataSize_Word ;
-	   		   dmaConfig.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Word ;
-	   		   break;
-	   }
-	   if (stream == DMA1_CH1)
-	   {
-	   		   irq = DMA1_Channel1_IRQn;
-	   		   DMA_CALLback[0].CallBack = f;
-	   }
-	   else if  (stream == DMA1_CH2)
-	   {
-
-	   		   irq = DMA1_Channel2_IRQn;
-	   		   DMA_CALLback[1].CallBack = f;
-	   }
-	   else if  (stream == DMA1_CH3)
-	   {
-
-	   		   irq = DMA1_Channel3_IRQn;
-	   		   DMA_CALLback[2].CallBack = f;
-	   }
-	   else if  (stream == DMA1_CH4)
-	   {
-
-	   		   irq = DMA1_Channel4_IRQn;
-	   		   DMA_CALLback[3].CallBack = f;
-	   }
-	   else if  (stream == DMA1_CH5)
-	   {
-
-	   		   irq = DMA1_Channel5_IRQn;
-	   		   DMA_CALLback[4].CallBack = f;
-	   }
-	   else if  (stream == DMA1_CH6)
-	   {
-
-	   		   irq = DMA1_Channel6_IRQn;
-	   		   DMA_CALLback[5].CallBack = f;
-	   }
-	   else
-	{
-		   		   irq = DMA1_Channel7_IRQn;
-		   		   DMA_CALLback[6].CallBack = f;
-	    }
-
-	   dmaConfig.DMA_MemoryInc		    = DMA_MemoryInc_Enable;
-	   dmaConfig.DMA_PeripheralInc 	    = DMA_PeripheralInc_Disable;
-	   dmaConfig.DMA_Mode		   		= DMA_Mode_Normal;
-	   dmaConfig.DMA_Priority		    = DMA_Priority_Medium;
-	   dmaConfig.DMA_PeripheralBaseAddr = paddr;
-	   dmaConfig.DMA_MemoryBaseAddr     = memadr;
-	   dmaConfig.DMA_M2M 		        = DMA_M2M_Disable;
-	   HAL_DMA_Disable(stream);
-	   DMA_Init(DMACH[stream] , &dmaConfig);
-	   DMACH[stream]->CFGR |= DMA_IT_TC;
-	   PFIC_IRQ_ENABLE_PG1(irq ,prior,subprior);
+	          DMACH[stream]->CFGR = tmpreg;
+	          DMACH[stream]->CNTR = 0;
+	          DMACH[stream]->PADDR = paddr;
+	          DMACH[stream]->MADDR = memadr;
+	          DMACH[stream]->CFGR |= DMA_IT_TC;
+	          PFIC_IRQ_ENABLE_PG1(DMA1_Channel1_IRQn  + stream ,prior,subprior);
 
 
 #endif
@@ -324,15 +287,13 @@ void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size)
 	ADC_SoftwareStartConv(adc);
 #endif
 #if MCU == CH32V2
-	DMA_ClearITPendingBit( DMA1_IT_GL1 );
+
 	DMACH[chanel]->CNTR  = size;
 	DMACH[chanel]->MADDR = (u32)data;
-	ADC_DMACmd(ADC1, ENABLE);
-	ADC_ClearITPendingBit(ADC1,ADC_IT_EOC);
+	ADC_Clear_Pending_and_DMA_EN(ADC_1);
 	DMACH[chanel]->CFGR |=DMA_IT_TC;
 	DMACH[chanel]->CFGR |= DMA_CFGR1_EN;
-	ADC_Cmd(ADC1, ENABLE);
-	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+	ADC_Enable_and_Start(ADC_1);
 #endif
 }
 
@@ -432,4 +393,5 @@ void DMA1_Channel7_IRQHandler(void)
 
 
 #endif
+
 

@@ -155,7 +155,7 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
    {
 
 	   PFIC_IRQ_ENABLE_PG1(I2C1_EV_IRQn ,prior,subprior);
-	     PFIC_IRQ_ENABLE_PG1(I2C1_ER_IRQn ,prior,subprior);
+	   PFIC_IRQ_ENABLE_PG1(I2C1_ER_IRQn ,prior,subprior);
    }
    else
    {
