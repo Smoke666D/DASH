@@ -51,6 +51,8 @@
 #define   PortName_t   GPIO_TypeDef *
 #endif
 
+#define DEFAULT_C
+
 typedef enum
 {
 #if MCU == APM32

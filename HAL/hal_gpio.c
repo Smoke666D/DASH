@@ -33,15 +33,11 @@ void HAL_InitGPIO(GPIO_TypeDef *GPIOx,    uint16_t GPIO_Pin, GPIOSpeed_TypeDef G
     {
         currentmode |= (uint32_t)GPIO_Speed;
     }
-#ifdef PORT_C_ENABLE
+#if defined(PORT_C_ENABLE) || defined(DEFAULT_C)
 #if defined (CH32V20x_D6)
-    if(((*(uint32_t *) 0x40022030) & 0x0F000000) == 0)
-    {
-        MCU_Version = 1;
-    }
 
-    if((GPIOx == GPIOC) && MCU_Version){
-        GPIO_InitStruct->GPIO_Pin = GPIO_InitStruct->GPIO_Pin >> 13;
+    if((GPIOx == GPIOC) && (((*(uint32_t *) 0x40022030) & 0x0F000000) == 0)){
+        GPIO_Pin = GPIO_Pin >> 13;
     }
 
 #endif

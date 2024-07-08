@@ -66,11 +66,7 @@ void SoftwareReset()
 */
 static void MX_GPIO_Init(void)
 {
-
-
-
-
-
+  HAL_InitGpioIn(PORT_C,GPIO_13 );
 //Конфигурируем порты DIN
   HAL_InitGpioIn( Din3_4_5_Port,Din3_Pin | Din4_Pin | Din5_Pin );
   /*
