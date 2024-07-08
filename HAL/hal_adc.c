@@ -1,7 +1,7 @@
 /*
  * hal_adc.c
  *
- *  Created on: 11 §Ñ§á§â. 2024 §Ô.
+ *  Created on: 11 Ð°Ð¿Ñ€. 2024 Ð³.
  *      Author: i.dymov
  */
 
@@ -59,17 +59,6 @@ static inline void ADC_EXT_TRIG_ENABLE ( ADC_NUMBER_t adc )  {ADCS[adc]->CTLR2 |
 #endif
 
 
-void  ADC_Enable_and_Start( ADC_NUMBER_t adc  )
-{
-    ADC_ENABLE(adc);
-    ADCS[adc]->CTLR2 |= CTLR2_EXTTRIG_SWSTART_Set;
-}
-
-void ADC_Clear_Pending_and_DMA_EN( ADC_NUMBER_t adc )
-{
-    ADC_DMA_ENABLE (adc);
-    ADC_ClearITPendingBit(ADCS[adc],ADC_IT_EOC);
-}
 
 void HAL_ADC_CommonConfig()
  {
@@ -230,7 +219,6 @@ void HAL_ADC_AWDT_IT_Init( ADC_NUMBER_t adc, uint8_t channel,u16 low, u16 high, 
     ADC_AnalogWatchdogCmd( ADCS[adc], ADC_AnalogWatchdog_SingleRegEnable);
     ADC_ITConfig( ADCS[adc], ADC_IT_AWD, ENABLE);
     ADC_ENABLE(adc);
-
     PFIC_IRQ_ENABLE_PG1( ADC_IRQn,prior,subprior);
 
 #endif
@@ -251,4 +239,40 @@ void ADC1_2_IRQHandler(void)
 #endif
 #endif
 
-
+void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size)
+{
+#if MCU == APM32
+    ADC_T* adc;
+    if (chanel == DMA2_CH4)
+    {
+            DMA_ClearStatusFlag(chanel, DMA_FLAG_TEIFLG4 | DMA_FLAG_DMEIFLG4 );
+            adc = ADC1;
+    }
+    else if (chanel == DMA2_CH2)
+    {
+            DMA_ClearStatusFlag(chanel, DMA_FLAG_TEIFLG2 | DMA_FLAG_DMEIFLG2 );
+            adc = ADC2;
+    }
+    else if (chanel == DMA2_CH0)
+    {
+            DMA_ClearStatusFlag(chanel, DMA_FLAG_TEIFLG0 | DMA_FLAG_DMEIFLG0 );
+            adc = ADC3;
+    }
+    DMA_ConfigDataNumber(chanel, size);
+    DMA_ConfigMemoryTarget(chanel, data, DMA_MEMORY_0);
+    ADC_ClearStatusFlag(adc, ADC_FLAG_EOC | ADC_FLAG_OVR);
+    ADC_EnableDMA(adc);
+    DMA_EnableInterrupt(chanel, DMA_INT_TCIFLG);
+    DMA_Enable(chanel);
+    ADC_SoftwareStartConv(adc);
+#endif
+#if MCU == CH32V2
+    HAL_DMA_SetCounter(chanel, size);
+    ADC_DMA_ENABLE (ADC_1);
+    ADCS[ADC_1]->STATR = ~(uint32_t)(ADC_IT_EOC >> 8);
+    HAL_DMA_ITENABLE( chanel, DMA_IT_TC );
+    HAL_DMA_Enable(chanel );
+    ADC_ENABLE(ADC_1);
+    ADCS[ADC_1]->CTLR2 |= CTLR2_EXTTRIG_SWSTART_Set;
+#endif
+}

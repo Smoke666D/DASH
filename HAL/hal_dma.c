@@ -72,6 +72,13 @@ void HAL_DMA_SetCounter( DMA_Stram_t stream, uint32_t counter )
 
 }
 
+void HAL_DMA_ITENABLE( DMA_Stram_t stream, uint32_t it )
+{
+    #if MCU == CH32V2
+    DMACH[stream]->CFGR |=it;
+    #endif
+}
+
 void HAL_DMA_SetCouterAndEnable(DMA_Stram_t stream, uint32_t counter )
 {
 #if MCU == CH32V2
@@ -259,43 +266,7 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 
 
 
-void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size)
-{
-#if MCU == APM32
-	ADC_T* adc;
-	if (chanel == DMA2_CH4)
-	{
-			DMA_ClearStatusFlag(chanel, DMA_FLAG_TEIFLG4 | DMA_FLAG_DMEIFLG4 );
-			adc = ADC1;
-	}
-	else if (chanel == DMA2_CH2)
-	{
-			DMA_ClearStatusFlag(chanel, DMA_FLAG_TEIFLG2 | DMA_FLAG_DMEIFLG2 );
-			adc = ADC2;
-	}
-	else if (chanel == DMA2_CH0)
-    {
-			DMA_ClearStatusFlag(chanel, DMA_FLAG_TEIFLG0 | DMA_FLAG_DMEIFLG0 );
-			adc = ADC3;
-	}
-	DMA_ConfigDataNumber(chanel, size);
-	DMA_ConfigMemoryTarget(chanel, data, DMA_MEMORY_0);
-	ADC_ClearStatusFlag(adc, ADC_FLAG_EOC | ADC_FLAG_OVR);
-	ADC_EnableDMA(adc);
-	DMA_EnableInterrupt(chanel, DMA_INT_TCIFLG);
-	DMA_Enable(chanel);
-	ADC_SoftwareStartConv(adc);
-#endif
-#if MCU == CH32V2
 
-	DMACH[chanel]->CNTR  = size;
-	DMACH[chanel]->MADDR = (u32)data;
-	ADC_Clear_Pending_and_DMA_EN(ADC_1);
-	DMACH[chanel]->CFGR |=DMA_IT_TC;
-	DMACH[chanel]->CFGR |= DMA_CFGR1_EN;
-	ADC_Enable_and_Start(ADC_1);
-#endif
-}
 
 #if MCU == APM32
 void DMA2_STR4_IRQHandler( void )

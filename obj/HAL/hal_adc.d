@@ -61,6 +61,7 @@ HAL/hal_adc.o: ../HAL/hal_adc.c ../HAL/hal_adc.h \
  C:\MRS_DATA\workspace\DASH\User/init.h \
  C:\MRS_DATA\workspace\DASH\User/DataModel.h \
  C:\MRS_DATA\workspace\DASH\User/inputs.h ../HAL/hal_config.h \
+ ../HAL/hal_dma.h C:\MRS_DATA\workspace\DASH\User/system_init.h \
  ../HAL/hal_irq.h
 
 ../HAL/hal_adc.h:
@@ -190,5 +191,9 @@ C:\MRS_DATA\workspace\DASH\User/DataModel.h:
 C:\MRS_DATA\workspace\DASH\User/inputs.h:
 
 ../HAL/hal_config.h:
+
+../HAL/hal_dma.h:
+
+C:\MRS_DATA\workspace\DASH\User/system_init.h:
 
 ../HAL/hal_irq.h:

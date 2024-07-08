@@ -61,12 +61,13 @@ User/init.o: ../User/init.c ../User/init.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_wdt.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_rtc.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_adc.h \
+ C:\MRS_DATA\workspace\DASH\HAL/hal_dma.h \
+ C:\MRS_DATA\workspace\DASH\User/system_init.h \
  C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_din.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_timers.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_spi.h \
  C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_eeprom.h \
- C:\MRS_DATA\workspace\DASH\HAL/hal_i2c.h \
- C:\MRS_DATA\workspace\DASH\User/system_init.h
+ C:\MRS_DATA\workspace\DASH\HAL/hal_i2c.h
 
 ../User/init.h:
 
@@ -206,6 +207,10 @@ C:\MRS_DATA\workspace\DASH\HAL/hal_rtc.h:
 
 C:\MRS_DATA\workspace\DASH\HAL/hal_adc.h:
 
+C:\MRS_DATA\workspace\DASH\HAL/hal_dma.h:
+
+C:\MRS_DATA\workspace\DASH\User/system_init.h:
+
 C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_din.h:
 
 C:\MRS_DATA\workspace\DASH\HAL/hal_timers.h:
@@ -215,5 +220,3 @@ C:\MRS_DATA\workspace\DASH\HAL/hal_spi.h:
 C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_eeprom.h:
 
 C:\MRS_DATA\workspace\DASH\HAL/hal_i2c.h:
-
-C:\MRS_DATA\workspace\DASH\User/system_init.h:

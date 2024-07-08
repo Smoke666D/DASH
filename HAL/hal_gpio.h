@@ -1,7 +1,7 @@
 /*
  * hal_gpio.h
  *
- *  Created on: 9 апр. 2024 г.
+ *  Created on: 9 邪锌褉. 2024 谐.
  *      Author: i.dymov
  */
 

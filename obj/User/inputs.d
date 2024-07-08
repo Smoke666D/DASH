@@ -55,6 +55,8 @@ User/inputs.o: ../User/inputs.c ../User/inputs.h ../User/system_init.h \
  C:\MRS_DATA\workspace\DASH\HAL/board_define.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_config.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_adc.h \
+ C:\MRS_DATA\workspace\DASH\HAL/hal_dma.h \
+ C:\MRS_DATA\workspace\DASH\User/system_init.h \
  C:\MRS_DATA\workspace\DASH\HWLIB/HW_API.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode\301/CO_ODinterface.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode/301/CO_driver.h \
@@ -63,7 +65,6 @@ User/inputs.o: ../User/inputs.c ../User/inputs.h ../User/system_init.h \
  C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_din.h \
  C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/OD.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_dma.h \
- C:\MRS_DATA\workspace\DASH\User/system_init.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_timers.h \
  C:\MRS_DATA\workspace\DASH\HAL/hal_gpio.h
 
@@ -193,6 +194,10 @@ C:\MRS_DATA\workspace\DASH\HAL/hal_config.h:
 
 C:\MRS_DATA\workspace\DASH\HAL/hal_adc.h:
 
+C:\MRS_DATA\workspace\DASH\HAL/hal_dma.h:
+
+C:\MRS_DATA\workspace\DASH\User/system_init.h:
+
 C:\MRS_DATA\workspace\DASH\HWLIB/HW_API.h:
 
 C:\MRS_DATA\workspace\DASH\CANopenNode\301/CO_ODinterface.h:
@@ -208,8 +213,6 @@ C:\MRS_DATA\workspace\DASH\HWLIB/hw_lib_din.h:
 C:\MRS_DATA\workspace\DASH\CANopenNode\keypad/OD.h:
 
 C:\MRS_DATA\workspace\DASH\HAL/hal_dma.h:
-
-C:\MRS_DATA\workspace\DASH\User/system_init.h:
 
 C:\MRS_DATA\workspace\DASH\HAL/hal_timers.h:
 

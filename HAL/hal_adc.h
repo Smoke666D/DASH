@@ -1,7 +1,7 @@
 /*
  * hal_adc.h
  *
- *  Created on: 11 §Ñ§á§â. 2024 §Ô.
+ *  Created on: 11 Ð°Ð¿Ñ€. 2024 Ð³.
  *      Author: i.dymov
  */
 
@@ -11,6 +11,7 @@
 
 #include "main.h"
 #include "hal_config.h"
+#include "hal_dma.h"
 
 typedef enum
 {
@@ -76,8 +77,7 @@ typedef struct
    #define CTLR2_EXTTRIG_Reset              ((uint32_t)0xFFEFFFFF)
 #endif
 
-void ADC_Enable_and_Start( ADC_NUMBER_t adc  );
-void ADC_Clear_Pending_and_DMA_EN( ADC_NUMBER_t adc );
+
 void HAL_ADC_CommonConfig();
 void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count, uint8_t * channel_nmber);
 void HAL_ADC_TempEnable();
@@ -85,5 +85,5 @@ void HAL_ADC_VrefEnable();
 void HAL_ADC_Enable(ADC_NUMBER_t adc_number);
 void HAL_ADCDMA_Disable(ADC_NUMBER_t adc_number);
 void HAL_ADC_AWDT_IT_Init( ADC_NUMBER_t adc, uint8_t channel,u16 low, u16 high, void (*f)(void ) , uint8_t prior, uint8_t subprior );
-
+void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size);
 #endif /* HAL_HAL_ADC_H_ */
