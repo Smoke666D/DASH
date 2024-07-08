@@ -10,6 +10,7 @@ C_SRCS += \
 ../HAL/hal_dma.c \
 ../HAL/hal_gpio.c \
 ../HAL/hal_i2c.c \
+../HAL/hal_irq.c \
 ../HAL/hal_rtc.c \
 ../HAL/hal_spi.c \
 ../HAL/hal_timers.c \
@@ -21,6 +22,7 @@ OBJS += \
 ./HAL/hal_dma.o \
 ./HAL/hal_gpio.o \
 ./HAL/hal_i2c.o \
+./HAL/hal_irq.o \
 ./HAL/hal_rtc.o \
 ./HAL/hal_spi.o \
 ./HAL/hal_timers.o \
@@ -32,6 +34,7 @@ C_DEPS += \
 ./HAL/hal_dma.d \
 ./HAL/hal_gpio.d \
 ./HAL/hal_i2c.d \
+./HAL/hal_irq.d \
 ./HAL/hal_rtc.d \
 ./HAL/hal_spi.d \
 ./HAL/hal_timers.d \
