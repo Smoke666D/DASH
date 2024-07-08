@@ -6,6 +6,7 @@
  */
 
 #include "hal_dma.h"
+#include "hal_irq.h"
 #if MCU == APM32
 	#include "apm32f4xx_dma.h"
 	#include "apm32f4xx_rcm.h"
@@ -16,7 +17,7 @@
 	#include "ch32v20x_adc.h"
 	#include "ch32v20x_rcc.h"
 
-
+DMA_Channel_TypeDef * DMACH[]={DMA1_Channel1,DMA1_Channel2,DMA1_Channel3,DMA1_Channel4,DMA1_Channel5,DMA1_Channel6,DMA1_Channel7};
 #if DMA1_CH1_ENABLE == 1
 void     DMA1_Channel1_IRQHandler(void)   __attribute__((interrupt()));
 #endif
@@ -47,7 +48,7 @@ DMA_CFG_t DMA_CALLback[7]   __SECTION(RAM_SECTION_CCMRAM);
 void HAL_DMA_Enable(DMA_Stram_t stream  )
 {
 #if MCU == CH32V2
-    stream->CFGR |= DMA_CFGR1_EN;
+    DMACH[stream]->CFGR |= DMA_CFGR1_EN;
 #endif
 }
 /*
@@ -57,14 +58,14 @@ void HAL_DMA_Enable(DMA_Stram_t stream  )
 void HAL_DMA_Disable(DMA_Stram_t stream  )
 {
 #if MCU == CH32V2
-    stream->CFGR &= (uint16_t)(~DMA_CFGR1_EN);
+    DMACH[stream]->CFGR &= (uint16_t)(~DMA_CFGR1_EN);
 #endif
 }
 
 void HAL_DMA_SetCounter( DMA_Stram_t stream, uint32_t counter )
 {
 	#if MCU == CH32V2
-     stream->CNTR = counter;
+    DMACH[stream]->CNTR = counter;
 	#endif
 
 }
@@ -72,8 +73,8 @@ void HAL_DMA_SetCounter( DMA_Stram_t stream, uint32_t counter )
 void HAL_DMA_SetCouterAndEnable(DMA_Stram_t stream, uint32_t counter )
 {
 #if MCU == CH32V2
-     stream->CNTR = counter;
-     stream->CFGR |= DMA_CFGR1_EN;
+    DMACH[stream]->CNTR = counter;
+    DMACH[stream]->CFGR |= DMA_CFGR1_EN;
     #endif
 }
 
@@ -215,7 +216,6 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   IRQn_Type  irq;
 	  /* Enable DMA clock */
 	   RCC->AHBPCENR |= RCC_AHBPeriph_DMA1;
-
 	   dmaConfig.DMA_DIR = ( direction== MTOP ) ?DMA_DIR_PeripheralDST : DMA_DIR_PeripheralSRC;
 
 
@@ -271,7 +271,6 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   }
 	   else
 	{
-
 		   		   irq = DMA1_Channel7_IRQn;
 		   		   DMA_CALLback[6].CallBack = f;
 	    }
@@ -284,8 +283,8 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 	   dmaConfig.DMA_MemoryBaseAddr     = memadr;
 	   dmaConfig.DMA_M2M 		        = DMA_M2M_Disable;
 	   HAL_DMA_Disable(stream);
-	   DMA_Init(stream , &dmaConfig);
-	   stream->CFGR |= DMA_IT_TC;
+	   DMA_Init(DMACH[stream] , &dmaConfig);
+	   DMACH[stream]->CFGR |= DMA_IT_TC;
 	   PFIC_IRQ_ENABLE_PG1(irq ,prior,subprior);
 
 
@@ -326,12 +325,12 @@ void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size)
 #endif
 #if MCU == CH32V2
 	DMA_ClearITPendingBit( DMA1_IT_GL1 );
-	chanel->CNTR  = size;
-	chanel->MADDR = (u32)data;
+	DMACH[chanel]->CNTR  = size;
+	DMACH[chanel]->MADDR = (u32)data;
 	ADC_DMACmd(ADC1, ENABLE);
 	ADC_ClearITPendingBit(ADC1,ADC_IT_EOC);
-	chanel->CFGR |=DMA_IT_TC;
-	chanel->CFGR |= DMA_CFGR1_EN;
+	DMACH[chanel]->CFGR |=DMA_IT_TC;
+	DMACH[chanel]->CFGR |= DMA_CFGR1_EN;
 	ADC_Cmd(ADC1, ENABLE);
 	ADC_SoftwareStartConvCmd(ADC1, ENABLE);
 #endif

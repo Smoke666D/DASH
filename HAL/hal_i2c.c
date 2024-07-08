@@ -557,10 +557,8 @@ static void I2C_FSM()
                      if (int_flags & 0x0004)
                      {
                          I2C_GenerateSTOP( pEEPROM->dev, ENABLE );
-
-                             xTaskNotifyIndexedFromISR(pEEPROM->NotifyTaskHeandle, pEEPROM->ucTaskNatificationIndex, 0x01, eSetValueWithOverwrite, &xHigherPriorityTaskWoken  );
-                             portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
-
+                         xTaskNotifyIndexedFromISR(pEEPROM->NotifyTaskHeandle, pEEPROM->ucTaskNatificationIndex, 0x01, eSetValueWithOverwrite, &xHigherPriorityTaskWoken  );
+                         portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
                          pEEPROM->I2C_State = I2C_IDLE;
                      }
                      break;
@@ -744,8 +742,6 @@ static void I2C_FSM()
 #endif
 #endif
 }
-
-
 
 
 #if I2C1_ENABLE == 1
