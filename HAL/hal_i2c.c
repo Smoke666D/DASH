@@ -38,18 +38,22 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 #if	MCU == CH32V2
 	NVIC_InitTypeDef      NVIC_InitStructure = {0};
 
-	if ( i2c == I2C_1)
-	{
-	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, ENABLE );
-	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, DISABLE );
-		RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C1, ENABLE );
-	}
-	else
-	{
-	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C2, ENABLE );
-	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C2, DISABLE );
-	    RCC_APB1PeriphClockCmd( RCC_APB1Periph_I2C2, ENABLE );
-	}
+#if I2C1_ENABLE == 1
+    if ( i2c == I2C_1)
+    {
+        RCC->APB1PRSTR |= RCC_APB1Periph_I2C1;
+        RCC->APB1PRSTR &= ~RCC_APB1Periph_I2C1;
+        RCC->APB1PCENR |= RCC_APB1Periph_I2C1;
+    }
+#endif
+#if I2C2_ENABLE == 1
+    if ( i2c == I2C_2)
+    {
+        RCC->APB1PRSTR |= RCC_APB1Periph_I2C2;
+        RCC->APB1PRSTR &= ~RCC_APB1Periph_I2C2;
+        RCC->APB1PCENR |= RCC_APB1Periph_I2C2;
+    }
+#endif
     I2C_InitTypeDef I2C_InitTSturcture={0};
     I2C_InitTSturcture.I2C_ClockSpeed          = 400000;
     I2C_InitTSturcture.I2C_Mode                = I2C_Mode_I2C;
