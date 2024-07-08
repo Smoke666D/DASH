@@ -53,6 +53,12 @@ typedef enum
 #define I2C_1  I2C1
 #define I2C_2  I2C2
 #define I2C_NAME_t I2C_TypeDef *
+
+#define STAR1_SB_FLAG     0x0001
+#define STAR1_ADDR_FLAG   0x0002
+#define STAR1_BTF_FLAG    0x0004
+#define STAR1_TXE_FLAG    0x0080
+#define STAR2_BUSY_FLAG   0x0002
 #endif
 
 void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior);
