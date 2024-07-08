@@ -48,7 +48,7 @@ DMA_CFG_t DMA_CALLback[7]   __SECTION(RAM_SECTION_CCMRAM);
 /*
  * Включить выбрвнный канал DMA
  */
-void HAL_DMA_Enable(DMA_Stram_t stream  )
+inline void HAL_DMA_Enable(DMA_Stram_t stream  )
 {
 #if MCU == CH32V2
     DMACH[stream]->CFGR |= DMA_CFGR1_EN;
@@ -58,14 +58,14 @@ void HAL_DMA_Enable(DMA_Stram_t stream  )
  * Выключить выбранный канал DMA
  */
 
-void HAL_DMA_Disable(DMA_Stram_t stream  )
+inline void HAL_DMA_Disable(DMA_Stram_t stream  )
 {
 #if MCU == CH32V2
     DMACH[stream]->CFGR &= (uint16_t)(~DMA_CFGR1_EN);
 #endif
 }
 
-void HAL_DMA_SetCounter( DMA_Stram_t stream, uint32_t counter )
+inline void HAL_DMA_SetCounter( DMA_Stram_t stream, uint32_t counter )
 {
 #if MCU == CH32V2
     DMACH[stream]->CNTR = counter;

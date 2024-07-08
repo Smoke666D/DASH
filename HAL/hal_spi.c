@@ -1,7 +1,7 @@
 /*
  * HAL_SPI.c
  *
- *  Created on: 14 屑邪褟 2024 谐.
+ *  Created on: 14 灞戦偑瑜� 2024 璋�.
  *      Author: i.dymov
  */
 
