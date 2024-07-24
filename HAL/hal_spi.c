@@ -1,7 +1,7 @@
 /*
  * HAL_SPI.c
  *
- *  Created on: 14 屑邪褟 2024 谐.
+ *  Created on: 14 灞戦偑瑜� 2024 璋�.
  *      Author: i.dymov
  */
 
@@ -12,12 +12,14 @@
 
 SPI_TypeDef * SPI[] ={SPI1,SPI2};
 
-#endif
-
+#define CTLR1_SPE_Set         ((uint16_t)0x0040)
+    #define CTLR1_SPE_Reset       ((uint16_t)0xFFBF)
+    /* SPI registers Masks */
+    #define CTLR1_CLEAR_Mask      ((uint16_t)0x3040)
+    #define I2SCFGR_CLEAR_Mask    ((uint16_t)0xF040)
 
 void HAL_SPI_InitDMA(HAL_SPI_t spi , SPI_DATA_Size_t data_size )
 {
-#if MCU == CH32V2
     SPI_TypeDef * SPI_;
     if ( spi == HAL_SPI1)
     {
@@ -47,21 +49,22 @@ void HAL_SPI_InitDMA(HAL_SPI_t spi , SPI_DATA_Size_t data_size )
     SPI_->CRCR = 0;
     SPI_->CTLR2 |= SPI_I2S_DMAReq_Tx;
     SPI_->CTLR1 |= CTLR1_SPE_Set;
-#endif
+
 
 }
 
 void HAL_SPI_RXOveleyClear(HAL_SPI_t spi )
 {
-#if MCU == CH32V2
+
     SPI[spi]->STATR = (uint16_t)~SPI_I2S_FLAG_OVR;
-#endif
+
 
 }
 
 uint8_t HAL_SPI_GetBusy(HAL_SPI_t spi )
 {
-#if MCU == CH32V2
 	return (((SPI[spi]->STATR & SPI_I2S_FLAG_BSY) == SET) ? HAL_SET : HAL_RESET);
-#endif
+
 }
+
+#endif

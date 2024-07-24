@@ -8,17 +8,9 @@
 #ifndef HAL_HAL_ADC_H_
 #define HAL_HAL_ADC_H_
 
-
 #include "main.h"
 #include "hal_config.h"
 #include "hal_dma.h"
-
-typedef enum
-{
-    ADC_1 = 0,
-    ADC_2 = 1,
-} ADC_NUMBER_t;
-
 typedef enum
 {
     ADC_CH_0 = 0,  /*!< ADC Channel 0 */
@@ -43,53 +35,33 @@ typedef enum
 } ADC_CH_T;
 
 
-typedef struct
-{
-  void (*awdt_callback)(void);
+ typedef enum
+ {
+    ADC_1 = 0,
+	ADC_2 = 1,
+	ADC_3 = 2,
+ } ADC_NUMBER_t;
 
-} ADC_t;
 
-#if MCU == APM32
-    #define ADC_NUMBER_t ADC_T*
-    #define ADC_1  ADC1
-    #define ADC_2  ADC2
-    #define ADC_3  ADC3
-#endif
+ typedef struct
+ {
+   void (*awdt_callback)(void);
+
+ } ADC_t;
+
+
 #if MCU == CH32V2
-
-
-   u16 Get_ConversionVal(s16 val);
-   /* ADC ADON mask */
-   #define CTLR2_ADON_Set                   ((uint32_t)0x00000001)
-   #define CTLR2_ADON_Reset                 ((uint32_t)0xFFFFFFFE)
-   /* ADC DMA mask */
-   #define CTLR2_DMA_Set                    ((uint32_t)0x00000100)
-   #define CTLR2_DMA_Reset                  ((uint32_t)0xFFFFFEFF)
-   /* ADC Software start mask */
-   #define CTLR2_EXTTRIG_SWSTART_Set        ((uint32_t)0x00500000)
-   #define CTLR2_EXTTRIG_SWSTART_Reset      ((uint32_t)0xFFAFFFFF)
-   /* ADC RSTCAL mask */
-   #define CTLR2_RSTCAL_Set                 ((uint32_t)0x00000008)
-   /* ADC CAL mask */
-   #define CTLR2_CAL_Set                    ((uint32_t)0x00000004)
-   /* ADC EXTTRIG mask */
-   #define CTLR2_EXTTRIG_Set                ((uint32_t)0x00100000)
-   #define CTLR2_EXTTRIG_Reset              ((uint32_t)0xFFEFFFFF)
-#endif
-
-
-
+u16 Get_ConversionVal(s16 val);
 void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count, uint8_t * channel_nmber);
-
-#if MCU == CH32V2
 void HAL_ADC_StartDMA( DMA_Stram_t chanel,  uint16_t size);
 #endif
+
 #if MCU == APM32
-void HAL_ADC_CommonConfig();
-void HAL_ADC_Enable(ADC_NUMBER_t adc_number);
-void HAL_ADCDMA_Disable(ADC_NUMBER_t adc_number);
-void HAL_ADC_TempEnable();
-void HAL_ADC_VrefEnable();
 void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size);
+void HAL_ADC_CommonConfig();
+void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count, uint8_t * channel_nmber);
+void HAL_ADC_TempEnable();
+void HAL_ADC_Enable(ADC_NUMBER_t adc_number);
+void HAL_ADCDMA_Disable(ADC_NUMBER_t adc);
 #endif
 #endif /* HAL_HAL_ADC_H_ */

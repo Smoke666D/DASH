@@ -1,34 +1,38 @@
 /*
- * hal_adc.c
+ * hal_adc_ch32.c
  *
- *  Created on: 11 апр. 2024 г.
+ *  Created on: 24 懈褞谢. 2024 谐.
  *      Author: i.dymov
  */
 
 #include "hal_adc.h"
-#include "hal_irq.h"
-#if MCU == APM32
-    #include "apm32f4xx_adc.h"
-    #include "apm32f4xx_rcm.h"
-    #include "apm32f4xx_dma.h"
-    static uint8_t ADC_INIT = 0;
-#endif
 
-
-
-ADC_t adcs;
-
-#if MCU == APM32
-static const  ADC_CHANNEL_T ADC_chennel_ref[]={  ADC_CHANNEL_0,  ADC_CHANNEL_1,  ADC_CHANNEL_2, ADC_CHANNEL_3, ADC_CHANNEL_4,  ADC_CHANNEL_5,  ADC_CHANNEL_6,  ADC_CHANNEL_7,  ADC_CHANNEL_8,  ADC_CHANNEL_9,  ADC_CHANNEL_10,
-    ADC_CHANNEL_11, ADC_CHANNEL_12, ADC_CHANNEL_13, ADC_CHANNEL_14, ADC_CHANNEL_15,  ADC_CHANNEL_16,  ADC_CHANNEL_17, ADC_CHANNEL_18, } ;
-#endif
 
 #if MCU == CH32V2
 
+#include "hal_irq.h"
+ADC_t adcs;
 static s16 Calibrattion_Val = 0;
 static const  uint8_t ADC_chennel_ref[]={  ADC_Channel_0,  ADC_Channel_1,  ADC_Channel_2, ADC_Channel_3, ADC_Channel_4,  ADC_Channel_5,  ADC_Channel_6,  ADC_Channel_7,  ADC_Channel_8,  ADC_Channel_9,  ADC_Channel_10,
         ADC_Channel_11, ADC_Channel_12, ADC_Channel_13, ADC_Channel_14, ADC_Channel_15,  ADC_Channel_16,  ADC_Channel_17} ;
-/* ADC SQx mask */
+
+
+/* ADC SQx ma   /* ADC ADON mask */
+#define CTLR2_ADON_Set                   ((uint32_t)0x00000001)
+#define CTLR2_ADON_Reset                 ((uint32_t)0xFFFFFFFE)
+/* ADC DMA mask */
+#define CTLR2_DMA_Set                    ((uint32_t)0x00000100)
+#define CTLR2_DMA_Reset                  ((uint32_t)0xFFFFFEFF)
+/* ADC Software start mask */
+#define CTLR2_EXTTRIG_SWSTART_Set        ((uint32_t)0x00500000)
+#define CTLR2_EXTTRIG_SWSTART_Reset      ((uint32_t)0xFFAFFFFF)
+/* ADC RSTCAL mask */
+#define CTLR2_RSTCAL_Set                 ((uint32_t)0x00000008)
+/* ADC CAL mask */
+#define CTLR2_CAL_Set                    ((uint32_t)0x00000004)
+/* ADC EXTTRIG mask */
+#define CTLR2_EXTTRIG_Set                ((uint32_t)0x00100000)
+#define CTLR2_EXTTRIG_Reset              ((uint32_t)0xFFEFFFFF)sk */
 #define RSQR3_SQ_Set                     ((uint32_t)0x0000001F)
 #define RSQR2_SQ_Set                     ((uint32_t)0x0000001F)
 #define RSQR1_SQ_Set                     ((uint32_t)0x0000001F)
@@ -205,101 +209,3 @@ void ADC1_2_IRQHandler(void)
 
 #endif
 
-#if MCU == APM32
-
-
-void HAL_ADC_CommonConfig()
- {
-     ADC_CommonConfig_T      adcCommonConfig;
-     if (ADC_INIT==0)
-     {
-         ADC_Reset();
-         ADC_CommonConfigStructInit(&adcCommonConfig);
-         adcCommonConfig.mode            = ADC_MODE_INDEPENDENT;
-         adcCommonConfig.prescaler       = ADC_PRESCALER_DIV8;
-         ADC_CommonConfig(&adcCommonConfig);
-         ADC_INIT = 1;
-     }
- }
-
-void HAL_ADC_Enable(ADC_NUMBER_t adc_number)
-{
-    ADC_Enable(adc_number);
-
-}
-
-void HAL_ADCDMA_Disable(ADC_NUMBER_t adc_number)
-{
-    ADC_Disable(adc_number);
-    ADC_DisableDMA(adc_number);
-
-}
-
-void HAL_ADC_TempEnable()
-{
-     ADC_EnableTempSensorVrefint();
-}
-
-void HAL_ADC_VrefEnable()
-{
-      ADC_EnableVbat();
-}
-
-
-void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t * data, uint16_t size)
-{
-    ADC_T* adc;
-    if (chanel == DMA2_CH4)
-    {
-            DMA_ClearStatusFlag(chanel, DMA_FLAG_TEIFLG4 | DMA_FLAG_DMEIFLG4 );
-            adc = ADC1;
-    }
-    else if (chanel == DMA2_CH2)
-    {
-            DMA_ClearStatusFlag(chanel, DMA_FLAG_TEIFLG2 | DMA_FLAG_DMEIFLG2 );
-            adc = ADC2;
-    }
-    else if (chanel == DMA2_CH0)
-    {
-            DMA_ClearStatusFlag(chanel, DMA_FLAG_TEIFLG0 | DMA_FLAG_DMEIFLG0 );
-            adc = ADC3;
-    }
-    DMA_ConfigDataNumber(chanel, size);
-    DMA_ConfigMemoryTarget(chanel, data, DMA_MEMORY_0);
-    ADC_ClearStatusFlag(adc, ADC_FLAG_EOC | ADC_FLAG_OVR);
-    ADC_EnableDMA(adc);
-    DMA_EnableInterrupt(chanel, DMA_INT_TCIFLG);
-    DMA_Enable(chanel);
-    ADC_SoftwareStartConv(adc);
-}
-
-void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count, uint8_t *  channel_nmber)
- {
-
-    ADC_Config_T  adcConfig;
-    if ( adc == ADC_1)
-        RCM_EnableAPB2PeriphClock( RCM_APB2_PERIPH_ADC1 );
-    else
-    if (adc == ADC_2)
-       RCM_EnableAPB2PeriphClock( RCM_APB2_PERIPH_ADC2 );
-    else
-       RCM_EnableAPB2PeriphClock( RCM_APB2_PERIPH_ADC3 );
-
-
-
-     ADC_ConfigStructInit( &adcConfig );
-     adcConfig.resolution            = ADC_RESOLUTION_12BIT;
-     adcConfig.scanConvMode          = ENABLE;
-     adcConfig.continuousConvMode    = ENABLE;
-     adcConfig.dataAlign             = ADC_DATA_ALIGN_RIGHT;
-     adcConfig.extTrigEdge           = ADC_EXT_TRIG_EDGE_NONE;
-     adcConfig.nbrOfChannel          = channel_count;
-     ADC_Config(adc, &adcConfig);
-     for (u8 i=0; i< (channel_count) ;i++)
-     {
-         ADC_ConfigRegularChannel(adc,  ADC_chennel_ref[channel_nmber[ i  ]],  i + 1, ADC_SAMPLETIME_112CYCLES);
-     }
-     ADC_EnableEOCOnEachChannel( adc );
-
- }
-#endif

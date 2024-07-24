@@ -1,7 +1,7 @@
 /*
  * hal_spi.h
  *
- *  Created on: 14 屑邪褟 2024 谐.
+ *  Created on: 14 灞戦偑瑜� 2024 璋�.
  *      Author: i.dymov
  */
 
@@ -33,7 +33,7 @@ typedef enum
     typedef enum
     {
        HAL_SPI1 =0,
-       HAL_SPI2=1
+       HAL_SPI2 = 1
 
     } HAL_SPI_t;
 
@@ -42,11 +42,7 @@ typedef enum
 	#include "ch32v20x_dma.h"
 	//#define HAL_SPI_t SPI_TypeDef *
     /* SPI SPE mask */
-    #define CTLR1_SPE_Set         ((uint16_t)0x0040)
-    #define CTLR1_SPE_Reset       ((uint16_t)0xFFBF)
-    /* SPI registers Masks */
-    #define CTLR1_CLEAR_Mask      ((uint16_t)0x3040)
-    #define I2SCFGR_CLEAR_Mask    ((uint16_t)0xF040)
+
 #endif
 
 void HAL_SPI_InitDMA(HAL_SPI_t spi , SPI_DATA_Size_t data_size );

@@ -16,7 +16,7 @@
 
 /*                        0     1    2    3    4   5    6    7    8   9*/
 const u8 DigitMask[] = {0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F};
-//                                       0  1  2  3 4  5  6  7  8  9 10   11  12 13   14
+//                                       0  1  2  3 4  5  6  7     8  9   10   11  12 13   14
 static const u16 Brigth[MAX_BRIGTH] =  { 0, 2, 3, 5,8,100,200,300,400,500,600,700,800,900,PWM_TIM_PERIOD+1};
 static uint16_t SPI1_DATA[SPI1_CHIP_COUNT];
 static uint16_t data[SPI1_CHIP_COUNT];

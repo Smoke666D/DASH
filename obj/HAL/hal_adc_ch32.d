@@ -1,4 +1,4 @@
-HAL/hal_adc.o: ../HAL/hal_adc.c ../HAL/hal_adc.h \
+HAL/hal_adc_ch32.o: ../HAL/hal_adc_ch32.c ../HAL/hal_adc.h \
  C:\MRS_DATA\workspace\DASH\User/main.h \
  C:\MRS_DATA\workspace\DASH\User/inputs.h \
  C:\MRS_DATA\workspace\DASH\User/system_init.h \

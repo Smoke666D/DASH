@@ -65,7 +65,7 @@ void vDataModelRegDelayWrite()
     }
 }
 
-static const u8 default_data[]= { VALID_CODE, 2, 13, 13, 0x20 ,1};
+static const u8 default_data[]= { VALID_CODE, 2, 10, 10, 0x20 ,1};
 static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
 static const u16 cal_point_count_index[]={AIN1_CAL_POINT_COUNT,AIN2_CAL_POINT_COUNT,AIN3_CAL_POINT_COUNT};
 static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF , 0x0E6 , 0x0ED};
