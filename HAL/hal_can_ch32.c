@@ -44,9 +44,10 @@ void HAL_CANSetERRCallback(void (* f) ( void ))
 void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
 {
      u16 CAN_Prescaler;
+     RCC->APB1PCENR |= RCC_APB1Periph_CAN1;
      RCC->APB1PRSTR |= RCC_APB1Periph_CAN1;
      RCC->APB1PRSTR &= ~RCC_APB1Periph_CAN1;
-     RCC->APB1PCENR |= RCC_APB1Periph_CAN1;
+
      /* Configure CAN timing */
       switch (CANbitRate)
       {
@@ -142,8 +143,6 @@ uint8_t HAL_CANToOperatingMode()
 
 uint8_t HAL_CANSend(CAN_TX_FRAME_TYPE *buffer)
 {
-
-
    u8 Data[8];
    u8 DLC                = (uint32_t)buffer->DLC;
    u8 RTR                = (buffer->ident & FLAG_RTR) ? CAN_RTR_REMOTE : CAN_RTR_DATA;
@@ -187,8 +186,6 @@ uint8_t HAL_CANSend(CAN_TX_FRAME_TYPE *buffer)
 
 void HAL_CANSetFiters(uint8_t filter_index, uint32_t f1,uint32_t f2,uint32_t f3,uint32_t f4, HAL_CAN_FILTER_FIFO_t FIFO)
 {
-
-
     u16 CAN_FilterIdLow       = f1 <<5;
     u16 CAN_FilterIdHigh      = f3 <<5;
     u16 CAN_FilterMaskIdLow   = f2 <<5;
@@ -256,8 +253,6 @@ HAL_CAN_ERROR_t HAL_CANGetRXMessage( HAL_CAN_RX_FIFO_NUMBER_t fifo,  CAN_FRAME_T
        rx_message->filter_id = 0;
        return (HAL_CAN_OK);
       }
-
-
 }
 
 
