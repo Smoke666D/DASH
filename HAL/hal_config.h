@@ -13,8 +13,9 @@
  * MCU Define
  */
 
-#define APM32     0
+#define APM32       0
 #define CH32V2      1
+#
 
 
 #include "board_define.h"

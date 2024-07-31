@@ -1,7 +1,7 @@
 /*
  * hal_can.h
  *
- *  Created on: 13 мая 2024 г.
+ *  Created on: 13 屑邪褟 2024 谐.
  *      Author: i.dymov
  */
 
@@ -29,12 +29,15 @@ typedef enum
 } HAL_CAN_FILTER_FIFO_t;
 
 #if MCU==APM32
+
+#include "apm32f4xx_can.h"
 typedef enum
 {
     HAL_RX_FIFO0 = CAN_RX_FIFO_0,
     HAL_RX_FIFO1 = CAN_RX_FIFO_1,
 } HAL_CAN_RX_FIFO_NUMBER_t;
 #endif
+
 #if MCU == CH32V2
 typedef enum
 {

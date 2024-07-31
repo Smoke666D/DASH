@@ -6,7 +6,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../HAL/hal_adc_ch32.c \
-../HAL/hal_can.c \
+../HAL/hal_can_ch32.c \
 ../HAL/hal_dma.c \
 ../HAL/hal_gpio.c \
 ../HAL/hal_i2c.c \
@@ -14,11 +14,11 @@ C_SRCS += \
 ../HAL/hal_rtc.c \
 ../HAL/hal_spi.c \
 ../HAL/hal_timers.c \
-../HAL/hal_wdt.c 
+../HAL/hal_wdt_ch32.c 
 
 OBJS += \
 ./HAL/hal_adc_ch32.o \
-./HAL/hal_can.o \
+./HAL/hal_can_ch32.o \
 ./HAL/hal_dma.o \
 ./HAL/hal_gpio.o \
 ./HAL/hal_i2c.o \
@@ -26,11 +26,11 @@ OBJS += \
 ./HAL/hal_rtc.o \
 ./HAL/hal_spi.o \
 ./HAL/hal_timers.o \
-./HAL/hal_wdt.o 
+./HAL/hal_wdt_ch32.o 
 
 C_DEPS += \
 ./HAL/hal_adc_ch32.d \
-./HAL/hal_can.d \
+./HAL/hal_can_ch32.d \
 ./HAL/hal_dma.d \
 ./HAL/hal_gpio.d \
 ./HAL/hal_i2c.d \
@@ -38,7 +38,7 @@ C_DEPS += \
 ./HAL/hal_rtc.d \
 ./HAL/hal_spi.d \
 ./HAL/hal_timers.d \
-./HAL/hal_wdt.d 
+./HAL/hal_wdt_ch32.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
