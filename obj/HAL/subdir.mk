@@ -13,7 +13,7 @@ C_SRCS += \
 ../HAL/hal_irq.c \
 ../HAL/hal_rtc.c \
 ../HAL/hal_spi_ch32.c \
-../HAL/hal_timers.c \
+../HAL/hal_timers_ch32.c \
 ../HAL/hal_wdt_ch32.c 
 
 OBJS += \
@@ -25,7 +25,7 @@ OBJS += \
 ./HAL/hal_irq.o \
 ./HAL/hal_rtc.o \
 ./HAL/hal_spi_ch32.o \
-./HAL/hal_timers.o \
+./HAL/hal_timers_ch32.o \
 ./HAL/hal_wdt_ch32.o 
 
 C_DEPS += \
@@ -37,7 +37,7 @@ C_DEPS += \
 ./HAL/hal_irq.d \
 ./HAL/hal_rtc.d \
 ./HAL/hal_spi_ch32.d \
-./HAL/hal_timers.d \
+./HAL/hal_timers_ch32.d \
 ./HAL/hal_wdt_ch32.d 
 
 

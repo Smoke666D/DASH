@@ -31,7 +31,7 @@ void TIM4_IRQHandler(void) __attribute__((interrupt()));
 
 void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Period, void (*f)() ,uint8_t prior, uint8_t subprior )
 {
-    vTimerInitRCC(TimerName) ;
+
     config[TimerName].Period = Period;
     config[TimerName].Div = ( 72000000U /freq_in_hz);
     config[TimerName].callback_function = f;
@@ -115,6 +115,7 @@ void HAL_TiemrDisable( TimerName_t TimerName )
 
 void  HW_TIMER_BaseTimerInit(TimerName_t TimerName  )
 {
+    vTimerInitRCC(TimerName) ;
     timers[TimerName]->SMCFGR &= (uint16_t)(~((uint16_t)TIM_SMS)); //Тактирование от внутренней шины
     uint16_t tmpcr1 = 0;
     tmpcr1 = timers[TimerName]->CTLR1;
@@ -149,7 +150,6 @@ u32 HAL_GetTimerCounterRegAdres(TimerName_t TimerName , uint8_t ch )
 void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel)
 {
 	 TIM_OCInitTypeDef TIM_OCInitStructure={0};
-	 vTimerInitRCC(TimerName) ;
 	 config[TimerName].Period = Period;
 	 config[TimerName].Div = (72000000U /freq_in_hz);
 	 config[TimerName].ClockDiv = 0;
@@ -219,7 +219,6 @@ static void TI4_Config(TimerName_t TimerName, uint16_t TIM_ICPolarity, uint16_t 
 
 void HAL_TimeInitCaptureDMA( TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel )
 {
-     vTimerInitRCC(TimerName) ;
      config[TimerName].Period = Period;
      config[TimerName].Div = (72000000U /freq_in_hz);
      config[TimerName].ClockDiv = 0;
@@ -293,6 +292,5 @@ static void vTimerInitRCC(TimerName_t TimerName)
     }
 }
 #endif
-
 
 
