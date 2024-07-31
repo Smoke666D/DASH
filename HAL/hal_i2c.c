@@ -250,7 +250,7 @@ static EERPOM_ERROR_CODE_t I2C_Master_TransmitFast( u8 DevAdrees, u16 data_addre
 
    EERPOM_I2C_SEND_ADDR_TRANS( pEEPROM->DevAdrres );
    while( !( pEEPROM->dev->STAR1 & STAR1_ADDR_FLAG ) );
-    u16 int_flags = pEEPROM->dev->STAR2;
+   u16 int_flags = pEEPROM->dev->STAR2;
    EEPROM_I2C_SEND(  (u8)((data_addres >>  8) & 0x1F ) );
    while( !( pEEPROM->dev->STAR1 & STAR1_TXE_FLAG ) );
    EEPROM_I2C_SEND(  data_addres & 0xFF );
