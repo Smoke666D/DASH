@@ -8,7 +8,7 @@
 #include "hal_gpio.h"
 
 #if MCU == CH32V2 || MCU==CH32V3
-
+#include "hal_irq.h"
 #if MCU == CH32V2
     #include "ch32v20x_rcc.h"
     #include "ch32v20x_gpio.h"
@@ -272,10 +272,7 @@ static const uint32_t PERIPH_MASK[GPIO_PORT_COUNT] = { RCC_APB2Periph_GPIOA,RCC_
  {
      for (u8 i=0;i< GPIO_PORT_COUNT;i++)
      {
-         RCC->APB2PCENR |= PERIPH_MASK[i];
-         RCC->APB2PRSTR |= PERIPH_MASK[i];
-         RCC->APB2PRSTR &= ~PERIPH_MASK[i];
-
+         HAL_InitAPB2( PERIPH_MASK[i]);
      }
  }
 

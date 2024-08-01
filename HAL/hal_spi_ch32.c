@@ -9,7 +9,7 @@
 #include "hal_spi.h"
 
 #if MCU == CH32V2
-
+#include "hal_irq.h"
 SPI_TypeDef * SPI[] ={SPI1,SPI2};
 
 #define CTLR1_SPE_Set         ((uint16_t)0x0040)
@@ -22,15 +22,11 @@ void HAL_SPI_InitDMA(HAL_SPI_t spi , SPI_DATA_Size_t data_size )
     //Сбрасываем SPI, все регистры переходят в дефолтное состоние
     if ( spi == HAL_SPI1)
     {
-        RCC->APB2PCENR |= RCC_APB2Periph_SPI1;
-        RCC->APB2PRSTR |= RCC_APB2Periph_SPI1;
-        RCC->APB2PRSTR &= ~RCC_APB2Periph_SPI1;
+        HAL_InitAPB2(RCC_APB2Periph_SPI1);
    }
    else
    {
-        RCC->APB1PCENR |= RCC_APB1Periph_SPI2;
-        RCC->APB1PRSTR |= RCC_APB1Periph_SPI2;
-        RCC->APB1PRSTR &= ~RCC_APB1Periph_SPI2;
+       HAL_InitAPB1( RCC_APB1Periph_SPI2);
    }
 
     uint16_t tmpreg = (uint16_t)((uint32_t)SPI_Direction_1Line_Tx | SPI_Mode_Master |

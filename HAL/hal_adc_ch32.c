@@ -1,7 +1,7 @@
 /*
  * hal_adc_ch32.c
  *
- *  Created on: 24 懈褞谢. 2024 谐.
+ *  Created on: 24 鎳堣璋�. 2024 璋�.
  *      Author: i.dymov
  */
 
@@ -134,19 +134,13 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
 #if ADC_1_ENABLE == 1
     if ( adc == ADC_1)
     {
-        RCC->APB2PCENR |= RCC_APB2Periph_ADC1;
-        RCC->APB2PRSTR |= RCC_APB2Periph_ADC1;
-        RCC->APB2PRSTR &= ~RCC_APB2Periph_ADC1;
-
+        HAL_InitAPB2( RCC_APB2Periph_ADC1);
     }
 #endif
 #if ADC_2_ENABLE == 1
     else
     {
-        RCC->APB2PCENR |= RCC_APB2Periph_ADC2;
-        RCC->APB2PRSTR |= RCC_APB2Periph_ADC2;
-        RCC->APB2PRSTR &= ~RCC_APB2Periph_ADC2;
-
+        HAL_InitAPB2( RCC_APB2Periph_ADC2);
     }
 #endif
      uint32_t tmpreg = 0;

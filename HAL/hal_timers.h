@@ -1,7 +1,7 @@
 /*
  * hal_timers.h
  *
- *  Created on: 9 апр. 2024 г.
+ *  Created on: 9 邪锌褉. 2024 谐.
  *      Author: i.dymov
  */
 
@@ -65,15 +65,7 @@ typedef enum {
 #define TIMERS_COUNT  5
 #endif
 
-/*typedef struct
-{
-	uint16_t Period;
-	uint16_t Div;
-	TimerRef_t timers;
-	void (* callback_function)();
-} TimerConfif_t;
 
-*/
 typedef struct
 {
 	uint16_t Period;
@@ -120,3 +112,4 @@ void HW_TIMER_BaseTimerInit(TimerName_t TimerName  );
 
 
 #endif /* HAL_HAL_TIMERS_H_ */
+

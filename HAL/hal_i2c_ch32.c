@@ -84,18 +84,13 @@ void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior)
 #if I2C1_ENABLE == 1
     if ( i2c == I2C_1)
     {
-        RCC->APB1PCENR |= RCC_APB1Periph_I2C1;
-        RCC->APB1PRSTR |= RCC_APB1Periph_I2C1;
-        RCC->APB1PRSTR &= ~RCC_APB1Periph_I2C1;
-
+        HAL_InitAPB1(RCC_APB1Periph_I2C1);
     }
 #endif
 #if I2C2_ENABLE == 1
     if ( i2c == I2C_2)
     {
-        RCC->APB1PCENR |= RCC_APB1Periph_I2C2;
-        RCC->APB1PRSTR |= RCC_APB1Periph_I2C2;
-        RCC->APB1PRSTR &= ~RCC_APB1Periph_I2C2;
+        HAL_InitAPB1(RCC_APB1Periph_I2C2);
 
     }
 #endif

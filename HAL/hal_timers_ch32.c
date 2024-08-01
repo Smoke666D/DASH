@@ -261,6 +261,8 @@ void HAL_TIMER_EnablePWMCH(TimerName_t TimerName  )
     timers[TimerName]->BDTR |= TIM_MOE;
 
 }
+
+
 /*
  *  Функция иницализаиурет тактирование таймера и возвращает указатель
  *  на handle нужного таймера
@@ -270,27 +272,18 @@ static void vTimerInitRCC(TimerName_t TimerName)
     switch (TimerName)
     {
         case TIMER1:
-            RCC->APB2PRSTR |= RCC_APB2Periph_TIM1;
-            RCC->APB2PRSTR &= ~RCC_APB2Periph_TIM1;
-            RCC->APB2PCENR |= RCC_APB2Periph_TIM1;
+            HAL_InitAPB2(RCC_APB2Periph_TIM1);
             break;
         case TIMER2:
-            RCC->APB1PRSTR |= RCC_APB1Periph_TIM2;
-            RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM2;
-            RCC->APB1PCENR |= RCC_APB1Periph_TIM2;
+            HAL_InitAPB1( RCC_APB1Periph_TIM2);
             break;
         case TIMER3:
-            RCC->APB1PRSTR |= RCC_APB1Periph_TIM3;
-            RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM3;
-            RCC->APB1PCENR |= RCC_APB1Periph_TIM3;
+            HAL_InitAPB1(RCC_APB1Periph_TIM3);
             break;
         default:
-            RCC->APB1PRSTR |= RCC_APB1Periph_TIM4;
-            RCC->APB1PRSTR &= ~RCC_APB1Periph_TIM4;
-            RCC->APB1PCENR |= RCC_APB1Periph_TIM4;
+            HAL_InitAPB1(RCC_APB1Periph_TIM4);
             break;
     }
 }
 #endif
-
 
