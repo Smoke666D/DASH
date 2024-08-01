@@ -41,24 +41,22 @@ void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t d
 {
 	   /* Enable DMA clock */
 	    RCC->AHBPCENR |= RCC_AHBPeriph_DMA1;
-
 	    DMA_CALLback[stream].CallBack = f;
 	    HAL_DMA_Disable(stream);
-	    uint32_t  tmpreg = DMACH[stream]->CFGR & CFGR_CLEAR_Mask;
+	    uint32_t  tmpreg;
 	    switch (dma_size)
 	    {
 	        case DMA_BYTE:
-	           tmpreg |= DMA_MemoryDataSize_Byte | DMA_PeripheralDataSize_Byte;
+	           tmpreg = DMA_MemoryDataSize_Byte | DMA_PeripheralDataSize_Byte;
 	           break;
 	       case DMA_HWORD:
-	           tmpreg |= DMA_MemoryDataSize_HalfWord | DMA_PeripheralDataSize_HalfWord;
+	           tmpreg = DMA_MemoryDataSize_HalfWord | DMA_PeripheralDataSize_HalfWord;
 	           break;
 	       default:
-	           tmpreg |= DMA_MemoryDataSize_Word | DMA_PeripheralDataSize_Word;
+	           tmpreg = DMA_MemoryDataSize_Word | DMA_PeripheralDataSize_Word;
 	           break;
 	    }
-	    tmpreg |= direction | DMA_Mode_Normal | DMA_PeripheralInc_Disable | DMA_MemoryInc_Enable  |DMA_Priority_Medium | DMA_M2M_Disable;
-	    DMACH[stream]->CFGR = tmpreg;
+	    DMACH[stream]->CFGR= tmpreg | direction | DMA_Mode_Normal | DMA_PeripheralInc_Disable | DMA_MemoryInc_Enable  |DMA_Priority_Medium | DMA_M2M_Disable;
 	    DMACH[stream]->CNTR = 0;
 	    DMACH[stream]->PADDR = paddr;
 	    DMACH[stream]->MADDR = memadr;
