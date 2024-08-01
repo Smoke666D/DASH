@@ -9,7 +9,7 @@ C_SRCS += \
 ../HAL/hal_can_ch32.c \
 ../HAL/hal_dma_ch32.c \
 ../HAL/hal_gpio_ch32.c \
-../HAL/hal_i2c.c \
+../HAL/hal_i2c_ch32.c \
 ../HAL/hal_irq.c \
 ../HAL/hal_rtc_ch32.c \
 ../HAL/hal_spi_ch32.c \
@@ -21,7 +21,7 @@ OBJS += \
 ./HAL/hal_can_ch32.o \
 ./HAL/hal_dma_ch32.o \
 ./HAL/hal_gpio_ch32.o \
-./HAL/hal_i2c.o \
+./HAL/hal_i2c_ch32.o \
 ./HAL/hal_irq.o \
 ./HAL/hal_rtc_ch32.o \
 ./HAL/hal_spi_ch32.o \
@@ -33,7 +33,7 @@ C_DEPS += \
 ./HAL/hal_can_ch32.d \
 ./HAL/hal_dma_ch32.d \
 ./HAL/hal_gpio_ch32.d \
-./HAL/hal_i2c.d \
+./HAL/hal_i2c_ch32.d \
 ./HAL/hal_irq.d \
 ./HAL/hal_rtc_ch32.d \
 ./HAL/hal_spi_ch32.d \

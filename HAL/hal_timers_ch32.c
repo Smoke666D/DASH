@@ -218,7 +218,7 @@ static void TI4_Config(TimerName_t TimerName, uint16_t TIM_ICPolarity, uint16_t 
 
 void HAL_TimeInitCaptureDMA( TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel )
 {
-    TimerConfif_t config;
+     TimerConfif_t config;
      config.Period = Period;
      config.Div = (72000000U /freq_in_hz);
      config.ClockDiv = 0;
