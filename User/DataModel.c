@@ -134,9 +134,9 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
              setReg16(RGB7_VALUE_RED_LOW    ,1000+AIN_OFFSET );
              setReg16(RGB7_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB7_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB8_VALUE_GREEN_HIGH ,1);
+             setReg16(RGB8_VALUE_GREEN_HIGH ,3);
              setReg16(RGB8_VALUE_GREEN_LOW  ,1);
-             setReg16(RGB8_VALUE_RED_HIGH   ,1);
+             setReg16(RGB8_VALUE_RED_HIGH   ,3);
              setReg16(RGB8_VALUE_RED_LOW    ,1);
              setReg16(RGB8_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB8_VALUE_BLUE_LOW   ,0);
@@ -158,10 +158,10 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
              setReg16(RGB10_VALUE_RED_LOW   ,650+AIN_OFFSET );
              setReg16(RGB10_VALUE_BLUE_HIGH ,0);
              setReg16(RGB10_VALUE_BLUE_LOW  ,0);
-             setReg16(RGB11_VALUE_GREEN_HIGH,2);
-             setReg16(RGB11_VALUE_GREEN_LOW ,2);
-             setReg16(RGB11_VALUE_RED_HIGH  ,2);
-             setReg16(RGB11_VALUE_RED_LOW   ,2);
+             setReg16(RGB11_VALUE_GREEN_HIGH,4);
+             setReg16(RGB11_VALUE_GREEN_LOW ,3);
+             setReg16(RGB11_VALUE_RED_HIGH  ,4);
+             setReg16(RGB11_VALUE_RED_LOW   ,3);
              setReg16(RGB11_VALUE_BLUE_HIGH ,0);
              setReg16(RGB11_VALUE_BLUE_LOW  ,0);
              setReg16(RGB13_VALUE_GREEN_HIGH,1);

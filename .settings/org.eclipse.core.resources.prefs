@@ -34,6 +34,7 @@ encoding//FreeRTOS/event_groups.c=GBK
 encoding//FreeRTOS/include/FreeRTOS.h=GBK
 encoding//FreeRTOS/include/list.h=GBK
 encoding//FreeRTOS/include/portable.h=GBK
+encoding//FreeRTOS/include/queue.h=GBK
 encoding//FreeRTOS/include/semphr.h=GBK
 encoding//FreeRTOS/include/task.h=GBK
 encoding//FreeRTOS/portable/GCC/RISC-V/port.c=GBK

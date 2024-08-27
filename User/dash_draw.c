@@ -76,15 +76,13 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case chAKB  :
         return ( (int32_t)( GetAIN(AIN4 ) * 10 ));
     case chRPM1  :
-
         data16 = GetRPM(INPUT_1);
         float coof1 = (float)getReg16(RPM1_COOF)/RMP_OFFSET;
-
-        return ( ((u32)(data16 *coof1))*10.0 );
+        return ( ((u32)(data16 *coof1))*10 );
     case chRPM2  :
         data16 = GetRPM(INPUT_2);
         float coof2 = (float)getReg16(RPM2_COOF)/RMP_OFFSET;
-        return ( ((u32)(data16 *coof2))*10.0 );
+        return ( ((u32)(data16 *coof2))*10 );
       case chKEY  :
           return ((u32) keystate);
       case chDIN1   :
@@ -619,8 +617,11 @@ static void SystemMenuDraw()
                          }
                          if  (Keys.SystemDelayState == SYSTEM_IDLE)
                          {
-                             u16 data16 =  getReg16(RPM1_COOF +  index ) - 1;
-                             setReg16(RPM1_COOF +index,data16);
+
+                             u16 data16 = getReg16(RPM1_COOF +  index );
+                             if (data16>1)
+
+                                 setReg16(RPM1_COOF +index,data16 - 1);
                          }
                      }
 

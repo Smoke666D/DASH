@@ -118,9 +118,6 @@ void HAL_TiemrDisable( TimerName_t TimerName )
 void  HW_TIMER_BaseTimerInit(TimerName_t TimerName , TimerConfif_t * config )
 {
     vTimerInitRCC(TimerName) ;
-    //uint16_t tmpcr1 = timers[TimerName]->CTLR1;
-   // tmpcr1 |= (uint32_t)TIM_CounterMode_Up;
-   // tmpcr1 |= (uint32_t)config->ClockDiv;
     timers[TimerName]->CTLR1    = ( uint32_t)(TIM_CounterMode_Up | config->ClockDiv) ;
     timers[TimerName]->ATRLR    = config->Period;
     timers[TimerName]->PSC      = config->Div;
