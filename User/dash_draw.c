@@ -22,7 +22,7 @@ static median_filter_data_t      AIN_MIDIAN_FILTER_STRUC[1];
 static TaskHandle_t  pProcessTaskHandle ;
 static const u16 RMPMAUP[] =   { (u16)0x2306,  (u16)0x235B};
 static const u16 RMPMADOWN[] = { (u16)0x1C06,  (u16)0x1C5B};
-static const MenuState_t MenuStateCross[]={RPM1_UP_MENU_STATE,RPM2_UP_MENU_STATE,AIN1_VIEW_STATE,AIN2_VIEW_STATE,AIN3_VIEW_STATE};
+static const MenuState_t MenuStateCross[]={RPM1_UP_MENU_STATE,RPM2_UP_MENU_STATE,AIN1_VIEW_STATE,AIN2_VIEW_STATE,AIN3_VIEW_STATE,RPMCOOF1,RPMCOOF2};
 static MenuState_t  MenuSatate = WORK_MENU_STATE;
 static u8           ServieModeFSM = 0;
 static u8 coof_view_flag =  0;

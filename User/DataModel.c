@@ -214,7 +214,7 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint1[i][0]);
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
              }
-             setReg16(RPM1_COOF,40);
+             setReg16(RPM1_COOF,295);
              setReg16(RPM2_COOF,10);
              setReg32( MENU2_MAP , 0x3E000000 | chAKB );
              setReg32( MENU3_MAP , 0x76000000 | chHOUR );

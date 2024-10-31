@@ -131,6 +131,8 @@ typedef enum
   AIN1_VIEW_STATE  = 7,
   AIN2_VIEW_STATE = 8,
   AIN3_VIEW_STATE = 9,
+  RPMCOOF1      =10,
+  RPMCOOF2     = 11,
 } MenuState_t;
 
 

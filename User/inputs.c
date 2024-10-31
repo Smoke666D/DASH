@@ -204,8 +204,8 @@ static void vDINInit()
     vInitRunAverga(&RPM_AVER_FILTER_STRUC[1],0.5);
     eRPMConfig(INPUT_1,RPM_CH1);
     eRPMConfig(INPUT_2,RPM_CH2);
-    HAL_TimeInitCaptureDMA( TIMER1 , 2000, 60000, TIM_CHANNEL_4);
-    HAL_TimeInitCaptureDMA( TIMER2 , 2000, 60000, TIM_CHANNEL_2);
+    HAL_TimeInitCaptureDMA( TIMER1 , 20000, 60000, TIM_CHANNEL_4);
+    HAL_TimeInitCaptureDMA( TIMER2 , 20000, 60000, TIM_CHANNEL_2);
     HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack );
     HAL_DMAInitIT( DMA1_CH7,PTOM, DMA_HWORD , (u32)&TIM2->CH2CVR, (u32) getCaputreBuffer(INPUT_2),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack_1 );
     HAL_DMA_SetCouterAndEnable(DMA1_CH7,  CC_BUFFER_SIZE);
