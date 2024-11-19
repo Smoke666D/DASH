@@ -1,7 +1,7 @@
 /*
  * hal_can.h
  *
- *  Created on: 13 屑邪褟 2024 谐.
+ *  Created on: 13 灞戦偑瑜� 2024 璋�.
  *      Author: i.dymov
  */
 
@@ -50,6 +50,7 @@ typedef struct {
     uint32_t ident;
     uint8_t DLC;
     uint8_t data[8];
+    uint8_t type;
 
 } CAN_TX_FRAME_TYPE;
 

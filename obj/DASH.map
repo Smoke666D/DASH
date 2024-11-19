@@ -3861,7 +3861,7 @@ END GROUP
                 0x0000000020005000                __freertos_irq_stack_top = .
 OUTPUT(DASH.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000    0x50648
+.debug_info     0x0000000000000000    0x50662
  .debug_info    0x0000000000000000     0x329c ./User/CanOpenNode.o
  .debug_info    0x000000000000329c     0x2ee7 ./User/DataModel.o
  .debug_info    0x0000000000006183      0xa02 ./User/ch32v20x_it.o
@@ -3886,32 +3886,32 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_info    0x0000000000025900     0x14fd ./HWLIB/hw_lib_din.o
  .debug_info    0x0000000000026dfd     0x104b ./HWLIB/hw_lib_eeprom.o
  .debug_info    0x0000000000027e48     0x11a7 ./HAL/hal_adc_ch32.o
- .debug_info    0x0000000000028fef     0x13a7 ./HAL/hal_can_ch32.o
- .debug_info    0x000000000002a396     0x107a ./HAL/hal_dma_ch32.o
- .debug_info    0x000000000002b410     0x104a ./HAL/hal_gpio_ch32.o
- .debug_info    0x000000000002c45a     0x18c6 ./HAL/hal_i2c_ch32.o
- .debug_info    0x000000000002dd20      0xec3 ./HAL/hal_irq.o
- .debug_info    0x000000000002ebe3      0xe7f ./HAL/hal_rtc_ch32.o
- .debug_info    0x000000000002fa62      0xc13 ./HAL/hal_spi_ch32.o
- .debug_info    0x0000000000030675     0x17bd ./HAL/hal_timers_ch32.o
- .debug_info    0x0000000000031e32      0xa81 ./HAL/hal_wdt_ch32.o
- .debug_info    0x00000000000328b3      0xe63 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_info    0x0000000000033716     0x1080 ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_info    0x0000000000034796       0x26 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_info    0x00000000000347bc      0xb87 ./FreeRTOS/list.o
- .debug_info    0x0000000000035343     0x3240 ./FreeRTOS/queue.o
- .debug_info    0x0000000000038583     0x394b ./FreeRTOS/tasks.o
- .debug_info    0x000000000003bece      0xd5d ./Drivers/filters.o
- .debug_info    0x000000000003cc2b      0xf05 ./Debug/debug.o
- .debug_info    0x000000000003db30     0x195f ./CANopenNode/keypad/CO_driver_ST32F103.o
- .debug_info    0x000000000003f48f     0x2009 ./CANopenNode/keypad/OD.o
- .debug_info    0x0000000000041498     0x17c6 ./CANopenNode/305/CO_LSSslave.o
- .debug_info    0x0000000000042c5e     0x1e35 ./CANopenNode/301/CO_Emergency.o
- .debug_info    0x0000000000044a93     0x19f0 ./CANopenNode/301/CO_NMT_Heartbeat.o
- .debug_info    0x0000000000046483     0x14c6 ./CANopenNode/301/CO_ODinterface.o
- .debug_info    0x0000000000047949     0x336f ./CANopenNode/301/CO_PDO.o
- .debug_info    0x000000000004acb8     0x25c1 ./CANopenNode/301/CO_SDOserver.o
- .debug_info    0x000000000004d279     0x33cf ./CANopenNode/CANopen.o
+ .debug_info    0x0000000000028fef     0x13b4 ./HAL/hal_can_ch32.o
+ .debug_info    0x000000000002a3a3     0x107a ./HAL/hal_dma_ch32.o
+ .debug_info    0x000000000002b41d     0x104a ./HAL/hal_gpio_ch32.o
+ .debug_info    0x000000000002c467     0x18c6 ./HAL/hal_i2c_ch32.o
+ .debug_info    0x000000000002dd2d      0xec3 ./HAL/hal_irq.o
+ .debug_info    0x000000000002ebf0      0xe7f ./HAL/hal_rtc_ch32.o
+ .debug_info    0x000000000002fa6f      0xc13 ./HAL/hal_spi_ch32.o
+ .debug_info    0x0000000000030682     0x17bd ./HAL/hal_timers_ch32.o
+ .debug_info    0x0000000000031e3f      0xa81 ./HAL/hal_wdt_ch32.o
+ .debug_info    0x00000000000328c0      0xe63 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_info    0x0000000000033723     0x1080 ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_info    0x00000000000347a3       0x26 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_info    0x00000000000347c9      0xb87 ./FreeRTOS/list.o
+ .debug_info    0x0000000000035350     0x3240 ./FreeRTOS/queue.o
+ .debug_info    0x0000000000038590     0x394b ./FreeRTOS/tasks.o
+ .debug_info    0x000000000003bedb      0xd5d ./Drivers/filters.o
+ .debug_info    0x000000000003cc38      0xf05 ./Debug/debug.o
+ .debug_info    0x000000000003db3d     0x196c ./CANopenNode/keypad/CO_driver_ST32F103.o
+ .debug_info    0x000000000003f4a9     0x2009 ./CANopenNode/keypad/OD.o
+ .debug_info    0x00000000000414b2     0x17c6 ./CANopenNode/305/CO_LSSslave.o
+ .debug_info    0x0000000000042c78     0x1e35 ./CANopenNode/301/CO_Emergency.o
+ .debug_info    0x0000000000044aad     0x19f0 ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_info    0x000000000004649d     0x14c6 ./CANopenNode/301/CO_ODinterface.o
+ .debug_info    0x0000000000047963     0x336f ./CANopenNode/301/CO_PDO.o
+ .debug_info    0x000000000004acd2     0x25c1 ./CANopenNode/301/CO_SDOserver.o
+ .debug_info    0x000000000004d293     0x33cf ./CANopenNode/CANopen.o
 
 .debug_abbrev   0x0000000000000000     0xb147
  .debug_abbrev  0x0000000000000000      0x3da ./User/CanOpenNode.o
@@ -4162,59 +4162,59 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_ranges  0x0000000000003328      0x268 ./CANopenNode/301/CO_SDOserver.o
  .debug_ranges  0x0000000000003590      0x148 ./CANopenNode/CANopen.o
 
-.debug_line     0x0000000000000000    0x30522
+.debug_line     0x0000000000000000    0x30528
  .debug_line    0x0000000000000000      0xa81 ./User/CanOpenNode.o
- .debug_line    0x0000000000000a81     0x17b5 ./User/DataModel.o
- .debug_line    0x0000000000002236      0x345 ./User/ch32v20x_it.o
- .debug_line    0x000000000000257b     0x20cf ./User/dash_draw.o
- .debug_line    0x000000000000464a      0x597 ./User/init.o
- .debug_line    0x0000000000004be1      0xea7 ./User/inputs.o
- .debug_line    0x0000000000005a88      0xecb ./User/led.o
- .debug_line    0x0000000000006953      0x468 ./User/main.o
- .debug_line    0x0000000000006dbb     0x2239 ./User/process.o
- .debug_line    0x0000000000008ff4      0x660 ./User/system_ch32v20x.o
- .debug_line    0x0000000000009654      0x76d ./User/system_init.o
- .debug_line    0x0000000000009dc1      0x25f ./Startup/startup_ch32v20x_D6.o
- .debug_line    0x000000000000a020     0x1a80 ./Peripheral/src/ch32v20x_adc.o
- .debug_line    0x000000000000baa0      0x76a ./Peripheral/src/ch32v20x_dma.o
- .debug_line    0x000000000000c20a     0x14b1 ./Peripheral/src/ch32v20x_gpio.o
- .debug_line    0x000000000000d6bb     0x10f0 ./Peripheral/src/ch32v20x_i2c.o
- .debug_line    0x000000000000e7ab     0x1122 ./Peripheral/src/ch32v20x_rcc.o
- .debug_line    0x000000000000f8cd      0x75a ./Peripheral/src/ch32v20x_rtc.o
- .debug_line    0x0000000000010027     0x30a3 ./Peripheral/src/ch32v20x_tim.o
- .debug_line    0x00000000000130ca      0xf5a ./Peripheral/src/ch32v20x_usart.o
- .debug_line    0x0000000000014024      0xa7e ./HWLIB/hw_lib_adc.o
- .debug_line    0x0000000000014aa2      0xe8c ./HWLIB/hw_lib_din.o
- .debug_line    0x000000000001592e      0x76d ./HWLIB/hw_lib_eeprom.o
- .debug_line    0x000000000001609b      0x87d ./HAL/hal_adc_ch32.o
- .debug_line    0x0000000000016918      0xe7d ./HAL/hal_can_ch32.o
- .debug_line    0x0000000000017795      0x7a1 ./HAL/hal_dma_ch32.o
- .debug_line    0x0000000000017f36      0x883 ./HAL/hal_gpio_ch32.o
- .debug_line    0x00000000000187b9     0x109d ./HAL/hal_i2c_ch32.o
- .debug_line    0x0000000000019856      0x3a8 ./HAL/hal_irq.o
- .debug_line    0x0000000000019bfe      0x4ac ./HAL/hal_rtc_ch32.o
- .debug_line    0x000000000001a0aa      0x39a ./HAL/hal_spi_ch32.o
- .debug_line    0x000000000001a444      0xc70 ./HAL/hal_timers_ch32.o
- .debug_line    0x000000000001b0b4      0x43e ./HAL/hal_wdt_ch32.o
- .debug_line    0x000000000001b4f2      0xc01 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_line    0x000000000001c0f3      0x71a ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_line    0x000000000001c80d      0x368 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_line    0x000000000001cb75      0x626 ./FreeRTOS/list.o
- .debug_line    0x000000000001d19b     0x31aa ./FreeRTOS/queue.o
- .debug_line    0x0000000000020345     0x4982 ./FreeRTOS/tasks.o
- .debug_line    0x0000000000024cc7      0x752 ./Drivers/filters.o
- .debug_line    0x0000000000025419      0x6b5 ./Debug/debug.o
- .debug_line    0x0000000000025ace     0x1171 ./CANopenNode/keypad/CO_driver_ST32F103.o
- .debug_line    0x0000000000026c3f      0x341 ./CANopenNode/keypad/OD.o
- .debug_line    0x0000000000026f80      0xfdd ./CANopenNode/305/CO_LSSslave.o
- .debug_line    0x0000000000027f5d     0x1113 ./CANopenNode/301/CO_Emergency.o
- .debug_line    0x0000000000029070      0xb19 ./CANopenNode/301/CO_NMT_Heartbeat.o
- .debug_line    0x0000000000029b89      0xe8b ./CANopenNode/301/CO_ODinterface.o
- .debug_line    0x000000000002aa14     0x2794 ./CANopenNode/301/CO_PDO.o
- .debug_line    0x000000000002d1a8     0x231a ./CANopenNode/301/CO_SDOserver.o
- .debug_line    0x000000000002f4c2     0x1060 ./CANopenNode/CANopen.o
+ .debug_line    0x0000000000000a81     0x17bb ./User/DataModel.o
+ .debug_line    0x000000000000223c      0x345 ./User/ch32v20x_it.o
+ .debug_line    0x0000000000002581     0x20cf ./User/dash_draw.o
+ .debug_line    0x0000000000004650      0x597 ./User/init.o
+ .debug_line    0x0000000000004be7      0xea7 ./User/inputs.o
+ .debug_line    0x0000000000005a8e      0xecb ./User/led.o
+ .debug_line    0x0000000000006959      0x468 ./User/main.o
+ .debug_line    0x0000000000006dc1     0x2239 ./User/process.o
+ .debug_line    0x0000000000008ffa      0x660 ./User/system_ch32v20x.o
+ .debug_line    0x000000000000965a      0x76d ./User/system_init.o
+ .debug_line    0x0000000000009dc7      0x25f ./Startup/startup_ch32v20x_D6.o
+ .debug_line    0x000000000000a026     0x1a80 ./Peripheral/src/ch32v20x_adc.o
+ .debug_line    0x000000000000baa6      0x76a ./Peripheral/src/ch32v20x_dma.o
+ .debug_line    0x000000000000c210     0x14b1 ./Peripheral/src/ch32v20x_gpio.o
+ .debug_line    0x000000000000d6c1     0x10f0 ./Peripheral/src/ch32v20x_i2c.o
+ .debug_line    0x000000000000e7b1     0x1122 ./Peripheral/src/ch32v20x_rcc.o
+ .debug_line    0x000000000000f8d3      0x75a ./Peripheral/src/ch32v20x_rtc.o
+ .debug_line    0x000000000001002d     0x30a3 ./Peripheral/src/ch32v20x_tim.o
+ .debug_line    0x00000000000130d0      0xf5a ./Peripheral/src/ch32v20x_usart.o
+ .debug_line    0x000000000001402a      0xa7e ./HWLIB/hw_lib_adc.o
+ .debug_line    0x0000000000014aa8      0xe8c ./HWLIB/hw_lib_din.o
+ .debug_line    0x0000000000015934      0x76d ./HWLIB/hw_lib_eeprom.o
+ .debug_line    0x00000000000160a1      0x87d ./HAL/hal_adc_ch32.o
+ .debug_line    0x000000000001691e      0xe7d ./HAL/hal_can_ch32.o
+ .debug_line    0x000000000001779b      0x7a1 ./HAL/hal_dma_ch32.o
+ .debug_line    0x0000000000017f3c      0x883 ./HAL/hal_gpio_ch32.o
+ .debug_line    0x00000000000187bf     0x109d ./HAL/hal_i2c_ch32.o
+ .debug_line    0x000000000001985c      0x3a8 ./HAL/hal_irq.o
+ .debug_line    0x0000000000019c04      0x4ac ./HAL/hal_rtc_ch32.o
+ .debug_line    0x000000000001a0b0      0x39a ./HAL/hal_spi_ch32.o
+ .debug_line    0x000000000001a44a      0xc70 ./HAL/hal_timers_ch32.o
+ .debug_line    0x000000000001b0ba      0x43e ./HAL/hal_wdt_ch32.o
+ .debug_line    0x000000000001b4f8      0xc01 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_line    0x000000000001c0f9      0x71a ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_line    0x000000000001c813      0x368 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_line    0x000000000001cb7b      0x626 ./FreeRTOS/list.o
+ .debug_line    0x000000000001d1a1     0x31aa ./FreeRTOS/queue.o
+ .debug_line    0x000000000002034b     0x4982 ./FreeRTOS/tasks.o
+ .debug_line    0x0000000000024ccd      0x752 ./Drivers/filters.o
+ .debug_line    0x000000000002541f      0x6b5 ./Debug/debug.o
+ .debug_line    0x0000000000025ad4     0x1171 ./CANopenNode/keypad/CO_driver_ST32F103.o
+ .debug_line    0x0000000000026c45      0x341 ./CANopenNode/keypad/OD.o
+ .debug_line    0x0000000000026f86      0xfdd ./CANopenNode/305/CO_LSSslave.o
+ .debug_line    0x0000000000027f63     0x1113 ./CANopenNode/301/CO_Emergency.o
+ .debug_line    0x0000000000029076      0xb19 ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_line    0x0000000000029b8f      0xe8b ./CANopenNode/301/CO_ODinterface.o
+ .debug_line    0x000000000002aa1a     0x2794 ./CANopenNode/301/CO_PDO.o
+ .debug_line    0x000000000002d1ae     0x231a ./CANopenNode/301/CO_SDOserver.o
+ .debug_line    0x000000000002f4c8     0x1060 ./CANopenNode/CANopen.o
 
-.debug_str      0x0000000000000000     0xbc62
+.debug_str      0x0000000000000000     0xbc67
  .debug_str     0x0000000000000000     0x2452 ./User/CanOpenNode.o
                                        0x25ce (size before relaxing)
  .debug_str     0x0000000000002452      0x47c ./User/DataModel.o
@@ -4263,57 +4263,57 @@ OUTPUT(DASH.elf elf32-littleriscv)
                                         0xa3f (size before relaxing)
  .debug_str     0x00000000000075b3      0x13b ./HAL/hal_adc_ch32.o
                                         0x9e7 (size before relaxing)
- .debug_str     0x00000000000076ee      0x302 ./HAL/hal_can_ch32.o
-                                        0xdb4 (size before relaxing)
- .debug_str     0x00000000000079f0       0xf3 ./HAL/hal_dma_ch32.o
+ .debug_str     0x00000000000076ee      0x307 ./HAL/hal_can_ch32.o
+                                        0xdb9 (size before relaxing)
+ .debug_str     0x00000000000079f5       0xf3 ./HAL/hal_dma_ch32.o
                                         0xc0c (size before relaxing)
- .debug_str     0x0000000000007ae3       0x90 ./HAL/hal_gpio_ch32.o
+ .debug_str     0x0000000000007ae8       0x90 ./HAL/hal_gpio_ch32.o
                                         0x979 (size before relaxing)
- .debug_str     0x0000000000007b73      0x1b2 ./HAL/hal_i2c_ch32.o
+ .debug_str     0x0000000000007b78      0x1b2 ./HAL/hal_i2c_ch32.o
                                        0x1091 (size before relaxing)
- .debug_str     0x0000000000007d25       0x42 ./HAL/hal_irq.o
+ .debug_str     0x0000000000007d2a       0x42 ./HAL/hal_irq.o
                                         0xa2d (size before relaxing)
- .debug_str     0x0000000000007d67       0x4a ./HAL/hal_rtc_ch32.o
+ .debug_str     0x0000000000007d6c       0x4a ./HAL/hal_rtc_ch32.o
                                         0xa99 (size before relaxing)
- .debug_str     0x0000000000007db1       0x30 ./HAL/hal_spi_ch32.o
+ .debug_str     0x0000000000007db6       0x30 ./HAL/hal_spi_ch32.o
                                         0x71b (size before relaxing)
- .debug_str     0x0000000000007de1       0xf6 ./HAL/hal_timers_ch32.o
+ .debug_str     0x0000000000007de6       0xf6 ./HAL/hal_timers_ch32.o
                                         0xea8 (size before relaxing)
- .debug_str     0x0000000000007ed7       0x39 ./HAL/hal_wdt_ch32.o
+ .debug_str     0x0000000000007edc       0x39 ./HAL/hal_wdt_ch32.o
                                         0x6ab (size before relaxing)
- .debug_str     0x0000000000007f10      0x319 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_str     0x0000000000007f15      0x319 ./FreeRTOS/portable/MemMang/heap_4.o
                                         0x8df (size before relaxing)
- .debug_str     0x0000000000008229      0x128 ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_str     0x000000000000822e      0x128 ./FreeRTOS/portable/GCC/RISC-V/port.o
                                         0xb22 (size before relaxing)
- .debug_str     0x0000000000008351       0x2a ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_str     0x0000000000008356       0x2a ./FreeRTOS/portable/GCC/RISC-V/portASM.o
                                          0x55 (size before relaxing)
- .debug_str     0x000000000000837b      0x10f ./FreeRTOS/list.o
+ .debug_str     0x0000000000008380      0x10f ./FreeRTOS/list.o
                                         0x6e9 (size before relaxing)
- .debug_str     0x000000000000848a      0x69d ./FreeRTOS/queue.o
+ .debug_str     0x000000000000848f      0x69d ./FreeRTOS/queue.o
                                        0x1368 (size before relaxing)
- .debug_str     0x0000000000008b27      0x858 ./FreeRTOS/tasks.o
+ .debug_str     0x0000000000008b2c      0x858 ./FreeRTOS/tasks.o
                                        0x17ef (size before relaxing)
- .debug_str     0x000000000000937f       0x56 ./Drivers/filters.o
+ .debug_str     0x0000000000009384       0x56 ./Drivers/filters.o
                                         0x78a (size before relaxing)
- .debug_str     0x00000000000093d5       0x79 ./Debug/debug.o
+ .debug_str     0x00000000000093da       0x79 ./Debug/debug.o
                                         0x90a (size before relaxing)
- .debug_str     0x000000000000944e      0x23c ./CANopenNode/keypad/CO_driver_ST32F103.o
-                                        0xf67 (size before relaxing)
- .debug_str     0x000000000000968a      0x6b8 ./CANopenNode/keypad/OD.o
+ .debug_str     0x0000000000009453      0x23c ./CANopenNode/keypad/CO_driver_ST32F103.o
+                                        0xf6c (size before relaxing)
+ .debug_str     0x000000000000968f      0x6b8 ./CANopenNode/keypad/OD.o
                                        0x1831 (size before relaxing)
- .debug_str     0x0000000000009d42      0x406 ./CANopenNode/305/CO_LSSslave.o
+ .debug_str     0x0000000000009d47      0x406 ./CANopenNode/305/CO_LSSslave.o
                                        0x1161 (size before relaxing)
- .debug_str     0x000000000000a148      0xaa8 ./CANopenNode/301/CO_Emergency.o
+ .debug_str     0x000000000000a14d      0xaa8 ./CANopenNode/301/CO_Emergency.o
                                        0x1993 (size before relaxing)
- .debug_str     0x000000000000abf0      0x14b ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_str     0x000000000000abf5      0x14b ./CANopenNode/301/CO_NMT_Heartbeat.o
                                        0x1572 (size before relaxing)
- .debug_str     0x000000000000ad3b       0xbf ./CANopenNode/301/CO_ODinterface.o
+ .debug_str     0x000000000000ad40       0xbf ./CANopenNode/301/CO_ODinterface.o
                                         0xa8c (size before relaxing)
- .debug_str     0x000000000000adfa      0x337 ./CANopenNode/301/CO_PDO.o
+ .debug_str     0x000000000000adff      0x337 ./CANopenNode/301/CO_PDO.o
                                        0x1b31 (size before relaxing)
- .debug_str     0x000000000000b131      0xa2d ./CANopenNode/301/CO_SDOserver.o
+ .debug_str     0x000000000000b136      0xa2d ./CANopenNode/301/CO_SDOserver.o
                                        0x1d5e (size before relaxing)
- .debug_str     0x000000000000bb5e      0x104 ./CANopenNode/CANopen.o
+ .debug_str     0x000000000000bb63      0x104 ./CANopenNode/CANopen.o
                                        0x24e6 (size before relaxing)
 
 .comment        0x0000000000000000       0x33

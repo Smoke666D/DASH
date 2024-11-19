@@ -65,7 +65,7 @@ void vDataModelRegDelayWrite()
     }
 }
 
-static const u8 default_data[]= { VALID_CODE, 2, 10, 10, 0x20 ,1};
+static const u8 default_data[]= { VALID_CODE, 3, 10, 10, 0x20 ,1};
 static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
 static const u16 cal_point_count_index[]={AIN1_CAL_POINT_COUNT,AIN2_CAL_POINT_COUNT,AIN3_CAL_POINT_COUNT};
 static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF , 0x0E6 , 0x0ED};
@@ -80,7 +80,7 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
          if (DATA_MODEL_REGISTER[VALID_CODE_ADDRES]!=VALID_CODE )
          {
              memcpy(DATA_MODEL_REGISTER,default_data,6);
-           //  DATA_MODEL_REGISTER[BITRATE_ADR ]                = 2;
+             DATA_MODEL_REGISTER[BITRATE_ADR ]                = 3;
             // DATA_MODEL_REGISTER[NODE_ID]                     = 0x20;
             // DATA_MODEL_REGISTER[VALID_CODE_ADDRES]           = VALID_CODE;
           //   DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]            = 14;
