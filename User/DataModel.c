@@ -352,7 +352,7 @@ void WriteReg( u16 reg_adress, void * data, u8 len)
 }
 
 #define MAX_BITRATE_INDEX 8
-static const u16 bitrate_table[MAX_BITRATE_INDEX]={1000,125,500,250,125,125,50,20};
+static const u16 bitrate_table[MAX_BITRATE_INDEX]={1000,125,250,250,125,125,50,20};
 /*
  * 圾抉戒志把忘投忘快技 戒扶忘折快扶我快 扼抗抉把抉扼找我 CAN 我戒 EEPROM
  */
