@@ -40,7 +40,7 @@ static const uint16_t CalPoint1[4][2] = {
                                   {36,18},
                                   {17,159},
                                   {5,250},
-                                  {0,340}};
+                                  {1,380}};
 
 
 static u16 secondcounter;
@@ -68,7 +68,7 @@ void vDataModelRegDelayWrite()
 static const u8 default_data[]= { VALID_CODE, 3, 10, 10, 0x20 ,1};
 static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
 static const u16 cal_point_count_index[]={AIN1_CAL_POINT_COUNT,AIN2_CAL_POINT_COUNT,AIN3_CAL_POINT_COUNT};
-static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF , 0x0E6 , 0x0ED};
+static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
 
 
 
@@ -88,10 +88,10 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
           //   DATA_MODEL_REGISTER[BAR_MODE]   = 1;
              setReg16(BAR_VALUE_HIGH        ,360);
              setReg16(BAR_VALUE_LOW         ,0);
-             setReg16(BAR_VALUE_RED_HIGH    ,5);
+             setReg16(BAR_VALUE_RED_HIGH    ,100);
              setReg16(BAR_VALUE_RED_LOW     ,0);
-             setReg16(BAR_VALUE_GREEN_HIGH  ,36);
-             setReg16(BAR_VALUE_GREEN_LOW   ,5);
+             setReg16(BAR_VALUE_GREEN_HIGH  ,360);
+             setReg16(BAR_VALUE_GREEN_LOW   ,50);
              setReg16(RGB1_VALUE_GREEN_HIGH ,0);
              setReg16(RGB1_VALUE_GREEN_LOW  ,0);
              setReg16(RGB1_VALUE_RED_HIGH   ,1);
@@ -146,16 +146,16 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
              setReg16(RGB9_VALUE_RED_LOW    ,2);
              setReg16(RGB9_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB9_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB12_VALUE_GREEN_HIGH,6);
-             setReg16(RGB12_VALUE_GREEN_LOW ,36);
-             setReg16(RGB12_VALUE_RED_HIGH  ,1);
-             setReg16(RGB12_VALUE_RED_LOW   ,36);
-             setReg16(RGB12_VALUE_BLUE_HIGH ,6);
-             setReg16(RGB12_VALUE_BLUE_LOW  ,36);
-             setReg16(RGB10_VALUE_GREEN_HIGH,650+AIN_OFFSET);
-             setReg16(RGB10_VALUE_GREEN_LOW ,600+AIN_OFFSET);
-             setReg16(RGB10_VALUE_RED_HIGH  ,1);
-             setReg16(RGB10_VALUE_RED_LOW   ,650+AIN_OFFSET );
+             setReg16(RGB12_VALUE_GREEN_HIGH,380);
+             setReg16(RGB12_VALUE_GREEN_LOW ,50);
+             setReg16(RGB12_VALUE_RED_HIGH  ,380);
+             setReg16(RGB12_VALUE_RED_LOW   ,1);
+             setReg16(RGB12_VALUE_BLUE_HIGH ,380);
+             setReg16(RGB12_VALUE_BLUE_LOW  ,100);
+             setReg16(RGB10_VALUE_GREEN_HIGH,0);
+             setReg16(RGB10_VALUE_GREEN_LOW ,0);
+             setReg16(RGB10_VALUE_RED_HIGH  ,0);
+             setReg16(RGB10_VALUE_RED_LOW   ,0 );
              setReg16(RGB10_VALUE_BLUE_HIGH ,0);
              setReg16(RGB10_VALUE_BLUE_LOW  ,0);
              setReg16(RGB11_VALUE_GREEN_HIGH,4);
@@ -186,7 +186,7 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
              DATA_MODEL_REGISTER[RGBMAP7]  =vCHANNEL5;
              DATA_MODEL_REGISTER[RGBMAP9]  =vCHANNEL3 ;
              DATA_MODEL_REGISTER[RGBMAP12] =chAIN3;
-             DATA_MODEL_REGISTER[RGBMAP10] =chAIN2;
+             DATA_MODEL_REGISTER[RGBMAP10] =0;
              DATA_MODEL_REGISTER[RGBMAP11] =0;
              DATA_MODEL_REGISTER[RGBMAP13] =vCHANNEL4;
              DATA_MODEL_REGISTER[RGBMAP14] =vCHANNEL3 ;
