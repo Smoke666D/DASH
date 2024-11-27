@@ -37,10 +37,10 @@ static const uint16_t CalPoint[18][2] = {
 
 
 static const uint16_t CalPoint1[4][2] = {
-                                  {0,0},
-                                  {20,25},
-                                  {25,50},
-                                  {30,135}};
+                                  {36,18},
+                                  {17,159},
+                                  {5,250},
+                                  {0,340}};
 
 
 static u16 secondcounter;
@@ -86,7 +86,7 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
           //   DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]            = 14;
            //  DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]              = 13;
           //   DATA_MODEL_REGISTER[BAR_MODE]   = 1;
-             setReg16(BAR_VALUE_HIGH        ,36);
+             setReg16(BAR_VALUE_HIGH        ,360);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,5);
              setReg16(BAR_VALUE_RED_LOW     ,0);
@@ -201,7 +201,7 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
              DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 18;
              setReg16(AIN2_OFFSET,AIN_OFFSET );
              DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT] = 4;
-             //setReg16(AIN3_OFFSET,0 );
+             setReg16(AIN3_OFFSET,0 );
              for (u8 i=0; i< 18;i++)
              {
                  setReg16(AIN1_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
@@ -227,7 +227,7 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x006, 0x0DB , 0x0CF 
              setReg32( MENU8_MAP , chErrorRegister);
               setReg32( MENU9_MAP , 0);
              setReg32( MENU10_MAP , 0);
-             DATA_MODEL_REGISTER[MENU_DEF_POS]             = 7;
+             DATA_MODEL_REGISTER[MENU_DEF_POS]             = 3;
              DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      = 5;
              DATA_MODEL_REGISTER[DIN_ACTIVE_STATE]         = 0;
              eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,2);

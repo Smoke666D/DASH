@@ -94,9 +94,12 @@ void ADC_FSM()
           {
               case AIN1:
               case AIN2:
-              case AIN3:
                   Vx = (float)ADC_Buffer*AIN_COOF*K;
                   OurVData[i]= (Vx*Rpup)/(OurVData[AIN5]-Vx);
+                  break;
+              case AIN3:
+                  Vx = (float)ADC_Buffer*AIN_COOF*K;
+                  OurVData[i]= (Vx*RpupAIN3)/(OurVData[AIN5]-Vx);
                   break;
               case AIN5:
                   OurVData[i]= (float)ADC_Buffer*VADD_COOF*K;
