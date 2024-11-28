@@ -279,17 +279,19 @@ void vProceesInit( void)
 
 static ODR_t OD_writeV1_14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-    if ( stream->subIndex <= 15 )
+    if ( stream->subIndex < 15 )
     {
         uint8_t data = CO_getUint8(buf);
         *countWritten = sizeof(data);
         setReg8( V1 + (stream->subIndex-1 ) * sizeof(data) ,data);
+
     }
     else if (stream->subIndex <=17 )
     {
         uint16_t data = CO_getUint16(buf);
+
         *countWritten = sizeof(data);
-        setReg16( V15 + (stream->subIndex -1) * sizeof(data) ,data);
+        setReg16( V15 + (stream->subIndex -15) * sizeof(uint16_t) ,data);
     }
     else
     {

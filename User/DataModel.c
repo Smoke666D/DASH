@@ -13,7 +13,7 @@
 #include "dash_draw.h"
 #include "hw_lib_eeprom.h"
 
-static const uint16_t CalPoint[18][2] = {
+__attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
                                   {130,89},
                                   {120,113},
                                   {110,110},
@@ -36,7 +36,7 @@ static const uint16_t CalPoint[18][2] = {
 };
 
 
-static const uint16_t CalPoint1[4][2] = {
+__attribute__((section(".stext"))) static const uint16_t CalPoint1[4][2] = {
                                   {36,18},
                                   {17,159},
                                   {5,250},
@@ -65,10 +65,10 @@ void vDataModelRegDelayWrite()
     }
 }
 
-static const u8 default_data[]= { VALID_CODE, 3, 10, 10, 0x20 ,1};
-static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
-static const u16 cal_point_count_index[]={AIN1_CAL_POINT_COUNT,AIN2_CAL_POINT_COUNT,AIN3_CAL_POINT_COUNT};
-static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
+__attribute__((section(".stext"))) static const u8 default_data[]= { VALID_CODE, 3, 10, 10, 0x20 ,1};
+__attribute__((section(".stext"))) static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
+__attribute__((section(".stext"))) static const u16 cal_point_count_index[]={AIN1_CAL_POINT_COUNT,AIN2_CAL_POINT_COUNT,AIN3_CAL_POINT_COUNT};
+__attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
 
 
 
@@ -214,21 +214,21 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF 
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint1[i][0]);
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
              }
-             setReg16(RPM1_COOF,295);
+             setReg16(RPM1_COOF,1);
              setReg16(RPM2_COOF,10);
              setReg32( MENU2_MAP , 0x3E000000 | chAKB );
              setReg32( MENU3_MAP , 0x76000000 | chHOUR );
              //setReg32( MENU4_MAP , 0x783F0000 | chAIN2);
              setReg32( MENU4_MAP , 0x71000000 | chAIN3);
              setReg32( MENU5_MAP , 0x78790000 | vCHANNEL5);
-             setReg32( MENU1_MAP ,  0x50730000 | chRPM1);
+             setReg32( MENU1_MAP ,  0x50730000 | vCHANNEL15);
              setReg32( MENU6_MAP , 0x6D000000 | chRPM2);
              setReg32( MENU7_MAP , 0x3F000000 | chODOMETR);
              setReg32( MENU8_MAP , chErrorRegister);
               setReg32( MENU9_MAP , 0);
              setReg32( MENU10_MAP , 0);
-             DATA_MODEL_REGISTER[MENU_DEF_POS]             = 3;
-             DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      = 5;
+             DATA_MODEL_REGISTER[MENU_DEF_POS]             = 0;
+             DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      = 10;
              DATA_MODEL_REGISTER[DIN_ACTIVE_STATE]         = 0;
              eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,2);
              memset(DATA_MODEL_REGISTER,0,EEPROM_REGISER_COUNT);
@@ -271,6 +271,7 @@ static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF 
 
 void setReg16( u16 reg_adress, u16 data)
 {
+
     DATA_MODEL_REGISTER[ reg_adress] = (u8)( data & 0xFF);
     DATA_MODEL_REGISTER[ reg_adress + 1] =(u8)( data>>8 & 0xFF);
 }

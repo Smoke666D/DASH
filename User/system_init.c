@@ -103,6 +103,7 @@ static  TaskFSM_t DeafaultTaskFSM = STATE_INIT;
 void StartDefaultTask(void *argument)
 {
   uint32_t ulNotifiedValue;
+ // printf("System Start%d\r\n",SystemCoreClock);
   for(;;)
   {
       switch( DeafaultTaskFSM)
@@ -127,7 +128,7 @@ void StartDefaultTask(void *argument)
               break;
           case STATE_RUN:
               vTaskDelay(500);
-            // printf("SystemClk\r\n");
+
 
               HAL_WDTReset();
               break;

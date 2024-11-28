@@ -33,12 +33,10 @@ int main(void)
 {
     SystemCoreClockUpdate();
     Delay_Init();
-   // USART_Printf_Init(115200);
-   // printf("System Start%d\r\n",SystemCoreClock);
     vInit_DeviceConfig( );
+    USART_Printf_Init(115200);
     vSYSqueueInit (  );
     vSYStaskInit ( );
-
     vTaskStartScheduler();
 
     while(1);

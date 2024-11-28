@@ -21,8 +21,11 @@ static void MX_GPIO_Init( void );
 void vInit_DeviceConfig( void )
 {	
     //Настройка тактирования всех устрйоств
+
     HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR);
+
 	MX_GPIO_Init( );
+
 	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
     HAL_TiemrEneblae( TIMER3);
     vSetBrigth(RGB_CHANNEL,0);

@@ -45,6 +45,7 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
   u16 data16 = 0;
   u8 index;
   int32_t out_data;
+
   switch (virtualchannel)
   {
     case vCHANNEL1:
@@ -65,7 +66,9 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case vCHANNEL15:
     case vCHANNEL16:
     case vCHANNEL17:
-        return ( (u32) getReg16(V1 + virtualchannel -1 ) );
+        data16 =getReg16(V15 + (virtualchannel -vCHANNEL15)*sizeof(uint16_t) );
+
+        return ( (u32) data16);
     case chAIN1 :
     case chAIN2 :
     case chAIN3 :
@@ -502,8 +505,9 @@ static void SystemMenuDraw()
     u8 data,index;
     if ( MenuSatate == WORK_MENU_STATE )
     {
-        menu.blink = (( Keys.SystemDelayState > SYSTEM_IDLE) || (menu.show_error_flag)) ? MENU_BLINK : MENU_NOT_BLINK ;
-        MenuBackHomeCheck( 10 );
+
+       /* menu.blink = (( Keys.SystemDelayState > SYSTEM_IDLE) || (menu.show_error_flag)) ? MENU_BLINK : MENU_NOT_BLINK ;
+
         if (Keys.key_press_state  == KEY_CHANGE_STATE )   //Проверяем нажатие клавиши
         {
            if ( Keys.SystemDelayState       ==  SYSTEM_IDLE )  //Если было короткое переходим по меню
@@ -513,6 +517,9 @@ static void SystemMenuDraw()
            else
                SetCurMenuHome();                              //Если средней длительности, то фиксируем новый домашний экран
        }
+        else
+            MenuBackHomeCheck( 10 );
+*/
         /*Отображение регистра ошибок*/
        SetErrorRegiter(ErrorRegister);
        buffer32 = uGetCurrMenu();
@@ -714,13 +721,9 @@ void vRedrawTask( void * argument )
                 break;
             case STATE_RUN:
                  vTaskDelay(10);
-                 vCheckKeySatate(HAL_GetBit( Din3_4_5_Port ,Din4_Pin ));
-
+              //   vCheckKeySatate(HAL_GetBit( Din3_4_5_Port ,Din4_Pin ));
                  // Отображение меню
                  SystemMenuDraw();
-
-
-
 
                   if (++draw_counter >= 20)
                  {
