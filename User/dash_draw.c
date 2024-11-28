@@ -506,7 +506,7 @@ static void SystemMenuDraw()
     if ( MenuSatate == WORK_MENU_STATE )
     {
 
-       /* menu.blink = (( Keys.SystemDelayState > SYSTEM_IDLE) || (menu.show_error_flag)) ? MENU_BLINK : MENU_NOT_BLINK ;
+        menu.blink = (( Keys.SystemDelayState > SYSTEM_IDLE) || (menu.show_error_flag)) ? MENU_BLINK : MENU_NOT_BLINK ;
 
         if (Keys.key_press_state  == KEY_CHANGE_STATE )   //Проверяем нажатие клавиши
         {
@@ -519,7 +519,7 @@ static void SystemMenuDraw()
        }
         else
             MenuBackHomeCheck( 10 );
-*/
+
         /*Отображение регистра ошибок*/
        SetErrorRegiter(ErrorRegister);
        buffer32 = uGetCurrMenu();
@@ -721,7 +721,7 @@ void vRedrawTask( void * argument )
                 break;
             case STATE_RUN:
                  vTaskDelay(10);
-              //   vCheckKeySatate(HAL_GetBit( Din3_4_5_Port ,Din4_Pin ));
+                 vCheckKeySatate(HAL_GetBit( Din3_4_5_Port ,Din4_Pin ));
                  // Отображение меню
                  SystemMenuDraw();
 
