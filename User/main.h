@@ -32,6 +32,17 @@
 
 #define CORE WCH32V2
 
+
+/***************************watchdog***************************/
+//§¡§Ü§ä§Ú§Ó§Ú§â§à§Ó§Ñ§ä§î §Ó§Ñ§ä§é§Õ§à§Ô
+#define WDT_ENABLE
+/****************************RTC**************************/
+#define RTC_IRQ_ENABLE
+/************************I2C************************************/
+#define I2C1_IT_ENABLE
+//#define I2C2_IT_ENABLE
+
+#define INIT_FUNC_LOC //__attribute__((section(".stext")))
 #define RESTART_DISABLE  0x0001
 #define DATA_MODEL_READY 0x02
 #define IGNITON_FLAG    0x08
