@@ -53,7 +53,7 @@
 #endif
 
 #define DEFAULT_C
-
+/*
 typedef enum
 {
 #if MCU == APM32
@@ -96,7 +96,7 @@ typedef enum
 
 #endif
 } PinName_t;
-
+*/
 #define HAL_SET   1
 #define HAL_RESET 0
 

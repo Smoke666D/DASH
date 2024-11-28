@@ -27,6 +27,10 @@
 #include "inputs.h"
 #include "DataModel.h"
 
+#define WCH32V3   2
+#define WCH32V2   1
+
+#define CORE WCH32V2
 
 #define RESTART_DISABLE  0x0001
 #define DATA_MODEL_READY 0x02

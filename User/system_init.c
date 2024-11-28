@@ -71,7 +71,6 @@ void vSystemStopProcess()
 
 void vSYStaskInit ( void )
 {
-
    (* xProcessTaskHandle ())
              = xTaskCreateStatic( vRedrawTask, "ProcessTask", PROCESS_STK_SIZE , ( void * ) 1, PROCESS_TASK_PRIO  ,
                                      (StackType_t * const )ProcessTaskBuffer, &ProcessTaskControlBlock );
@@ -128,8 +127,6 @@ void StartDefaultTask(void *argument)
               break;
           case STATE_RUN:
               vTaskDelay(500);
-
-
               HAL_WDTReset();
               break;
       }

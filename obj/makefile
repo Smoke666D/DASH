@@ -13,6 +13,7 @@ RM := rm -rf
 -include Startup/subdir.mk
 -include Peripheral/src/subdir.mk
 -include HWLIB/subdir.mk
+-include HAL_DRIVER/subdir.mk
 -include HAL/subdir.mk
 -include FreeRTOS/portable/MemMang/subdir.mk
 -include FreeRTOS/portable/GCC/RISC-V/subdir.mk
