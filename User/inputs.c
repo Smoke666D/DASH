@@ -312,7 +312,7 @@ void vInputsTask( void * argument )
                              if ((OD_Ain_flag))// || (data_send_dealy==0))
                              {
                                   OD_Ain_flag = RESET;
-                                  OD_requestTPDO(OD_AIN_flagsPDO,1);
+                                 // OD_requestTPDO(OD_AIN_flagsPDO,1);
                              }
                         }
                         else

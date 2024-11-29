@@ -133,7 +133,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg16(RGB7_VALUE_RED_HIGH   ,1);
              setReg16(RGB7_VALUE_RED_LOW    ,1000+AIN_OFFSET );
              setReg16(RGB7_VALUE_BLUE_HIGH  ,0);
-             setReg16(RGB7_VALUE_BLUE_LOW   ,0);
+             setReg16(RGB7_VALUE_BLUE_LOW   ,1);
              setReg16(RGB8_VALUE_GREEN_HIGH ,3);
              setReg16(RGB8_VALUE_GREEN_LOW  ,1);
              setReg16(RGB8_VALUE_RED_HIGH   ,3);
@@ -230,6 +230,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              DATA_MODEL_REGISTER[MENU_DEF_POS]             = 0;
              DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      = 10;
              DATA_MODEL_REGISTER[DIN_ACTIVE_STATE]         = 0;
+             DATA_MODEL_REGISTER[KEY_CONTROL_REG]     =1;
              eEEPROMWr(VALID_CODE_ADDRES,DATA_MODEL_REGISTER,EEPROM_REGISER_COUNT,2);
              memset(DATA_MODEL_REGISTER,0,EEPROM_REGISER_COUNT);
              vTaskDelay(10);

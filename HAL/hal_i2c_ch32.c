@@ -9,7 +9,7 @@
 #if MCU == CH32V2
 
 #include "hw_lib_eeprom.h"
-#include "hal_gpio.h"
+//#include "hal_gpio.h"
 #include "hal_irq.h"
 
 

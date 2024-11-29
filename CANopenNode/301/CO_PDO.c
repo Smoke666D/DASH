@@ -1191,6 +1191,7 @@ CO_ReturnError_t CO_TPDO_init(CO_TPDO_t *TPDO,
     odRet = OD_get_u16(OD_18xx_TPDOCommPar, 5, &eventTime, true);
     TPDO->inhibitTime_us = (uint32_t)inhibitTime * 100;
     TPDO->eventTime_us = (uint32_t)eventTime * 1000;
+    ;
 #endif
 
 
@@ -1348,6 +1349,7 @@ void CO_TPDO_process(CO_TPDO_t *TPDO,
             || TPDO->transmissionType >= CO_PDO_TRANSM_TYPE_SYNC_EVENT_LO
         ) {
             /* event timer */
+
  #if (CO_CONFIG_PDO) & CO_CONFIG_TPDO_TIMERS_ENABLE
             if (TPDO->eventTime_us != 0) {
                 TPDO->eventTimer = (TPDO->eventTimer > timeDifference_us)
@@ -1390,6 +1392,7 @@ void CO_TPDO_process(CO_TPDO_t *TPDO,
             /* send TPDO */
             if (TPDO->sendRequest && TPDO->inhibitTimer == 0) {
                 CO_TPDOsend(TPDO);
+                printf("send req\r\n");
             }
 
  #if (CO_CONFIG_PDO) & CO_CONFIG_FLAG_TIMERNEXT

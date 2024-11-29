@@ -721,7 +721,15 @@ void vRedrawTask( void * argument )
                 break;
             case STATE_RUN:
                  vTaskDelay(10);
-                 vCheckKeySatate(HAL_GetBit( Din3_4_5_Port ,Din4_Pin ));
+
+                 if (getReg8(KEY_CONTROL_REG) == 1 )
+                 {
+                     vCheckKeySatate(getReg8(KEY_CODE)? 0 :1);
+                 }
+                 else
+                 {
+                     vCheckKeySatate(HAL_GetBit( Din3_4_5_Port ,Din4_Pin ));
+                 }
                  // Отображение меню
                  SystemMenuDraw();
 

@@ -11,7 +11,7 @@
 #include "system_init.h"
 
 
-#define VALID_CODE            0x33
+#define VALID_CODE            0x55
 #define VALID_CODE_ADDRES     0
 
 #define BITRATE_ADR            (VALID_CODE_ADDRES + 1)
@@ -161,7 +161,8 @@
 #define MENU_HOME_BACK_TIME   (MENU_DEF_POS +1 )
 #define DIN_ACTIVE_STATE      (MENU_HOME_BACK_TIME +1)
 #define VERSION_REG           (DIN_ACTIVE_STATE  +1)
-#define EEPROM_REGISER_COUNT  (VERSION_REG   +4)
+#define KEY_CONTROL_REG       (VERSION_REG   +4)
+#define EEPROM_REGISER_COUNT  (KEY_CONTROL_REG  +1)
 
 
 #define BIG_SEG                 ( EEPROM_REGISER_COUNT)
@@ -182,11 +183,12 @@
 #define V15                     ( V14 + 1 )
 #define V16                     ( V15 + 2 )
 #define V17                     ( V16 + 2 )
+#define KEY_CODE                 (V17 +  2 )
 
 #define AIN_OFFSET                400
 #define RMP_OFFSET                1000
 
-#define TOTAL_REGISTER_COUNT  (V17 +2 )
+#define TOTAL_REGISTER_COUNT  (KEY_CODE +1 )
 
 
 typedef struct

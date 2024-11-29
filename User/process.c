@@ -64,6 +64,8 @@ static ODR_t OD_writeBoardSettings(OD_stream_t *stream,const  void *buf, OD_size
 static ODR_t OD_readBoardSettings(OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 static ODR_t OD_writeRPMConfig(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readRPMConfig (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
+static ODR_t OD_writeKEY(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
+static ODR_t OD_readKEY(OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 /* Variables used for triggering TPDO, see simulation in app_programRt(). */
 
 
@@ -244,6 +246,12 @@ const OD_extension_t  OD_RPMCONFIG_extension = {
         .write = OD_writeRPMConfig
     };
 
+const OD_extension_t  OD_KEY_extension = {
+        .object = NULL,
+        .read =  OD_readKEY,
+        .write = OD_writeKEY
+    };
+
 void vProceesInit( void)
 {
     OD_extension_init(OD_ENTRY_H2001, &OD_VRegiters_extension);
@@ -273,6 +281,7 @@ void vProceesInit( void)
     OD_extension_init(OD_ENTRY_H2033, &OD_ADC2_CAL_extension) ;
     OD_extension_init(OD_ENTRY_H2034, &OD_ADC3_CAL_extension) ;
     OD_extension_init(OD_ENTRY_H2035, &OD_RPMCONFIG_extension);
+    OD_extension_init(OD_ENTRY_H2036, &OD_KEY_extension);
 
 }
 
@@ -810,5 +819,32 @@ static ODR_t OD_readRPMConfig (OD_stream_t *stream, void *buf, OD_size_t count, 
 {
      *countRead = sizeof(u16);
      CO_setUint16( buf, getReg16( RPM1_COOF + ( stream->subIndex -1 ) * sizeof(u16) )  );
+     return (ODR_OK);
+}
+
+/*
+ * Функции для работы с объектом 2036
+ */
+static ODR_t OD_writeKEY(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
+{
+   uint8_t data =(uint8_t)CO_getUint8(buf);
+   *countWritten = sizeof(data);
+   if ( stream->subIndex == 1 )
+   {
+       WriteRegAfterDelay( KEY_CONTROL_REG  ,&data, sizeof(data));
+   }
+   else
+   {
+       setReg8(KEY_CODE , data);
+   }
+
+  // WriteRegAfterDelay( RPM1_COOF + (stream->subIndex -1)*sizeof(data)  ,&data, sizeof(data));
+   return (ODR_OK);
+}
+
+static ODR_t OD_readKEY(OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+     *countRead = sizeof(u8);
+    // CO_setUint16( buf, getReg16( RPM1_COOF + ( stream->subIndex -1 ) * sizeof(u16) )  );
      return (ODR_OK);
 }

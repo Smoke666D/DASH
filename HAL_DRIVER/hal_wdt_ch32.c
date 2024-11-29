@@ -58,7 +58,7 @@ void HAL_WDTReset()
 /*
  *
  */
-void HAL_WDT_Init1s()
+INIT_FUNC_LOC void HAL_WDT_Init1s()
 {
 #ifdef WDT_ENABLE
 
