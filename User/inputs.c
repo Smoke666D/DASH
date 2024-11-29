@@ -290,7 +290,6 @@ void vInputsTask( void * argument )
                         {
                             if ( uGetDIN(INPUT_4)== RESET)
                             {
-                                //SaveData();
                                 state = STATE_SAVE_DATA;
                                 break;
                             }
@@ -302,13 +301,7 @@ void vInputsTask( void * argument )
                                   OD_Ain_flag = SET;
                                 }
                             }
-                           // uint8_t din_data;
-                           // if (++data_send_dealy> 10)  data_send_dealy = 0;
-                            //Обработка дискрентого входа датчика давления масла
-                            //if (( xGetDIN(INPUT_3,&din_data) == DIN_CHANGE )) ///|| (data_send_dealy==0))
-                           //  {
-                            //     OD_requestTPDO(OD_DIN_flagsPDO,1);
-                           //  }
+
                              if ((OD_Ain_flag))// || (data_send_dealy==0))
                              {
                                   OD_Ain_flag = RESET;
