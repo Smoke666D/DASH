@@ -1,9 +1,7 @@
 #include "init.h"
 #include "hw_lib_eeprom_i2c.h"
 #include "main.h"
-#include "HW_API.h"
 #include "hal_gpio.h"
-
 #include "hal_wdt.h"
 #include "hal_rtc.h"
 #include "hal_adc.h"

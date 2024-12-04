@@ -8,7 +8,7 @@
 #include "inputs.h"
 #include "init.h"
 #include "hal_adc.h"
-#include "HW_API.h"
+
 #include "CO_ODinterface.h"
 #include "hw_lib_din.h"
 #include "OD.h"
@@ -100,12 +100,14 @@ void ADC_FSM()
               case AIN3:
                   Vx = (float)ADC_Buffer*AIN_COOF*K;
                   OurVData[i]= (Vx*RpupAIN3)/(OurVData[AIN5]-Vx);
+                  if ( OurVData[i] > 10000 ) OurVData[i]  = 0;
                   break;
               case AIN5:
                   OurVData[i]= (float)ADC_Buffer*VADD_COOF*K;
+
                   break;
               case AIN4:
-                  OurVData[i]= (float) ADC_Buffer  * AINCOOF1 + INDIOD;
+                  OurVData[i]= (float) ADC_Buffer  * AINCOOF3  + INDIOD;
                   break;
               default:
                   break;
@@ -140,7 +142,7 @@ float GetAIN(u8 ch)
  */
 uint8_t fDinStateCallback (uint8_t i)
 {
-    switch ( i)
+    switch ( i )
     {
         case INPUT_3:
             return HAL_GetBit(  Din3_4_5_Port , Din3_Pin);
@@ -240,42 +242,41 @@ void vInputsTask( void * argument )
     switch (state)
     {
         case  STATE_SAVE_DATA:
+            printf("save_data\r\n");
             SaveData();
+
             state = STATE_IDLE;
+            InitState = START_UP_STATE;
             break;
         case  STATE_IDLE:
-            xTaskNotifyWait(0,0xFF ,&ulNotifiedValue,portMAX_DELAY);
-            if ((ulNotifiedValue & TASK_INIT_NOTIFY) !=0)
-            {
+
                 ADC1_Init();
                 vDINInit();
-                state = STATE_INIT;
-            }
+                HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
+                state = STATE_RUN;
             break;
-        case STATE_INIT:                                                                  //Отправляем вызывающей задаче уведомление что таск запущен
-            state = STATE_RUN;
-            printf("input_procces\r\n");
-            xTaskNotifyGiveIndexed(pTaskToNotifykHandle,0);
-            break;
+
         case  STATE_RUN:
-            HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
             vDataModelRegDelayWrite();
             vTaskDelay(1);
-
-            if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) & ADC1_DATA_READY)
+           if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) & ADC1_DATA_READY)
             {
                 ADC_FSM();
+                HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
                 vDinDoutProcess();
                 switch (  InitState  )
                 {
                     case START_UP_STATE:
-                        if ( uGetDIN(INPUT_4) && (GetAIN(3)>= 7.0 )) InitState = RUN_STATE_INIT;
+
+                        if  (uGetDIN(INPUT_4) && (GetAIN(3)>= 7.0 ))
+
+                            InitState = RUN_STATE_INIT;
                         break;
                     case RUN_STATE_INIT:
                         vSetBrigth( RGB_CHANNEL,    getReg8(RGB_BRIGTH_ADR) );
                         vSetBrigth( WHITE_CHANNEL,  getReg8(WHITE_BRIGTH_ADR));
                         HAL_SetBit(PowerON_Port,PowerON_Pin);
-                       // eSetDUT(OUT_1, SET);
+                        eSetDUT(OUT_1, SET);
                         InitState = RUN_STATE;
                         break;
                     case RUN_STATE:
@@ -294,6 +295,7 @@ void vInputsTask( void * argument )
                             if ( uGetDIN(INPUT_4)== RESET)
                             {
                                 state = STATE_SAVE_DATA;
+                                printf("fff\r\n");
                                 break;
                             }
                             for (u8 i =0;i<2;i++)
@@ -317,7 +319,9 @@ void vInputsTask( void * argument )
                             state = STATE_SAVE_DATA;
                         }
                         break;
+
                 }
+
             }
             break;
     }
@@ -328,13 +332,12 @@ void vInputsTask( void * argument )
 static void SaveData()
 {
     HardwareDeinit();
-    vSystemStopProcess();
+    vSystemStop();
     vSaveData();
     vTaskDelay(10);
     HAL_ResetBit(PowerON_Port,PowerON_Pin);
+    vTaskDelay(1);
     SoftwareReset();
-
-
 }
 
 

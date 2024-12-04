@@ -12,7 +12,6 @@ RM := rm -rf
 -include User/subdir.mk
 -include Startup/subdir.mk
 -include Peripheral/src/subdir.mk
--include HWLIB/subdir.mk
 -include HAL_LIB/subdir.mk
 -include HAL_DRIVER/subdir.mk
 -include HAL/subdir.mk

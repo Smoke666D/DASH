@@ -9,9 +9,7 @@
 #include "CO_ODinterface.h"
 #include "OD.h"
 #include "hw_lib_din.h"
-//#include "hw_lib_keyboard.h"
 #include "inputs.h"
-#include "HW_API.h"
 #include "hal_gpio.h"
 
 static Menu_Object_t menu;
@@ -742,24 +740,19 @@ void vRedrawTask( void * argument )
         switch(state)
         {
             case STATE_IDLE:
-                xTaskNotifyWait(0,0xFF ,&ulNotifiedValue,portMAX_DELAY);
-                if ((ulNotifiedValue & TASK_INIT_NOTIFY) !=0)
-                {
 
+                    vLedDriverStart();
                     vDashDrawInit();
                     vInitKeys();
-                    state = STATE_INIT;
-
-                }
+                  //  vSetBrigth( RGB_CHANNEL,    getReg8(RGB_BRIGTH_ADR) );
+                  //  vSetBrigth( WHITE_CHANNEL,  getReg8(WHITE_BRIGTH_ADR));
+                  //  HAL_SetBit(PowerON_Port,PowerON_Pin);
+                    state = STATE_RUN;
                 break;
             case STATE_TEST:
                  vTaskDelay(100);
                  TestProcedure();
                  break;
-            case STATE_INIT:
-                state = STATE_RUN;
-                xTaskNotifyGiveIndexed(pTaskToNotifykHandle,0);
-                break;
             case STATE_RUN:
                  vTaskDelay(10);
 

@@ -39,7 +39,6 @@ FreeRTOS/portable/MemMang \
 HAL \
 HAL_DRIVER \
 HAL_LIB \
-HWLIB \
 Peripheral/src \
 Startup \
 User \

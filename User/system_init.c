@@ -62,11 +62,20 @@ void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
  *
  */
 
-void vSystemStopProcess()
+void vSystemStop()
 {
-   // vTaskSuspend(* xProcessTaskHandle ());
+    vTaskSuspend(* xProcessTaskHandle ());
     vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
     vTaskSuspend( *xCanOpenProcessTaskHandle());
+   // vTaskSuspend(* getInputsTaskHandle());
+}
+
+void vSystemStopProcess()
+{
+    vTaskSuspend(* xProcessTaskHandle ());
+    vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
+    vTaskSuspend( *xCanOpenProcessTaskHandle());
+    vTaskSuspend(* getInputsTaskHandle());
 }
 
 INIT_FUNC_LOC  void vSYStaskInit ( void )
@@ -80,7 +89,7 @@ INIT_FUNC_LOC  void vSYStaskInit ( void )
   (* xCanOpenProcessTaskHandle())
   = xTaskCreateStatic( vCanOpenProcess, "CanOpenProcessTask", CAN_OPEN_STK_SIZE , ( void * ) 1, CAN_OPEN_TASK_PRIO ,
   (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );
-  (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, INPUT_TASK_PRIO, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
+ (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, INPUT_TASK_PRIO, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
   DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, DEFAULT_TASK_PRIOR, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
   vSystemStopProcess();
   return;
@@ -109,24 +118,30 @@ void StartDefaultTask(void *argument)
       {
           case STATE_INIT:
               DataModel_Init();
-              vLedDriverStart();
-              InputsNotifyTaskToInit();
-              RedrawNotifyTaskToInit();
+           //   InputsNotifyTaskToInit();
               vProceesInit();
-              DeafaultTaskFSM = STATE_WHAIT_TO_RAEDY;
+              vTaskResume( *xCanOpenProcessTaskHandle());
+              vTaskResume( *xCanOpenPeriodicTaskHandle ());
+              vTaskResume(* xProcessTaskHandle ());
+              DeafaultTaskFSM = STATE_RUN;
+              vTaskDelay(100);
+              vTaskResume(* getInputsTaskHandle());
+              printf("start\r\n");
               break;
           case STATE_WHAIT_TO_RAEDY:
-              xTaskNotifyWait(0, 0, &ulNotifiedValue,portMAX_DELAY);
-              if ( ulNotifiedValue == 1)
-              {
+              //xTaskNotifyWait(0, 0, &ulNotifiedValue,portMAX_DELAY);
+             // if ( ulNotifiedValue == 1)
+             // {
                   ulTaskNotifyValueClearIndexed(0, 0, 0xFFFF);
-                  vTaskResume( *xCanOpenProcessTaskHandle());
-                  vTaskResume( *xCanOpenPeriodicTaskHandle ());
+                 // vTaskResume( *xCanOpenProcessTaskHandle());
+                //  vTaskResume( *xCanOpenPeriodicTaskHandle ());
                   DeafaultTaskFSM = STATE_RUN;
-              }
+                  vTaskDelay(100);
+
+             // }
               break;
           case STATE_RUN:
-              printf("def task\r\n");
+
               vTaskDelay(500);
               HAL_WDTReset();
               break;

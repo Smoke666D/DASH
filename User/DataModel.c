@@ -38,6 +38,7 @@ __attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
 
 
 __attribute__((section(".stext"))) static const uint16_t CalPoint1[4][2] = {
+                                  {0,0},
                                   {36,18},
                                   {17,159},
                                   {5,250},
@@ -75,20 +76,16 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
 
  void DataModel_Init()
 {
-    memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
+
 
 
     if ( eEEPROMRd(0x00 ,DATA_MODEL_REGISTER , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
          if (DATA_MODEL_REGISTER[VALID_CODE_ADDRES]!=VALID_CODE )
          {
+             memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
              memcpy(DATA_MODEL_REGISTER,default_data,6);
              DATA_MODEL_REGISTER[BITRATE_ADR ]                = 3;
-            // DATA_MODEL_REGISTER[NODE_ID]                     = 0x20;
-            // DATA_MODEL_REGISTER[VALID_CODE_ADDRES]           = VALID_CODE;
-          //   DATA_MODEL_REGISTER[WHITE_BRIGTH_ADR]            = 14;
-           //  DATA_MODEL_REGISTER[RGB_BRIGTH_ADR]              = 13;
-          //   DATA_MODEL_REGISTER[BAR_MODE]   = 1;
              setReg16(BAR_VALUE_HIGH        ,360);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,100);
@@ -203,7 +200,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg16(AIN1_OFFSET,AIN_OFFSET );
              DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 18;
              setReg16(AIN2_OFFSET,AIN_OFFSET );
-             DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT] = 4;
+             DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT] = 5;
              setReg16(AIN3_OFFSET,0 );
              for (u8 i=0; i< 18;i++)
              {
@@ -212,7 +209,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4 + 2, CalPoint[i][1]);
              }
-             for (u8 i=0; i< 4;i++)
+             for (u8 i=0; i< 5;i++)
              {
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint1[i][0]);
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
@@ -384,6 +381,7 @@ uint8_t vGetNodeId( void )
  */
 void vIncrementSystemCounters()
 {
+
     if (++secondcounter >= 360 )
     {
         setReg32(HOUR_COUNTER_ADR,  getReg32(HOUR_COUNTER_ADR) + 1 );

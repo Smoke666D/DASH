@@ -16,13 +16,15 @@
 #include "task.h"
 #include "semphr.h"
 #include "event_groups.h"
-
+#include "hw_lib_adc.h"
 
 
 
 
 #define ADC1_DATA_READY 0x01
 
+
+#define DAC_NUMBER       0
 #define AIN_NUMBER       5
 #define ADC1_CHANNELS    5
 #define ADC2_CHANNELS    0
@@ -30,7 +32,7 @@
 #define ADC_CHANNEL      AIN_NUMBER
 
 
-#include "hw_lib_adc.h"
+
 
 #define RR  300.0
 
