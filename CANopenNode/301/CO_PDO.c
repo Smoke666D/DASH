@@ -1392,7 +1392,7 @@ void CO_TPDO_process(CO_TPDO_t *TPDO,
             /* send TPDO */
             if (TPDO->sendRequest && TPDO->inhibitTimer == 0) {
                 CO_TPDOsend(TPDO);
-                printf("send req\r\n");
+
             }
 
  #if (CO_CONFIG_PDO) & CO_CONFIG_FLAG_TIMERNEXT

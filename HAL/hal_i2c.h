@@ -20,23 +20,7 @@
 #endif
 
 
-typedef enum
-{
-  I2C_IDLE   		= 0,
-  I2C_MASTER_RECIVE_START  = 1,
-  I2C_MASTER_RECIVE_WRITE_ADDR =2,
-  I2C_MASTER_RECIVE_WRITE_ADDR2 = 11,
-  I2C_MASTER_RECIVE_DA_WRITE = 3,
-  I2C_MASTER_RECIVE_ADDR = 4,
-  I2C_MASTER_RECIVE_MODE = 5,
-  I2C_MASTER_RECIEVE 	 = 6,
-  I2C_MASTER_TRANSMIT_START  = 7,
-  I2C_MASTER_TRANSMIT_ADDR = 8,
-  I2C_MASTER_TRANSMIT_ADDR2 = 12,
-  I2C_MASTER_TRANSMIT_NEXT  = 9,
-  I2C_MASTER_TRANSMIT_LAST = 10,
 
-} I2C_STATE_t;
 
 #define MODE_DMA 1
 #define MODE_IT  2
@@ -50,9 +34,23 @@ typedef enum
 #define  I2C_NAME_t I2C_T*
 #endif
 #if MCU == CH32V2
-#define I2C_1  I2C1
+
+typedef enum
+      {
+    I2C_1  =0,
+    I2C_2  =1,
+      }
+ I2C_NAME_t;
+/*#define I2C_1  I2C1
 #define I2C_2  I2C2
 #define I2C_NAME_t I2C_TypeDef *
+*/
+
+ typedef struct
+ {
+   void (* datacallback) ( void );
+   void (* errorcallback)(void );
+ } HAL_I2C_t;
 
 #define STAR1_SB_FLAG     0x0001
 #define STAR1_ADDR_FLAG   0x0002
@@ -61,7 +59,58 @@ typedef enum
 #define STAR2_BUSY_FLAG   0x0002
 #endif
 
-void InitI2CDMA( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior);
+
+
+
+#include "main.h"
+
+
+#define EEPROM_ADRESS_TYPE uint16_t
+#define EEPROM_MAX_ADRRES 0x7FF
+
+#if  CORE == APM32
+#include "apm32f4xx_i2c.h"
+#define I2C_T I2C_T
+#define  DIR_TRANSMIT     I2C_DIRECTION_TX
+#define  DIR_RECIEVE      I2C_DIRECTION_RX
+
+#endif
+#if  CORE == WCH32V2
+
+#define  DIR_TRANSMIT I2C_Direction_Transmitter
+#define  DIR_RECIEVE  I2C_Direction_Receiver
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ void  HAL_I2C_SEND_ADDR_TRANS(I2C_NAME_t i2c,  u8 DATA) ;
+ void  HAL_I2C_SEND_ADDR_RECIEVE(I2C_NAME_t i2c,  u8 DATA);
+ void HAL_I2C_ClearFlag( I2C_NAME_t i2c , uint32_t flag);
+uint16_t HAL_I2C_GET_STAR2(I2C_NAME_t i2c );
+uint16_t HAL_I2C_GET_STAR1(I2C_NAME_t i2c );
+void HAL_I2C_ENABLE( I2C_NAME_t i2c ) ;
+void HAL_I2C_DISABLE( I2C_NAME_t i2c );
+void I2C_IT_ENABLE( I2C_NAME_t i2c , u16 DATA );
+void I2C_IT_DISABLE(I2C_NAME_t i2c , u16 DATA );
+void HAL_I2C_STOP(I2C_NAME_t i2c );
+void HAL_I2C_START(I2C_NAME_t i2c );
+void HAL_I2C_ACK_DISABLE(I2C_NAME_t i2c ) ;
+void HAL_I2C_SEND( I2C_NAME_t i2c, u8 DATA);
+void HAL_I2C_ACK_ENABLE(I2C_NAME_t i2c ) ;
+u16  HAL_I2C_READ_DATA();
+void InitI2CIT( I2C_NAME_t i2c, uint8_t prior, uint8_t subprior, void (* fdata) ( void ), void (* ferror) ( void ));
 void I2C1_EV_IRQHandler( void );
 void I2C1_ER_IRQHandler ( void );
 void I2C2_EV_IRQHandler( void );

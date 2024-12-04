@@ -35,6 +35,7 @@ int main(void)
     Delay_Init();
     vInit_DeviceConfig( );
     USART_Printf_Init(115200);
+
     vSYSqueueInit (  );
     vSYStaskInit ( );
     vTaskStartScheduler();

@@ -69,7 +69,7 @@ void vSystemStopProcess()
     vTaskSuspend( *xCanOpenProcessTaskHandle());
 }
 
-void vSYStaskInit ( void )
+INIT_FUNC_LOC  void vSYStaskInit ( void )
 {
    (* xProcessTaskHandle ())
              = xTaskCreateStatic( vRedrawTask, "ProcessTask", PROCESS_STK_SIZE , ( void * ) 1, PROCESS_TASK_PRIO  ,
@@ -117,7 +117,7 @@ void StartDefaultTask(void *argument)
               break;
           case STATE_WHAIT_TO_RAEDY:
               xTaskNotifyWait(0, 0, &ulNotifiedValue,portMAX_DELAY);
-              if ( ulNotifiedValue == 2)
+              if ( ulNotifiedValue == 1)
               {
                   ulTaskNotifyValueClearIndexed(0, 0, 0xFFFF);
                   vTaskResume( *xCanOpenProcessTaskHandle());
@@ -126,6 +126,7 @@ void StartDefaultTask(void *argument)
               }
               break;
           case STATE_RUN:
+              printf("def task\r\n");
               vTaskDelay(500);
               HAL_WDTReset();
               break;

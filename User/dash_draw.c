@@ -692,11 +692,46 @@ static void vInitKeys()
     Keys.key_counter       = 0;
     Keys.SystemDelayState  = SYSTEM_IDLE;
 }
+
+static u8 test_fasm = 0;
+
+void SetTest(LED_COLOR_t color, u8 number)
+{
+    for (u8 i = 0; i< 14;i++)
+    {
+          SetRGB( i, RED_COLOR,  (( i == number ) && (color ==RED_COLOR)) ? STATE_ON  : STATE_OFF );
+          SetRGB( i, GREEN_COLOR,(( i == number ) && (color = GREEN_COLOR)) ? STATE_ON  : STATE_OFF  );
+          SetRGB( i, BLUE_COLOR, (( i == number ) && (color ==BLUE_COLOR)) ? STATE_ON  : STATE_OFF );
+    }
+
+}
+INIT_FUNC_LOC  void TestProcedure()
+{
+    if (++test_fasm>=42 ) test_fasm = 0;
+    if (test_fasm < 14)
+             SetTest(RED_COLOR,test_fasm );
+    else
+    if (test_fasm < 28)
+             SetTest(GREEN_COLOR,test_fasm );
+    else
+    if (test_fasm < 42)
+           SetTest(BLUE_COLOR,test_fasm );
+    if (test_fasm < 16)
+        SetBarState( 0, test_fasm, 0, 0 );
+    else  if (test_fasm < 16)
+        SetBarState( 0, 0, 0, test_fasm%16 );
+    else
+        SetBarState( 0, 16, 0, 16);
+
+    vLedProcess( );
+
+}
 /*
  *
  */
 void vRedrawTask( void * argument )
 {
+
     uint32_t ulNotifiedValue;
     TaskFSM_t  state = STATE_IDLE;
     u8 draw_counter = 0;
@@ -710,11 +745,17 @@ void vRedrawTask( void * argument )
                 xTaskNotifyWait(0,0xFF ,&ulNotifiedValue,portMAX_DELAY);
                 if ((ulNotifiedValue & TASK_INIT_NOTIFY) !=0)
                 {
+
                     vDashDrawInit();
                     vInitKeys();
                     state = STATE_INIT;
+
                 }
                 break;
+            case STATE_TEST:
+                 vTaskDelay(100);
+                 TestProcedure();
+                 break;
             case STATE_INIT:
                 state = STATE_RUN;
                 xTaskNotifyGiveIndexed(pTaskToNotifykHandle,0);

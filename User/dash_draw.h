@@ -10,7 +10,6 @@
 
 
 #include "system_init.h"
-#include "filters.h"
 #include "types.h"
 
 #define KEY_ON_STATE       ( HAL_BIT_RESET  )
@@ -138,7 +137,7 @@ typedef enum
 
 
 
-
+void TestProcedure();
 TaskHandle_t * xProcessTaskHandle ();
 void RedrawNotifyTaskToInit();
 u8 GetCurMenuHome();

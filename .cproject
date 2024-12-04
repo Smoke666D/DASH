@@ -69,6 +69,7 @@
 							<tool id="ilg.gnumcueclipse.managedbuild.cross.riscv.tool.c.compiler.1731377187" name="GNU RISC-V Cross C Compiler" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.tool.c.compiler">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.compiler.include.paths.1567947810" name="Include paths (-I)" superClass="ilg.gnumcueclipse.managedbuild.cross.riscv.option.c.compiler.include.paths" useByScannerDiscovery="true" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Drivers}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;C:\Users\i.dymov\Documents\SYSTEM_LIB\HAL_LIB&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/HAL_DRIVER}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/HWLIB}&quot;"/>
@@ -230,8 +231,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="HAL_DRIVER/hal_i2c.h|HAL_DRIVER/hal_i2c_ch32.c|HAL/hal_spi.h|HAL/hal_spi_ch32.c|HAL/hal_rtc.h|HAL/hal_rtc_ch32.c|HAL/hal_can.h|HAL/hal_can_ch32.c|HAL/hal_irq.h|HAL/hal_irq.c|HAL/hal_wdt_ch32.c|HAL/hal_wdt.h|HAL/hal_gpio.h|HAL/hal_gpio_ch32.c|DRIVER|FreeRTOS/portable/Common/mpu_wrappers.c|SRC|Core|LiteOS/components/cppsupport|User/task_sample.c|LiteOS/kal|LiteOS/third_party/cmsis/CMSIS/Core|LiteOS/components/exchook|LiteOS/third_party/cmsis|Ld|User/task_sample.h|LiteOS/components/net|LiteOS/testsuits|Startup|LiteOS/components/fs" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="HAL_LIB|HWLIB/hw_lib_eeprom.h|HWLIB/hw_lib_eeprom.c|Drivers/drivers_config.h|Drivers/filters.h|Drivers/filters.c|HAL_DRIVER/hal_i2c.h|HAL_DRIVER/hal_i2c_ch32.c|HAL/hal_spi.h|HAL/hal_spi_ch32.c|HAL/hal_rtc.h|HAL/hal_rtc_ch32.c|HAL/hal_can.h|HAL/hal_can_ch32.c|HAL/hal_irq.h|HAL/hal_irq.c|HAL/hal_wdt_ch32.c|HAL/hal_wdt.h|HAL/hal_gpio.h|HAL/hal_gpio_ch32.c|DRIVER|FreeRTOS/portable/Common/mpu_wrappers.c|SRC|Core|LiteOS/components/cppsupport|User/task_sample.c|LiteOS/kal|LiteOS/third_party/cmsis/CMSIS/Core|LiteOS/components/exchook|LiteOS/third_party/cmsis|Ld|User/task_sample.h|LiteOS/components/net|LiteOS/testsuits|Startup|LiteOS/components/fs" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
+						<entry excluding="hw_lib_keyboard.h|hw_lib_keyboard.c|hw_lib_din.h|hw_lib_din.c|hw_lib_adc.h|hw_lib_adc.c|EEPROM_25C.h|EEPROM_25C.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="HAL_LIB"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Ld"/>
 						<entry excluding="startup_ch32v20x.S" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Startup"/>
 					</sourceEntries>

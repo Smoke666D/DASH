@@ -52,6 +52,7 @@ typedef enum
     STATE_RUN,
     STATE_WHAIT_TO_RAEDY,
     STATE_SAVE_DATA,
+    STATE_TEST,
 } TaskFSM_t;
 
 void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,

@@ -1,15 +1,17 @@
 #include "init.h"
+#include "hw_lib_eeprom_i2c.h"
 #include "main.h"
 #include "HW_API.h"
 #include "hal_gpio.h"
-#include "drivers_config.h"
+
 #include "hal_wdt.h"
 #include "hal_rtc.h"
 #include "hal_adc.h"
 #include "hw_lib_din.h"
 #include "hal_timers.h"
 #include "hal_spi.h"
-#include "hw_lib_eeprom.h"
+
+
 
 static void MX_GPIO_Init( void );
 
@@ -37,7 +39,7 @@ void vInit_DeviceConfig( void )
 	HAL_TIMER_InitIt( TIMER4, 1500000, 100, &vRGBProcess ,TIM4_PRIOR,TIM4_SUB_PRIOR);
 	HAL_TiemrEneblae( TIMER4);
 	HAL_WDT_Init1s();
-	InitI2CDMA(EEPROM_I2C, I2C1_PRIOR ,I2C1_SUB_PRIOR );
+	vInitEEPROM_I2C(I2C_1, I2C1_PRIOR ,I2C1_SUB_PRIOR );
 	HAL_SetBit(PowerOn_Port, PowerOn_Pin);
 	vCanOpenInit(CAN1);;
 	return;

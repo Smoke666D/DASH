@@ -11,7 +11,8 @@
 #include "CO_driver_target.h"
 #include "OD.h"
 #include "dash_draw.h"
-#include "hw_lib_eeprom.h"
+#include "hw_lib_eeprom_i2c.h"
+
 
 __attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
                                   {130,89},
@@ -75,6 +76,8 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
  void DataModel_Init()
 {
     memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
+
+
     if ( eEEPROMRd(0x00 ,DATA_MODEL_REGISTER , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
          if (DATA_MODEL_REGISTER[VALID_CODE_ADDRES]!=VALID_CODE )
@@ -258,6 +261,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
             }
          }
          odometr =  getReg32(ODOMETR_ADR);
+
     }
     secondcounter = 0;
 }

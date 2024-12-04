@@ -33,12 +33,12 @@ CANopenNode/extra \
 CANopenNode/keypad \
 Core \
 Debug \
-Drivers \
 FreeRTOS \
 FreeRTOS/portable/GCC/RISC-V \
 FreeRTOS/portable/MemMang \
 HAL \
 HAL_DRIVER \
+HAL_LIB \
 HWLIB \
 Peripheral/src \
 Startup \

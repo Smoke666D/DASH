@@ -236,6 +236,7 @@ void vInputsTask( void * argument )
   OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
   for(;;)
   {
+
     switch (state)
     {
         case  STATE_SAVE_DATA:
@@ -253,12 +254,14 @@ void vInputsTask( void * argument )
             break;
         case STATE_INIT:                                                                  //Отправляем вызывающей задаче уведомление что таск запущен
             state = STATE_RUN;
+            printf("input_procces\r\n");
             xTaskNotifyGiveIndexed(pTaskToNotifykHandle,0);
             break;
         case  STATE_RUN:
             HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
             vDataModelRegDelayWrite();
             vTaskDelay(1);
+
             if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) & ADC1_DATA_READY)
             {
                 ADC_FSM();

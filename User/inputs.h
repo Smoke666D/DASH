@@ -9,7 +9,6 @@
 #define INC_INPUTS_H_
 /*----------------------- Includes -------------------------------------*/
 #include "system_init.h"
-
 #include "main.h"
 #include "FreeRTOS.h"
 #include "queue.h"
@@ -17,7 +16,7 @@
 #include "task.h"
 #include "semphr.h"
 #include "event_groups.h"
-#include "filters.h"
+
 
 
 
