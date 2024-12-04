@@ -381,7 +381,6 @@ uint8_t vGetNodeId( void )
  */
 void vIncrementSystemCounters()
 {
-
     if (++secondcounter >= 360 )
     {
         setReg32(HOUR_COUNTER_ADR,  getReg32(HOUR_COUNTER_ADR) + 1 );

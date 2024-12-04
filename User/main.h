@@ -83,6 +83,7 @@
 /****************************RTC**************************/
 #define RTC_IRQ_ENABLE
 /************************I2C************************************/
+#define I2C1_ENABLE
 #define I2C1_IT_ENABLE
 //#define I2C2_IT_ENABLE
 

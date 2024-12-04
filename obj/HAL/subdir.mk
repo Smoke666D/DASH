@@ -7,19 +7,16 @@
 C_SRCS += \
 ../HAL/hal_adc_ch32.c \
 ../HAL/hal_dma_ch32.c \
-../HAL/hal_i2c_ch32.c \
 ../HAL/hal_timers_ch32.c 
 
 OBJS += \
 ./HAL/hal_adc_ch32.o \
 ./HAL/hal_dma_ch32.o \
-./HAL/hal_i2c_ch32.o \
 ./HAL/hal_timers_ch32.o 
 
 C_DEPS += \
 ./HAL/hal_adc_ch32.d \
 ./HAL/hal_dma_ch32.d \
-./HAL/hal_i2c_ch32.d \
 ./HAL/hal_timers_ch32.d 
 
 

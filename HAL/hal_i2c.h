@@ -65,8 +65,6 @@ typedef enum
 #include "main.h"
 
 
-#define EEPROM_ADRESS_TYPE uint16_t
-#define EEPROM_MAX_ADRRES 0x7FF
 
 #if  CORE == APM32
 #include "apm32f4xx_i2c.h"
