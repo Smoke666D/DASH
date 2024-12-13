@@ -252,7 +252,7 @@ const OD_extension_t  OD_KEY_extension = {
         .write = OD_writeKEY
     };
 
-void vProceesInit( void)
+INIT_FUNC_LOC void vProceesInit( void)
 {
     OD_extension_init(OD_ENTRY_H2001, &OD_VRegiters_extension);
     OD_extension_init(OD_ENTRY_H2004, &OD_DASH_PARAM_extension);

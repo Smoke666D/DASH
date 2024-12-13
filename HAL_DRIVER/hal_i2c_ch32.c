@@ -212,8 +212,6 @@ u16  HAL_I2C_READ_DATA(I2C_NAME_t i2c)                                   { retur
 
 
 
-
-
 #ifdef I2C1_IT_ENABLE
 void I2C1_EV_IRQHandler( void )
 {

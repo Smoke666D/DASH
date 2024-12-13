@@ -109,8 +109,7 @@ typedef enum
 #define DMA1_CH7_ENABLE 1
 
 
-#define I2C1_ENABLE  1
-#define I2C2_ENABLE  0
+
 
 #define TIM1_UP_ENABLE 0
 #define TIM2_UP_ENABLE 0

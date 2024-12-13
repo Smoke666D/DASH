@@ -89,25 +89,26 @@ void ADC_FSM()
           for (u8 k = 0;k < ADC_FRAME_SIZE;k++)
                   ADC_Buffer += pBuffer[k*ADC1_CHANNELS  + i];
           ADC_Buffer =( ADC_Buffer /ADC_FRAME_SIZE);
-          ADC_Buffer = vRCFilter(ADC_Buffer, &ADC_OLD_RAW[i]);
+          ADC_Buffer = vRCFilterConfig(ADC_Buffer, &ADC_OLD_RAW[i],230);
           switch ( i )
           {
               case AIN1:
               case AIN2:
-                  Vx = (float)ADC_Buffer*AIN_COOF*K;
+                  Vx = (float)((double)ADC_Buffer*AIN_COOF*K);
                   OurVData[i]= (Vx*Rpup)/(OurVData[AIN5]-Vx);
                   break;
               case AIN3:
-                  Vx = (float)ADC_Buffer*AIN_COOF*K;
-                  OurVData[i]= (Vx*RpupAIN3)/(OurVData[AIN5]-Vx);
-                  if ( OurVData[i] > 10000 ) OurVData[i]  = 0;
+                  Vx = (float)((double)ADC_Buffer*AIN_COOF*K);
+                 OurVData[i]= (Vx*RpupAIN3)/(OurVData[AIN5]-Vx);
+                  if ( (OurVData[AIN5]-Vx) < 0.2 )
+                      OurVData[i]  = 0;
                   break;
               case AIN5:
                   OurVData[i]= (float)ADC_Buffer*VADD_COOF*K;
 
                   break;
               case AIN4:
-                  OurVData[i]= (float) ADC_Buffer  * AINCOOF3  + INDIOD;
+                  OurVData[i]= (float)((double) ADC_Buffer  * AINCOOF3);
                   break;
               default:
                   break;
@@ -186,7 +187,7 @@ void  vSetDoutState( OUT_NAME_TYPE ucCh, u8 BitVal )
 /*
  *
  */
-static void vDINInit()
+ INIT_FUNC_LOC static void vDINInit()
 {
     DoutCinfig_t  DOUT_CONFIG;
     DinConfig_t DIN_CONFIG;

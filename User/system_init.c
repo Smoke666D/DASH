@@ -70,13 +70,10 @@ void vSystemStop()
    // vTaskSuspend(* getInputsTaskHandle());
 }
 
-void vSystemStopProcess()
-{
-    vTaskSuspend(* xProcessTaskHandle ());
-    vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
-    vTaskSuspend( *xCanOpenProcessTaskHandle());
-    vTaskSuspend(* getInputsTaskHandle());
-}
+
+
+
+
 
 INIT_FUNC_LOC  void vSYStaskInit ( void )
 {
@@ -91,11 +88,14 @@ INIT_FUNC_LOC  void vSYStaskInit ( void )
   (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );
  (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, INPUT_TASK_PRIO, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
   DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, DEFAULT_TASK_PRIOR, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
-  vSystemStopProcess();
+  vTaskSuspend(* xProcessTaskHandle ());
+  vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
+  vTaskSuspend( *xCanOpenProcessTaskHandle());
+  vTaskSuspend(* getInputsTaskHandle());
   return;
 }
 
-void vSYSqueueInit ( void )
+INIT_FUNC_LOC void vSYSqueueInit ( void )
 {
     *( xDataRegQueue()) = xQueueCreateStatic( 16U, sizeof( EEPROM_REG_Q_t ),ucQueueStorageArea, &xStaticQueue );;
 }
@@ -110,8 +110,7 @@ static  TaskFSM_t DeafaultTaskFSM = STATE_INIT;
 
 void StartDefaultTask(void *argument)
 {
-  uint32_t ulNotifiedValue;
- // printf("System Start%d\r\n",SystemCoreClock);
+
   for(;;)
   {
       switch( DeafaultTaskFSM)
@@ -128,20 +127,7 @@ void StartDefaultTask(void *argument)
               vTaskResume(* getInputsTaskHandle());
               printf("start\r\n");
               break;
-          case STATE_WHAIT_TO_RAEDY:
-              //xTaskNotifyWait(0, 0, &ulNotifiedValue,portMAX_DELAY);
-             // if ( ulNotifiedValue == 1)
-             // {
-                  ulTaskNotifyValueClearIndexed(0, 0, 0xFFFF);
-                 // vTaskResume( *xCanOpenProcessTaskHandle());
-                //  vTaskResume( *xCanOpenPeriodicTaskHandle ());
-                  DeafaultTaskFSM = STATE_RUN;
-                  vTaskDelay(100);
-
-             // }
-              break;
           case STATE_RUN:
-
               vTaskDelay(500);
               HAL_WDTReset();
               break;

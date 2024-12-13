@@ -18,7 +18,7 @@ static void MX_GPIO_Init( void );
 Функция инициализации перефирии устройства
 */
 
-void vInit_DeviceConfig( void )
+INIT_FUNC_LOC void vInit_DeviceConfig( void )
 {	
     //Настройка тактирования всех устрйоств
 
@@ -69,7 +69,7 @@ void SoftwareReset()
 /*
 Функция инициализации портов
 */
-static void MX_GPIO_Init(void)
+INIT_FUNC_LOC static void MX_GPIO_Init(void)
 {
   HAL_InitGPO();
   HAL_InitGpioIn(PORT_C,GPIO_13 );

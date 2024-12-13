@@ -11,7 +11,7 @@
 #include "system_init.h"
 
 
-#define VALID_CODE            0x55
+#define VALID_CODE            0x77
 #define VALID_CODE_ADDRES     0
 
 #define BITRATE_ADR            (VALID_CODE_ADDRES + 1)

@@ -37,7 +37,7 @@ __attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
 };
 
 
-__attribute__((section(".stext"))) static const uint16_t CalPoint1[4][2] = {
+__attribute__((section(".stext"))) static const uint16_t CalPoint1[5][2] = {
                                   {0,0},
                                   {36,18},
                                   {17,159},
@@ -69,7 +69,7 @@ void vDataModelRegDelayWrite()
 
 __attribute__((section(".stext"))) static const u8 default_data[]= { VALID_CODE, 3, 10, 10, 0x20 ,1};
 __attribute__((section(".stext"))) static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
-__attribute__((section(".stext"))) static const u16 cal_point_count_index[]={AIN1_CAL_POINT_COUNT,AIN2_CAL_POINT_COUNT,AIN3_CAL_POINT_COUNT};
+//__attribute__((section(".stext"))) static const u16 cal_point_count_index[]={AIN1_CAL_POINT_COUNT,AIN2_CAL_POINT_COUNT,AIN3_CAL_POINT_COUNT};
 __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
 
 
@@ -176,7 +176,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
            //  setReg16(RGB14_VALUE_RED_LOW   ,0);
            //  setReg16(RGB14_VALUE_BLUE_HIGH ,0);
           //  setReg16(RGB14_VALUE_BLUE_LOW  ,0);
-             DATA_MODEL_REGISTER[RGBMAP1]  =chDIN1;
+             DATA_MODEL_REGISTER[RGBMAP1]  =vCHANNEL6;
              DATA_MODEL_REGISTER[RGBMAP2]  =vCHANNEL2;
              DATA_MODEL_REGISTER[RGBMAP3]  =0;
              DATA_MODEL_REGISTER[RGBMAP4]  =0;
