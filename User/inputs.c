@@ -108,7 +108,7 @@ void ADC_FSM()
 
                   break;
               case AIN4:
-                  OurVData[i]= (float)((double) ADC_Buffer  * AINCOOF3);
+                  OurVData[i]= (float)((double) ADC_Buffer  * AINCOOF3)+DIOD;
                   break;
               default:
                   break;

@@ -37,12 +37,25 @@ __attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
 };
 
 
-__attribute__((section(".stext"))) static const uint16_t CalPoint1[5][2] = {
-                                  {0,0},
-                                  {36,18},
+/*__attribute__((section(".stext"))) static const uint16_t CalPoint1[8][2] = {
+                            //      {35,1},
+                                  {32,18},
+                                  {22,90},
                                   {17,159},
                                   {5,250},
                                   {1,380}};
+
+*/
+__attribute__((section(".stext"))) static const uint16_t CalPoint1[8][2] = {
+                            //      {35,1},
+                                  {32,163},
+                                  {30,134},
+                                  {25,96},
+                                  {20,79},
+                                  {15,62},
+                                  {10,51},
+                                  {5,35},
+                                  {0,32}};
 
 
 static u16 secondcounter;
@@ -86,11 +99,11 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
              memcpy(DATA_MODEL_REGISTER,default_data,6);
              DATA_MODEL_REGISTER[BITRATE_ADR ]                = 3;
-             setReg16(BAR_VALUE_HIGH        ,360);
+             setReg16(BAR_VALUE_HIGH        ,320);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,100);
              setReg16(BAR_VALUE_RED_LOW     ,0);
-             setReg16(BAR_VALUE_GREEN_HIGH  ,360);
+             setReg16(BAR_VALUE_GREEN_HIGH  ,320);
              setReg16(BAR_VALUE_GREEN_LOW   ,50);
              setReg16(RGB1_VALUE_GREEN_HIGH ,0);
              setReg16(RGB1_VALUE_GREEN_LOW  ,0);
@@ -128,11 +141,11 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg16(RGB6_VALUE_RED_LOW    ,1);
              setReg16(RGB6_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB6_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB7_VALUE_GREEN_HIGH ,1000+AIN_OFFSET );
-             setReg16(RGB7_VALUE_GREEN_LOW  ,950+AIN_OFFSET );
+             setReg16(RGB7_VALUE_GREEN_HIGH ,1000 );
+             setReg16(RGB7_VALUE_GREEN_LOW  ,950 );
              setReg16(RGB7_VALUE_RED_HIGH   ,1);
-             setReg16(RGB7_VALUE_RED_LOW    ,1000+AIN_OFFSET );
-             setReg16(RGB7_VALUE_BLUE_HIGH  ,0);
+             setReg16(RGB7_VALUE_RED_LOW    ,1000 );
+             setReg16(RGB7_VALUE_BLUE_HIGH  ,400);
              setReg16(RGB7_VALUE_BLUE_LOW   ,1);
              setReg16(RGB8_VALUE_GREEN_HIGH ,3);
              setReg16(RGB8_VALUE_GREEN_LOW  ,1);
@@ -183,7 +196,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              DATA_MODEL_REGISTER[RGBMAP5]  =chAKB;
              DATA_MODEL_REGISTER[RGBMAP6]  =vCHANNEL1 ;
              DATA_MODEL_REGISTER[RGBMAP8]  =0;
-             DATA_MODEL_REGISTER[RGBMAP7]  =vCHANNEL5;
+             DATA_MODEL_REGISTER[RGBMAP7]  =vCHANNEL16;
              DATA_MODEL_REGISTER[RGBMAP9]  =vCHANNEL3 ;
              DATA_MODEL_REGISTER[RGBMAP12] =chAIN3;
              DATA_MODEL_REGISTER[RGBMAP10] =0;
@@ -200,7 +213,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg16(AIN1_OFFSET,AIN_OFFSET );
              DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 18;
              setReg16(AIN2_OFFSET,AIN_OFFSET );
-             DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT] = 5;
+             DATA_MODEL_REGISTER[AIN3_CAL_POINT_COUNT] = 8;
              setReg16(AIN3_OFFSET,0 );
              for (u8 i=0; i< 18;i++)
              {
@@ -209,7 +222,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4 + 2, CalPoint[i][1]);
              }
-             for (u8 i=0; i< 5;i++)
+             for (u8 i=0; i<8;i++)
              {
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint1[i][0]);
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
@@ -220,7 +233,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg32( MENU3_MAP , 0x76000000 | chHOUR );
              //setReg32( MENU4_MAP , 0x783F0000 | chAIN2);
              setReg32( MENU4_MAP , 0x71000000 | chAIN3);
-             setReg32( MENU5_MAP , 0x78790000 | vCHANNEL5);
+             setReg32( MENU5_MAP , 0x78790000 | vCHANNEL16);
              setReg32( MENU1_MAP ,  0x50730000 | vCHANNEL15);
              setReg32( MENU6_MAP , 0x6D000000 | chRPM2);
              setReg32( MENU7_MAP , 0x3F000000 | chODOMETR);

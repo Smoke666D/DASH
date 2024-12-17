@@ -16,7 +16,7 @@
 #include "task.h"
 #include "semphr.h"
 #include "event_groups.h"
-#include "hw_lib_adc.h"
+//#include "hw_lib_adc.h"
 
 
 
@@ -54,6 +54,7 @@ typedef enum
 #define Rpup  3000.0
 #define RpupAIN3  1000.0
 #define AIN_COOF   ((Rup+Rgnd)/Rgnd)
+#define DIOD    0.2
 /*----------------------------- Functions ------------------------------------*/
 TaskHandle_t * getInputsTaskHandle();
 void vInputsTask( void * argument );
