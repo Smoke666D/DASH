@@ -100,6 +100,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              memcpy(DATA_MODEL_REGISTER,default_data,6);
              DATA_MODEL_REGISTER[BITRATE_ADR ]                = 3;
              setReg16(BAR_VALUE_HIGH        ,320);
+             setReg32(HOUR_COUNTER_ADR,10);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,100);
              setReg16(BAR_VALUE_RED_LOW     ,0);
@@ -394,7 +395,7 @@ uint8_t vGetNodeId( void )
  */
 void vIncrementSystemCounters()
 {
-    if (++secondcounter >= 360 )
+    if (++secondcounter >= 2)//360 )
     {
         setReg32(HOUR_COUNTER_ADR,  getReg32(HOUR_COUNTER_ADR) + 1 );
         secondcounter = 0;
@@ -407,6 +408,7 @@ void vSaveData()
 {
   //  setReg32(ODOMETR_ADR, odometr/100);
     eEEPROMWrFast(HOUR_COUNTER_ADR,&DATA_MODEL_REGISTER[HOUR_COUNTER_ADR],8);
+
 }
 
 u32 getOdometr()

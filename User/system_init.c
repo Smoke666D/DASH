@@ -119,13 +119,13 @@ void StartDefaultTask(void *argument)
               DataModel_Init();
            //   InputsNotifyTaskToInit();
               vProceesInit();
-              vTaskResume( *xCanOpenProcessTaskHandle());
-              vTaskResume( *xCanOpenPeriodicTaskHandle ());
+            //  vTaskResume( *xCanOpenProcessTaskHandle());
+            //  vTaskResume( *xCanOpenPeriodicTaskHandle ());
               vTaskResume(* xProcessTaskHandle ());
               DeafaultTaskFSM = STATE_RUN;
               vTaskDelay(100);
               vTaskResume(* getInputsTaskHandle());
-              printf("start\r\n");
+              printf("start h = %d\r\n",getReg32(HOUR_COUNTER_ADR));
               break;
           case STATE_RUN:
               vTaskDelay(500);

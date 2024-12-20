@@ -23,9 +23,7 @@ INIT_FUNC_LOC void vInit_DeviceConfig( void )
     //Настройка тактирования всех устрйоств
 
     HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR);
-
 	MX_GPIO_Init( );
-
 	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
     HAL_TiemrEneblae( TIMER3);
     vSetBrigth(RGB_CHANNEL,0);
@@ -36,12 +34,10 @@ INIT_FUNC_LOC void vInit_DeviceConfig( void )
 	HAL_SPI_InitDMA(HAL_SPI2, SPI_16bit );
 	HAL_TIMER_InitIt( TIMER4, 1500000, 100, &vRGBProcess ,TIM4_PRIOR,TIM4_SUB_PRIOR);
 	HAL_TiemrEneblae( TIMER4);
-	HAL_WDT_Init1s();
-
-
 	vInitEEPROM_I2C(I2C_1, I2C1_PRIOR ,I2C1_SUB_PRIOR );
 	HAL_SetBit(PowerOn_Port, PowerOn_Pin);
 	vCanOpenInit(CAN1);;
+	HAL_WDT_Init1s();
 	return;
 }
 

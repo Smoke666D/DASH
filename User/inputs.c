@@ -245,12 +245,10 @@ void vInputsTask( void * argument )
         case  STATE_SAVE_DATA:
             printf("save_data\r\n");
             SaveData();
-
             state = STATE_IDLE;
             InitState = START_UP_STATE;
             break;
         case  STATE_IDLE:
-
                 ADC1_Init();
                 vDINInit();
                 HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
@@ -274,6 +272,7 @@ void vInputsTask( void * argument )
                             InitState = RUN_STATE_INIT;
                         break;
                     case RUN_STATE_INIT:
+
                         vSetBrigth( RGB_CHANNEL,    getReg8(RGB_BRIGTH_ADR) );
                         vSetBrigth( WHITE_CHANNEL,  getReg8(WHITE_BRIGTH_ADR));
                         HAL_SetBit(PowerON_Port,PowerON_Pin);
@@ -281,6 +280,7 @@ void vInputsTask( void * argument )
                         InitState = RUN_STATE;
                         break;
                     case RUN_STATE:
+                        //printf("run\r\n");
                         for (u8 i=0; i<4;i++)
                         {
                             data = getODValue( chAIN1 + i,1);
@@ -291,12 +291,13 @@ void vInputsTask( void * argument )
                                 OD_Ain_flag = SET;
                             }
                         }
-                        if (GetAIN(3) > 7.0 )
+                        if (GetAIN(3) > 9.0 )
                         {
+
                             if ( uGetDIN(INPUT_4)== RESET)
                             {
                                 state = STATE_SAVE_DATA;
-                                printf("fff\r\n");
+
                                 break;
                             }
                             for (u8 i =0;i<2;i++)
@@ -316,8 +317,10 @@ void vInputsTask( void * argument )
                         }
                         else
                         {
-
-                            state = STATE_SAVE_DATA;
+                            printf("save_data\r\n");
+                                       SaveData();
+                                       state = STATE_IDLE;
+                                       InitState = START_UP_STATE;
                         }
                         break;
 
@@ -332,8 +335,9 @@ void vInputsTask( void * argument )
 
 static void SaveData()
 {
-    HardwareDeinit();
+
     vSystemStop();
+    HardwareDeinit();
     vSaveData();
     vTaskDelay(10);
     HAL_ResetBit(PowerON_Port,PowerON_Pin);
