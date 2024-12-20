@@ -48,7 +48,7 @@ static const  uint8_t ADC_chennel_ref[]={  ADC_Channel_0,  ADC_Channel_1,  ADC_C
 /* RSQR1 register Mask */
 #define RSQR1_CLEAR_Mask                 ((uint32_t)0xFF0FFFFF)
 #define CFGR0_ADCPRE_Reset_Mask     ((uint32_t)0xFFFF3FFF)
-#if ADC_1_2_ENABLE == 1
+#ifdef ADC_1_2_ENABLE
 void ADC1_2_IRQHandler(void) __attribute__((interrupt()));
 #endif
 u16 Get_ConversionVal(s16 val)
@@ -68,6 +68,8 @@ static inline void ADC_DMA_DISABLE ( ADC_NUMBER_t adc ) {  ADCS[adc]->CTLR2  &= 
 static inline void ADC_RESET_CAL( ADC_NUMBER_t adc  )  { ADCS[adc]->CTLR2 |= CTLR2_RSTCAL_Set; }
 static inline void ADC_START_CAL ( ADC_NUMBER_t adc  )     {ADCS[adc]->CTLR2 |= CTLR2_CAL_Set; }
 static inline void ADC_EXT_TRIG_ENABLE ( ADC_NUMBER_t adc )  {ADCS[adc]->CTLR2 |= CTLR2_EXTTRIG_Set;}
+
+
 
 
 void HAL_ADC_RegularChannelConfig(ADC_TypeDef *ADCx, uint8_t ADC_Channel, uint8_t Rank, uint8_t ADC_SampleTime)
@@ -169,6 +171,18 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
  }
 
 
+void HAL_ADC_AWDT_InitIT(ADC_NUMBER_t adc,uint16_t low_value,uint16_t high_value,  uint8_t prior, uint8_t subprior,void (* f) ( void ))
+{
+    adcs.awdt_callback = f;
+    ADCS[adc]->WDHTR =  high_value;
+    ADCS[adc]->WDLTR =  low_value;
+    ADC_AnalogWatchdogSingleChannelConfig(ADC1, ADC_Channel_6);
+    ADC_AnalogWatchdogCmd(ADC1, ADC_AnalogWatchdog_SingleRegEnable);
+    PFIC_IRQ_ENABLE_PG1(ADC1_2_IRQn,prior,subprior);
+    ADC_ITConfig(ADC1, ADC_IT_AWD, ENABLE);
+    ADC_ENABLE(adc);
+}
+
  void HAL_ADC_StartDMA( DMA_Stram_t chanel, uint16_t size)
  {
     HAL_DMA_SetCounter(chanel, size);
@@ -181,7 +195,7 @@ void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count
 }
 
 
-#if ADC_1_2_ENABLE == 1
+#ifdef ADC_1_2_ENABLE
 
 void ADC1_2_IRQHandler(void)
 {

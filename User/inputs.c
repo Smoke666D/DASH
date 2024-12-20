@@ -30,7 +30,22 @@ static float    OurVData[ ADC1_CHANNELS ];
 static median_filter_data_t      RPM_MIDIAN_FILTER_STRUC[2] __SECTION(RAM_SECTION_CCMRAM);
 static ab_filter_data_t          RPM_AB_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
 static aver_filter_data_t        RPM_AVER_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
+static void SaveFromISR();
 
+uint16_t vSetVBATLow( float vref)
+{
+    uint16_t data;
+    data = (uint16_t)((vref -DIOD)/AINCOOF3);
+    return (data);
+
+}
+
+void fcal()
+{
+    printf("low %i\r\n",(uint16_t)(GetAIN(AIN5)*10));
+   // SaveFromISR();
+
+}
 /*
  *
  */
@@ -73,6 +88,7 @@ void ADC1_Init()
     uint8_t ADC1_CHANNEL[5] = { ADC_CH_0,  ADC_CH_1, ADC_CH_2, ADC_CH_6,  ADC_CH_3};
     HAL_ADC_ContiniusScanCinvertionDMA( ADC_1 ,  5 ,  ADC1_CHANNEL);
     HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(),  ADC_PRIOR , ADC_SUB_PRIOR, &ADC1_Event  );
+
 }
 /*
  *
@@ -115,6 +131,8 @@ void ADC_FSM()
           }
       }
 }
+
+
 
 /*
  *
@@ -184,6 +202,8 @@ void  vSetDoutState( OUT_NAME_TYPE ucCh, u8 BitVal )
    HAL_DMA_Enable(DMA1_CH7);
 }
 
+
+
 /*
  *
  */
@@ -214,6 +234,7 @@ void  vSetDoutState( OUT_NAME_TYPE ucCh, u8 BitVal )
     HAL_TimeInitCaptureDMA( TIMER2 , 20000, 60000, TIM_CHANNEL_2);
     HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack );
     HAL_DMAInitIT( DMA1_CH7,PTOM, DMA_HWORD , (u32)&TIM2->CH2CVR, (u32) getCaputreBuffer(INPUT_2),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack_1 );
+
     HAL_DMA_SetCouterAndEnable(DMA1_CH7,  CC_BUFFER_SIZE);
     HAL_DMA_SetCouterAndEnable(DMA1_CH4,  CC_BUFFER_SIZE);
 
@@ -267,7 +288,7 @@ void vInputsTask( void * argument )
                 {
                     case START_UP_STATE:
 
-                        if  (uGetDIN(INPUT_4) && (GetAIN(3)>= 7.0 ))
+                        if  (uGetDIN(INPUT_4) && (GetAIN(3)>= 9.0 ))
 
                             InitState = RUN_STATE_INIT;
                         break;
@@ -291,7 +312,7 @@ void vInputsTask( void * argument )
                                 OD_Ain_flag = SET;
                             }
                         }
-                        if (GetAIN(3) > 9.0 )
+                        if (GetAIN(AIN4) > 8.5)
                         {
 
                             if ( uGetDIN(INPUT_4)== RESET)
@@ -317,10 +338,10 @@ void vInputsTask( void * argument )
                         }
                         else
                         {
-                            printf("save_data\r\n");
-                                       SaveData();
-                                       state = STATE_IDLE;
-                                       InitState = START_UP_STATE;
+
+                            SaveData();
+                            state = STATE_IDLE;
+                            InitState = START_UP_STATE;
                         }
                         break;
 
@@ -345,4 +366,13 @@ static void SaveData()
     SoftwareReset();
 }
 
+
+static void SaveFromISR()
+{
+    HardwareDeinit();
+    vSaveData();
+    HAL_ResetBit(PowerON_Port,PowerON_Pin);
+    SoftwareReset();
+
+}
 

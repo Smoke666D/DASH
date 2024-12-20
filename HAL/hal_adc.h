@@ -54,6 +54,7 @@ typedef enum
 u16 Get_ConversionVal(s16 val);
 void HAL_ADC_ContiniusScanCinvertionDMA( ADC_NUMBER_t adc, uint8_t channel_count, uint8_t * channel_nmber);
 void HAL_ADC_StartDMA( DMA_Stram_t chanel,  uint16_t size);
+void HAL_ADC_AWDT_InitIT(ADC_NUMBER_t adc,uint16_t low_value,uint16_t high_value,  uint8_t prior, uint8_t subprior,void (* f) ( void ));
 #endif
 
 #if MCU == APM32

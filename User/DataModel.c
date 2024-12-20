@@ -395,9 +395,9 @@ uint8_t vGetNodeId( void )
  */
 void vIncrementSystemCounters()
 {
-    if (++secondcounter >= 2)//360 )
+    if (++secondcounter >= 360 )
     {
-        setReg32(HOUR_COUNTER_ADR,  getReg32(HOUR_COUNTER_ADR) + 1 );
+        setReg32(HOUR_COUNTER_ADR,  (uint32_t)(getReg32(HOUR_COUNTER_ADR) + 1) );
         secondcounter = 0;
     }
     setReg32(ODOMETR_ADR, getReg32(ODOMETR_ADR) + ((float)getODValue( DATA_MODEL_REGISTER[ODOMETR_MAP],0))/10.0/3.6);
