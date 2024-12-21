@@ -90,6 +90,9 @@ void ADC1_Init()
     HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(),  ADC_PRIOR , ADC_SUB_PRIOR, &ADC1_Event  );
 
 }
+
+
+
 /*
  *
  */
@@ -105,7 +108,7 @@ void ADC_FSM()
           for (u8 k = 0;k < ADC_FRAME_SIZE;k++)
                   ADC_Buffer += pBuffer[k*ADC1_CHANNELS  + i];
           ADC_Buffer =( ADC_Buffer /ADC_FRAME_SIZE);
-          ADC_Buffer = vRCFilterConfig(ADC_Buffer, &ADC_OLD_RAW[i],230);
+          ADC_Buffer = vRCFilterConfig(ADC_Buffer, &ADC_OLD_RAW[i],(i<AIN4)? 230: 100 );
           switch ( i )
           {
               case AIN1:
@@ -234,13 +237,10 @@ void  vSetDoutState( OUT_NAME_TYPE ucCh, u8 BitVal )
     HAL_TimeInitCaptureDMA( TIMER2 , 20000, 60000, TIM_CHANNEL_2);
     HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack );
     HAL_DMAInitIT( DMA1_CH7,PTOM, DMA_HWORD , (u32)&TIM2->CH2CVR, (u32) getCaputreBuffer(INPUT_2),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack_1 );
-
     HAL_DMA_SetCouterAndEnable(DMA1_CH7,  CC_BUFFER_SIZE);
     HAL_DMA_SetCouterAndEnable(DMA1_CH4,  CC_BUFFER_SIZE);
-
     HAL_TiemrEneblae(TIMER1);
     HAL_TiemrEneblae(TIMER2);
-
 }
 
 u16 BufAIN[4]={0};
@@ -260,7 +260,6 @@ void vInputsTask( void * argument )
   OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
   for(;;)
   {
-
     switch (state)
     {
         case  STATE_SAVE_DATA:
@@ -275,7 +274,6 @@ void vInputsTask( void * argument )
                 HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
                 state = STATE_RUN;
             break;
-
         case  STATE_RUN:
             vDataModelRegDelayWrite();
             vTaskDelay(1);
@@ -288,12 +286,11 @@ void vInputsTask( void * argument )
                 {
                     case START_UP_STATE:
 
-                        if  (uGetDIN(INPUT_4) && (GetAIN(3)>= 9.0 ))
+                        if  (uGetDIN(INPUT_4) && (GetAIN(AIN4)>= 9.0 ))
 
                             InitState = RUN_STATE_INIT;
                         break;
                     case RUN_STATE_INIT:
-
                         vSetBrigth( RGB_CHANNEL,    getReg8(RGB_BRIGTH_ADR) );
                         vSetBrigth( WHITE_CHANNEL,  getReg8(WHITE_BRIGTH_ADR));
                         HAL_SetBit(PowerON_Port,PowerON_Pin);
@@ -301,7 +298,6 @@ void vInputsTask( void * argument )
                         InitState = RUN_STATE;
                         break;
                     case RUN_STATE:
-                        //printf("run\r\n");
                         for (u8 i=0; i<4;i++)
                         {
                             data = getODValue( chAIN1 + i,1);
@@ -312,13 +308,11 @@ void vInputsTask( void * argument )
                                 OD_Ain_flag = SET;
                             }
                         }
-                        if (GetAIN(AIN4) > 8.5)
+                        if (GetAIN(AIN5) > 4.9)
                         {
-
                             if ( uGetDIN(INPUT_4)== RESET)
                             {
                                 state = STATE_SAVE_DATA;
-
                                 break;
                             }
                             for (u8 i =0;i<2;i++)
@@ -329,24 +323,20 @@ void vInputsTask( void * argument )
                                   OD_Ain_flag = SET;
                                 }
                             }
-
-                             if ((OD_Ain_flag))// || (data_send_dealy==0))
-                             {
+                            if ((OD_Ain_flag))// || (data_send_dealy==0))
+                            {
                                   OD_Ain_flag = RESET;
                                  // OD_requestTPDO(OD_AIN_flagsPDO,1);
-                             }
+                            }
                         }
                         else
                         {
-
                             SaveData();
                             state = STATE_IDLE;
                             InitState = START_UP_STATE;
                         }
                         break;
-
                 }
-
             }
             break;
     }
@@ -367,12 +357,5 @@ static void SaveData()
 }
 
 
-static void SaveFromISR()
-{
-    HardwareDeinit();
-    vSaveData();
-    HAL_ResetBit(PowerON_Port,PowerON_Pin);
-    SoftwareReset();
 
-}
 

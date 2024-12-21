@@ -47,15 +47,15 @@ __attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
 
 */
 __attribute__((section(".stext"))) static const uint16_t CalPoint1[8][2] = {
-                            //      {35,1},
-                                  {32,163},
-                                  {30,134},
-                                  {25,96},
-                                  {20,79},
-                                  {15,62},
-                                  {10,51},
-                                  {5,35},
-                                  {0,32}};
+        {0,1},
+        {5,35},
+        {10,51},
+        {15,62},
+        {20,79},
+        {25,96},
+        {30,134},
+        {32,163}};
+
 
 
 static u16 secondcounter;
@@ -99,13 +99,14 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
              memcpy(DATA_MODEL_REGISTER,default_data,6);
              DATA_MODEL_REGISTER[BITRATE_ADR ]                = 3;
-             setReg16(BAR_VALUE_HIGH        ,320);
              setReg32(HOUR_COUNTER_ADR,10);
+             setReg16(BAR_VALUE_HIGH        ,39000);
              setReg16(BAR_VALUE_LOW         ,0);
-             setReg16(BAR_VALUE_RED_HIGH    ,100);
-             setReg16(BAR_VALUE_RED_LOW     ,0);
-             setReg16(BAR_VALUE_GREEN_HIGH  ,320);
-             setReg16(BAR_VALUE_GREEN_LOW   ,50);
+             setReg16(BAR_VALUE_RED_HIGH    ,39000);
+             setReg16(BAR_VALUE_RED_LOW     ,30000);
+             setReg16(BAR_VALUE_GREEN_HIGH  ,36000);
+             setReg16(BAR_VALUE_GREEN_LOW   ,0);
+
              setReg16(RGB1_VALUE_GREEN_HIGH ,0);
              setReg16(RGB1_VALUE_GREEN_LOW  ,0);
              setReg16(RGB1_VALUE_RED_HIGH   ,1);
@@ -142,10 +143,10 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg16(RGB6_VALUE_RED_LOW    ,1);
              setReg16(RGB6_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB6_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB7_VALUE_GREEN_HIGH ,1000 );
-             setReg16(RGB7_VALUE_GREEN_LOW  ,950 );
-             setReg16(RGB7_VALUE_RED_HIGH   ,1);
-             setReg16(RGB7_VALUE_RED_LOW    ,1000 );
+             setReg16(RGB7_VALUE_GREEN_HIGH ,0 );
+             setReg16(RGB7_VALUE_GREEN_LOW  ,0 );
+             setReg16(RGB7_VALUE_RED_HIGH   ,1000);
+             setReg16(RGB7_VALUE_RED_LOW    ,950 );
              setReg16(RGB7_VALUE_BLUE_HIGH  ,400);
              setReg16(RGB7_VALUE_BLUE_LOW   ,1);
              setReg16(RGB8_VALUE_GREEN_HIGH ,3);
@@ -160,12 +161,12 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg16(RGB9_VALUE_RED_LOW    ,2);
              setReg16(RGB9_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB9_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB12_VALUE_GREEN_HIGH,380);
-             setReg16(RGB12_VALUE_GREEN_LOW ,50);
-             setReg16(RGB12_VALUE_RED_HIGH  ,380);
-             setReg16(RGB12_VALUE_RED_LOW   ,1);
-             setReg16(RGB12_VALUE_BLUE_HIGH ,380);
-             setReg16(RGB12_VALUE_BLUE_LOW  ,100);
+             setReg16(RGB12_VALUE_GREEN_HIGH,100);
+             setReg16(RGB12_VALUE_GREEN_LOW ,00);
+             setReg16(RGB12_VALUE_RED_HIGH  ,50);
+             setReg16(RGB12_VALUE_RED_LOW   ,0);
+             setReg16(RGB12_VALUE_BLUE_HIGH ,0);
+             setReg16(RGB12_VALUE_BLUE_LOW  ,0);
              setReg16(RGB10_VALUE_GREEN_HIGH,0);
              setReg16(RGB10_VALUE_GREEN_LOW ,0);
              setReg16(RGB10_VALUE_RED_HIGH  ,0);
@@ -202,9 +203,9 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              DATA_MODEL_REGISTER[RGBMAP12] =chAIN3;
              DATA_MODEL_REGISTER[RGBMAP10] =0;
              DATA_MODEL_REGISTER[RGBMAP11] =0;
-             DATA_MODEL_REGISTER[RGBMAP13] =vCHANNEL4;
-             DATA_MODEL_REGISTER[RGBMAP14] =vCHANNEL3 ;
-             DATA_MODEL_REGISTER[BARMAP]   =chAIN3;
+             DATA_MODEL_REGISTER[RGBMAP13] = vCHANNEL4;
+             DATA_MODEL_REGISTER[RGBMAP14] = vCHANNEL3 ;
+             DATA_MODEL_REGISTER[BARMAP]   = vCHANNEL15;
              for (u8 i=0; i<9;i++)
                  setReg16(BIG_SEGVAL1 + i*sizeof (u16), seg_const[i]);
 
@@ -230,16 +231,16 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              }
              setReg16(RPM1_COOF,1);
              setReg16(RPM2_COOF,10);
-             setReg32( MENU2_MAP , 0x3E000000 | chAKB );
-             setReg32( MENU3_MAP , 0x76000000 | chHOUR );
+             setReg32( MENU2_MAP , 0x3E000000  | chAKB );
+             setReg32( MENU3_MAP , 0x76000000  | chHOUR );
              //setReg32( MENU4_MAP , 0x783F0000 | chAIN2);
-             setReg32( MENU4_MAP , 0x71000000 | chAIN3);
-             setReg32( MENU5_MAP , 0x78790000 | vCHANNEL16);
+             setReg32( MENU4_MAP , 0x71000000  | chAIN3);
+             setReg32( MENU5_MAP , 0x78790000  | vCHANNEL16);
              setReg32( MENU1_MAP ,  0x50730000 | vCHANNEL15);
-             setReg32( MENU6_MAP , 0x6D000000 | chRPM2);
-             setReg32( MENU7_MAP , 0x3F000000 | chODOMETR);
+             setReg32( MENU6_MAP , 0x6D000000  | chRPM2);
+             setReg32( MENU7_MAP , 0x3F000000  | chODOMETR);
              setReg32( MENU8_MAP , chErrorRegister);
-              setReg32( MENU9_MAP , 0);
+             setReg32( MENU9_MAP , 0);
              setReg32( MENU10_MAP , 0);
              DATA_MODEL_REGISTER[MENU_DEF_POS]             = 0;
              DATA_MODEL_REGISTER[MENU_HOME_BACK_TIME]      = 10;
