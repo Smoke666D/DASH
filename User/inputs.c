@@ -21,6 +21,8 @@
 /*
  * Внутрение переменные модуля
  */
+
+#define AIN_MAX_BUFFER_SIZE 100
 static TaskHandle_t pInputsTaskHandle;
 static TaskHandle_t  pTaskToNotifykHandle;
 static uint8_t *OD_DIN_flagsPDO = NULL;
@@ -30,22 +32,13 @@ static float    OurVData[ ADC1_CHANNELS ];
 static median_filter_data_t      RPM_MIDIAN_FILTER_STRUC[2] __SECTION(RAM_SECTION_CCMRAM);
 static ab_filter_data_t          RPM_AB_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
 static aver_filter_data_t        RPM_AVER_FILTER_STRUC  [2] __SECTION(RAM_SECTION_CCMRAM);
-static void SaveFromISR();
+static ADC_Conversionl_Buf_t DataBuffer[ 3 ];
+static int16_t AIN1Buffer[ AIN_MAX_BUFFER_SIZE ];
+static int16_t AIN2Buffer[ AIN_MAX_BUFFER_SIZE ];
+static int16_t AIN3Buffer[ AIN_MAX_BUFFER_SIZE ];
 
-uint16_t vSetVBATLow( float vref)
-{
-    uint16_t data;
-    data = (uint16_t)((vref -DIOD)/AINCOOF3);
-    return (data);
 
-}
 
-void fcal()
-{
-    printf("low %i\r\n",(uint16_t)(GetAIN(AIN5)*10));
-   // SaveFromISR();
-
-}
 /*
  *
  */
@@ -83,56 +76,78 @@ void ADC1_Event( void )
 /*
  *
  */
-void ADC1_Init()
+INIT_FUNC_LOC void ADC1_Init()
 {
     uint8_t ADC1_CHANNEL[5] = { ADC_CH_0,  ADC_CH_1, ADC_CH_2, ADC_CH_6,  ADC_CH_3};
     HAL_ADC_ContiniusScanCinvertionDMA( ADC_1 ,  5 ,  ADC1_CHANNEL);
-    HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(),  ADC_PRIOR , ADC_SUB_PRIOR, &ADC1_Event  );
-
+    HAL_DMAInitIT( DMA1_CH1,PTOM, DMA_HWORD , (u32)&ADC1->RDATAR, (u32)getADC1Buffer(),  ADC_PRIOR , ADC_SUB_PRIOR, &ADC1_Event  );\
+    //Инициализация буффера зажержки
+    DataBuffer[0].ConversionalSize = 10;
+    DataBuffer[0].pIndex = 0;
+    DataBuffer[0].pBuff = AIN1Buffer;
+    DataBuffer[0].offset =0;
+    DataBuffer[1].ConversionalSize = 10;
+    DataBuffer[1].pIndex = 0;
+    DataBuffer[1].pBuff = AIN2Buffer;
+    DataBuffer[1].offset =0;
+    DataBuffer[2].ConversionalSize = 100;
+    DataBuffer[2].pIndex = 0;
+    DataBuffer[2].pBuff = AIN3Buffer;
+    DataBuffer[2].offset =0;
 }
 
 
-
+static u32 AIN_CONVERT_DELAY = 0;
 /*
  *
  */
-void ADC_FSM()
+void ADC_FSM( BaseType_t time )
 {
+   u32 ADC_Buffer[ADC1_CHANNELS ];
    uint16_t * pBuffer = getADC1Buffer();
-   float Vx =0;
-      for (u16 i = 0; i<ADC1_CHANNELS  * ADC_FRAME_SIZE ;i++)
-          pBuffer[i]= Get_ConversionVal(pBuffer[i]);
-      for (u8 i = 0; i< ADC1_CHANNELS ;i++)
-      {
-          u32 ADC_Buffer = 0;
-          for (u8 k = 0;k < ADC_FRAME_SIZE;k++)
-                  ADC_Buffer += pBuffer[k*ADC1_CHANNELS  + i];
-          ADC_Buffer =( ADC_Buffer /ADC_FRAME_SIZE);
-          ADC_Buffer = vRCFilterConfig(ADC_Buffer, &ADC_OLD_RAW[i],(i<AIN4)? 230: 100 );
+   //Получаем данные из буфеера DMA и вносим коректировочную поправку
+   for (u16 i = 0; i<ADC1_CHANNELS  * ADC_FRAME_SIZE ;i++)
+             pBuffer[i]= Get_ConversionVal(pBuffer[i]);
+   //Берем среднее значение по 3-м замерам для всех каналов.
+   for (u8 i = 0; i < ADC1_CHANNELS; i++ )
+   {
+       u32 ADCB = 0;
+       for (u8 k = 0;k < ADC_FRAME_SIZE;k++)
+                          ADCB = ADCB + pBuffer[k*ADC1_CHANNELS  + i ];
+       ADC_Buffer[i] =( ADCB /ADC_FRAME_SIZE);
+       ADC_Buffer[i] = vRCFilterConfig(ADC_Buffer[i], &ADC_OLD_RAW[i],(i < AIN4)? 230: 100 );
+   }
+   //Расчет выходных значений для напряжений
+   OurVData[AIN4] = (float)((double) ADC_Buffer[AIN4]  * AINCOOF3)+DIOD;
+   OurVData[AIN5]= (float)ADC_Buffer[AIN5]*VADD_COOF*K;
+
+
+   AIN_CONVERT_DELAY = AIN_CONVERT_DELAY + time;
+   if (AIN_CONVERT_DELAY > 100 )
+   {
+       AIN_CONVERT_DELAY = 0;
+       for (u8 i = 0; i< AIN4 ;i++)
+       {
+          float Vx =0;
+          AddBufferData(&DataBuffer[i],ADC_Buffer[i]);
+          ADC_Buffer[i] = GetConversional(&DataBuffer[i]);
+          Vx = (float)((double)ADC_Buffer[i]*AIN_COOF*K);
           switch ( i )
           {
-              case AIN1:
-              case AIN2:
-                  Vx = (float)((double)ADC_Buffer*AIN_COOF*K);
-                  OurVData[i]= (Vx*Rpup)/(OurVData[AIN5]-Vx);
-                  break;
-              case AIN3:
-                  Vx = (float)((double)ADC_Buffer*AIN_COOF*K);
-                 OurVData[i]= (Vx*RpupAIN3)/(OurVData[AIN5]-Vx);
-                  if ( (OurVData[AIN5]-Vx) < 0.2 )
-                      OurVData[i]  = 0;
-                  break;
-              case AIN5:
-                  OurVData[i]= (float)ADC_Buffer*VADD_COOF*K;
-
-                  break;
-              case AIN4:
-                  OurVData[i]= (float)((double) ADC_Buffer  * AINCOOF3)+DIOD;
-                  break;
-              default:
-                  break;
-          }
-      }
+                  case AIN1:
+                  case AIN2:
+                      OurVData[i]= (Vx*Rpup)/(OurVData[AIN5]-Vx);
+                      break;
+                  case AIN3:
+                     OurVData[i]= (Vx*RpupAIN3)/(OurVData[AIN5]-Vx);
+                      if ( (OurVData[AIN5]-Vx) < 0.2 )
+                          OurVData[i]  = 0;
+                      break;
+                  default:
+                      break;
+           }
+       }
+   }
 }
 
 
@@ -251,6 +266,7 @@ static void SaveData();
  * */
 void vInputsTask( void * argument )
 {
+  uint32_t last_tick;
   TaskFSM_t  state = STATE_IDLE;
   INPUTS_FSM_t InitState = START_UP_STATE;
   uint32_t ulNotifiedValue;
@@ -258,36 +274,35 @@ void vInputsTask( void * argument )
   uint8_t OD_Ain_flag;
  //OD_DIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2006);
   OD_AIN_flagsPDO = OD_getFlagsPDO(OD_ENTRY_H2005);
+  last_tick =  xTaskGetTickCount();
   for(;;)
   {
     switch (state)
     {
         case  STATE_SAVE_DATA:
-            printf("save_data\r\n");
             SaveData();
             state = STATE_IDLE;
             InitState = START_UP_STATE;
             break;
         case  STATE_IDLE:
-                ADC1_Init();
-                vDINInit();
-                HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
-                state = STATE_RUN;
+            ADC1_Init();
+            vDINInit();
+            HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
+            state = STATE_RUN;
             break;
         case  STATE_RUN:
             vDataModelRegDelayWrite();
             vTaskDelay(1);
-           if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) & ADC1_DATA_READY)
+            vDinDoutProcess();
+            if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) )
             {
-                ADC_FSM();
+                ADC_FSM( xTaskGetTickCount()- last_tick);
+                last_tick =  xTaskGetTickCount();
                 HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
-                vDinDoutProcess();
                 switch (  InitState  )
                 {
                     case START_UP_STATE:
-
                         if  (uGetDIN(INPUT_4) && (GetAIN(AIN4)>= 9.0 ))
-
                             InitState = RUN_STATE_INIT;
                         break;
                     case RUN_STATE_INIT:
@@ -332,8 +347,8 @@ void vInputsTask( void * argument )
                         else
                         {
                             SaveData();
-                            state = STATE_IDLE;
-                            InitState = START_UP_STATE;
+                            state       = STATE_IDLE;
+                            InitState   = START_UP_STATE;
                         }
                         break;
                 }
@@ -346,7 +361,6 @@ void vInputsTask( void * argument )
 
 static void SaveData()
 {
-
     vSystemStop();
     HardwareDeinit();
     vSaveData();

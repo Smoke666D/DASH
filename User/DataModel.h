@@ -13,7 +13,7 @@
 
 #define SW_V                 1
 #define SW_V2                0
-#define SW_V3                1
+#define SW_V3               2
 
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
 #define VALID_CODE_ADDRES     0
@@ -150,23 +150,26 @@
 #define AIN2_CAL_POINT_BEGIN    (AIN1_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
 #define AIN3_CAL_POINT_BEGIN    (AIN2_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
 #define RPM1_COOF               (AIN3_CAL_POINT_BEGIN  +  MAX_CAL_POINT * 4 )
-#define RPM2_COOF            ( RPM1_COOF+2)
-#define MENU1_MAP             (RPM2_COOF+2)
-#define MENU2_MAP             (MENU1_MAP + 4)
-#define MENU3_MAP             (MENU2_MAP + 4)
-#define MENU4_MAP             (MENU3_MAP + 4)
-#define MENU5_MAP             (MENU4_MAP + 4)
-#define MENU6_MAP             (MENU5_MAP + 4)
-#define MENU7_MAP             (MENU6_MAP + 4)
-#define MENU8_MAP             (MENU7_MAP + 4)
-#define MENU9_MAP             (MENU8_MAP + 4)
-#define MENU10_MAP            (MENU9_MAP + 4)
-#define MENU_DEF_POS          (MENU10_MAP +4)
-#define MENU_HOME_BACK_TIME   (MENU_DEF_POS +1 )
-#define DIN_ACTIVE_STATE      (MENU_HOME_BACK_TIME +1)
-#define VERSION_REG           (DIN_ACTIVE_STATE  +1)
-#define KEY_CONTROL_REG       (VERSION_REG   +4)
-#define EEPROM_REGISER_COUNT  (KEY_CONTROL_REG  +1)
+#define RPM2_COOF             ( RPM1_COOF+2 )
+#define MENU1_MAP             ( RPM2_COOF+2 )
+#define MENU2_MAP             ( MENU1_MAP + 4 )
+#define MENU3_MAP             ( MENU2_MAP + 4 )
+#define MENU4_MAP             ( MENU3_MAP + 4 )
+#define MENU5_MAP             ( MENU4_MAP + 4 )
+#define MENU6_MAP             ( MENU5_MAP + 4 )
+#define MENU7_MAP             ( MENU6_MAP + 4 )
+#define MENU8_MAP             ( MENU7_MAP + 4 )
+#define MENU9_MAP             ( MENU8_MAP + 4 )
+#define MENU10_MAP            ( MENU9_MAP + 4 )
+#define MENU_DEF_POS          ( MENU10_MAP + 4 )
+#define MENU_HOME_BACK_TIME   ( MENU_DEF_POS +1 )
+#define DIN_ACTIVE_STATE      ( MENU_HOME_BACK_TIME +1)
+#define VERSION_REG           ( DIN_ACTIVE_STATE  +1)
+#define KEY_CONTROL_REG       ( VERSION_REG   + 4)
+#define CH1_TIME_AVER         ( KEY_CONTROL_REG  +1 )
+#define CH2_TIME_AVER         ( CH1_TIME_AVER + 2 )
+#define CH3_TIME_AVER         ( CH2_TIME_AVER + 2 )
+#define EEPROM_REGISER_COUNT  ( CH3_TIME_AVER + 2 )
 
 
 #define BIG_SEG                 ( EEPROM_REGISER_COUNT)

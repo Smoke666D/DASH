@@ -47,7 +47,7 @@ __attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
 
 */
 __attribute__((section(".stext"))) static const uint16_t CalPoint1[8][2] = {
-        {0,1},
+        {0,0},
         {5,35},
         {10,51},
         {15,62},
@@ -396,7 +396,7 @@ uint8_t vGetNodeId( void )
  */
 void vIncrementSystemCounters()
 {
-    if (++secondcounter >= 360 )
+    if (++secondcounter >=  360 )
     {
         setReg32(HOUR_COUNTER_ADR,  (uint32_t)(getReg32(HOUR_COUNTER_ADR) + 1) );
         secondcounter = 0;
