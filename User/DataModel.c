@@ -46,7 +46,7 @@ __attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
                                   {1,380}};
 
 */
-__attribute__((section(".stext"))) static const uint16_t CalPoint1[8][2] = {
+__attribute__((section(".stext"))) static const uint16_t CalPoint1[10][2] = {
         {0,0},
         {5,35},
         {10,51},
@@ -54,7 +54,9 @@ __attribute__((section(".stext"))) static const uint16_t CalPoint1[8][2] = {
         {20,79},
         {25,96},
         {30,134},
-        {32,163}};
+        {32,163},
+        {0, 170},
+        {0,190}};
 
 
 
@@ -224,7 +226,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4 + 2, CalPoint[i][1]);
              }
-             for (u8 i=0; i<8;i++)
+             for (u8 i=0; i<10;i++)
              {
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint1[i][0]);
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
