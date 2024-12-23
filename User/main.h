@@ -78,7 +78,7 @@
 #define DOUT_COUNT            1
 
 
-#define ADC_1_2_ENABLE
+//#define ADC_1_2_ENABLE
 /***************************watchdog***************************/
 //§¡§Ü§ä§Ú§Ó§Ú§â§à§Ó§Ñ§ä§î §Ó§Ñ§ä§é§Õ§à§Ô
 #define WDT_ENABLE

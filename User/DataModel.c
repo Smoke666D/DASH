@@ -89,10 +89,8 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
 
 
 
- void DataModel_Init()
+__attribute__((section(".stext"))) void DataModel_Init()
 {
-
-
 
     if ( eEEPROMRd(0x00 ,DATA_MODEL_REGISTER , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
@@ -100,8 +98,8 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
          {
              memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
              memcpy(DATA_MODEL_REGISTER,default_data,6);
-             DATA_MODEL_REGISTER[BITRATE_ADR ]                = 3;
-             setReg32(HOUR_COUNTER_ADR,10);
+             setReg8 (BITRATE_ADR           ,3);
+             setReg32(HOUR_COUNTER_ADR      ,10);
              setReg16(BAR_VALUE_HIGH        ,39000);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,39000);
@@ -115,6 +113,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg16(RGB1_VALUE_RED_LOW    ,1);
              setReg16(RGB1_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB1_VALUE_BLUE_LOW   ,0);
+
              setReg16(RGB2_VALUE_GREEN_HIGH ,1);
              setReg16(RGB2_VALUE_GREEN_LOW  ,1);
              setReg16(RGB2_VALUE_RED_HIGH   ,1);
