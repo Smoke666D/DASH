@@ -668,7 +668,7 @@ static ODR_t OD_writeBoardSettings(OD_stream_t *stream, const void *buf, OD_size
             case 3:
                 if (temp <= MAX_BRIGTH)
                 {
-                    vSetBrigth(stream->subIndex  - 2 , sizeof(temp));
+                    vSetBrigth(stream->subIndex  - 2 , temp);
                     WriteRegAfterDelay(RGB_BRIGTH_ADR + (stream->subIndex -2 ), &temp, sizeof(temp));
                     res =  ODR_OK;
                     *countWritten =sizeof(temp);
