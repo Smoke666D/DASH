@@ -260,8 +260,8 @@ void  vSetDoutState( OUT_NAME_TYPE ucCh, u8 BitVal )
     vInitRunAverga(&RPM_AVER_FILTER_STRUC[1],0.5);
     eRPMConfig(INPUT_1,RPM_CH1);
     eRPMConfig(INPUT_2,RPM_CH2);
-    HAL_TimeInitCaptureDMA( TIMER1 , 20000, 60000, TIM_CHANNEL_4);
-    HAL_TimeInitCaptureDMA( TIMER2 , 20000, 60000, TIM_CHANNEL_2);
+    HAL_TimeInitCaptureDMA( TIMER1 , 30000, 60000, TIM_CHANNEL_4);
+    HAL_TimeInitCaptureDMA( TIMER2 , 30000, 60000, TIM_CHANNEL_2);
     HAL_DMAInitIT( DMA1_CH4,PTOM, DMA_HWORD , (u32)&TIM1->CH4CVR, (u32) getCaputreBuffer(INPUT_1),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack );
     HAL_DMAInitIT( DMA1_CH7,PTOM, DMA_HWORD , (u32)&TIM2->CH2CVR, (u32) getCaputreBuffer(INPUT_2),  TIM1_DMA_PRIOR , TIM1_DMA_SUBPRIOR, &CaptureDMACallBack_1 );
     HAL_DMA_SetCouterAndEnable(DMA1_CH7,  CC_BUFFER_SIZE);
@@ -279,6 +279,7 @@ static void SaveData();
 void vInputsTask( void * argument )
 {
   uint32_t last_tick;
+  uint8_t din_counter = 0;
   TaskFSM_t  state = STATE_IDLE;
   INPUTS_FSM_t InitState = START_UP_STATE;
   uint32_t ulNotifiedValue;
@@ -305,7 +306,12 @@ void vInputsTask( void * argument )
         case  STATE_RUN:
             vDataModelRegDelayWrite();
             vTaskDelay(1);
-            vDinDoutProcess();
+            if (++din_counter>10)
+            {
+                vDinDoutProcess();
+                din_counter = 0;
+
+            }
             if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) )
             {
                 ADC_FSM( xTaskGetTickCount()- last_tick, InitState);

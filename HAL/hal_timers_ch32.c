@@ -222,14 +222,14 @@ void HAL_TimeInitCaptureDMA( TimerName_t TimerName , uint32_t freq_in_hz, uint32
      HW_TIMER_BaseTimerInit(TimerName,&config);
      if ( channel == TIM_CHANNEL_2 )
      {
-         TI2_Config(TimerName, TIM_ICPolarity_Rising, TIM_ICSelection_DirectTI, 4);
+         TI2_Config(TimerName, TIM_ICPolarity_Falling , TIM_ICSelection_DirectTI, 4);
          timers[TimerName]->CHCTLR1 &= (uint16_t) ~((uint16_t)TIM_IC2PSC);   // Устанавилваем предделитель
          timers[TimerName]->CHCTLR1 |= (uint16_t)(TIM_ICPSC_DIV1 << 8);
          timers[TimerName]->DMAINTENR |= ( TIM_IT_CC2 | TIM_DMA_CC2 ) ;      //Рзрешаем прерывание и работу по DMA
      }
      if ( channel == TIM_CHANNEL_4 )
      {
-          TI4_Config(TimerName, TIM_ICPolarity_Rising,  TIM_ICSelection_DirectTI,  4);
+          TI4_Config(TimerName, TIM_ICPolarity_Falling ,  TIM_ICSelection_DirectTI,  4);
           timers[TimerName]->CHCTLR2 &= (uint16_t) ~((uint16_t)TIM_IC4PSC); // Устанавилваем предделитель
           timers[TimerName]->CHCTLR2 |= (uint16_t)(TIM_ICPSC_DIV1 << 8);
           timers[TimerName]->DMAINTENR |= ( TIM_IT_CC4 | TIM_DMA_CC4 ) ;    //Рзрешаем прерывание и работу по DMA
