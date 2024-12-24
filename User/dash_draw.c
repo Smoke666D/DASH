@@ -91,6 +91,8 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
           return ( (u32) uGetDIN(INPUT_3) );
       case chODOMETR:
           return ( getOdometr());
+      case chTRIP:
+             return ( getOdometr1());
       case  chHOUR:
           return ( getReg32(HOUR_COUNTER_ADR) );
       case chErrorRegister:
@@ -157,13 +159,21 @@ void IncMenuIndex( )
 
 void GoToHome()
 {
+
+
     menu.current_timer_ms   = 0;
     menu.current_menu       = menu.home_menu;
+
 }
 
 void SetCurMenuHome()
 {
+    if ((menu.menu_draw[menu.current_menu] & 0xFF) == chTRIP )
+       {
+           ResrtOdometr1();
+       }
     menu.home_menu          = menu.current_menu;
+
     WriteReg( MENU_DEF_POS  ,&menu.home_menu, 1 );
 
 }
@@ -733,7 +743,7 @@ void vRedrawTask( void * argument )
 
     uint32_t ulNotifiedValue;
     TaskFSM_t  state = STATE_IDLE;
-    u8 draw_counter = 0;
+    u8 draw_counter = 20;
     u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r,bd;
     u8 data;
     while(1)

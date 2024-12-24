@@ -55,7 +55,8 @@ typedef enum
     chODOMETR       = 26,
     chHOUR          = 27,
     chErrorRegister = 28,
-    chVERSION       = 29
+    chVERSION       = 29,
+    chTRIP          = 30
 } VIRTUAL_CHANNEL_t;
 
 

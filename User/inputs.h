@@ -52,7 +52,7 @@ typedef enum
 #define Rgnd  15000.0
 #define Rup   10000.0
 #define Rpup  3000.0
-#define RpupAIN3  1000.0
+#define RpupAIN3  500.0
 #define AIN_COOF   ((Rup+Rgnd)/Rgnd)
 #define DIOD    0.2
 /*----------------------------- Functions ------------------------------------*/

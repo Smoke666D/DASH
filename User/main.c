@@ -33,10 +33,11 @@ int main(void)
 {
     SystemCoreClockUpdate();
     Delay_Init();
-    vInit_DeviceConfig( );
-    USART_Printf_Init(115200);
     vSYSqueueInit (  );
     vSYStaskInit ( );
+    vInit_DeviceConfig( );
+    USART_Printf_Init(115200);
+
     vTaskStartScheduler();
     while(1);
 }

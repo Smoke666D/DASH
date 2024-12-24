@@ -17,6 +17,7 @@
 #include "hw_lib_din.h"
 #include "hal_timers.h"
 #include "hal_gpio.h"
+#include "hw_timeout.h"
 
 /*
  * Внутрение переменные модуля
@@ -86,68 +87,79 @@ INIT_FUNC_LOC void ADC1_Init()
     DataBuffer[0].pIndex = 0;
     DataBuffer[0].pBuff = AIN1Buffer;
     DataBuffer[0].offset =0;
+    vHW_INIT_TIMEOUT(0,getReg16(CH1_TIME_AVER));
     DataBuffer[1].ConversionalSize = 10;
     DataBuffer[1].pIndex = 0;
     DataBuffer[1].pBuff = AIN2Buffer;
     DataBuffer[1].offset =0;
+    vHW_INIT_TIMEOUT(1,getReg16(CH2_TIME_AVER));
     DataBuffer[2].ConversionalSize = 100;
     DataBuffer[2].pIndex = 0;
     DataBuffer[2].pBuff = AIN3Buffer;
     DataBuffer[2].offset =0;
+    vHW_INIT_TIMEOUT(2,getReg16(CH3_TIME_AVER));
 }
 
 
-static u32 AIN_CONVERT_DELAY = 0;
+
+
+
 /*
  *
  */
-void ADC_FSM( BaseType_t time )
+void ADC_FSM( BaseType_t time, INPUTS_FSM_t state )
 {
    u32 ADC_Buffer[ADC1_CHANNELS ];
    uint16_t * pBuffer = getADC1Buffer();
-   //Получаем данные из буфеера DMA и вносим коректировочную поправку
-   for (u16 i = 0; i<ADC1_CHANNELS  * ADC_FRAME_SIZE ;i++)
-             pBuffer[i]= Get_ConversionVal(pBuffer[i]);
-   //Берем среднее значение по 3-м замерам для всех каналов.
-   for (u8 i = 0; i < ADC1_CHANNELS; i++ )
-   {
-       u32 ADCB = 0;
-       for (u8 k = 0;k < ADC_FRAME_SIZE;k++)
-                          ADCB = ADCB + pBuffer[k*ADC1_CHANNELS  + i ];
-       ADC_Buffer[i] =( ADCB /ADC_FRAME_SIZE);
-       ADC_Buffer[i] = vRCFilterConfig(ADC_Buffer[i], &ADC_OLD_RAW[i],(i < AIN4)? 230: 100 );
-   }
-   //Расчет выходных значений для напряжений
-   OurVData[AIN4] = (float)((double) ADC_Buffer[AIN4]  * AINCOOF3)+DIOD;
-   OurVData[AIN5]= (float)ADC_Buffer[AIN5]*VADD_COOF*K;
-
-
-   AIN_CONVERT_DELAY = AIN_CONVERT_DELAY + time;
-   if (AIN_CONVERT_DELAY > 100 )
-   {
-       AIN_CONVERT_DELAY = 0;
-       for (u8 i = 0; i< AIN4 ;i++)
-       {
-          float Vx =0;
-          AddBufferData(&DataBuffer[i],ADC_Buffer[i]);
-          ADC_Buffer[i] = GetConversional(&DataBuffer[i]);
-          Vx = (float)((double)ADC_Buffer[i]*AIN_COOF*K);
-          switch ( i )
-          {
-                  case AIN1:
-                  case AIN2:
-                      OurVData[i]= (Vx*Rpup)/(OurVData[AIN5]-Vx);
-                      break;
-                  case AIN3:
-                     OurVData[i]= (Vx*RpupAIN3)/(OurVData[AIN5]-Vx);
-                      if ( (OurVData[AIN5]-Vx) < 0.2 )
-                          OurVData[i]  = 0;
-                      break;
-                  default:
-                      break;
-           }
-       }
-   }
+      //Получаем данные из буфеера DMA и вносим коректировочную поправку
+      for (u16 i = 0; i<ADC1_CHANNELS  * ADC_FRAME_SIZE ;i++)
+                pBuffer[i]= Get_ConversionVal(pBuffer[i]);
+      for (u8 i = 0; i < ADC1_CHANNELS; i++ )
+      {
+             u32 ADCB = 0;
+             for (u8 k = 0;k < ADC_FRAME_SIZE;k++)
+                                ADCB = ADCB + pBuffer[k*ADC1_CHANNELS  + i ];
+             ADC_Buffer[i] =( ADCB /ADC_FRAME_SIZE);
+             ADC_Buffer[i] = vRCFilterConfig(ADC_Buffer[i], &ADC_OLD_RAW[i],(i < AIN4)? 230: 100 );
+      }
+     OurVData[AIN4] = (float)((double) ADC_Buffer[AIN4]  * AINCOOF3)+DIOD;
+     OurVData[AIN5]= (float)ADC_Buffer[AIN5]*VADD_COOF*K;
+    if (state  == RUN_STATE_INIT)
+    {   for (u8 i = 0; i< AIN4 ;i++)
+        {
+            for (uint8_t k = 0; k<DataBuffer[i].ConversionalSize;k++  )
+            {
+                AddBufferData(&DataBuffer[i],ADC_Buffer[i]);
+            }
+        }
+    }
+    else
+    {
+              for (u8 i = 0; i< AIN4 ;i++)
+              {
+                 if (vHW_PROCESS_TIMEOUT(i,time) )
+                 {
+                     float Vx =0;
+                     AddBufferData(&DataBuffer[i],ADC_Buffer[i]);
+                     ADC_Buffer[i] = GetConversional(&DataBuffer[i]);
+                     Vx = (float)((double)ADC_Buffer[i]*AIN_COOF*K);
+                     switch ( i )
+                     {
+                         case AIN1:
+                         case AIN2:
+                             OurVData[i]= (Vx*Rpup)/(OurVData[AIN5]-Vx);
+                             break;
+                         case AIN3:
+                            OurVData[i]= (Vx*RpupAIN3)/(OurVData[AIN5]-Vx);
+                             if ( (OurVData[AIN5]-Vx) < 0.2 )
+                                 OurVData[i]  = 0;
+                             break;
+                         default:
+                             break;
+                     }
+                 }
+              }
+    }
 }
 
 
@@ -296,14 +308,18 @@ void vInputsTask( void * argument )
             vDinDoutProcess();
             if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) )
             {
-                ADC_FSM( xTaskGetTickCount()- last_tick);
+                ADC_FSM( xTaskGetTickCount()- last_tick, InitState);
                 last_tick =  xTaskGetTickCount();
                 HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
                 switch (  InitState  )
                 {
                     case START_UP_STATE:
                         if  (uGetDIN(INPUT_4) && (GetAIN(AIN4)>= 9.0 ))
+                        {
+                            HAL_SetBit(PowerOn_Port, PowerOn_Pin);
                             InitState = RUN_STATE_INIT;
+                        }
+
                         break;
                     case RUN_STATE_INIT:
                         vSetBrigth( RGB_CHANNEL,    getReg8(RGB_BRIGTH_ADR) );

@@ -13,20 +13,21 @@
 
 #define SW_V                 1
 #define SW_V2                0
-#define SW_V3                6
+#define SW_V3                5
 
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
 #define VALID_CODE_ADDRES     0
 
-#define BITRATE_ADR            (VALID_CODE_ADDRES + 1)
+#define HOUR_COUNTER_ADR       ( VALID_CODE_ADDRES  +1 )
+#define ODOMETR_ADR            (HOUR_COUNTER_ADR + 4 )
+#define ODOMETR1_ADR           (ODOMETR_ADR   + 4 )
+#define ODOMETR_MAP            (ODOMETR1_ADR  + 4 )
+#define BITRATE_ADR            (ODOMETR_MAP + 1)
 #define RGB_BRIGTH_ADR         (BITRATE_ADR  +1)
 #define WHITE_BRIGTH_ADR       (RGB_BRIGTH_ADR + 1)
 #define NODE_ID                (WHITE_BRIGTH_ADR + 1)
-#define BAR_MODE               (NODE_ID  + 1 )
-#define HOUR_COUNTER_ADR       (BAR_MODE +1 )
-#define ODOMETR_ADR            (HOUR_COUNTER_ADR + 4 )
-#define ODOMETR_MAP            (ODOMETR_ADR  + 4 )
-#define BAR_VALUE_HIGH         (ODOMETR_MAP  + 1 )
+#define BAR_MODE               (NODE_ID   + 1 )
+#define BAR_VALUE_HIGH         (BAR_MODE +1 )
 #define BAR_VALUE_LOW          (BAR_VALUE_HIGH  + 2 )
 #define BAR_VALUE_RED_HIGH     (BAR_VALUE_LOW  + 2 )
 #define BAR_VALUE_RED_LOW      (BAR_VALUE_RED_HIGH + 2 )
@@ -221,5 +222,8 @@ void WriteRegAfterDelay( u16 reg_adress, void * data, u8 len);
 uint8_t vGetNodeId( void );
 void vSaveData();
 u32 getOdometr();
+u32 getOdometr1();
+
+void ResrtOdometr1();
 void SaveReg16(u16 reg_adress, u8 notyfy_index );
 #endif /* USER_DATAMODEL_H_ */
