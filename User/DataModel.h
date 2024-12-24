@@ -13,7 +13,7 @@
 
 #define SW_V                 1
 #define SW_V2                0
-#define SW_V3                6
+#define SW_V3                7
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
 #define VALID_CODE_ADDRES     0
 
@@ -193,7 +193,7 @@
 #define KEY_CODE                 (V17 +  2 )
 
 #define AIN_OFFSET                400
-#define RMP_OFFSET                1000
+#define RMP_OFFSET                1000.0
 
 #define TOTAL_REGISTER_COUNT  (KEY_CODE +1 )
 

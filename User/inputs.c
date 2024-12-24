@@ -122,8 +122,8 @@ void ADC_FSM( BaseType_t time, INPUTS_FSM_t state )
              ADC_Buffer[i] =( ADCB /ADC_FRAME_SIZE);
              ADC_Buffer[i] = vRCFilterConfig(ADC_Buffer[i], &ADC_OLD_RAW[i],(i < AIN4)? 230: 100 );
       }
-     OurVData[AIN4] = (float)((double) ADC_Buffer[AIN4]  * AINCOOF3)+DIOD;
-     OurVData[AIN5]= (float)ADC_Buffer[AIN5]*VADD_COOF*K;
+    OurVData[AIN4] = (float)((double) ADC_Buffer[AIN4]  * AINCOOF3)+DIOD;
+    OurVData[AIN5]=  (float) ADC_Buffer[AIN5]*VADD_COOF*K;
     if (state  == RUN_STATE_INIT)
     {   for (u8 i = 0; i< AIN4 ;i++)
         {

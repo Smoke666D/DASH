@@ -89,7 +89,6 @@ void vDataModelRegDelayWrite()
 
 
 __attribute__((section(".stext"))) static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
-//__attribute__((section(".stext"))) static const u16 cal_point_count_index[]={AIN1_CAL_POINT_COUNT,AIN2_CAL_POINT_COUNT,AIN3_CAL_POINT_COUNT};
 __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
 
 
@@ -244,7 +243,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
              }
              setReg16(RPM1_COOF,1);
-             setReg16(RPM2_COOF,36);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      );
+             setReg16(RPM2_COOF,45);
              setReg32( MENU2_MAP , 0x3E000000  | chAKB );
              setReg32( MENU3_MAP , 0x76000000  | chHOUR );
              //setReg32( MENU4_MAP , 0x783F0000 | chAIN2);
@@ -375,13 +374,19 @@ uint8_t vGetNodeId( void )
  */
 void vIncrementSystemCounters()
 {
-    if (++secondcounter >=  2)//360 )
+    u32 temp_odometr;
+    if (++secondcounter >=  360 )
     {
         setReg32(HOUR_COUNTER_ADR,  (uint32_t)(getReg32(HOUR_COUNTER_ADR) + 1) );
         secondcounter = 0;
     }
-    setReg32(ODOMETR_ADR,  getReg32(ODOMETR_ADR)  + ((float)getODValue( getReg8(ODOMETR_MAP),0))/10.0/3.6);
-    setReg32(ODOMETR1_ADR, getReg32(ODOMETR1_ADR) + ((float)getODValue( getReg8(ODOMETR_MAP),0))/10.0/3.6);
+    u32 distance = ((float)getODValue( getReg8(ODOMETR_MAP),0))/10.0/3.6;
+    temp_odometr = getReg32(ODOMETR_ADR)  + distance;
+    if ( temp_odometr > 9999990 )  temp_odometr = 0;
+    setReg32(ODOMETR_ADR,  temp_odometr );
+    temp_odometr = getReg32(ODOMETR1_ADR) + distance;
+    if ( temp_odometr > 999990 ) temp_odometr = 0;
+    setReg32(ODOMETR1_ADR, temp_odometr);
     return;
 }
 
