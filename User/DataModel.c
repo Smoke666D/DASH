@@ -101,7 +101,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              memset(DATA_MODEL_REGISTER,0,TOTAL_REGISTER_COUNT);
              memcpy(DATA_MODEL_REGISTER,default_data,6);
              DATA_MODEL_REGISTER[BITRATE_ADR ]                = 3;
-             setReg32(HOUR_COUNTER_ADR,10);
+             setReg32(HOUR_COUNTER_ADR,200);
              setReg16(BAR_VALUE_HIGH        ,39000);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,39000);
@@ -212,7 +212,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
                  setReg16(BIG_SEGVAL1 + i*sizeof (u16), seg_const[i]);
 
              DATA_MODEL_REGISTER[ODOMETR_MAP] = chRPM2;
-             setReg32(ODOMETR_ADR       ,0x1000);
+             setReg32(ODOMETR_ADR       ,250000);
              DATA_MODEL_REGISTER[AIN1_CAL_POINT_COUNT] = 18;
              setReg16(AIN1_OFFSET,AIN_OFFSET );
              DATA_MODEL_REGISTER[AIN2_CAL_POINT_COUNT] = 18;
