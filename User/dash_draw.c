@@ -16,7 +16,6 @@ static Menu_Object_t menu;
 static u32 ErrorRegister = 0;
 static u8 keystate = 0;
 static KeyState_t Keys;
-static median_filter_data_t      AIN_MIDIAN_FILTER_STRUC[1];
 static TaskHandle_t  pProcessTaskHandle ;
 static const u16 RMPMAUP[] =   { (u16)0x2306,  (u16)0x235B};
 static const u16 RMPMADOWN[] = { (u16)0x1C06,  (u16)0x1C5B};
@@ -25,7 +24,6 @@ static MenuState_t  MenuSatate = WORK_MENU_STATE;
 static u8           ServieModeFSM = 0;
 static u8 coof_view_flag =  0;
 
-static void SegClear();
 
 TaskHandle_t * xProcessTaskHandle ()
 {
@@ -159,11 +157,8 @@ void IncMenuIndex( )
 
 void GoToHome()
 {
-
-
     menu.current_timer_ms   = 0;
     menu.current_menu       = menu.home_menu;
-
 }
 
 void SetCurMenuHome()
@@ -245,7 +240,7 @@ MENU_CHECK_CHANNEL_t  CheckMenuChannel( u8 menu_item, u8 index)
 
 INIT_FUNC_LOC void vDashDrawInit()
 {
-    vInitMedianFilter(&AIN_MIDIAN_FILTER_STRUC[0]);
+ //  vInitMedianFilter(&AIN_MIDIAN_FILTER_STRUC[0]);
     menu.home_menu              = getReg8(MENU_DEF_POS);
     menu.home_menu_back_time_s  = getReg8(MENU_HOME_BACK_TIME );
     menu.current_menu           = menu.home_menu;
@@ -272,7 +267,15 @@ void vMenuBlink()
     if (menu.blink)
         {
              if (++menu.blink_counter>40) menu.blink_counter = 0;
-              if (menu.blink_counter>21)  SegClear();
+              if (menu.blink_counter>21)
+              {
+                      for (u8 i = 0;i<7;i++)
+                      {
+                          SetSegDirect(i,0x00);
+                      }
+
+              }
+
         }
 }
 
@@ -463,13 +466,7 @@ void RedrawNotifyTaskToInit()
 }
 
 
-static void SegClear()
-{
-    for (u8 i = 0;i<7;i++)
-    {
-        SetSegDirect(i,0x00);
-    }
-}
+
 static void SegPrint(u8 s1,u8 s2,u8 s3,u8 s4,u8 s5,u8 s6,u8 s7)
 {
     SetSegDirect(6,s1);
@@ -508,10 +505,12 @@ static void SeriveceMenuDraw( u8 * servece_menu_state)
 
 static const u16 ain_view_mask[]={ (u16)0x0600,(u16)0x05B00,(u16)0x4F00};
 static const u16 rpm_view_mask[]={(u16)0x2306,(u16)0x635B};
+
 static void SystemMenuDraw()
 {
     u32 buffer32;
-    u8 data,index;
+    u16 data;
+    u8 index;
     if ( MenuSatate == WORK_MENU_STATE )
     {
 
@@ -567,8 +566,10 @@ static void SystemMenuDraw()
                           MenuSatate= MenuStateCross[ServieModeFSM-1];
                           break;
                        case 6:
-                          SaveReg16(RPM1_COOF, 2);
-                          SaveReg16(RPM2_COOF, 2);
+                          data = getReg16(RPM1_COOF);
+                          WriteRegAfterDelay(RPM1_COOF,&data,2);
+                          data = getReg16(RPM2_COOF);
+                          WriteRegAfterDelay(RPM2_COOF,&data,2);
                           ServieModeFSM = 0;
                           break;
                        case 8:
@@ -740,97 +741,90 @@ INIT_FUNC_LOC  void TestProcedure()
  */
 void vRedrawTask( void * argument )
 {
-
-    uint32_t ulNotifiedValue;
-    TaskFSM_t  state = STATE_IDLE;
+    TaskFSM_t  state = STATE_RUN;
     u8 draw_counter = 20;
     u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r,bd;
     u8 data;
+    vLedDriverStart();
+    vDashDrawInit();
+    vInitKeys();
     while(1)
     {
-        switch(state)
-        {
-            case STATE_IDLE:
-                    vLedDriverStart();
-                    vDashDrawInit();
-                    vInitKeys();
-                  //  vSetBrigth( RGB_CHANNEL,    getReg8(RGB_BRIGTH_ADR) );
-                  //  vSetBrigth( WHITE_CHANNEL,  getReg8(WHITE_BRIGTH_ADR));
-                  //  HAL_SetBit(PowerON_Port,PowerON_Pin);
-                    state = STATE_RUN;
-                break;
-            case STATE_TEST:
-                 vTaskDelay(100);
+         vTaskDelay(10);
+         if (state ==  STATE_RUN)
+         {
+             if (getReg8(KEY_CONTROL_REG) == 1 )
+             {
+                 vCheckKeySatate(getReg8(KEY_CODE)? 0 :1);
+             }
+             else
+             {
+                 vCheckKeySatate(HAL_GetBit( Din3_4_5_Port ,Din4_Pin ));
+             }
+             // Отображение меню
+             SystemMenuDraw();
+             if (++draw_counter >= 20)
+             {
+                 //Отрисовываем RGB пикторграммы
+                 for ( u8 i = 0; i < RGB_DIOD_COUNT; i++ )
+                 {
+                     vRGBMode( i,  getReg8( RGBMAP1 + i));
+                 }
+                 //Вывод данных в бар
+                 data =  getReg8(BARMAP);
+                 u8 startR = 0;
+                 u8 countR = 0;
+                 u8 startG = 0;
+                 u8 countG = 0;
+                 if (data!=0)
+                 {
+                     bd = getODValue(data,1);
+                     u16 max_value,min_value;
+                     vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
+                     vGetEdgeData( BAR_VALUE_RED_HIGH, &high_edge_r,&low_edge_r);
+                     vGetEdgeData( BAR_VALUE_GREEN_HIGH, &high_edge_g,&low_edge_g);
+                     float delta = (float)(max_value - min_value)/16.0;
+                     if ( getReg8(BAR_MODE) == 0 )
+                     {
+                         if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
+                         {
+                             vBarColorMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, delta,  bd );
+                         }
+                     }
+                     else
+                     {
+                         u8 bar_count = (u8)(( float)(bd /delta));
+                         if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
+                         {
+                             vBarWindowMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, bar_count,  bd );
+                         }
+                         else
+                         {
+                             vBarMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &countG,  &countR, bar_count,  bd );
+                         }
+                      }
+                   }
+                   SetBarState( startG, countG, startR, countR );
+                   //Конец вывода данных в бар
+                   //Отображение большого сегменета
+                   data = getReg16(BIG_SEG);
+                   u16 seg_view = 0;
+                   if (data!=0)
+                   {
+                       seg_view = getReg16(BIG_SEGVAL1 + (--data)*2 );
+                   }
+                   SetBigSeg(seg_view);
+                   vLedProcess( );
+                   draw_counter = 0;
+              }
+         }
+         else
+         {
+             if (++draw_counter >= 20)
+             {
                  TestProcedure();
-                 break;
-            case STATE_RUN:
-                 vTaskDelay(10);
-                 if (getReg8(KEY_CONTROL_REG) == 1 )
-                 {
-                     vCheckKeySatate(getReg8(KEY_CODE)? 0 :1);
-                 }
-                 else
-                 {
-                     vCheckKeySatate(HAL_GetBit( Din3_4_5_Port ,Din4_Pin ));
-                 }
-                 // Отображение меню
-                 SystemMenuDraw();
-
-                  if (++draw_counter >= 20)
-                 {
-                      //Отрисовываем RGB пикторграммы
-                      for ( u8 i = 0; i < RGB_DIOD_COUNT; i++ )
-                      {
-                          vRGBMode( i,  getReg8( RGBMAP1 + i));
-                      }
-                      //Вывод данных в бар
-                                      data =  getReg8(BARMAP);
-                                      u8 startR = 0;
-                                      u8 countR = 0;
-                                      u8 startG = 0;
-                                      u8 countG = 0;
-                                      if (data!=0)
-                                      {
-                                          bd = getODValue(data,1);
-                                          u16 max_value,min_value;
-                                          vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
-                                          vGetEdgeData( BAR_VALUE_RED_HIGH, &high_edge_r,&low_edge_r);
-                                          vGetEdgeData( BAR_VALUE_GREEN_HIGH, &high_edge_g,&low_edge_g);
-                                          float delta = (float)(max_value - min_value)/16.0;
-                                          if ( getReg8(BAR_MODE) == 0 )
-                                          {
-                                              if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
-                                              {
-                                                  vBarColorMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, delta,  bd );
-                                              }
-                                          }
-                                          else
-                                          {
-                                              u8 bar_count = (u8)(( float)(bd /delta));
-                                              if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
-                                              {
-                                                  vBarWindowMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, bar_count,  bd );
-                                              }
-                                              else
-                                              {
-                                                  vBarMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &countG,  &countR, bar_count,  bd );
-                                              }
-                                          }
-                                      }
-                                      SetBarState( startG, countG, startR, countR );
-                                      //Конец вывода данных в бар
-                      //Отображение большого сегменета
-                      data = getReg16(BIG_SEG);
-                      u16 seg_view = 0;
-                      if (data!=0)
-                      {
-                            seg_view = getReg16(BIG_SEGVAL1 + (--data)*2 );
-                      }
-                      SetBigSeg(seg_view);
-                      vLedProcess( );
-                      draw_counter = 0;
-                  }
-                  break;
-            }
-        }
+                 draw_counter = 0;
+             }
+         }
+     }
 }

@@ -75,7 +75,7 @@
 #define DIN_CHANNEL_COUNT     2
 #define DIN_COUNT            ( RPM_CHANNEL_COUNT + DIN_CHANNEL_COUNT )
 
-#define DOUT_COUNT            1
+#define DOUT_COUNT            0
 
 
 #define ADC_1_2_ENABLE

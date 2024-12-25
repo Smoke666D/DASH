@@ -37,7 +37,6 @@ int main(void)
     vSYStaskInit ( );
     vInit_DeviceConfig( );
     USART_Printf_Init(115200);
-
     vTaskStartScheduler();
     while(1);
 }

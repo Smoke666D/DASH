@@ -12,16 +12,14 @@
 #include "debug.h"
 
 static void StartDefaultTask(void *argument);
-static StaticTask_t xIdleTaskTCB                                     __SECTION(RAM_SECTION_CCMRAM);
-static StaticTask_t xTimerTaskTCB                                    __SECTION(RAM_SECTION_CCMRAM);
+static StaticTask_t xIdleTaskTCB;
+static StaticTask_t xTimerTaskTCB;
 static StaticTask_t defaultTaskControlBlock;
 static StaticTask_t CanOpneProccesTaskControlBlock;
 static StaticTask_t CanOpnePeriodicTaskControlBlock;
-
 static StaticTask_t ProcessTaskControlBlock;
-
-static StackType_t uxIdleTaskStack[ configMINIMAL_STACK_SIZE ]       __SECTION(RAM_SECTION_CCMRAM);
-static StackType_t uxTimerTaskStack[ configTIMER_TASK_STACK_DEPTH ]  __SECTION(RAM_SECTION_CCMRAM);
+static StackType_t uxIdleTaskStack[ configMINIMAL_STACK_SIZE ];
+static StackType_t uxTimerTaskStack[ configTIMER_TASK_STACK_DEPTH ];
 static StackType_t defaultTaskBuffer[DEFAULT_TASK_STACK_SIZE];
 static StackType_t CanOpneProccesTaskBuffer[CAN_OPEN_STK_SIZE ];
 static StackType_t CanOpnePeriodicTaskBuffer[PERIODIC_CAN_STK_SIZE ];
@@ -32,7 +30,6 @@ static StackType_t InputsTaskBuffer[INPUTS_TASK_STACK_SIZE];
 static StaticTask_t defaultTaskControlBlock;
 static StaticTask_t InputsTaskControlBlock;
 static TaskHandle_t DefautTask_Handler;
-
 static uint8_t ucQueueStorageArea[  16U * sizeof( EEPROM_REG_Q_t ) ];
 static StaticQueue_t xStaticQueue;
 
@@ -40,7 +37,7 @@ static StaticQueue_t xStaticQueue;
  * 妤快把快技快扶扶抑快
  */
 
-void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
+INIT_FUNC_LOC  void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
                                     StackType_t **ppxIdleTaskStackBuffer,
                                     uint32_t *pulIdleTaskStackSize )
 {
@@ -50,7 +47,7 @@ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
 }
 
 
-void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
+INIT_FUNC_LOC void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
                                      StackType_t **ppxTimerTaskStackBuffer,
                                      uint32_t *pulTimerTaskStackSize )
 {
@@ -67,12 +64,7 @@ void vSystemStop()
     vTaskSuspend(* xProcessTaskHandle ());
     vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
     vTaskSuspend( *xCanOpenProcessTaskHandle());
-   // vTaskSuspend(* getInputsTaskHandle());
 }
-
-
-
-
 
 
 INIT_FUNC_LOC  void vSYStaskInit ( void )
@@ -88,9 +80,7 @@ INIT_FUNC_LOC  void vSYStaskInit ( void )
   (StackType_t * const )CanOpneProccesTaskBuffer, &CanOpneProccesTaskControlBlock );
  (* getInputsTaskHandle()) =   xTaskCreateStatic( vInputsTask, "InputsTask", INPUTS_TASK_STACK_SIZE , ( void * ) 1, INPUT_TASK_PRIO, (StackType_t * const )InputsTaskBuffer, &InputsTaskControlBlock );
   DefautTask_Handler = xTaskCreateStatic( StartDefaultTask, "DefTask", DEFAULT_TASK_STACK_SIZE , ( void * ) 1, DEFAULT_TASK_PRIOR, (StackType_t * const )defaultTaskBuffer, &defaultTaskControlBlock );
-  vTaskSuspend(* xProcessTaskHandle ());
-  vTaskSuspend( *xCanOpenPeriodicTaskHandle ());
-  vTaskSuspend( *xCanOpenProcessTaskHandle());
+  vSystemStop();
   vTaskSuspend(* getInputsTaskHandle());
   return;
 }
@@ -106,32 +96,22 @@ void vSYSeventInit ( void )
 }
 
 
-static  TaskFSM_t DeafaultTaskFSM = STATE_INIT;
+
 
 void StartDefaultTask(void *argument)
 {
-
-  for(;;)
-  {
-      switch( DeafaultTaskFSM)
-      {
-          case STATE_INIT:
-              DataModel_Init();
-           //   InputsNotifyTaskToInit();
-              vProceesInit();
-              vTaskResume( *xCanOpenProcessTaskHandle());
-              vTaskResume( *xCanOpenPeriodicTaskHandle ());
-              vTaskResume(* xProcessTaskHandle ());
-              DeafaultTaskFSM = STATE_RUN;
-              vTaskDelay(100);
-              vTaskResume(* getInputsTaskHandle());
-              printf("start h = %i\r\n",getReg32(HOUR_COUNTER_ADR));
-              break;
-          case STATE_RUN:
-              vTaskDelay(500);
-              HAL_WDTReset();
-              break;
-      }
-  }
+   DataModel_Init();
+   vProceesInit();
+   vTaskResume( *xCanOpenProcessTaskHandle());
+   vTaskResume( *xCanOpenPeriodicTaskHandle ());
+   vTaskResume(* xProcessTaskHandle ());
+   vTaskDelay(100);
+   vTaskResume(* getInputsTaskHandle());
+   //printf("start h = %i\r\n",getReg32(HOUR_COUNTER_ADR));
+   for(;;)
+   {
+      vTaskDelay(500);
+      HAL_WDTReset();
+   }
   /* USER CODE END 5 */
 }

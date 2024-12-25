@@ -89,8 +89,8 @@ INIT_FUNC_LOC static void MX_GPIO_Init(void)
    */
   HAL_InitGpioAF(  SPI1_Port , SPI1_SCK_Pin   | SPI1_MOSI_Pin  , 0, GPIO_Mode_AF_PP);
   HAL_InitGpioAF(  SPI2_Port , SPI2_SCK_Pin   | SPI2_MOSI_Pin |  nOE1_Pin | nOE2_Pin , 0, GPIO_Mode_AF_PP );
-  HAL_InitGpioOut(  SPI1_Port , SPI1_NSS_Pin);
-  HAL_InitGpioOut(  SPI2_Port , SPI2_NSS_Pin | PowerOn_Pin);
+  HAL_InitGpioOut( SPI1_Port , SPI1_NSS_Pin);
+  HAL_InitGpioOut( SPI2_Port , SPI2_NSS_Pin | PowerOn_Pin);
  /*
   * Порты CAN
   */

@@ -64,6 +64,7 @@ encoding//HAL_DRIVER/hal_wdt_ch32.c=GBK
 encoding//HAL_LIB/filters.c=GBK
 encoding//HAL_LIB/filters.h=GBK
 encoding//HAL_LIB/hw_data_model.c=GBK
+encoding//HAL_LIB/hw_data_model.h=GBK
 encoding//HAL_LIB/hw_lib_din.h=GBK
 encoding//HAL_LIB/hw_lib_eeprom_i2c.c=GBK
 encoding//HAL_LIB/hw_lib_eeprom_i2c.h=GBK

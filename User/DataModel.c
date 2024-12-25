@@ -93,9 +93,7 @@ void vDataModelRegDelayWrite()
 
 __attribute__((section(".stext"))) void DataModel_Init()
 {
-
      ClearDataModel();
-
     if ( eEEPROMRd(0x00 ,GetDataRegister() , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
          if (getReg8(VALID_CODE_ADDRES)!=VALID_CODE )
@@ -293,10 +291,6 @@ __attribute__((section(".stext"))) void DataModel_Init()
 }
 
 
-void SaveReg16(u16 reg_adress, u8 notyfy_index )
-{
-    eEEPROMWr(reg_adress, GetRegisterAddr(reg_adress),2,notyfy_index );
-}
 
 
 
@@ -390,9 +384,7 @@ void vIncrementSystemCounters()
 
 void vSaveData()
 {
-  //  setReg32(ODOMETR_ADR, odometr/100);
     eEEPROMWrFast(HOUR_COUNTER_ADR,GetRegisterAddr(HOUR_COUNTER_ADR),12);
-
 }
 
 u32 getOdometr()

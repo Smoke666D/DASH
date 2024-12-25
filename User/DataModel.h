@@ -10,6 +10,7 @@
 
 #include "system_init.h"
 #include "hw_lib_adc.h"
+#include "hw_data_model.h"
 
 #define SW_V                 1
 #define SW_V2                0
@@ -208,12 +209,7 @@ typedef struct
 QueueHandle_t * xDataRegQueue( void );
 void DataModel_Init();
 void vDataModelRegDelayWrite();
-void setReg32( u16 reg_adress, u32 data);
-void setReg16( u16 reg_adress, u16 data);
-void setReg8( u16 reg_adress, u8 data);
-u32 getReg32(u16 reg_adress );
-u16 getReg16(u16 reg_adress );
-u8 getReg8( u16 reg_adress);
+
 void WriteReg( u16 reg_adress, void * data, u8 len);
 uint16_t vGetBitrate();
 void vIncrementSystemCounters();

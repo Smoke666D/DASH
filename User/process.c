@@ -10,8 +10,6 @@
 
 
 static ODR_t OD_writeBAR(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
-
-
 static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_writeV1_14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readDashParam (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
@@ -23,7 +21,7 @@ static ODR_t OD_readMenuMap (OD_stream_t *stream, void *buf, OD_size_t count, OD
 static ODR_t  OD_writeMenuSetup(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readMenuSetup (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 static ODR_t OD_readSEG (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
-static ODR_t OD_readRGBMAP (uint16_t addr, OD_stream_t *stream, void *buf, OD_size_t *countRead);
+static ODR_t OD_readRGBMAP ( OD_stream_t *stream, void *buf,OD_size_t count, OD_size_t *countRead);
 static ODR_t OD_writeRGBMAP(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readRGB1 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 static ODR_t OD_readRGB2 (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
@@ -180,10 +178,6 @@ const OD_extension_t OD_RGB14_extension = {
     .write = OD_writeRGB14
 };
 
-
-
-
-
 const OD_extension_t OD_BAR_extension = {
     .object = NULL,
     .read =  OD_readBar,
@@ -195,8 +189,6 @@ const OD_extension_t  OD_AIN_RPM_extension = {
         .read =  OD_readAIN_RPM,
         .write = OD_writeOriginal
     };
-
-
 
 const OD_extension_t  OD_DIN_extension= {
         .object = NULL,
@@ -254,35 +246,34 @@ const OD_extension_t  OD_KEY_extension = {
 
 INIT_FUNC_LOC void vProceesInit( void)
 {
-    OD_extension_init(OD_ENTRY_H2001, &OD_VRegiters_extension);
-    OD_extension_init(OD_ENTRY_H2004, &OD_DASH_PARAM_extension);
-    OD_extension_init(OD_ENTRY_H2005, &OD_AIN_RPM_extension);
-    OD_extension_init(OD_ENTRY_H2006, &OD_DIN_extension);
-    OD_extension_init(OD_ENTRY_H2007, &OD_SEG_extension);
-    OD_extension_init(OD_ENTRY_H2008, &OD_RGBMAP_extension);
-    OD_extension_init(OD_ENTRY_H2009, &OD_RGB1_extension);
-	OD_extension_init(OD_ENTRY_H200A, &OD_RGB2_extension);
-	OD_extension_init(OD_ENTRY_H200B, &OD_RGB3_extension);
-	OD_extension_init(OD_ENTRY_H200C, &OD_RGB4_extension);
-	OD_extension_init(OD_ENTRY_H200D, &OD_RGB5_extension);
-    OD_extension_init(OD_ENTRY_H200E, &OD_RGB6_extension);
-    OD_extension_init(OD_ENTRY_H200F, &OD_RGB7_extension);
-    OD_extension_init(OD_ENTRY_H2010, &OD_RGB8_extension);
-    OD_extension_init(OD_ENTRY_H2011, &OD_RGB9_extension);
-    OD_extension_init(OD_ENTRY_H2012, &OD_RGB10_extension);
-    OD_extension_init(OD_ENTRY_H2013, &OD_RGB11_extension);
-    OD_extension_init(OD_ENTRY_H2014, &OD_RGB12_extension);
-    OD_extension_init(OD_ENTRY_H2015, &OD_RGB13_extension);
-    OD_extension_init(OD_ENTRY_H2019, &OD_BAR_extension);
-    OD_extension_init(OD_ENTRY_H201A, &OD_MENU_MAP_extension);
-    OD_extension_init(OD_ENTRY_H201B, &OD_MENU_SETUP_extension);
-    OD_extension_init(OD_ENTRY_H2025, &OD_BOARD_SETTINGS_extension);
-    OD_extension_init(OD_ENTRY_H2032, &OD_ADC1_CAL_extension) ;
-    OD_extension_init(OD_ENTRY_H2033, &OD_ADC2_CAL_extension) ;
-    OD_extension_init(OD_ENTRY_H2034, &OD_ADC3_CAL_extension) ;
-    OD_extension_init(OD_ENTRY_H2035, &OD_RPMCONFIG_extension);
-    OD_extension_init(OD_ENTRY_H2036, &OD_KEY_extension);
-
+    OD_extension_init(OD_ENTRY_H2001, (OD_extension_t *)&OD_VRegiters_extension);
+    OD_extension_init(OD_ENTRY_H2004, (OD_extension_t *)&OD_DASH_PARAM_extension);
+    OD_extension_init(OD_ENTRY_H2005, (OD_extension_t *)&OD_AIN_RPM_extension);
+    OD_extension_init(OD_ENTRY_H2006, (OD_extension_t *)&OD_DIN_extension);
+    OD_extension_init(OD_ENTRY_H2007, (OD_extension_t *)&OD_SEG_extension);
+    OD_extension_init(OD_ENTRY_H2008, (OD_extension_t *)&OD_RGBMAP_extension);
+    OD_extension_init(OD_ENTRY_H2009, (OD_extension_t *)&OD_RGB1_extension);
+	OD_extension_init(OD_ENTRY_H200A, (OD_extension_t *)&OD_RGB2_extension);
+	OD_extension_init(OD_ENTRY_H200B, (OD_extension_t *)&OD_RGB3_extension);
+	OD_extension_init(OD_ENTRY_H200C, (OD_extension_t *)&OD_RGB4_extension);
+	OD_extension_init(OD_ENTRY_H200D, (OD_extension_t *)&OD_RGB5_extension);
+    OD_extension_init(OD_ENTRY_H200E, (OD_extension_t *)&OD_RGB6_extension);
+    OD_extension_init(OD_ENTRY_H200F, (OD_extension_t *)&OD_RGB7_extension);
+    OD_extension_init(OD_ENTRY_H2010, (OD_extension_t *)&OD_RGB8_extension);
+    OD_extension_init(OD_ENTRY_H2011, (OD_extension_t *)&OD_RGB9_extension);
+    OD_extension_init(OD_ENTRY_H2012, (OD_extension_t *)&OD_RGB10_extension);
+    OD_extension_init(OD_ENTRY_H2013, (OD_extension_t *)&OD_RGB11_extension);
+    OD_extension_init(OD_ENTRY_H2014, (OD_extension_t *)&OD_RGB12_extension);
+    OD_extension_init(OD_ENTRY_H2015, (OD_extension_t *)&OD_RGB13_extension);
+    OD_extension_init(OD_ENTRY_H2019, (OD_extension_t *)&OD_BAR_extension);
+    OD_extension_init(OD_ENTRY_H201A, (OD_extension_t *)&OD_MENU_MAP_extension);
+    OD_extension_init(OD_ENTRY_H201B, (OD_extension_t *)&OD_MENU_SETUP_extension);
+    OD_extension_init(OD_ENTRY_H2025, (OD_extension_t *)&OD_BOARD_SETTINGS_extension);
+    OD_extension_init(OD_ENTRY_H2032, (OD_extension_t *)&OD_ADC1_CAL_extension) ;
+    OD_extension_init(OD_ENTRY_H2033, (OD_extension_t *)&OD_ADC2_CAL_extension) ;
+    OD_extension_init(OD_ENTRY_H2034, (OD_extension_t *)&OD_ADC3_CAL_extension) ;
+    OD_extension_init(OD_ENTRY_H2035, (OD_extension_t *)&OD_RPMCONFIG_extension);
+    OD_extension_init(OD_ENTRY_H2036, (OD_extension_t *)&OD_KEY_extension);
 }
 
 
@@ -357,7 +348,7 @@ static ODR_t OD_writeDashParam(OD_stream_t *stream,const  void *buf, OD_size_t c
 }
 
 
-static ODR_t OD_readRGBMAP (uint16_t addr, OD_stream_t *stream, void *buf, OD_size_t *countRead)
+static ODR_t OD_readRGBMAP ( OD_stream_t *stream, void *buf,OD_size_t count, OD_size_t *countRead)
 {
     *countRead = sizeof(u8);
      CO_setUint8( buf, getReg8( RGBMAP1  + (stream->subIndex -1)));
@@ -550,7 +541,6 @@ static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, 
      return (ODR_OK);
 }
 
-
 static ODR_t OD_readBar (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
 {
     *countRead = sizeof(u16);
@@ -558,21 +548,13 @@ static ODR_t OD_readBar (OD_stream_t *stream, void *buf, OD_size_t count, OD_siz
     return (ODR_OK);
 }
 
-
 static ODR_t OD_writeBAR(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-#ifdef  DEBUF_OD_READ_WRITE
-       if (stream == NULL || buf == NULL || countRead == NULL) {
-           return ODR_DEV_INCOMPAT;
-       }
-#endif
       uint16_t data = CO_getUint16(buf);
       *countWritten = sizeof(u16);
       WriteRegAfterDelay( (BAR_VALUE_RED_HIGH + (stream->subIndex-1)*sizeof(u16)),&data,sizeof(u16));
       return (ODR_OK);
 }
-
-
 
 
 static ODR_t OD_readMenuMap (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
