@@ -46,7 +46,7 @@ TaskHandle_t * xCanOpenPeriodicTaskHandle ()
 }
 
 
-void vCanOpenInit(CAN_TypeDef *hcan)
+INIT_FUNC_LOC void vCanOpenInit(CAN_TypeDef *hcan)
 {
     pcan = hcan;
     return;

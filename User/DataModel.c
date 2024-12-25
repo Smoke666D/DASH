@@ -15,7 +15,7 @@
 #include "hw_data_model.h"
 
 
-__attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
+ static const uint16_t CalPoint[18][2] = {
                                   {130,89},
                                   {120,113},
                                   {110,110},
@@ -49,7 +49,7 @@ __attribute__((section(".stext"))) static const uint16_t CalPoint[18][2] = {
 */
 #define FUEL_SENSOR_CAL_POINT_COUNT 10
 
-__attribute__((section(".stext"))) static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
+ static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
         {0,0},
         {5,35},
         {10,51},
@@ -64,8 +64,6 @@ __attribute__((section(".stext"))) static const uint16_t CalPoint1[FUEL_SENSOR_C
 
 
 static u16 secondcounter;
-//static u32 odometr;
-//static uint8_t DATA_MODEL_REGISTER[TOTAL_REGISTER_COUNT];
 static QueueHandle_t    pDataRegQueue;
 
 
@@ -88,12 +86,12 @@ void vDataModelRegDelayWrite()
 }
 
 
-__attribute__((section(".stext"))) static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
-__attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
+//__attribute__((section(".stext"))) static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
+//__attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
 
 
 
- void DataModel_Init()
+__attribute__((section(".stext"))) void DataModel_Init()
 {
 
      ClearDataModel();
@@ -218,6 +216,8 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg8(RGBMAP13               , vCHANNEL4 );
              setReg8(RGBMAP14               , vCHANNEL3 ) ;
              setReg8(BARMAP                 , vCHANNEL15 );
+
+             static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
              for (u8 i=0; i<9;i++)
                  setReg16(BIG_SEGVAL1 + i*sizeof (u16), seg_const[i]);
 
@@ -243,7 +243,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
              }
              setReg16(RPM1_COOF,1);
-             setReg16(RPM2_COOF,45);
+             setReg16(RPM2_COOF,6);
              setReg32( MENU2_MAP , 0x3E000000  | chAKB );
              setReg32( MENU3_MAP , 0x76000000  | chHOUR );
              //setReg32( MENU4_MAP , 0x783F0000 | chAIN2);
@@ -253,8 +253,8 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              setReg32( MENU6_MAP , 0x6D000000  | chRPM2);
              setReg32( MENU7_MAP , 0x3F000000  | chODOMETR);
              setReg32( MENU8_MAP , 0x3F060000  | chTRIP);
-             setReg32( MENU9_MAP                        , 0);
-             setReg32( MENU10_MAP                       , 0);
+            // setReg32( MENU9_MAP                        , 0);
+           //  setReg32( MENU10_MAP                       , 0);
              setReg8(MENU_DEF_POS                       , 0);
              setReg8(MENU_HOME_BACK_TIME                , 10);
              setReg8(DIN_ACTIVE_STATE                   , 0);
@@ -267,7 +267,7 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
              vTaskDelay(10);
              eEEPROMRd(0x00 ,GetDataRegister() , EEPROM_REGISER_COUNT,2);
          }
-
+         static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
          POINT_t point[2];
          for (u8 k = 0; k < 3 ;k++)
          {
@@ -288,8 +288,6 @@ __attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0
                 }
             }
          }
-        // odometr =  getReg32(ODOMETR_ADR);
-
     }
     secondcounter = 0;
 }

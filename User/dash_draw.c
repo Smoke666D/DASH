@@ -243,7 +243,7 @@ MENU_CHECK_CHANNEL_t  CheckMenuChannel( u8 menu_item, u8 index)
     return ( MENU_ORDINARY);
 }
 
-void vDashDrawInit()
+INIT_FUNC_LOC void vDashDrawInit()
 {
     vInitMedianFilter(&AIN_MIDIAN_FILTER_STRUC[0]);
     menu.home_menu              = getReg8(MENU_DEF_POS);
@@ -616,8 +616,8 @@ static void SystemMenuDraw()
                           }
                           if (Keys.SystemDelayState == SYSTEM_IDLE)
                           {
-                             u16 data16 =  getReg16( RPM1_COOF + index *2 ) + 1;
-                             setReg16( RPM1_COOF + index * 2 , data16);
+                             u16 data16 =  getReg16( RPM1_COOF + index *sizeof(uint16_t) ) + 1;
+                             setReg16( RPM1_COOF + index * sizeof(uint16_t) , data16);
                           }
                       }
                 }
@@ -634,10 +634,10 @@ static void SystemMenuDraw()
                          if  (Keys.SystemDelayState == SYSTEM_IDLE)
                          {
 
-                             u16 data16 = getReg16(RPM1_COOF +  index );
+                             u16 data16 = getReg16(RPM1_COOF +  index *sizeof(uint16_t));
                              if (data16>1)
 
-                                 setReg16(RPM1_COOF +index,data16 - 1);
+                                 setReg16(RPM1_COOF +index*sizeof(uint16_t),data16 - 1);
                          }
                      }
 
@@ -694,7 +694,7 @@ static void vCheckKeySatate(  BitState_t key)
 /*
  *   Функция инииалзации клавитуры
  */
-static void vInitKeys()
+INIT_FUNC_LOC static void vInitKeys()
 {
     Keys.key_press_state   = KEY_NOT_CHANGED;
     Keys.key_status        = KEY_STATUS_IDLE;
@@ -751,7 +751,6 @@ void vRedrawTask( void * argument )
         switch(state)
         {
             case STATE_IDLE:
-
                     vLedDriverStart();
                     vDashDrawInit();
                     vInitKeys();
@@ -766,7 +765,6 @@ void vRedrawTask( void * argument )
                  break;
             case STATE_RUN:
                  vTaskDelay(10);
-
                  if (getReg8(KEY_CONTROL_REG) == 1 )
                  {
                      vCheckKeySatate(getReg8(KEY_CODE)? 0 :1);
