@@ -47,19 +47,14 @@
                                   {1,380}};
 
 */
-#define FUEL_SENSOR_CAL_POINT_COUNT 10
+#define FUEL_SENSOR_CAL_POINT_COUNT 5
 
  static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
-        {0,0},
-        {5,35},
-        {10,51},
-        {15,62},
-        {20,79},
-        {25,96},
-        {30,134},
-        {32,163},
-        {0, 170},
-        {0,1000}};
+        {0,330},
+        {8,230},
+        {16,185},
+        {24,118},
+        {32,11}};
 
 
 

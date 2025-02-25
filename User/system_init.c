@@ -107,7 +107,6 @@ void StartDefaultTask(void *argument)
    vTaskResume(* xProcessTaskHandle ());
    vTaskDelay(100);
    vTaskResume(* getInputsTaskHandle());
-   //printf("start h = %i\r\n",getReg32(HOUR_COUNTER_ADR));
    for(;;)
    {
       vTaskDelay(500);
