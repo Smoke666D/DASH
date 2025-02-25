@@ -102,7 +102,7 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg8 (BAR_MODE ,1);
 
              setReg8 (BITRATE_ADR           ,3);
-             setReg32(HOUR_COUNTER_ADR,      940);
+             setReg32(HOUR_COUNTER_ADR,      960);
              setReg16(BAR_VALUE_HIGH        ,39000);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,39000);
@@ -215,7 +215,7 @@ __attribute__((section(".stext"))) void DataModel_Init()
                  setReg16(BIG_SEGVAL1 + i*sizeof (u16), seg_const[i]);
 
              setReg8(ODOMETR_MAP            , chRPM2 );
-             setReg32(ODOMETR_ADR       ,1042000);
+             setReg32(ODOMETR_ADR       ,1044000);
              setReg32(ODOMETR1_ADR       ,00);
              setReg8( AIN1_CAL_POINT_COUNT      ,  18 );
              setReg16(AIN1_OFFSET,AIN_OFFSET );
@@ -236,7 +236,7 @@ __attribute__((section(".stext"))) void DataModel_Init()
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
              }
              setReg16(RPM1_COOF,1);
-             setReg16(RPM2_COOF,6);
+             setReg16(RPM2_COOF,8);
              setReg32( MENU2_MAP , 0x3E000000  | chAKB );
              setReg32( MENU3_MAP , 0x76000000  | chHOUR );
              //setReg32( MENU4_MAP , 0x783F0000 | chAIN2);
