@@ -50,11 +50,11 @@
 #define FUEL_SENSOR_CAL_POINT_COUNT 5
 
  static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
-        {0,330},
+        {33,7},
         {8,230},
         {16,185},
         {24,118},
-        {32,11}};
+        {0,345}};
 
 
 
@@ -102,7 +102,7 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg8 (BAR_MODE ,1);
 
              setReg8 (BITRATE_ADR           ,3);
-             setReg32(HOUR_COUNTER_ADR,     200);
+             setReg32(HOUR_COUNTER_ADR,      940);
              setReg16(BAR_VALUE_HIGH        ,39000);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,39000);
@@ -215,8 +215,8 @@ __attribute__((section(".stext"))) void DataModel_Init()
                  setReg16(BIG_SEGVAL1 + i*sizeof (u16), seg_const[i]);
 
              setReg8(ODOMETR_MAP            , chRPM2 );
-             setReg32(ODOMETR_ADR       ,250000);
-             setReg32(ODOMETR1_ADR       ,80000);
+             setReg32(ODOMETR_ADR       ,1042000);
+             setReg32(ODOMETR1_ADR       ,00);
              setReg8( AIN1_CAL_POINT_COUNT      ,  18 );
              setReg16(AIN1_OFFSET,AIN_OFFSET );
              setReg8( AIN2_CAL_POINT_COUNT      , 18);

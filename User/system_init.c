@@ -37,7 +37,7 @@ static StaticQueue_t xStaticQueue;
  * 妤快把快技快扶扶抑快
  */
 
-INIT_FUNC_LOC  void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
+ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
                                     StackType_t **ppxIdleTaskStackBuffer,
                                     uint32_t *pulIdleTaskStackSize )
 {
@@ -47,7 +47,7 @@ INIT_FUNC_LOC  void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCB
 }
 
 
-INIT_FUNC_LOC void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
+ void vApplicationGetTimerTaskMemory( StaticTask_t **ppxTimerTaskTCBBuffer,
                                      StackType_t **ppxTimerTaskStackBuffer,
                                      uint32_t *pulTimerTaskStackSize )
 {
