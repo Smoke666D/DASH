@@ -248,8 +248,8 @@ void vInputsTask( void * argument )
                         InitState = RUN_STATE;
                     }
             }
-             else
-             {
+            else
+            {
                  if ((GetAIN(AIN5) < 4.9) || (uGetDIN(INPUT_4)== RESET))
                  {
                      vSystemStop();

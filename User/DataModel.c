@@ -51,9 +51,9 @@
 
  static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
         {33,7},
-        {8,230},
-        {16,185},
         {24,118},
+        {16,185},
+        {8,230},
         {0,345}};
 
 

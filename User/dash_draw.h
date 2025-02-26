@@ -101,6 +101,11 @@ typedef enum
 #define SERVICE_MODE_EXIT     400
 #define SERVICE_MODE_ENTER    200
 
+#define KEY_STAT_HOLD  0x10
+#define KEY_STAT_UP    0x20
+#define KEY_CHANGE_STAT  (KEY_STAT_HOLD  | KEY_STAT_UP)
+
+
 typedef enum
 {
   SYSTEM_IDLE =  0,
@@ -109,12 +114,19 @@ typedef enum
   SYSTEM_EDIT =  3,
 } KeyDelayState_t;
 
+#define SYSTEM_PRESS_STATE  (KEY_STAT_UP )
+#define SYSTEM_ENTER_STATE ( SYSTEM_ENTER | KEY_STAT_UP )
+#define SYSTEM_EXIT_STATE  ( SYSTEM_EXIT | KEY_STAT_UP )
+#define SYSTEM_EDIT_DOWN_STATE ( SYSTEM_EDIT | KEY_STAT_HOLD )
+#define SYSYEM_EDIT_UP_STATE   ( SYSTEM_EDIT | KEY_STAT_UP   )
+
 typedef struct
 {
     KEY_PRESS_t key_press_state;
     KEY_STATUS_t key_status;
     u16          key_counter;
     KeyDelayState_t SystemDelayState;
+    u8 key_state;
 } KeyState_t;
 
 #define RMP1_UP_MASK  (RPM1_UP_MENU_STATE & RPM2_UP_MENU_STATE)
