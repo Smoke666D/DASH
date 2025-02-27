@@ -47,15 +47,15 @@
                                   {1,380}};
 
 */
-#define FUEL_SENSOR_CAL_POINT_COUNT 5
+#define FUEL_SENSOR_CAL_POINT_COUNT 6
 
  static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
-        {33,7},
-        {24,118},
-        {16,185},
-        {8,230},
-        {0,345}};
-
+             {28,11},
+             {23,61},
+             {16,112},
+             {9,160},
+             {5,185},
+             {0,300}};
 
 
 static u16 secondcounter;
@@ -102,7 +102,7 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg8 (BAR_MODE ,1);
 
              setReg8 (BITRATE_ADR           ,3);
-             setReg32(HOUR_COUNTER_ADR,      960);
+             setReg32(HOUR_COUNTER_ADR,      1046);
              setReg16(BAR_VALUE_HIGH        ,39000);
              setReg16(BAR_VALUE_LOW         ,0);
              setReg16(BAR_VALUE_RED_HIGH    ,39000);
@@ -164,10 +164,10 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg16(RGB9_VALUE_RED_LOW    ,2);
              setReg16(RGB9_VALUE_BLUE_HIGH  ,0);
              setReg16(RGB9_VALUE_BLUE_LOW   ,0);
-             setReg16(RGB12_VALUE_GREEN_HIGH,100);
-             setReg16(RGB12_VALUE_GREEN_LOW ,00);
-             setReg16(RGB12_VALUE_RED_HIGH  ,50);
-             setReg16(RGB12_VALUE_RED_LOW   ,0);
+             setReg16(RGB12_VALUE_GREEN_HIGH,110);
+             setReg16(RGB12_VALUE_GREEN_LOW ,50);
+             setReg16(RGB12_VALUE_RED_HIGH  ,110);
+             setReg16(RGB12_VALUE_RED_LOW   ,1);
              setReg16(RGB12_VALUE_BLUE_HIGH ,0);
              setReg16(RGB12_VALUE_BLUE_LOW  ,0);
              setReg16(RGB10_VALUE_GREEN_HIGH,0);
@@ -215,7 +215,7 @@ __attribute__((section(".stext"))) void DataModel_Init()
                  setReg16(BIG_SEGVAL1 + i*sizeof (u16), seg_const[i]);
 
              setReg8(ODOMETR_MAP            , chRPM2 );
-             setReg32(ODOMETR_ADR       ,1044000);
+             setReg32(ODOMETR_ADR       ,1161200);
              setReg32(ODOMETR1_ADR       ,00);
              setReg8( AIN1_CAL_POINT_COUNT      ,  18 );
              setReg16(AIN1_OFFSET,AIN_OFFSET );

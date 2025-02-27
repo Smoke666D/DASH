@@ -2085,35 +2085,35 @@ END GROUP
                 0x0000000000000140                . = ALIGN (0x40)
  *fill*         0x0000000000000134        0xc 
 
-.stext          0x0000000000010000      0xefa
+.stext          0x0000000000010000      0xefc
                 0x0000000000010000                . = ALIGN (0x4)
  *(.stext)
  .stext         0x0000000000010000        0xa ./User/CanOpenNode.o
                 0x0000000000010000                vCanOpenInit
- .stext         0x000000000001000a      0x6fe ./User/DataModel.o
+ .stext         0x000000000001000a      0x700 ./User/DataModel.o
                 0x000000000001000a                DataModel_Init
- .stext         0x0000000000010708       0xe2 ./User/dash_draw.o
-                0x0000000000010708                vDashDrawInit
-                0x0000000000010782                TestProcedure
- .stext         0x00000000000107ea      0x14c ./User/init.o
-                0x00000000000107ea                vInit_DeviceConfig
- .stext         0x0000000000010936       0xba ./User/inputs.o
-                0x0000000000010936                ADC1_Init
- .stext         0x00000000000109f0       0x4e ./User/led.o
-                0x00000000000109f0                vLedDriverStart
- .stext         0x0000000000010a3e      0x202 ./User/process.o
-                0x0000000000010a3e                vProceesInit
- .stext         0x0000000000010c40      0x134 ./User/system_init.o
-                0x0000000000010c40                vSYStaskInit
-                0x0000000000010d4a                vSYSqueueInit
- .stext         0x0000000000010d74       0x34 ./HAL_LIB/hw_lib_din.o
-                0x0000000000010d74                eDinConfigWtihStruct
- .stext         0x0000000000010da8       0xca ./HAL_DRIVER/hal_rtc_ch32.o
-                0x0000000000010da8                HAL_RTC_IT_Init
- .stext         0x0000000000010e72       0x60 ./HAL_DRIVER/hal_spi_ch32.o
-                0x0000000000010e72                HAL_SPI_InitDMA
- .stext         0x0000000000010ed2       0x28 ./HAL_DRIVER/hal_wdt_ch32.o
-                0x0000000000010ed2                HAL_WDT_Init1s
+ .stext         0x000000000001070a       0xe2 ./User/dash_draw.o
+                0x000000000001070a                vDashDrawInit
+                0x0000000000010784                TestProcedure
+ .stext         0x00000000000107ec      0x14c ./User/init.o
+                0x00000000000107ec                vInit_DeviceConfig
+ .stext         0x0000000000010938       0xba ./User/inputs.o
+                0x0000000000010938                ADC1_Init
+ .stext         0x00000000000109f2       0x4e ./User/led.o
+                0x00000000000109f2                vLedDriverStart
+ .stext         0x0000000000010a40      0x202 ./User/process.o
+                0x0000000000010a40                vProceesInit
+ .stext         0x0000000000010c42      0x134 ./User/system_init.o
+                0x0000000000010c42                vSYStaskInit
+                0x0000000000010d4c                vSYSqueueInit
+ .stext         0x0000000000010d76       0x34 ./HAL_LIB/hw_lib_din.o
+                0x0000000000010d76                eDinConfigWtihStruct
+ .stext         0x0000000000010daa       0xca ./HAL_DRIVER/hal_rtc_ch32.o
+                0x0000000000010daa                HAL_RTC_IT_Init
+ .stext         0x0000000000010e74       0x60 ./HAL_DRIVER/hal_spi_ch32.o
+                0x0000000000010e74                HAL_SPI_InitDMA
+ .stext         0x0000000000010ed4       0x28 ./HAL_DRIVER/hal_wdt_ch32.o
+                0x0000000000010ed4                HAL_WDT_Init1s
 
 .text           0x0000000000000200     0xe010
                 0x0000000000000200                . = ALIGN (0x4)
@@ -3465,31 +3465,31 @@ END GROUP
  .rodata.CalPoint
                 0x000000000000cdc8       0x48 ./User/DataModel.o
  .rodata.CalPoint1
-                0x000000000000ce10       0x14 ./User/DataModel.o
+                0x000000000000ce10       0x18 ./User/DataModel.o
  .rodata.bitrate_table
-                0x000000000000ce24       0x10 ./User/DataModel.o
+                0x000000000000ce28       0x10 ./User/DataModel.o
  .rodata.seg_const.7411
-                0x000000000000ce34       0x12 ./User/DataModel.o
- *fill*         0x000000000000ce46        0x2 
+                0x000000000000ce38       0x12 ./User/DataModel.o
+ *fill*         0x000000000000ce4a        0x2 
  .rodata.vIncrementSystemCounters.cst4
-                0x000000000000ce48        0x8 ./User/DataModel.o
+                0x000000000000ce4c        0x8 ./User/DataModel.o
  .rodata.HardFault_Handler.str1.4
-                0x000000000000ce50       0x42 ./User/ch32v20x_it.o
- *fill*         0x000000000000ce92        0x2 
+                0x000000000000ce54       0x42 ./User/ch32v20x_it.o
+ *fill*         0x000000000000ce96        0x2 
  .rodata.getODValue
-                0x000000000000ce94       0x78 ./User/dash_draw.o
+                0x000000000000ce98       0x78 ./User/dash_draw.o
  .rodata.MenuStateCross
-                0x000000000000cf0c       0x1c ./User/dash_draw.o
- .rodata.dm     0x000000000000cf28       0x3f ./User/dash_draw.o
- *fill*         0x000000000000cf67        0x1 
+                0x000000000000cf10       0x1c ./User/dash_draw.o
+ .rodata.dm     0x000000000000cf2c       0x3f ./User/dash_draw.o
+ *fill*         0x000000000000cf6b        0x1 
  .rodata.getODValue.cst4
-                0x000000000000cf68        0x4 ./User/dash_draw.o
+                0x000000000000cf6c        0x4 ./User/dash_draw.o
                                           0x8 (size before relaxing)
  .rodata.vBarColorMode.cst4
-                0x000000000000cf6c        0x4 ./User/dash_draw.o
+                0x000000000000cf70        0x4 ./User/dash_draw.o
  .rodata.ADC_FSM.cst4
-                0x000000000000cf70       0x14 ./User/inputs.o
- *fill*         0x000000000000cf84        0x4 
+                0x000000000000cf74       0x14 ./User/inputs.o
+ *fill*         0x000000000000cf88        0x0 
  .rodata.ADC_FSM.cst8
                 0x000000000000cf88       0x18 ./User/inputs.o
  .rodata.vInputsTask.cst4
@@ -4045,60 +4045,60 @@ END GROUP
                 0x0000000020005000                __freertos_irq_stack_top = .
 OUTPUT(DASH.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000    0x5379e
+.debug_info     0x0000000000000000    0x5379f
  .debug_info    0x0000000000000000     0x32c9 ./User/CanOpenNode.o
- .debug_info    0x00000000000032c9     0x3373 ./User/DataModel.o
- .debug_info    0x000000000000663c      0xab8 ./User/ch32v20x_it.o
- .debug_info    0x00000000000070f4     0x38a2 ./User/dash_draw.o
- .debug_info    0x000000000000a996     0x14fc ./User/init.o
- .debug_info    0x000000000000be92     0x3500 ./User/inputs.o
- .debug_info    0x000000000000f392     0x1562 ./User/led.o
- .debug_info    0x00000000000108f4     0x1bde ./User/main.o
- .debug_info    0x00000000000124d2     0x4c54 ./User/process.o
- .debug_info    0x0000000000017126      0xb90 ./User/system_ch32v20x.o
- .debug_info    0x0000000000017cb6     0x2339 ./User/system_init.o
- .debug_info    0x0000000000019fef       0x22 ./Startup/startup_ch32v20x_D6.o
- .debug_info    0x000000000001a011     0x16fd ./Peripheral/src/ch32v20x_adc.o
- .debug_info    0x000000000001b70e      0xd28 ./Peripheral/src/ch32v20x_dma.o
- .debug_info    0x000000000001c436     0x12cf ./Peripheral/src/ch32v20x_gpio.o
- .debug_info    0x000000000001d705     0x1486 ./Peripheral/src/ch32v20x_i2c.o
- .debug_info    0x000000000001eb8b     0x1263 ./Peripheral/src/ch32v20x_rcc.o
- .debug_info    0x000000000001fdee      0xd56 ./Peripheral/src/ch32v20x_rtc.o
- .debug_info    0x0000000000020b44     0x2ac5 ./Peripheral/src/ch32v20x_tim.o
- .debug_info    0x0000000000023609     0x13bb ./Peripheral/src/ch32v20x_usart.o
- .debug_info    0x00000000000249c4      0xedb ./HAL_LIB/filters.o
- .debug_info    0x000000000002589f      0xcad ./HAL_LIB/hw_data_model.o
- .debug_info    0x000000000002654c     0x12e2 ./HAL_LIB/hw_lib_adc.o
- .debug_info    0x000000000002782e     0x163b ./HAL_LIB/hw_lib_din.o
- .debug_info    0x0000000000028e69     0x1869 ./HAL_LIB/hw_lib_eeprom_i2c.o
- .debug_info    0x000000000002a6d2      0xaa8 ./HAL_LIB/hw_timeout.o
- .debug_info    0x000000000002b17a     0x1446 ./HAL_DRIVER/hal_can_ch32.o
- .debug_info    0x000000000002c5c0     0x10ab ./HAL_DRIVER/hal_gpio_ch32.o
- .debug_info    0x000000000002d66b     0x13a0 ./HAL_DRIVER/hal_i2c_ch32.o
- .debug_info    0x000000000002ea0b      0xf39 ./HAL_DRIVER/hal_irq.o
- .debug_info    0x000000000002f944     0x13a7 ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_info    0x0000000000030ceb      0xf26 ./HAL_DRIVER/hal_spi_ch32.o
- .debug_info    0x0000000000031c11      0xaa2 ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_info    0x00000000000326b3     0x149d ./HAL/hal_adc_ch32.o
- .debug_info    0x0000000000033b50     0x107a ./HAL/hal_dma_ch32.o
- .debug_info    0x0000000000034bca     0x17bd ./HAL/hal_timers_ch32.o
- .debug_info    0x0000000000036387      0xe63 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_info    0x00000000000371ea     0x1080 ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_info    0x000000000003826a       0x26 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_info    0x0000000000038290      0xb87 ./FreeRTOS/list.o
- .debug_info    0x0000000000038e17     0x3240 ./FreeRTOS/queue.o
- .debug_info    0x000000000003c057     0x394b ./FreeRTOS/tasks.o
- .debug_info    0x000000000003f9a2      0xf05 ./Debug/debug.o
- .debug_info    0x00000000000408a7      0x376 ./Core/core_riscv.o
- .debug_info    0x0000000000040c1d     0x195f ./CANopenNode/keypad/CO_driver_ST32F103.o
- .debug_info    0x000000000004257c     0x2045 ./CANopenNode/keypad/OD.o
- .debug_info    0x00000000000445c1     0x17c6 ./CANopenNode/305/CO_LSSslave.o
- .debug_info    0x0000000000045d87     0x1e35 ./CANopenNode/301/CO_Emergency.o
- .debug_info    0x0000000000047bbc     0x19f0 ./CANopenNode/301/CO_NMT_Heartbeat.o
- .debug_info    0x00000000000495ac     0x14c6 ./CANopenNode/301/CO_ODinterface.o
- .debug_info    0x000000000004aa72     0x336f ./CANopenNode/301/CO_PDO.o
- .debug_info    0x000000000004dde1     0x25c1 ./CANopenNode/301/CO_SDOserver.o
- .debug_info    0x00000000000503a2     0x33fc ./CANopenNode/CANopen.o
+ .debug_info    0x00000000000032c9     0x3374 ./User/DataModel.o
+ .debug_info    0x000000000000663d      0xab8 ./User/ch32v20x_it.o
+ .debug_info    0x00000000000070f5     0x38a2 ./User/dash_draw.o
+ .debug_info    0x000000000000a997     0x14fc ./User/init.o
+ .debug_info    0x000000000000be93     0x3500 ./User/inputs.o
+ .debug_info    0x000000000000f393     0x1562 ./User/led.o
+ .debug_info    0x00000000000108f5     0x1bde ./User/main.o
+ .debug_info    0x00000000000124d3     0x4c54 ./User/process.o
+ .debug_info    0x0000000000017127      0xb90 ./User/system_ch32v20x.o
+ .debug_info    0x0000000000017cb7     0x2339 ./User/system_init.o
+ .debug_info    0x0000000000019ff0       0x22 ./Startup/startup_ch32v20x_D6.o
+ .debug_info    0x000000000001a012     0x16fd ./Peripheral/src/ch32v20x_adc.o
+ .debug_info    0x000000000001b70f      0xd28 ./Peripheral/src/ch32v20x_dma.o
+ .debug_info    0x000000000001c437     0x12cf ./Peripheral/src/ch32v20x_gpio.o
+ .debug_info    0x000000000001d706     0x1486 ./Peripheral/src/ch32v20x_i2c.o
+ .debug_info    0x000000000001eb8c     0x1263 ./Peripheral/src/ch32v20x_rcc.o
+ .debug_info    0x000000000001fdef      0xd56 ./Peripheral/src/ch32v20x_rtc.o
+ .debug_info    0x0000000000020b45     0x2ac5 ./Peripheral/src/ch32v20x_tim.o
+ .debug_info    0x000000000002360a     0x13bb ./Peripheral/src/ch32v20x_usart.o
+ .debug_info    0x00000000000249c5      0xedb ./HAL_LIB/filters.o
+ .debug_info    0x00000000000258a0      0xcad ./HAL_LIB/hw_data_model.o
+ .debug_info    0x000000000002654d     0x12e2 ./HAL_LIB/hw_lib_adc.o
+ .debug_info    0x000000000002782f     0x163b ./HAL_LIB/hw_lib_din.o
+ .debug_info    0x0000000000028e6a     0x1869 ./HAL_LIB/hw_lib_eeprom_i2c.o
+ .debug_info    0x000000000002a6d3      0xaa8 ./HAL_LIB/hw_timeout.o
+ .debug_info    0x000000000002b17b     0x1446 ./HAL_DRIVER/hal_can_ch32.o
+ .debug_info    0x000000000002c5c1     0x10ab ./HAL_DRIVER/hal_gpio_ch32.o
+ .debug_info    0x000000000002d66c     0x13a0 ./HAL_DRIVER/hal_i2c_ch32.o
+ .debug_info    0x000000000002ea0c      0xf39 ./HAL_DRIVER/hal_irq.o
+ .debug_info    0x000000000002f945     0x13a7 ./HAL_DRIVER/hal_rtc_ch32.o
+ .debug_info    0x0000000000030cec      0xf26 ./HAL_DRIVER/hal_spi_ch32.o
+ .debug_info    0x0000000000031c12      0xaa2 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_info    0x00000000000326b4     0x149d ./HAL/hal_adc_ch32.o
+ .debug_info    0x0000000000033b51     0x107a ./HAL/hal_dma_ch32.o
+ .debug_info    0x0000000000034bcb     0x17bd ./HAL/hal_timers_ch32.o
+ .debug_info    0x0000000000036388      0xe63 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_info    0x00000000000371eb     0x1080 ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_info    0x000000000003826b       0x26 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_info    0x0000000000038291      0xb87 ./FreeRTOS/list.o
+ .debug_info    0x0000000000038e18     0x3240 ./FreeRTOS/queue.o
+ .debug_info    0x000000000003c058     0x394b ./FreeRTOS/tasks.o
+ .debug_info    0x000000000003f9a3      0xf05 ./Debug/debug.o
+ .debug_info    0x00000000000408a8      0x376 ./Core/core_riscv.o
+ .debug_info    0x0000000000040c1e     0x195f ./CANopenNode/keypad/CO_driver_ST32F103.o
+ .debug_info    0x000000000004257d     0x2045 ./CANopenNode/keypad/OD.o
+ .debug_info    0x00000000000445c2     0x17c6 ./CANopenNode/305/CO_LSSslave.o
+ .debug_info    0x0000000000045d88     0x1e35 ./CANopenNode/301/CO_Emergency.o
+ .debug_info    0x0000000000047bbd     0x19f0 ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_info    0x00000000000495ad     0x14c6 ./CANopenNode/301/CO_ODinterface.o
+ .debug_info    0x000000000004aa73     0x336f ./CANopenNode/301/CO_PDO.o
+ .debug_info    0x000000000004dde2     0x25c1 ./CANopenNode/301/CO_SDOserver.o
+ .debug_info    0x00000000000503a3     0x33fc ./CANopenNode/CANopen.o
 
 .debug_abbrev   0x0000000000000000     0xb903
  .debug_abbrev  0x0000000000000000      0x3da ./User/CanOpenNode.o
