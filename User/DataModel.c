@@ -88,12 +88,11 @@ void vDataModelRegDelayWrite()
 
 __attribute__((section(".stext"))) void DataModel_Init()
 {
-     ClearDataModel();
+    ClearDataModel();
     if ( eEEPROMRd(0x00 ,GetDataRegister() , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
          if (getReg8(VALID_CODE_ADDRES)!=VALID_CODE )
          {
-
              setReg8 (VALID_CODE_ADDRES ,VALID_CODE);
              setReg8 (BITRATE_ADR,3);
              setReg8 (RGB_BRIGTH_ADR,10);
@@ -109,7 +108,6 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg16(BAR_VALUE_RED_LOW     ,30000);
              setReg16(BAR_VALUE_GREEN_HIGH  ,36000);
              setReg16(BAR_VALUE_GREEN_LOW   ,0);
-
              setReg16(RGB1_VALUE_GREEN_HIGH ,0);
              setReg16(RGB1_VALUE_GREEN_LOW  ,0);
              setReg16(RGB1_VALUE_RED_HIGH   ,1);
@@ -184,16 +182,16 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg16(RGB11_VALUE_BLUE_LOW  ,0);
              setReg16(RGB13_VALUE_GREEN_HIGH,1);
              setReg16(RGB13_VALUE_GREEN_LOW ,1);
-           //  setReg16(RGB13_VALUE_RED_HIGH  ,0);
-            //setReg16(RGB13_VALUE_RED_LOW   ,0);
-             //setReg16(RGB13_VALUE_BLUE_HIGH ,0);
-            // setReg16(RGB13_VALUE_BLUE_LOW  ,0);
+             setReg16(RGB13_VALUE_RED_HIGH  ,0);
+             setReg16(RGB13_VALUE_RED_LOW   ,0);
+             setReg16(RGB13_VALUE_BLUE_HIGH ,0);
+             setReg16(RGB13_VALUE_BLUE_LOW  ,0);
              setReg16(RGB14_VALUE_GREEN_HIGH,1);
              setReg16(RGB14_VALUE_GREEN_LOW ,1);
-            // setReg16(RGB14_VALUE_RED_HIGH  ,0);
-           //  setReg16(RGB14_VALUE_RED_LOW   ,0);
-           //  setReg16(RGB14_VALUE_BLUE_HIGH ,0);
-          //  setReg16(RGB14_VALUE_BLUE_LOW  ,0);
+             setReg16(RGB14_VALUE_RED_HIGH  ,0);
+             setReg16(RGB14_VALUE_RED_LOW   ,0);
+             setReg16(RGB14_VALUE_BLUE_HIGH ,0);
+             setReg16(RGB14_VALUE_BLUE_LOW  ,0);
              setReg8(RGBMAP1                , vCHANNEL6) ;
              setReg8(RGBMAP2                , vCHANNEL2);
              setReg8(RGBMAP3                , 0);
@@ -209,7 +207,6 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg8(RGBMAP13               , vCHANNEL4 );
              setReg8(RGBMAP14               , vCHANNEL3 ) ;
              setReg8(BARMAP                 , vCHANNEL15 );
-
              static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
              for (u8 i=0; i<9;i++)
                  setReg16(BIG_SEGVAL1 + i*sizeof (u16), seg_const[i]);
@@ -255,6 +252,7 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg16(CH1_TIME_AVER,10);
              setReg16(CH2_TIME_AVER,10);
              setReg16(CH3_TIME_AVER,300);
+             setReg16(RGB_HISTERESIS_MAP, 0x1<<11);
              eEEPROMWr(VALID_CODE_ADDRES,GetDataRegister(),EEPROM_REGISER_COUNT,2);
              ClearDataModel();
              vTaskDelay(10);
@@ -284,8 +282,6 @@ __attribute__((section(".stext"))) void DataModel_Init()
     }
     secondcounter = 0;
 }
-
-
 
 
 

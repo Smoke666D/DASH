@@ -330,6 +330,7 @@ void vGetEdgeData(u16 addr,  u16 *high, u16 * low)
 
 static LED_STATE_t checkLedState( u16 addr, u16 bd)
 {
+
     u16 he;
     u16 le;
     vGetEdgeData( addr,  &he, &le);
@@ -337,16 +338,95 @@ static LED_STATE_t checkLedState( u16 addr, u16 bd)
     if ((le !=0) && (he !=0))
     {
        if (le <= he)   //Обычный режим, проверяем на попадание в окно.
-            {
-               if ((bd >= le) && (bd <= he)) state = STATE_ON;
-            }
-            else  // инвесный режим, попадаем на непопадание в окно
-            {
-                if ((bd >= le) || (bd <= he)) state = STATE_ON;
-            }
+       {
+           if ((bd >= le) && (bd <= he)) state = STATE_ON;
+       }
+       else  // инвесный режим, попадаем на непопадание в окно
+       {
+           if ((bd >= le) || (bd <= he)) state = STATE_ON;
+       }
     }
     return (state);
 }
+
+
+
+static uint8_t CheckLedState( u16 addr, u16 bd, LED_STATE_t * state )
+{
+    uint8_t res = 0;
+    u8 histeresis_on = getReg16(RGB_HISTERESIS_MAP) & (0x01<<addr);
+    u16 he;
+    u16 le;
+    vGetEdgeData( addr,  &he, &le);
+   // LED_STATE_t state = STATE_OFF;
+    if ((le !=0) && (he !=0))
+    {
+       if (le <= he)   //Обычный режим, проверяем на попадание в окно.
+       {
+           if (histeresis_on)
+           {
+               if ( ( bd >= (le + le*0.05 ) ) && ( bd <=  ( he - he*0.05 ) ) )
+               {
+                  *state = STATE_ON;
+                  res  = 1;
+               }
+               if ((bd < le ) && (bd > he ) )
+               {
+                   *state = STATE_OFF;
+                    res  = 1;
+               }
+           }
+           else
+           {
+               res  = 1;
+               if ((bd >= le) && (bd <= he))
+               {
+                   *state = STATE_ON;
+               }
+               else
+               {
+                   *state = STATE_OFF;
+               }
+           }
+        }
+       else  // инвесный режим, попадаем на непопадание в окно
+       {
+           if (histeresis_on)
+           {
+               if ((bd < (le - le*0.05)) || (bd > (he + he*0.05)))
+               {
+                   *state = STATE_OFF;
+                    res = 1;
+               }
+
+               if ((bd >= le) || (bd <= he))
+               {
+                   *state = STATE_ON;
+                   res = 1;
+               }
+           }
+           else
+           {
+               res = 1;
+               if ((bd >= le) || (bd <= he))
+               {
+                   *state = STATE_ON;
+               }
+               else
+               {
+                   *state = STATE_OFF;
+               }
+           }
+       }
+    }
+    else
+    {
+        *state = STATE_OFF;
+        res = 1;
+    }
+    return (res);
+}
+
 
 /*
  *
@@ -362,9 +442,14 @@ void vRGBMode( u8 i,  u8 index )
     }
     u16 bd = getODValue( index, 1 );
     u16 offset = RGB1_VALUE_GREEN_HIGH + i*6*sizeof(u16);
-    SetRGB( i, GREEN_COLOR, checkLedState(offset   , bd ) );
-    SetRGB( i, RED_COLOR,   checkLedState(offset+4 , bd ) );
-    SetRGB( i, BLUE_COLOR,  checkLedState(offset+8 , bd ) );
+    LED_STATE_t state;
+    if ( CheckLedState(offset   , bd, &state ) == 1 )  SetRGB( i, GREEN_COLOR, state );
+    if ( CheckLedState(offset+4 , bd, &state ) == 1 )  SetRGB( i, RED_COLOR,   state );
+    if ( CheckLedState(offset+8 , bd, &state ) == 1 )  SetRGB( i, BLUE_COLOR,  state );
+
+   // SetRGB( i, GREEN_COLOR, checkLedState(offset   , bd ) );
+   // SetRGB( i, RED_COLOR,   checkLedState(offset+4 , bd ) );
+   // SetRGB( i, BLUE_COLOR,  checkLedState(offset+8 , bd ) );
 }
 
 
