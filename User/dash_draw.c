@@ -363,21 +363,7 @@ static uint8_t CheckLedState( u16 addr, u16 bd, LED_STATE_t * state )
     {
        if (le <= he)   //Обычный режим, проверяем на попадание в окно.
        {
-           if (histeresis_on)
-           {
-               if ( ( bd >= (le + le*0.05 ) ) && ( bd <=  ( he - he*0.05 ) ) )
-               {
-                  *state = STATE_ON;
-                  res  = 1;
-               }
-               if ((bd < le ) && (bd > he ) )
-               {
-                   *state = STATE_OFF;
-                    res  = 1;
-               }
-           }
-           else
-           {
+
                res  = 1;
                if ((bd >= le) && (bd <= he))
                {
@@ -387,26 +373,11 @@ static uint8_t CheckLedState( u16 addr, u16 bd, LED_STATE_t * state )
                {
                    *state = STATE_OFF;
                }
-           }
+
         }
        else  // инвесный режим, попадаем на непопадание в окно
        {
-           if (histeresis_on)
-           {
-               if ((bd < (le - le*0.05)) || (bd > (he + he*0.05)))
-               {
-                   *state = STATE_OFF;
-                    res = 1;
-               }
 
-               if ((bd >= le) || (bd <= he))
-               {
-                   *state = STATE_ON;
-                   res = 1;
-               }
-           }
-           else
-           {
                res = 1;
                if ((bd >= le) || (bd <= he))
                {
@@ -416,7 +387,7 @@ static uint8_t CheckLedState( u16 addr, u16 bd, LED_STATE_t * state )
                {
                    *state = STATE_OFF;
                }
-           }
+
        }
     }
     else

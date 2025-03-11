@@ -320,7 +320,7 @@ static ODR_t OD_readDashParam (OD_stream_t *stream, void *buf, OD_size_t count, 
                case 3:
                    temp =  (u32)getReg8( ODOMETR_MAP);
                    break;
-               default:
+               case 4:
                    temp =  getReg32(VERSION_REG);
                    break;
        }
@@ -330,22 +330,31 @@ static ODR_t OD_readDashParam (OD_stream_t *stream, void *buf, OD_size_t count, 
 
 static ODR_t OD_writeDashParam(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
+      uint32_t data32;
+      uint8_t data;
       *countWritten = sizeof(u32);
-      if (stream->subIndex == 3)
+      switch (stream->subIndex)
       {
-             uint8_t data =(uint8_t)CO_getUint32(buf);
-             WriteRegAfterDelay( ODOMETR_MAP ,&data, sizeof(data));
-             return (ODR_OK);
+                      case 1:
+                        data32 =CO_getUint32(buf)*100;
+                         WriteRegAfterDelay(ODOMETR_ADR ,&data32, sizeof(data32));
+                        break;
+                    case 2:
+                        data32 =CO_getUint32(buf);
+                        WriteRegAfterDelay(HOUR_COUNTER_ADR ,&data32, sizeof(data32));
+                        break;
+                    case 3:
+                        data =(uint8_t)CO_getUint32(buf);
+                        WriteRegAfterDelay( ODOMETR_MAP ,&data, sizeof(data));
+                        break;
+                    case 4:
+                        data32 =CO_getUint32(buf);
+                         WriteRegAfterDelay(VERSION_REG ,&data32, sizeof(data32));
+
+                        break;
+
       }
-      else
-      if (stream->subIndex == 4)
-      {
-          uint32_t data =CO_getUint32(buf);
-          WriteRegAfterDelay(VERSION_REG ,&data, sizeof(data));
-          return (ODR_OK);
-      }
-      else
-            return (ODR_READONLY);
+      return (ODR_OK);
 }
 
 
@@ -561,7 +570,7 @@ static ODR_t OD_writeBAR(OD_stream_t *stream,const  void *buf, OD_size_t count, 
 static ODR_t OD_readMenuMap (OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
 {
      *countRead = sizeof(u32);
-     CO_setUint32(buf, getReg32( MENU1_MAP - 1 + stream->subIndex*sizeof(u32) ));
+     CO_setUint32(buf, getReg32( MENU1_MAP + (stream->subIndex-1)*sizeof(u32) ));
      return (ODR_OK);
 }
 
@@ -576,7 +585,7 @@ static ODR_t  OD_writeMenuMap(OD_stream_t *stream,const  void *buf, OD_size_t co
 #endif
          uint32_t data = CO_getUint32(buf);
          *countWritten = 4;
-         WriteRegAfterDelay(  MENU1_MAP - 1 + stream->subIndex*4 ,&data,4);
+         WriteRegAfterDelay(  MENU1_MAP  + (stream->subIndex-1)*sizeof(u32) ,&data,4);
          return (ODR_OK);
 }
 
@@ -626,10 +635,21 @@ static ODR_t OD_readMenuSetup (OD_stream_t *stream, void *buf, OD_size_t count, 
 static ODR_t OD_readBoardSettings(OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
 {
             *countRead = sizeof(u8);
-            if (stream->subIndex == 4)
+            switch  (stream->subIndex )
+            {
+            case 2:
+                CO_setUint8(buf,  getReg8(RGB_BRIGTH_ADR));
+                break;
+            case 3:
+                CO_setUint8(buf,  getReg8(WHITE_BRIGTH_ADR));
+                break;
+            case 4:
                 CO_setUint8(buf,  getReg8(DIN_ACTIVE_STATE));
-            else
-                CO_setUint8(buf,  getReg8(BITRATE_ADR - stream->subIndex -1 ) );
+                break;
+            case 1:
+                CO_setUint8(buf,  getReg8(BITRATE_ADR ) );
+                break;
+            }
             return (ODR_OK);
 }
 

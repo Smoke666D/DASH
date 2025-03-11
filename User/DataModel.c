@@ -88,19 +88,20 @@ void vDataModelRegDelayWrite()
 
 __attribute__((section(".stext"))) void DataModel_Init()
 {
-    ClearDataModel();
+    //ClearDataModel();
     if ( eEEPROMRd(0x00 ,GetDataRegister() , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
          if (getReg8(VALID_CODE_ADDRES)!=VALID_CODE )
          {
+             ClearDataModel();
              setReg8 (VALID_CODE_ADDRES ,VALID_CODE);
-             setReg8 (BITRATE_ADR,3);
+             setReg8 (BITRATE_ADR,2);
              setReg8 (RGB_BRIGTH_ADR,10);
              setReg8 (WHITE_BRIGTH_ADR,10);
              setReg8 (NODE_ID ,0x20);
              setReg8 (BAR_MODE ,1);
 
-             setReg8 (BITRATE_ADR           ,3);
+             setReg8 (BITRATE_ADR           ,2);
              setReg32(HOUR_COUNTER_ADR,      1046);
              setReg16(BAR_VALUE_HIGH        ,39000);
              setReg16(BAR_VALUE_LOW         ,0);
@@ -234,17 +235,16 @@ __attribute__((section(".stext"))) void DataModel_Init()
              }
              setReg16(RPM1_COOF,1);
              setReg16(RPM2_COOF,8);
+             setReg32( MENU1_MAP , 0x50730000 | vCHANNEL15);
              setReg32( MENU2_MAP , 0x3E000000  | chAKB );
              setReg32( MENU3_MAP , 0x76000000  | chHOUR );
-             //setReg32( MENU4_MAP , 0x783F0000 | chAIN2);
              setReg32( MENU4_MAP , 0x71000000  | chAIN3);
              setReg32( MENU5_MAP , 0x78790000  | vCHANNEL16);
-             setReg32( MENU1_MAP , 0x50730000 | vCHANNEL15);
              setReg32( MENU6_MAP , 0x6D000000  | chRPM2);
              setReg32( MENU7_MAP , 0x3F000000  | chODOMETR);
              setReg32( MENU8_MAP , 0x3F060000  | chTRIP);
-            // setReg32( MENU9_MAP                        , 0);
-           //  setReg32( MENU10_MAP                       , 0);
+             //setReg32( MENU9_MAP                        , 0);
+             //setReg32( MENU10_MAP                       , 0);
              setReg8(MENU_DEF_POS                       , 0);
              setReg8(MENU_HOME_BACK_TIME                , 10);
              setReg8(DIN_ACTIVE_STATE                   , 0);
@@ -253,6 +253,7 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg16(CH2_TIME_AVER,10);
              setReg16(CH3_TIME_AVER,300);
              setReg16(RGB_HISTERESIS_MAP, 0x1<<11);
+             setReg32(VERSION_REG,10);
              eEEPROMWr(VALID_CODE_ADDRES,GetDataRegister(),EEPROM_REGISER_COUNT,2);
              ClearDataModel();
              vTaskDelay(10);
@@ -331,7 +332,7 @@ void WriteReg( u16 reg_adress, void * data, u8 len)
 }
 
 #define MAX_BITRATE_INDEX 8
-static const u16 bitrate_table[MAX_BITRATE_INDEX]={1000,125,250,250,125,125,50,20};
+static const u16 bitrate_table[MAX_BITRATE_INDEX]={1000,500,250,125,100,50,20,10};
 /*
  * 圾抉戒志把忘投忘快技 戒扶忘折快扶我快 扼抗抉把抉扼找我 CAN 我戒 EEPROM
  */

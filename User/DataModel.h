@@ -14,7 +14,7 @@
 
 #define SW_V                 1
 #define SW_V2                1
-#define SW_V3                0
+#define SW_V3               3
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
 #define VALID_CODE_ADDRES     0
 
@@ -26,16 +26,13 @@
 #define RGB_BRIGTH_ADR         (BITRATE_ADR  +1)
 #define WHITE_BRIGTH_ADR       (RGB_BRIGTH_ADR + 1)
 #define NODE_ID                (WHITE_BRIGTH_ADR + 1)
-
-
 #define BAR_VALUE_RED_HIGH     (NODE_ID       + 1 )
-#define BAR_VALUE_RED_LOW      (BAR_VALUE_RED_HIGH  + 2 )
-#define BAR_VALUE_GREEN_HIGH   (BAR_VALUE_RED_LOW   + 2 )
-#define BAR_VALUE_GREEN_LOW    (BAR_VALUE_GREEN_HIGH  + 2 )
-#define BAR_VALUE_HIGH         (BAR_VALUE_GREEN_LOW  + 2 )
-#define BAR_VALUE_LOW          (BAR_VALUE_HIGH      + 2 )
-#define BAR_MODE               (BAR_VALUE_LOW       + 2 )
-
+#define BAR_VALUE_RED_LOW      ( BAR_VALUE_RED_HIGH    + 2 )
+#define BAR_VALUE_GREEN_HIGH   ( BAR_VALUE_RED_LOW     + 2 )
+#define BAR_VALUE_GREEN_LOW    ( BAR_VALUE_GREEN_HIGH  + 2 )
+#define BAR_VALUE_HIGH         ( BAR_VALUE_GREEN_LOW   + 2 )
+#define BAR_VALUE_LOW          ( BAR_VALUE_HIGH        + 2 )
+#define BAR_MODE               ( BAR_VALUE_LOW         + 2 )
 #define RGB1_VALUE_GREEN_HIGH  (BAR_MODE + 2)
 #define RGB1_VALUE_GREEN_LOW   (RGB1_VALUE_GREEN_HIGH + 2)
 #define RGB1_VALUE_RED_HIGH    (RGB1_VALUE_GREEN_LOW  + 2)
