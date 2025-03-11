@@ -153,7 +153,7 @@ OD_ATTR_RAM OD_RAM_t OD_RAM = {
     .x2004_DACH_PARAMETR_sub0 = 0x04,
     .x2005_AIN_RPM_sub0 = 0x06,
     .x2025_boardSettings = {
-        .highestSub_indexSupported = 0x04
+        .highestSub_indexSupported = 0x05
     },
     .x2032_ADC_1_CalibraionRegister = {
         .highestSub_indexSupported = 0x16,
@@ -335,7 +335,7 @@ typedef struct {
     OD_obj_array_t o_2019_BAR_SETUP_REGISTER;
     OD_obj_array_t o_201A_MENU_MAP_REGISTER;
     OD_obj_array_t o_201B_MENU_SETUP_REGISTER;
-    OD_obj_record_t o_2025_boardSettings[5];
+    OD_obj_record_t o_2025_boardSettings[6];
     OD_obj_record_t o_2032_ADC_1_CalibraionRegister[23];
     OD_obj_record_t o_2033_ADC_2_CalibraionRegister[23];
     OD_obj_record_t o_2034_ADC_3_CalibraionRegister[23];
@@ -1361,6 +1361,12 @@ static CO_PROGMEM ODObjs_t ODObjs = {
             .subIndex = 4,
             .attribute = ODA_SDO_RW,
             .dataLength = 1
+        },
+        {
+            .dataOrig = NULL,
+            .subIndex = 5,
+            .attribute = ODA_SDO_RW,
+            .dataLength = 1
         }
     },
     .o_2032_ADC_1_CalibraionRegister = {
@@ -1854,7 +1860,7 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x2019, 0x08, ODT_ARR, &ODObjs.o_2019_BAR_SETUP_REGISTER, NULL},
     {0x201A, 0x0B, ODT_ARR, &ODObjs.o_201A_MENU_MAP_REGISTER, NULL},
     {0x201B, 0x04, ODT_ARR, &ODObjs.o_201B_MENU_SETUP_REGISTER, NULL},
-    {0x2025, 0x05, ODT_REC, &ODObjs.o_2025_boardSettings, NULL},
+    {0x2025, 0x06, ODT_REC, &ODObjs.o_2025_boardSettings, NULL},
     {0x2032, 0x17, ODT_REC, &ODObjs.o_2032_ADC_1_CalibraionRegister, NULL},
     {0x2033, 0x17, ODT_REC, &ODObjs.o_2033_ADC_2_CalibraionRegister, NULL},
     {0x2034, 0x17, ODT_REC, &ODObjs.o_2034_ADC_3_CalibraionRegister, NULL},

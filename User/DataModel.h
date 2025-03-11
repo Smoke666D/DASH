@@ -14,7 +14,7 @@
 
 #define SW_V                 1
 #define SW_V2                1
-#define SW_V3               3
+#define SW_V3               4
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
 #define VALID_CODE_ADDRES     0
 
@@ -171,7 +171,27 @@
 #define CH2_TIME_AVER         ( CH1_TIME_AVER + 2 )
 #define CH3_TIME_AVER         ( CH2_TIME_AVER + 2 )
 #define RGB_HISTERESIS_MAP    ( CH3_TIME_AVER + 2 )
-#define EEPROM_REGISER_COUNT  ( RGB_HISTERESIS_MAP + 2 )
+
+#define VCH1_SETTING           (RGB_HISTERESIS_MAP + 2)
+#define VCH2_SETTING           (VCH1_SETTING + 2)
+#define VCH3_SETTING           (VCH2_SETTING + 2)
+#define VCH4_SETTING           (VCH3_SETTING + 2)
+#define VCH5_SETTING           (VCH4_SETTING + 2)
+#define VCH6_SETTING           (VCH5_SETTING + 2)
+#define VCH7_SETTING           (VCH6_SETTING + 2)
+#define VCH8_SETTING           (VCH7_SETTING + 2)
+#define VCH9_SETTING           (VCH8_SETTING + 2)
+#define VCH10_SETTING          (VCH9_SETTING + 2)
+#define VCH11_SETTING          (VCH10_SETTING + 2)
+#define VCH12_SETTING          (VCH11_SETTING + 2)
+#define VCH13_SETTING          (VCH12_SETTING + 2)
+#define VCH14_SETTING          (VCH13_SETTING + 2)
+#define VCH15_SETTING          (VCH14_SETTING + 2)
+#define VCH16_SETTING          (VCH5_SETTING + 4)
+#define VCH17_SETTING          (VCH16_SETTING + 4)
+
+
+#define EEPROM_REGISER_COUNT  ( VCH17_SETTING + 4 )
 
 
 #define BIG_SEG                 ( EEPROM_REGISER_COUNT)
@@ -192,12 +212,12 @@
 #define V15                     ( V14 + 1 )
 #define V16                     ( V15 + 2 )
 #define V17                     ( V16 + 2 )
-#define KEY_CODE                 (V17 +  2 )
-
+#define KEY_CODE                ( V17 +  2 )
+#define CHANNEL_TYPE_MASK       ( KEY_CODE +1 )
 #define AIN_OFFSET                400
 #define RMP_OFFSET                1000.0
 
-#define TOTAL_REGISTER_COUNT  (KEY_CODE +1 )
+#define TOTAL_REGISTER_COUNT  (CHANNEL_TYPE_MASK  + 2 )
 
 
 typedef struct

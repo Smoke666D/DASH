@@ -15,7 +15,7 @@
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2025-03-04" fileModificationTime="16:45:30.0658341+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2025-03-11" fileModificationTime="13:34:23.1234780+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <q1:DeviceIdentity>
         <q1:vendorName>SIDER</q1:vendorName>
         <q1:vendorID>2</q1:vendorID>
@@ -655,6 +655,9 @@
               <USINT />
             </q1:varDeclaration>
             <q1:varDeclaration name="DIN ACTIVE STATE" uniqueID="UID_RECSUB_202504">
+              <USINT />
+            </q1:varDeclaration>
+            <q1:varDeclaration name="NODE ID" uniqueID="UID_RECSUB_202505">
               <USINT />
             </q1:varDeclaration>
           </q1:struct>
@@ -3827,7 +3830,7 @@ Thride byte - RGB WHITE NUMBER</description>
           <q1:parameter uniqueID="UID_SUB_202500">
             <label lang="en">Highest sub-index supported</label>
             <USINT />
-            <q1:defaultValue value="0x04" />
+            <q1:defaultValue value="0x05" />
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_202501" access="readWrite">
             <label lang="en">Baud rate setting</label>
@@ -3861,6 +3864,16 @@ Thride byte - RGB WHITE NUMBER</description>
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_202504" access="readWrite">
             <label lang="en">DIN ACTIVE STATE</label>
+            <USINT />
+            <q1:allowedValues>
+              <q1:range>
+                <minValue value="0" />
+                <maxValue value="15" />
+              </q1:range>
+            </q1:allowedValues>
+          </q1:parameter>
+          <q1:parameter uniqueID="UID_SUB_202505" access="readWrite">
+            <label lang="en">NODE ID</label>
             <USINT />
             <q1:allowedValues>
               <q1:range>
@@ -4292,7 +4305,7 @@ Thride byte - RGB WHITE NUMBER</description>
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2025-03-04" fileModificationTime="16:45:30.0658341+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2025-03-11" fileModificationTime="13:34:23.1234780+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <ApplicationLayers>
         <q2:CANopenObjectList>
           <CANopenObject index="1000" name="Device type" objectType="7" PDOmapping="no" uniqueIDRef="UID_OBJ_1000" />
@@ -4778,12 +4791,13 @@ Thride byte - RGB WHITE NUMBER</description>
             <CANopenSubObject subIndex="02" name="Set Default Menu Position" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201B02" />
             <CANopenSubObject subIndex="03" name="Set Home menu back time" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_201B03" />
           </CANopenObject>
-          <CANopenObject index="2025" name="BoardSettings" objectType="9" uniqueIDRef="UID_OBJ_2025" subNumber="5">
+          <CANopenObject index="2025" name="BoardSettings" objectType="9" uniqueIDRef="UID_OBJ_2025" subNumber="6">
             <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202500" />
             <CANopenSubObject subIndex="01" name="Baud rate setting" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202501" />
             <CANopenSubObject subIndex="02" name="RGB_BRIGTH" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202502" />
             <CANopenSubObject subIndex="03" name="WHITE BRIGTH" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202503" />
             <CANopenSubObject subIndex="04" name="DIN ACTIVE STATE" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202504" />
+            <CANopenSubObject subIndex="05" name="NODE ID" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_202505" />
           </CANopenObject>
           <CANopenObject index="2032" name="ADC 1 Calibraion register" objectType="9" uniqueIDRef="UID_OBJ_2032" subNumber="23">
             <CANopenSubObject subIndex="00" name="Highest sub-index supported" objectType="7" PDOmapping="no" uniqueIDRef="UID_SUB_203200" />
