@@ -11,12 +11,12 @@
 
     File info:
         File Names:   OD.h; OD.c
-        Project File: DASH.xdd
+        Project File: DASH_v1_1_5.xdd
         File Version: 3
 
         Created:      31.01.2017 17:13:00
         Created By:   Smoke666
-        Modified:     11.03.2025 13:34:23
+        Modified:     11.03.2025 14:13:10
         Modified By:  rOBIN 2
 
     Device Info:
@@ -286,6 +286,26 @@ typedef struct {
     } x2034_ADC_3_CalibraionRegister;
     uint8_t x2036_newObject_sub0;
     int8_t x2036_newObject[OD_CNT_ARR_2036];
+    struct {
+        uint8_t highestSub_indexSupported;
+        uint16_t virtualChannel_1_Config;
+        uint16_t virtualChannel_2_Config;
+        uint16_t virtualChannel_3_Config;
+        uint16_t virtualChannel_4_Config;
+        uint16_t virtualChannel_5_Config;
+        uint16_t virtualChannel_6_Config;
+        uint16_t virtualChannel_7_Config;
+        uint16_t virtualChannel_8_Config;
+        uint16_t virtualChannel_9_Config;
+        uint16_t virtualChannel_10_Config;
+        uint16_t virtualChannel_11_Config;
+        uint16_t virtualChannel_12_Config;
+        uint16_t virtualChannel_13_Config;
+        uint16_t virtualChannel_14_Config;
+        uint32_t virtualChannel_15_Config;
+        uint32_t virtualChannel_16_Config;
+        uint32_t virtualChannel_17_Config;
+    } x2037_inputChannelConfig;
 } OD_RAM_t;
 
 typedef struct {
@@ -418,6 +438,7 @@ extern OD_ATTR_OD OD_t *OD;
 #define OD_ENTRY_H2034 &OD->list[51]
 #define OD_ENTRY_H2035 &OD->list[52]
 #define OD_ENTRY_H2036 &OD->list[53]
+#define OD_ENTRY_H2037 &OD->list[54]
 
 
 /*******************************************************************************
@@ -477,6 +498,7 @@ extern OD_ATTR_OD OD_t *OD;
 #define OD_ENTRY_H2034_ADC_3_CalibraionRegister &OD->list[51]
 #define OD_ENTRY_H2035_RPM_CalibrationRegister &OD->list[52]
 #define OD_ENTRY_H2036_newObject &OD->list[53]
+#define OD_ENTRY_H2037_inputChannelConfig &OD->list[54]
 
 
 /*******************************************************************************

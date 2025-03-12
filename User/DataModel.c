@@ -100,7 +100,6 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg8 (WHITE_BRIGTH_ADR,10);
              setReg8 (NODE_ID ,0x20);
              setReg8 (BAR_MODE ,1);
-
              setReg8 (BITRATE_ADR           ,2);
              setReg32(HOUR_COUNTER_ADR,      1046);
              setReg16(BAR_VALUE_HIGH        ,39000);
@@ -208,13 +207,15 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg8(RGBMAP13               , vCHANNEL4 );
              setReg8(RGBMAP14               , vCHANNEL3 ) ;
              setReg8(BARMAP                 , vCHANNEL15 );
+             setReg16(VCH1_SETTING                 , 0x340A);
+             setReg16(VCH2_SETTING                 , 0x350A);
              static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
              for (u8 i=0; i<9;i++)
                  setReg16(BIG_SEGVAL1 + i*sizeof (u16), seg_const[i]);
 
              setReg8(ODOMETR_MAP            , chRPM2 );
              setReg32(ODOMETR_ADR       ,1161200);
-             setReg32(ODOMETR1_ADR       ,00);
+             //setReg32(ODOMETR1_ADR       ,00);
              setReg8( AIN1_CAL_POINT_COUNT      ,  18 );
              setReg16(AIN1_OFFSET,AIN_OFFSET );
              setReg8( AIN2_CAL_POINT_COUNT      , 18);

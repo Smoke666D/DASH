@@ -231,7 +231,27 @@ OD_ATTR_RAM OD_RAM_t OD_RAM = {
         .point20_Y_X = 0
     },
     .x2036_newObject_sub0 = 0x02,
-    .x2036_newObject = {0, 0}
+    .x2036_newObject = {0, 0},
+    .x2037_inputChannelConfig = {
+        .highestSub_indexSupported = 0x11,
+        .virtualChannel_1_Config = 0x0000,
+        .virtualChannel_2_Config = 0x0000,
+        .virtualChannel_3_Config = 0x0000,
+        .virtualChannel_4_Config = 0x0000,
+        .virtualChannel_5_Config = 0x0000,
+        .virtualChannel_6_Config = 0x0000,
+        .virtualChannel_7_Config = 0x0000,
+        .virtualChannel_8_Config = 0x0000,
+        .virtualChannel_9_Config = 0x0000,
+        .virtualChannel_10_Config = 0x0000,
+        .virtualChannel_11_Config = 0x0000,
+        .virtualChannel_12_Config = 0x0000,
+        .virtualChannel_13_Config = 0x0000,
+        .virtualChannel_14_Config = 0x0000,
+        .virtualChannel_15_Config = 0x00000000,
+        .virtualChannel_16_Config = 0x00000000,
+        .virtualChannel_17_Config = 0x00000000
+    }
 };
 
 OD_ATTR_PERSIST_COMM OD_PERSIST_COMM_t OD_PERSIST_COMM = {
@@ -341,6 +361,7 @@ typedef struct {
     OD_obj_record_t o_2034_ADC_3_CalibraionRegister[23];
     OD_obj_array_t o_2035_RPM_CalibrationRegister;
     OD_obj_array_t o_2036_newObject;
+    OD_obj_record_t o_2037_inputChannelConfig[18];
 } ODObjs_t;
 
 static CO_PROGMEM ODObjs_t ODObjs = {
@@ -1804,6 +1825,116 @@ static CO_PROGMEM ODObjs_t ODObjs = {
         .attribute = ODA_SDO_RW,
         .dataElementLength = 1,
         .dataElementSizeof = sizeof(int8_t)
+    },
+    .o_2037_inputChannelConfig = {
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.highestSub_indexSupported,
+            .subIndex = 0,
+            .attribute = ODA_SDO_R,
+            .dataLength = 1
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_1_Config,
+            .subIndex = 1,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_2_Config,
+            .subIndex = 2,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_3_Config,
+            .subIndex = 3,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_4_Config,
+            .subIndex = 4,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_5_Config,
+            .subIndex = 5,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_6_Config,
+            .subIndex = 6,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_7_Config,
+            .subIndex = 7,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_8_Config,
+            .subIndex = 8,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_9_Config,
+            .subIndex = 9,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_10_Config,
+            .subIndex = 10,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_11_Config,
+            .subIndex = 11,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_12_Config,
+            .subIndex = 12,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_13_Config,
+            .subIndex = 13,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_14_Config,
+            .subIndex = 14,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 2
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_15_Config,
+            .subIndex = 15,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 4
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_16_Config,
+            .subIndex = 16,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 4
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.virtualChannel_17_Config,
+            .subIndex = 17,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 4
+        }
     }
 };
 
@@ -1866,6 +1997,7 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x2034, 0x17, ODT_REC, &ODObjs.o_2034_ADC_3_CalibraionRegister, NULL},
     {0x2035, 0x03, ODT_ARR, &ODObjs.o_2035_RPM_CalibrationRegister, NULL},
     {0x2036, 0x03, ODT_ARR, &ODObjs.o_2036_newObject, NULL},
+    {0x2037, 0x12, ODT_REC, &ODObjs.o_2037_inputChannelConfig, NULL},
     {0x0000, 0x00, 0, NULL, NULL}
 };
 

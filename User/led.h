@@ -52,4 +52,5 @@ void SetRGB(  u8 number, LED_COLOR_t color, LED_STATE_t state);
 void vRGBProcess();
 void vLedDriverStart(void);
 void vLedProcess( void );
+void SetDataSEG( u16 mask, u16 channel);
 #endif /* INC_LED_H_ */
