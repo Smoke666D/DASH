@@ -67,8 +67,6 @@ static ODR_t OD_readKEY(OD_stream_t *stream, void *buf, OD_size_t count, OD_size
 static ODR_t OD_writeICHC( OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_readICHC(OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 
-
-
 /* Variables used for triggering TPDO, see simulation in app_programRt(). */
 
 
@@ -248,7 +246,6 @@ const OD_extension_t  OD_KEY_extension = {
         .read =  OD_readKEY,
         .write = OD_writeKEY
     };
-
 const OD_extension_t  OD_INPUT_CH_CONFIG_extension = {
         .object = NULL,
         .read =  OD_readICHC,
@@ -549,6 +546,7 @@ static ODR_t OD_readSEG (OD_stream_t *stream, void *buf, OD_size_t count, OD_siz
 
 static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
+
      uint16_t data = CO_getUint16(buf);
      *countWritten= sizeof(data);
      if (stream->subIndex == 1)
@@ -646,25 +644,24 @@ static ODR_t OD_readMenuSetup (OD_stream_t *stream, void *buf, OD_size_t count, 
 static ODR_t OD_readBoardSettings(OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
 {
             *countRead = sizeof(u8);
-            u16 addr =NODE_ID;
             switch  (stream->subIndex )
             {
-                case 2:
-                    addr = RGB_BRIGTH_ADR;
-                    break;
-                case 3:
-                    addr = WHITE_BRIGTH_ADR;
-                    break;
-                case 4:
-                    addr = DIN_ACTIVE_STATE;
-                    break;
-                case 1:
-                    addr =BITRATE_ADR  ;
-                    break;
-                default:
-                    break;
+            case 2:
+                CO_setUint8(buf,  getReg8(RGB_BRIGTH_ADR));
+                break;
+            case 3:
+                CO_setUint8(buf,  getReg8(WHITE_BRIGTH_ADR));
+                break;
+            case 4:
+                CO_setUint8(buf,  getReg8(DIN_ACTIVE_STATE));
+                break;
+            case 1:
+                CO_setUint8(buf,  getReg8(BITRATE_ADR ) );
+                break;
+            case 5:
+                CO_setUint8(buf,  getReg8(NODE_ID ) );
+                break;
             }
-            CO_setUint8(buf,  getReg8(addr ) );
             return (ODR_OK);
 }
 
@@ -672,39 +669,49 @@ static ODR_t OD_readBoardSettings(OD_stream_t *stream, void *buf, OD_size_t coun
 
 static ODR_t OD_writeBoardSettings(OD_stream_t *stream, const void *buf, OD_size_t count, OD_size_t *countWritten)
 {
-
-    u8 temp = CO_getUint8(buf);
-    *countWritten =sizeof(temp);
-    switch( stream->subIndex )
-    {
-            default:
+#ifdef  DEBUF_OD_READ_WRITE
+       if (stream == NULL || buf == NULL || countRead == NULL) {
+           return ODR_DEV_INCOMPAT;
+       }
+#endif
+      ODR_t res = ODR_INVALID_VALUE;
+      u8 temp = CO_getUint8(buf);
+      *countWritten =0;
+      switch( stream->subIndex )
+        {
+            case 2:
+            case 3:
                 if (temp <= MAX_BRIGTH)
                 {
                     vSetBrigth(stream->subIndex  - 2 , temp);
                     WriteRegAfterDelay(RGB_BRIGTH_ADR + (stream->subIndex -2 ), &temp, sizeof(temp));
-                    return (ODR_OK);
+                    res =  ODR_OK;
+                    *countWritten =sizeof(temp);
                 }
                 break;
            case 1:
-                if (temp <= 7)
-                {
+                 if (temp <= 7)
+                 {
                     WriteRegAfterDelay(  BITRATE_ADR,&temp,sizeof(temp));
-                    return (ODR_OK);
+                    res =  ODR_OK;
+                    *countWritten =sizeof(temp);
                 }
                 break;
            case 4:
                if (temp <= 1)
                {
                   WriteRegAfterDelay(  DIN_ACTIVE_STATE,&temp,sizeof(temp));
-                  return (ODR_OK);
+                  res =  ODR_OK;
+                  *countWritten =sizeof(temp);
                }
                break;
            case 5:
                WriteRegAfterDelay(  NODE_ID,&temp,sizeof(temp));
-               return (ODR_OK);
+               res =  ODR_OK;
+               *countWritten =sizeof(temp);
+               break;
    }
-   *countWritten = 0;
-   return ( ODR_INVALID_VALUE );
+   return ( res );
 }
 
 
@@ -850,6 +857,8 @@ static ODR_t OD_writeKEY(OD_stream_t *stream,const  void *buf, OD_size_t count, 
    {
        setReg8(KEY_CODE , data);
    }
+
+  // WriteRegAfterDelay( RPM1_COOF + (stream->subIndex -1)*sizeof(data)  ,&data, sizeof(data));
    return (ODR_OK);
 }
 
@@ -859,8 +868,6 @@ static ODR_t OD_readKEY(OD_stream_t *stream, void *buf, OD_size_t count, OD_size
     // CO_setUint16( buf, getReg16( RPM1_COOF + ( stream->subIndex -1 ) * sizeof(u16) )  );
      return (ODR_OK);
 }
-
-
 static ODR_t OD_writeICHC( OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
 {
     if (stream->subIndex <=14)

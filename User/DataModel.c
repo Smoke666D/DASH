@@ -207,8 +207,7 @@ __attribute__((section(".stext"))) void DataModel_Init()
              setReg8(RGBMAP13               , vCHANNEL4 );
              setReg8(RGBMAP14               , vCHANNEL3 ) ;
              setReg8(BARMAP                 , vCHANNEL15 );
-             setReg16(VCH1_SETTING                 , 0x340A);
-             setReg16(VCH2_SETTING                 , 0x350A);
+
              static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
              for (u8 i=0; i<9;i++)
                  setReg16(BIG_SEGVAL1 + i*sizeof (u16), seg_const[i]);
