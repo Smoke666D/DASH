@@ -14,7 +14,7 @@
 
 #define SW_V                 1
 #define SW_V2                1
-#define SW_V3              5
+#define SW_V3                7
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
 #define VALID_CODE_ADDRES     0
 
@@ -187,11 +187,13 @@
 #define VCH13_SETTING          (VCH12_SETTING + 2)
 #define VCH14_SETTING          (VCH13_SETTING + 2)
 #define VCH15_SETTING          (VCH14_SETTING + 2)
-#define VCH16_SETTING          (VCH5_SETTING + 4)
+#define VCH16_SETTING          (VCH15_SETTING + 4)
 #define VCH17_SETTING          (VCH16_SETTING + 4)
+#define AIN1_SETTING          (VCH17_SETTING + 4)
+#define AIN2_SETTING          ( AIN1_SETTING + 4)
+#define AIN3_SETTING          ( AIN2_SETTING + 4)
 
-
-#define EEPROM_REGISER_COUNT  ( VCH17_SETTING + 4 )
+#define EEPROM_REGISER_COUNT  ( AIN3_SETTING + 4 )
 
 
 #define BIG_SEG                 ( EEPROM_REGISER_COUNT)

@@ -11,12 +11,12 @@
 
     File info:
         File Names:   OD.h; OD.c
-        Project File: DASH_v1_1_6.xdd
+        Project File: DASH_v1_1_5.xdd
         File Version: 3
 
         Created:      31.01.2017 17:13:00
         Created By:   Smoke666
-        Modified:     12.03.2025 16:56:56
+        Modified:     14.03.2025 16:25:46
         Modified By:  rOBIN 2
 
     Device Info:
@@ -305,6 +305,9 @@ typedef struct {
         uint32_t virtualChannel_15_Config;
         uint32_t virtualChannel_16_Config;
         uint32_t virtualChannel_17_Config;
+        uint32_t AIN1_Config;
+        uint32_t AIN2_Config;
+        uint32_t AIN3_Config;
     } x2037_inputChannelConfig;
 } OD_RAM_t;
 

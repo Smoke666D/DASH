@@ -37,8 +37,12 @@ int main(void)
     vSYStaskInit ( );
     vInit_DeviceConfig( );
     USART_Printf_Init(115200);
-    vTaskStartScheduler();
+   //printf("Hellow word!!!");
+   vTaskStartScheduler();
     while(1);
+    {
+       // printf("Hellow word!!!");
+    }
 }
 
 

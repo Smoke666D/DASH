@@ -233,7 +233,7 @@ OD_ATTR_RAM OD_RAM_t OD_RAM = {
     .x2036_newObject_sub0 = 0x02,
     .x2036_newObject = {0, 0},
     .x2037_inputChannelConfig = {
-        .highestSub_indexSupported = 0x11,
+        .highestSub_indexSupported = 0x14,
         .virtualChannel_1_Config = 0x0000,
         .virtualChannel_2_Config = 0x0000,
         .virtualChannel_3_Config = 0x0000,
@@ -250,7 +250,10 @@ OD_ATTR_RAM OD_RAM_t OD_RAM = {
         .virtualChannel_14_Config = 0x0000,
         .virtualChannel_15_Config = 0x00000000,
         .virtualChannel_16_Config = 0x00000000,
-        .virtualChannel_17_Config = 0x00000000
+        .virtualChannel_17_Config = 0x00000000,
+        .AIN1_Config = 0x00000000,
+        .AIN2_Config = 0x00000000,
+        .AIN3_Config = 0x00000000
     }
 };
 
@@ -361,7 +364,7 @@ typedef struct {
     OD_obj_record_t o_2034_ADC_3_CalibraionRegister[23];
     OD_obj_array_t o_2035_RPM_CalibrationRegister;
     OD_obj_array_t o_2036_newObject;
-    OD_obj_record_t o_2037_inputChannelConfig[18];
+    OD_obj_record_t o_2037_inputChannelConfig[21];
 } ODObjs_t;
 
 static CO_PROGMEM ODObjs_t ODObjs = {
@@ -1934,6 +1937,24 @@ static CO_PROGMEM ODObjs_t ODObjs = {
             .subIndex = 17,
             .attribute = ODA_SDO_RW | ODA_MB,
             .dataLength = 4
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.AIN1_Config,
+            .subIndex = 18,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 4
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.AIN2_Config,
+            .subIndex = 19,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 4
+        },
+        {
+            .dataOrig = &OD_RAM.x2037_inputChannelConfig.AIN3_Config,
+            .subIndex = 20,
+            .attribute = ODA_SDO_RW | ODA_MB,
+            .dataLength = 4
         }
     }
 };
@@ -1997,7 +2018,7 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x2034, 0x17, ODT_REC, &ODObjs.o_2034_ADC_3_CalibraionRegister, NULL},
     {0x2035, 0x03, ODT_ARR, &ODObjs.o_2035_RPM_CalibrationRegister, NULL},
     {0x2036, 0x03, ODT_ARR, &ODObjs.o_2036_newObject, NULL},
-    {0x2037, 0x12, ODT_REC, &ODObjs.o_2037_inputChannelConfig, NULL},
+    {0x2037, 0x15, ODT_REC, &ODObjs.o_2037_inputChannelConfig, NULL},
     {0x0000, 0x00, 0, NULL, NULL}
 };
 

@@ -86,7 +86,7 @@ void vDataModelRegDelayWrite()
 
 
 
-__attribute__((section(".stext"))) void DataModel_Init()
+ void DataModel_Init()
 {
     //ClearDataModel();
     if ( eEEPROMRd(0x00 ,GetDataRegister() , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
