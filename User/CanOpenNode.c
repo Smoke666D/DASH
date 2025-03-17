@@ -76,6 +76,7 @@ void vCanOpenProcess(void *argument)
 
         /* Reset normal state */
          CO->CANmodule->CANnormal = false;
+         printf("Can init\r\n");
          /* Enter CAN configuration. May be NULL, default one is used in driver */
          CO_CANsetConfigurationMode(CO->CANmodule->CANptr);
          CO_CANmodule_disable(CO->CANmodule);

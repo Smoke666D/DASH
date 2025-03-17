@@ -30,7 +30,7 @@ static StackType_t InputsTaskBuffer[INPUTS_TASK_STACK_SIZE];
 static StaticTask_t defaultTaskControlBlock;
 static StaticTask_t InputsTaskControlBlock;
 static TaskHandle_t DefautTask_Handler;
-static uint8_t ucQueueStorageArea[  16U * sizeof( EEPROM_REG_Q_t ) ];
+static uint8_t ucQueueStorageArea[  5U * sizeof( EEPROM_REG_Q_t ) ];
 static StaticQueue_t xStaticQueue;
 
 /*
@@ -111,6 +111,7 @@ void StartDefaultTask(void *argument)
    {
       vTaskDelay(500);
       HAL_WDTReset();
+      printf("Run\r\n");
    }
   /* USER CODE END 5 */
 }

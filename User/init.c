@@ -11,6 +11,7 @@
 
 
 
+
 static void MX_GPIO_Init( void );
 
 
@@ -33,7 +34,7 @@ INIT_FUNC_LOC void vInit_DeviceConfig( void )
     HAL_SPI_InitDMA(HAL_SPI2, SPI_16bit );
     HAL_TIMER_InitIt( TIMER4, 1500000, 100, &vRGBProcess ,TIM4_PRIOR,TIM4_SUB_PRIOR);
     HAL_TiemrEneblae( TIMER4);
-    vInitEEPROM_I2C(I2C_1, I2C1_PRIOR ,I2C1_SUB_PRIOR );
+    vInitEEPROM_I2C(EEPROM_I2C1, I2C1_PRIOR ,I2C1_SUB_PRIOR );
 	//while (HAL_GetBit(  Din3_4_5_Port , Din5_Pin)== RESET);
 	//HAL_SetBit(PowerOn_Port, PowerOn_Pin);
 	HAL_WDT_Init1s();

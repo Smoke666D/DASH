@@ -52,10 +52,10 @@ typedef struct
 #endif
 #if CORE == WCH32V2 || CORE == WCH32V3
 typedef enum
-      {
-    I2C_1  =0,
-    I2C_2  =1,
-      }
+{
+    HAL_I2C_1  =0,
+    HAL_I2C_2  =1,
+}
  I2C_NAME_t;
 
 #define STAR1_SB_FLAG     0x0001

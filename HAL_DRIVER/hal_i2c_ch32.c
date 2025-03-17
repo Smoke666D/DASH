@@ -75,7 +75,7 @@ void HAL_I2C_Init( I2C_NAME_t i2c, HAL_I2C_InitTypeDef * I2C_InitStruct)
 {
 
 #ifdef I2C1_ENABLE
-    if ( i2c == I2C_1)
+    if ( i2c == HAL_I2C_1)
     {
         HAL_InitAPB1( RCC_APB1Periph_I2C1);
 
@@ -140,7 +140,7 @@ void InitI2CIT( I2C_NAME_t i2c,HAL_I2C_InitTypeDef * I2C_InitStruct, uint8_t pri
 {
    // I2C_TypeDef *  I2Cx = i2c;
 #ifdef I2C1_ENABLE
-    if ( i2c == I2C_1)
+    if ( i2c == HAL_I2C_1)
     {
         I2C_Callback[0].datacallback  = fdata;
         I2C_Callback[0].errorcallback = ferror;
@@ -157,7 +157,7 @@ void InitI2CIT( I2C_NAME_t i2c,HAL_I2C_InitTypeDef * I2C_InitStruct, uint8_t pri
     }
 #endif
     HAL_I2C_Init( i2c,I2C_InitStruct);
-   if (i2c == I2C_1)
+   if (i2c == HAL_I2C_1)
    {
 #if CORE ==WCH32V2
        PFIC_IRQ_ENABLE_PG1(I2C1_EV_IRQn ,prior,subprior);

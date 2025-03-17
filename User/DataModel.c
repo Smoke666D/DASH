@@ -89,8 +89,10 @@ void vDataModelRegDelayWrite()
  void DataModel_Init()
 {
     //ClearDataModel();
+     printf("EEPROM Init...");
     if ( eEEPROMRd(0x00 ,GetDataRegister() , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
+         printf("OK!\r\n");
          if (getReg8(VALID_CODE_ADDRES)!=VALID_CODE )
          {
              ClearDataModel();
@@ -280,6 +282,9 @@ void vDataModelRegDelayWrite()
                 }
             }
          }
+    }
+    else {
+        printf("fail\r\n");
     }
     secondcounter = 0;
 }

@@ -775,30 +775,36 @@ void SetTest(LED_COLOR_t color, u8 number)
     for (u8 i = 0; i< 14;i++)
     {
           SetRGB( i, RED_COLOR,  (( i == number ) && (color ==RED_COLOR)) ? STATE_ON  : STATE_OFF );
-          SetRGB( i, GREEN_COLOR,(( i == number ) && (color = GREEN_COLOR)) ? STATE_ON  : STATE_OFF  );
+          SetRGB( i, GREEN_COLOR,(( i == number ) && (color == GREEN_COLOR)) ? STATE_ON  : STATE_OFF  );
           SetRGB( i, BLUE_COLOR, (( i == number ) && (color ==BLUE_COLOR)) ? STATE_ON  : STATE_OFF );
     }
 
 }
+
+const uint16_t SEG_MASK[]={0x0001,0x0002,0x0004,0x0008,0x0010,0x0020,0x0040,0x0080,0x0100,0x0200};
 INIT_FUNC_LOC  void TestProcedure()
 {
     if (++test_fasm>=42 ) test_fasm = 0;
     if (test_fasm < 14)
-             SetTest(RED_COLOR,test_fasm );
+         SetTest(RED_COLOR,test_fasm );
     else
     if (test_fasm < 28)
-             SetTest(GREEN_COLOR,test_fasm );
+          SetTest(GREEN_COLOR,test_fasm-14 );
     else
     if (test_fasm < 42)
-           SetTest(BLUE_COLOR,test_fasm );
+           SetTest(BLUE_COLOR,test_fasm-28 );
     if (test_fasm < 16)
         SetBarState( 0, test_fasm, 0, 0 );
     else  if (test_fasm < 16)
         SetBarState( 0, 0, 0, test_fasm%16 );
     else
         SetBarState( 0, 16, 0, 16);
-
     vLedProcess( );
+    SetBigSeg(SEG_MASK[test_fasm%10]);
+    for (int k = 0;k<7;k++)
+
+        SetSegDirect(k,SEG_MASK[test_fasm%7]);
+
 
 }
 /*
@@ -806,7 +812,7 @@ INIT_FUNC_LOC  void TestProcedure()
  */
 void vRedrawTask( void * argument )
 {
-    TaskFSM_t  state = STATE_RUN;
+    TaskFSM_t  state = STATE_TEST;
     u8 draw_counter = 20;
     u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r,bd;
     u8 data;

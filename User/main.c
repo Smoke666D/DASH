@@ -31,24 +31,14 @@
  */
 int main(void)
 {
-
     SystemCoreClockUpdate();
     vInit_DeviceConfig( );
     Delay_Init();
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
-
-
-
     vSYSqueueInit (  );
     vSYStaskInit ( );
-
-
-
-
-     vTaskStartScheduler();
-
-
+    vTaskStartScheduler();
     while(1);
     {
        // printf("Hellow word!!!");
@@ -71,8 +61,10 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
+  printf("Memory error!\r\n");
   while (1)
   {
+
   }
   /* USER CODE END Error_Handler_Debug */
 }

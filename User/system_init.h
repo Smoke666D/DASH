@@ -21,17 +21,17 @@
 #define __SECTION(x)
 
 
-#define DEFAULT_TASK_STACK_SIZE         128U
+
 #define INPUTS_TASK_STACK_SIZE          128U
 #define DEFAULT_TASK_STACK_SIZE         128U
 #define CAN_OPEN_TASK_PRIO              5
 #define INPUT_TASK_PRIO                 8
 #define DEFAULT_TASK_PRIOR              9
-#define CAN_OPEN_STK_SIZE               400
+#define CAN_OPEN_STK_SIZE               700
 #define PERIODIC_CAN_TASK_PRIO          4
 #define PERIODIC_CAN_STK_SIZE           256
 #define PROCESS_TASK_PRIO               6  //§¥§°§­§¨§¦§¯ §¢§½§´§¾ §³§¡§®§½ §£§½§³§°§¬§ª§«
-#define PROCESS_STK_SIZE                256
+#define PROCESS_STK_SIZE                128
 
 
 #define TASK_RUN_NOTIFY    0x01
