@@ -29,6 +29,7 @@ static TaskHandle_t pInputsTaskHandle;
 //static uint8_t *OD_AIN_flagsPDO = NULL;
 static uint16_t ADC_OLD_RAW[ ADC1_CHANNELS  ];
 static float    OurVData[ ADC1_CHANNELS ];
+static uint16_t    RawADC[3];
 static ADC_Conversionl_Buf_t DataBuffer[ 3 ];
 static int16_t AIN1Buffer[ AIN_MAX_BUFFER_SIZE ];
 static int16_t AIN2Buffer[ AIN_MAX_BUFFER_SIZE ];
@@ -75,10 +76,6 @@ INIT_FUNC_LOC void ADC1_Init()
     HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
 }
 
-
-
-
-
 /*
  *
  */
@@ -98,7 +95,7 @@ void ADC_FSM( BaseType_t time, u8 * init_flag )
        ADC_Buffer[i] = vRCFilterConfig(ADC_Buffer[i], &ADC_OLD_RAW[i],(i < AIN4)? 230: 100 );
    }
    OurVData[AIN4] = (float)((double) ADC_Buffer[AIN4]  * AINCOOF3)+DIOD;
-   OurVData[AIN5]=  (float) ADC_Buffer[AIN5]*VADD_COOF*K;
+   OurVData[AIN5]=  (float) ((double)ADC_Buffer[AIN5]*VADD_COOF*K);
     if (*init_flag )
     {   for (u8 i = 0; i< AIN4 ;i++)
         {
@@ -119,6 +116,7 @@ void ADC_FSM( BaseType_t time, u8 * init_flag )
                      AddBufferData(&DataBuffer[i],ADC_Buffer[i]);
                      ADC_Buffer[i] = GetConversional(&DataBuffer[i]);
                      Vx = (float)((double)ADC_Buffer[i]*AIN_COOF*K);
+                     RawADC[i]= ADC_Buffer[i];
                      switch ( i )
                      {
                          case AIN1:
@@ -146,6 +144,11 @@ float GetAIN(u8 ch)
     return OurVData[ch];
 }
 
+uint16_t GetAINRaw(u8 ch)
+{
+    return ( RawADC[ch]);
+}
+
 /*
  *
  */
@@ -159,6 +162,17 @@ uint8_t fDinStateCallback (uint8_t i)
             return HAL_GetBit(  Din3_4_5_Port , Din5_Pin);
         default:
             return (RESET);
+    }
+}
+
+uint8_t InputsGetTest( uint8_t ch)
+{
+    switch(ch)
+    {
+        case 0: return (HAL_GetBit(  Din1_Port , Din1_Pin));
+        case 1: return (HAL_GetBit(  Din2_Port , Din2_Pin));
+        case 2: return (HAL_GetBit(  Din3_4_5_Port , Din3_Pin));
+        default: return (HAL_GetBit(  Din3_4_5_Port , Din4_Pin));
     }
 }
 /*
@@ -256,12 +270,12 @@ void vInputsTask( void * argument )
                  if ((GetAIN(AIN5) < 4.9) || (uGetDIN(INPUT_4)== RESET))
                  {
                      vSystemStop();
-                      HardwareDeinit();
-                      vSaveData();
-                      vTaskDelay(10);
-                      HAL_ResetBit(PowerON_Port,PowerON_Pin);
-                      vTaskDelay(1);
-                      SoftwareReset();
+                     HardwareDeinit();
+                     vSaveData();
+                     vTaskDelay(10);
+                     HAL_ResetBit(PowerON_Port,PowerON_Pin);
+                     vTaskDelay(1);
+                     SoftwareReset();
                  }
               }
          }

@@ -61,6 +61,7 @@ void vInputsTask( void * argument );
 void InputsNotifyTaskToStop();
 void InputsNotifyTaskToInit();
 float GetAIN(u8 ch);
-
+uint16_t GetAINRaw(u8 ch);
+uint8_t InputsGetTest( uint8_t ch);
 /*----------------------------------------------------------------------------*/
 #endif /* INC_KEYBOARD_H_ */

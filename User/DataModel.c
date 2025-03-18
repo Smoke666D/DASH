@@ -100,12 +100,11 @@ void vDataModelRegDelayWrite()
          {
              ClearDataModel();
              setReg8 (VALID_CODE_ADDRES ,VALID_CODE);
-             setReg8 (BITRATE_ADR,2);
+             setReg8 (BITRATE_ADR,2 | 0x80);
              setReg8 (RGB_BRIGTH_ADR,10);
              setReg8 (WHITE_BRIGTH_ADR,10);
              setReg8 (NODE_ID ,0x20);
              setReg8 (BAR_MODE ,1);
-             setReg8 (BITRATE_ADR           ,2);
              setReg32(HOUR_COUNTER_ADR,      1046);
              setReg16(BAR_VALUE_HIGH        ,39000);
              setReg16(BAR_VALUE_LOW         ,0);

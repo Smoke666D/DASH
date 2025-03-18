@@ -117,12 +117,18 @@ void StartDefaultTask(void *argument)
       {
           if (counter++ ==2)
           {
-            printf("Pow*10=%d \r\n",(uint16_t)GetAIN(AIN4)*10);//, AIN2=%d, AIN3=%d AIN4=%d\r\n", GetAIN(AIN1),GetAIN(AIN2),GetAIN(AIN3),GetAIN(AIN4)*10);
-            printf("AIN1 R=%d \r\n",(uint16_t)GetAIN(AIN1));
-            printf("AIN2 R=%d \r\n",(uint16_t)GetAIN(AIN2));
-            printf("AIN3 R=%d \r\n",(uint16_t)GetAIN(AIN3));
-            printf("Sec =%d \r\n", DataModelGetSecCounter());
-            counter = 0;
+             printf("\r\n Sec =%d \r\n", DataModelGetSecCounter());
+             for (uint8_t i=AIN1;i<=AIN3;i++)
+             {
+                  printf("ain%d R  %d \r\n",i,(uint16_t)GetAIN(i));
+             }
+             for (uint8_t i=AIN4;i<=AIN5;i++)
+             {
+                 printf("ain%d B*100 %d \r\n",i,(uint16_t)(GetAIN(i)*100));
+             }
+             for (uint8_t i = 0 ; i< 4;i++)
+             printf("DIN%d =%d \r\n", i,InputsGetTest( i));
+             counter = 0;
           }
       }
    }

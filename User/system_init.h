@@ -23,7 +23,7 @@
 
 
 #define INPUTS_TASK_STACK_SIZE          150U
-#define DEFAULT_TASK_STACK_SIZE         128U
+#define DEFAULT_TASK_STACK_SIZE         150U
 #define CAN_OPEN_TASK_PRIO              5
 #define INPUT_TASK_PRIO                 8
 #define DEFAULT_TASK_PRIOR              9
