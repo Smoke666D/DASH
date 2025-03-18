@@ -30,7 +30,7 @@ static StackType_t InputsTaskBuffer[INPUTS_TASK_STACK_SIZE];
 static StaticTask_t defaultTaskControlBlock;
 static StaticTask_t InputsTaskControlBlock;
 static TaskHandle_t DefautTask_Handler;
-static uint8_t ucQueueStorageArea[  5U * sizeof( EEPROM_REG_Q_t ) ];
+static uint8_t ucQueueStorageArea[  16U * sizeof( EEPROM_REG_Q_t ) ];
 static StaticQueue_t xStaticQueue;
 
 /*
@@ -100,7 +100,9 @@ void vSYSeventInit ( void )
 
 void StartDefaultTask(void *argument)
 {
+   uint8_t counter = 0;
    DataModel_Init();
+   uint8_t test_mode =0;// ((getReg8(BITRATE_ADR ) & 0x80) == 0 )?0:1;
    vProceesInit();
    vTaskResume( *xCanOpenProcessTaskHandle());
    vTaskResume( *xCanOpenPeriodicTaskHandle ());
@@ -111,7 +113,17 @@ void StartDefaultTask(void *argument)
    {
       vTaskDelay(500);
       HAL_WDTReset();
-      printf("Run\r\n");
+      /*if (test_mode )
+      {
+          if (counter++ ==2)
+          {
+            printf("Pow*10=%d \r\n",(uint16_t)GetAIN(AIN4)*10);//, AIN2=%d, AIN3=%d AIN4=%d\r\n", GetAIN(AIN1),GetAIN(AIN2),GetAIN(AIN3),GetAIN(AIN4)*10);
+            printf("AIN1 R=%d \r\n",(uint16_t)GetAIN(AIN1));
+            printf("AIN2 R=%d \r\n",(uint16_t)GetAIN(AIN2));
+            printf("AIN3 R=%d \r\n",(uint16_t)GetAIN(AIN3));
+            counter = 0;
+          }
+      }*/
    }
   /* USER CODE END 5 */
 }

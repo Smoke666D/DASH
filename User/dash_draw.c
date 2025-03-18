@@ -812,7 +812,7 @@ INIT_FUNC_LOC  void TestProcedure()
  */
 void vRedrawTask( void * argument )
 {
-    TaskFSM_t  state = STATE_TEST;
+    TaskFSM_t  state =  ((getReg8(BITRATE_ADR ) & 0x80) == 0 ) ? STATE_RUN : STATE_TEST;
     u8 draw_counter = 20;
     u16 low_edge_g, high_edge_g, low_edge_r, high_edge_r,bd;
     u8 data;
@@ -891,6 +891,7 @@ void vRedrawTask( void * argument )
          }
          else
          {
+             vTaskDelay(10);
              if (++draw_counter >= 20)
              {
                  TestProcedure();

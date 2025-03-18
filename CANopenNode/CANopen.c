@@ -907,7 +907,7 @@ CO_ReturnError_t CO_CANinit(CO_t *co, void *CANptr, uint16_t bitRate) {
     if (co == NULL) { return CO_ERROR_ILLEGAL_ARGUMENT; }
 
     co->CANmodule->CANnormal = false;
-    CO_CANsetConfigurationMode(CANptr);
+  //  CO_CANsetConfigurationMode(CANptr);
 
     /* CANmodule */
     err = CO_CANmodule_init(co->CANmodule,

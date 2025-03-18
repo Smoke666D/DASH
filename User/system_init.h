@@ -22,26 +22,26 @@
 
 
 
-#define INPUTS_TASK_STACK_SIZE          128U
+#define INPUTS_TASK_STACK_SIZE          150U
 #define DEFAULT_TASK_STACK_SIZE         128U
 #define CAN_OPEN_TASK_PRIO              5
 #define INPUT_TASK_PRIO                 8
 #define DEFAULT_TASK_PRIOR              9
-#define CAN_OPEN_STK_SIZE               700
+#define CAN_OPEN_STK_SIZE               600
 #define PERIODIC_CAN_TASK_PRIO          4
 #define PERIODIC_CAN_STK_SIZE           256
 #define PROCESS_TASK_PRIO               6  //§¥§°§­§¨§¦§¯ §¢§½§´§¾ §³§¡§®§½ §£§½§³§°§¬§ª§«
 #define PROCESS_STK_SIZE                128
 
 
-#define TASK_RUN_NOTIFY    0x01
-#define TASK_STOP_NOTIFY   0x02
-#define TASK_INIT_NOTIFY   0x04
+#define TASK_RUN_NOTIFY       0x01
+#define TASK_STOP_NOTIFY      0x02
+#define TASK_INIT_NOTIFY      0x04
 #define INPUTS_DRIVER_READY   0x08
-#define AIN_DRIVER_READY   0x10
-#define ADC2_READY         0x20
-#define ADC3_READY         0x40
-#define ADC1_READY         0x80
+#define AIN_DRIVER_READY      0x10
+#define ADC2_READY            0x20
+#define ADC3_READY            0x40
+#define ADC1_READY            0x80
 
 
 

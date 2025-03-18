@@ -656,10 +656,13 @@ static ODR_t OD_readBoardSettings(OD_stream_t *stream, void *buf, OD_size_t coun
                 CO_setUint8(buf,  getReg8(DIN_ACTIVE_STATE));
                 break;
             case 1:
-                CO_setUint8(buf,  getReg8(BITRATE_ADR ) );
+                CO_setUint8(buf,  getReg8(BITRATE_ADR ) & 0x7F);
                 break;
             case 5:
                 CO_setUint8(buf,  getReg8(NODE_ID ) );
+                break;
+            case 6:
+                CO_setUint8(buf,  (getReg8(BITRATE_ADR ) & 0x80)>>7);
                 break;
             }
             return (ODR_OK);
@@ -692,6 +695,7 @@ static ODR_t OD_writeBoardSettings(OD_stream_t *stream, const void *buf, OD_size
            case 1:
                  if (temp <= 7)
                  {
+                    temp = (temp | ( getReg8(BITRATE_ADR ) & 0x80));
                     WriteRegAfterDelay(  BITRATE_ADR,&temp,sizeof(temp));
                     res =  ODR_OK;
                     *countWritten =sizeof(temp);
@@ -707,6 +711,12 @@ static ODR_t OD_writeBoardSettings(OD_stream_t *stream, const void *buf, OD_size
                break;
            case 5:
                WriteRegAfterDelay(  NODE_ID,&temp,sizeof(temp));
+               res =  ODR_OK;
+               *countWritten =sizeof(temp);
+               break;
+           case 6:
+               temp = ((temp <<7) | ( getReg8(BITRATE_ADR ) & 0x7F));
+               WriteRegAfterDelay(  BITRATE_ADR,&temp,sizeof(temp));
                res =  ODR_OK;
                *countWritten =sizeof(temp);
                break;
@@ -880,7 +890,7 @@ static ODR_t OD_writeICHC( OD_stream_t *stream,const  void *buf, OD_size_t count
     {
        *countWritten = sizeof(u32);
        uint32_t data32 =  (uint32_t)CO_getUint32(buf);
-       WriteRegAfterDelay(VCH15_SETTING + ( stream->subIndex -14 ) * sizeof(u32)  ,&data32, sizeof(data32));
+       WriteRegAfterDelay(VCH15_SETTING + ( stream->subIndex -15 ) * sizeof(u32)  ,&data32, sizeof(data32));
     }
     return (ODR_OK);
 }
@@ -894,7 +904,7 @@ static ODR_t OD_readICHC(OD_stream_t *stream, void *buf, OD_size_t count, OD_siz
      else
      {
         *countRead = sizeof(u32);
-        CO_setUint32( buf, getReg32( VCH15_SETTING + ( stream->subIndex -14 ) * sizeof(u32) )  );
+        CO_setUint32( buf, getReg32( VCH15_SETTING + ( stream->subIndex -15 ) * sizeof(u32) )  );
     }
     return (ODR_OK);
 }

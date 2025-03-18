@@ -214,6 +214,7 @@ uint8_t fDinStateCallback (uint8_t i)
  * */
 void vInputsTask( void * argument )
 {
+
   uint32_t last_tick;
   uint8_t din_counter = 0;
   u8 init_flag = 0;
@@ -237,6 +238,8 @@ void vInputsTask( void * argument )
             ADC_FSM( cur_tick- last_tick, &init_flag);
             last_tick = cur_tick;
             HAL_ADC_StartDMA(DMA1_CH1,ADC1_CHANNELS * ADC_FRAME_SIZE);
+
+
             if (  InitState  == START_UP_STATE)
             {
                     if  (uGetDIN(INPUT_4) && (GetAIN(AIN4)>= 9.0 ))

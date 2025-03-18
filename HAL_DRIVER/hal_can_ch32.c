@@ -47,6 +47,8 @@ void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
      RCC->APB1PRSTR |= RCC_APB1Periph_CAN1;
      RCC->APB1PRSTR &= ~RCC_APB1Periph_CAN1;
      RCC->APB1PCENR |= RCC_APB1Periph_CAN1;
+
+     HAL_CANToInitMode();
      /* Configure CAN timing */
       switch (CANbitRate)
       {
@@ -114,27 +116,29 @@ void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
 
 uint8_t HAL_CANToInitMode()
 {
-
-
 	uint32_t timeout = INAK_TIMEOUT;
+
 	CAN1->CTLR = (uint32_t)((CAN1->CTLR & (uint32_t)(~(uint32_t)CAN_CTLR_SLEEP)) | CAN_CTLR_INRQ);
 	while (((CAN1->STATR & CAN_MODE_MASK) != CAN_STATR_INAK) && (timeout != 0))
 	{
+
 	      timeout--;
 	}
-	return ( ((CAN1->STATR & CAN_MODE_MASK) != CAN_STATR_INAK)?  CAN_ModeStatus_Failed : CAN_ModeStatus_Success);
+
+	;
+	return 0;//( ((CAN1->STATR & CAN_MODE_MASK) != CAN_STATR_INAK)?  CAN_ModeStatus_Failed : CAN_ModeStatus_Success);
 
 }
 uint8_t HAL_CANToOperatingMode()
 {
-
-
 	uint32_t timeout = INAK_TIMEOUT;
+
 	CAN1->CTLR &= (uint32_t)(~(CAN_CTLR_SLEEP|CAN_CTLR_INRQ));
 	while (((CAN1->STATR & CAN_MODE_MASK) != 0) && (timeout!=0))
 	{
 	    timeout--;
 	}
+
 	return ( ((CAN1->STATR & CAN_MODE_MASK) != 0)?  CAN_ModeStatus_Failed : CAN_ModeStatus_Success);
 
 }

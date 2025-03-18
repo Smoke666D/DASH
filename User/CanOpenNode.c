@@ -13,6 +13,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "system_init.h"
+#include "hal_can.h"
 
 /*
  * Локальные переменные
@@ -78,12 +79,10 @@ void vCanOpenProcess(void *argument)
          CO->CANmodule->CANnormal = false;
          printf("Can init\r\n");
          /* Enter CAN configuration. May be NULL, default one is used in driver */
-         CO_CANsetConfigurationMode(CO->CANmodule->CANptr);
-         CO_CANmodule_disable(CO->CANmodule);
 
          /* Initialize CANopen */
           if ((err = CO_CANinit(CO, CO->CANmodule->CANptr, pendingBitRate)) != CO_ERROR_NO)
-          {
+        {
               Error_Handler();
           }
           CO_LSS_address_t lssAddress = {
@@ -96,6 +95,7 @@ void vCanOpenProcess(void *argument)
            };
            if ((err = CO_LSSinit(CO, &lssAddress, &pendingNodeId, &pendingBitRate)) != CO_ERROR_NO)
            {
+
                 Error_Handler();
            }
             /* Initialite core stack */
@@ -114,12 +114,14 @@ void vCanOpenProcess(void *argument)
                                  &errInfo);
             if (err != CO_ERROR_NO && err != CO_ERROR_NODE_ID_UNCONFIGURED_LSS)
             {
+
                  Error_Handler();
             }
 
             /* Initialize PDO */
             err = CO_CANopenInitPDO(CO, CO->em, OD, activeNodeId, &errInfo);
             if (err != CO_ERROR_NO) {
+
 
                 Error_Handler();
             }
@@ -134,14 +136,14 @@ void vCanOpenProcess(void *argument)
     #endif
             } else {
 
+
                 Error_Handler();
             }
 
             /* Start CAN to receive messages */
-            CO_CANsetNormalMode(CO->CANmodule);
+            HAL_CANToOperatingMode();
 
             reset = CO_RESET_NOT;
-
 
             /* Release semaphore at this point. We are ready to proceed */
             co_drv_mutex_unlock();

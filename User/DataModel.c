@@ -216,7 +216,9 @@ void vDataModelRegDelayWrite()
 
              setReg8(ODOMETR_MAP            , chRPM2 );
              setReg32(ODOMETR_ADR       ,1161200);
-             //setReg32(ODOMETR1_ADR       ,00);
+             setReg32(VCH15_SETTING       ,0xA000A);
+             setReg32(VCH16_SETTING       ,0xA000B);
+             setReg32(VCH17_SETTING       ,0xA000C);
              setReg8( AIN1_CAL_POINT_COUNT      ,  18 );
              setReg16(AIN1_OFFSET,AIN_OFFSET );
              setReg8( AIN2_CAL_POINT_COUNT      , 18);
@@ -343,7 +345,7 @@ static const u16 bitrate_table[MAX_BITRATE_INDEX]={1000,500,250,125,100,50,20,10
  */
 uint16_t vGetBitrate()
 {
-   u8 index = bReadEEPROM( BITRATE_ADR,2 );
+   u8 index = bReadEEPROM( BITRATE_ADR,2 ) & 0x7F;
    return (index <= MAX_BITRATE_INDEX ) ? bitrate_table[index] : 500;
 }
 
