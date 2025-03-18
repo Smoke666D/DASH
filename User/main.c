@@ -32,8 +32,8 @@
 int main(void)
 {
     SystemCoreClockUpdate();
-    vInit_DeviceConfig( );
     Delay_Init();
+    vInit_DeviceConfig( );
     USART_Printf_Init(115200);
     printf("SystemClk:%d\r\n", SystemCoreClock);
     vSYSqueueInit (  );

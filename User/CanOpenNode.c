@@ -141,7 +141,8 @@ void vCanOpenProcess(void *argument)
             }
 
             /* Start CAN to receive messages */
-            HAL_CANToOperatingMode();
+            CO_CANsetNormalMode(CO->CANmodule);
+           // HAL_CANToOperatingMode();
 
             reset = CO_RESET_NOT;
 

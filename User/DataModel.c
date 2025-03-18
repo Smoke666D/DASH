@@ -68,7 +68,10 @@ QueueHandle_t * xDataRegQueue( void )
 }
 
 
-
+u16 DataModelGetSecCounter()
+{
+    return (secondcounter);
+}
 
 void vDataModelRegDelayWrite()
 {
@@ -359,6 +362,9 @@ uint8_t vGetNodeId( void )
 {
   return ( getReg8( NODE_ID) );
 }
+
+
+
 
 /*
  * §°§Ò§â§Ñ§Ò§à§ä§é§Ú§Ü §á§â§Ö§â§í§Ó§Ñ§ß§Ú§ñ §à§ä §ã§Ö§Ü§å§ß§Õ§ß§à§Ô§à §ä§Ñ§Û§Þ§Ö§â§Ñ RTC

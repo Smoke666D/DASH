@@ -102,7 +102,7 @@ void StartDefaultTask(void *argument)
 {
    uint8_t counter = 0;
    DataModel_Init();
-   uint8_t test_mode =0;// ((getReg8(BITRATE_ADR ) & 0x80) == 0 )?0:1;
+   uint8_t test_mode =((getReg8(BITRATE_ADR ) & 0x80) == 0 )?0:1;
    vProceesInit();
    vTaskResume( *xCanOpenProcessTaskHandle());
    vTaskResume( *xCanOpenPeriodicTaskHandle ());
@@ -113,7 +113,7 @@ void StartDefaultTask(void *argument)
    {
       vTaskDelay(500);
       HAL_WDTReset();
-      /*if (test_mode )
+      if (test_mode )
       {
           if (counter++ ==2)
           {
@@ -121,9 +121,10 @@ void StartDefaultTask(void *argument)
             printf("AIN1 R=%d \r\n",(uint16_t)GetAIN(AIN1));
             printf("AIN2 R=%d \r\n",(uint16_t)GetAIN(AIN2));
             printf("AIN3 R=%d \r\n",(uint16_t)GetAIN(AIN3));
+            printf("Sec =%d \r\n", DataModelGetSecCounter());
             counter = 0;
           }
-      }*/
+      }
    }
   /* USER CODE END 5 */
 }

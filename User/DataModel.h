@@ -233,7 +233,7 @@ typedef struct
 QueueHandle_t * xDataRegQueue( void );
 void DataModel_Init();
 void vDataModelRegDelayWrite();
-
+u16 DataModelGetSecCounter();
 void WriteReg( u16 reg_adress, void * data, u8 len);
 uint16_t vGetBitrate();
 void vIncrementSystemCounters();

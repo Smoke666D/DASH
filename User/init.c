@@ -19,7 +19,7 @@ static void MX_GPIO_Init( void );
 Функция инициализации перефирии устройства
 */
 
-INIT_FUNC_LOC void vInit_DeviceConfig( void )
+ void vInit_DeviceConfig( void )
 {	
     //Настройка тактирования всех устрйоств
     HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR);
