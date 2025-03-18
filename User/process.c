@@ -875,6 +875,16 @@ static ODR_t OD_writeKEY(OD_stream_t *stream,const  void *buf, OD_size_t count, 
 static ODR_t OD_readKEY(OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
 {
      *countRead = sizeof(u8);
+
+
+       if ( stream->subIndex == 1 )
+       {
+           CO_setUint8( buf, getReg8(KEY_CONTROL_REG));
+       }
+       else
+       {
+           CO_setUint8( buf, getReg8(KEY_CODE));
+       }
     // CO_setUint16( buf, getReg16( RPM1_COOF + ( stream->subIndex -1 ) * sizeof(u16) )  );
      return (ODR_OK);
 }

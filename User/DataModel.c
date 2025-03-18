@@ -89,7 +89,7 @@ void vDataModelRegDelayWrite()
 
 
 
- void DataModel_Init()
+INIT_FUNC_LOC  void DataModel_Init()
 {
     //ClearDataModel();
      printf("EEPROM Init...");
@@ -294,14 +294,19 @@ void vDataModelRegDelayWrite()
 }
 
 
-
+//§¶§å§ß§Ü§è§Ú§ñ §Ù§Ñ§á§Ú§ã§Ú §Ó EEPROM §é§Ö§â§Ö§Ù §à§é§Ö§â§Ö§Õ§î §à§á§Ö§â§Ñ§è§Ú§ß§ß§à§Û §ã§Ú§ã§ä§Ö§Þ§í.
+//§¶§å§ß§Ü§è§Ú§ñ §Ù§Ñ§á§Ú§ã§í§Ó§Ñ§Ö§ä §ß§à§Ó§í§Ö §Õ§Ñ§ß§ß§í§Ö §Ó §â§Ö§Ô§Ú§ã§ä§â, §Ú §Ö§ã§Ý§Ú §â§Ö§Ô§Ú§ã§ä§â §ß§Ñ§ç§à§Õ§Ú§ä§î§ã§ñ §Ó ROM
+//§³§Ü§Ú§Õ§í§Ó§Ñ§Ö§ä §Õ§Ñ§ß§ß§í§Ö §à §ß§Ö§Þ §Ó §à§é§Ö§â§Ö§Õ§î
+//§°§é§Ö§â§Ö§Õ§î §à§Ò§â§Ñ§Ò§Ñ§ä§í§Ó§Ñ§Ö§ä§ã§ñ §Ó §á§à§ä§à§Ü§Ö vInputsTask
+//§´§Ñ§Ü§à§Û §Þ§Ö§ç§ß§Ú§Ù§Þ §ß§å§Ø§Ö§ß §Õ§Ý§ñ CanOpen, §á§ã§à§Ü§à§Ý§î§Ü§å §â§Ö§Ô§Ú§ã§ä§â§à§Ó§Ñ§ñ §Þ§à§Õ§Ö§Ý§î §à§Ò§â§Ñ§Ò§Ñ§ä§í§Ó§Ñ§Ö§ä§ã§ñ §Ó §á§Ö§â§Ö§í§Ó§Ñ§ß§Ú§Ú
+//§ª §Ù§Ñ§Ó§Ú§ã§Ñ§ä§î §Ó §ß§Ö§Þ §ß§Ñ §à§Ø§Ú§Õ§Ñ§ß§Ú§Ö §Ù§Ñ§á§Ú§ã§Ú EEPROM §ß§Ö §Ý§å§é§Ñ§ñ §Ú§Õ§Ö§ñ.
 void WriteRegAfterDelay( u16 reg_adress, void * data, u8 len)
 {
     u8 Buffer[4];
     memcpy(Buffer,data,len);
     switch (len)
     {
-        case 1:
+        default:
             setReg8(reg_adress, Buffer[0]);
             break;
         case 2:
@@ -319,14 +324,15 @@ void WriteRegAfterDelay( u16 reg_adress, void * data, u8 len)
         xQueueSend(  pDataRegQueue, &reg_data, portMAX_DELAY );
     }
 }
-
+//§¶§å§ß§Ü§è§Ú§ñ §Ñ§ß§Ñ§Ý§à§Ô§Ú§é§ß§Ñ §á§â§Ö§Õ§Ú§Õ§å§ë§Ö§Û, §ä§à§Ý§î§Ü§à §á§â§à§Ú§Ù§Ó§à§Õ§Ú§ä §Ù§Ñ§á§Ú§ã§î §â§Ö§Ô§Ú§ã§ä§â§Ñ §Ó §ã§Ó§à§Ö§Þ §Ó§í§Ù§à§Ó§Ö.
+//§°§ã§ä§Ñ§ß§à§Ó§Ñ§Ý§Ú§Ó§Ñ§Ö§ä §â§Ñ§Ò§à§ä§å §á§â§à§è§Ö§ã§ã§Ñ, §Õ§à §ä§Ö§ç §á§à§â, §á§à§Ü§Ñ §ß§Ö §Ù§Ñ§Ó§Ö§â§ê§Ú§ä§î§ã§ñ §Ù§Ñ§á§Ú§ã§î §Ó §â§Ö§Ô§Ú§ã§ä§â.
 void WriteReg( u16 reg_adress, void * data, u8 len)
 {
     u8 Buffer[4];
     memcpy(Buffer,data,len);
     switch (len)
     {
-        case 1:
+        default:
             setReg8(reg_adress, Buffer[0]);
             break;
         case 2:
@@ -356,14 +362,10 @@ uint16_t vFDGetNMTState( void )
     return (CO_NMT_STARTUP_TO_OPERATIONAL);
 }
 
-
 uint8_t vGetNodeId( void )
 {
   return ( getReg8( NODE_ID) );
 }
-
-
-
 
 /*
  * §°§Ò§â§Ñ§Ò§à§ä§é§Ú§Ü §á§â§Ö§â§í§Ó§Ñ§ß§Ú§ñ §à§ä §ã§Ö§Ü§å§ß§Õ§ß§à§Ô§à §ä§Ñ§Û§Þ§Ö§â§Ñ RTC
