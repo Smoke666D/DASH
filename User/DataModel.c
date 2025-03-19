@@ -80,6 +80,7 @@ void vDataModelRegDelayWrite()
         EEPROM_REG_Q_t reg_data;
         xQueueReceive( pDataRegQueue, &reg_data,portMAX_DELAY );
         eEEPROMWr(reg_data.addr, GetRegisterAddr(reg_data.addr),reg_data.len,2);
+
     }
 }
 
@@ -318,6 +319,7 @@ void WriteRegAfterDelay( u16 reg_adress, void * data, u8 len)
     }
     if (reg_adress < EEPROM_REGISER_COUNT)
     {
+
         EEPROM_REG_Q_t reg_data;
         reg_data.addr = reg_adress;
         reg_data.len = len;

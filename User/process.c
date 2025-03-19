@@ -555,7 +555,8 @@ static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, 
      }
      else
      {
-         WriteRegAfterDelay( BIG_SEGVAL1 + (stream->subIndex-2)* sizeof(data) ,&data, sizeof(data));
+         u16 index = (stream->subIndex-2)* sizeof(data);
+         WriteRegAfterDelay( BIG_SEGVAL1 +  index  ,&data, sizeof(data));
     }
      return (ODR_OK);
 }

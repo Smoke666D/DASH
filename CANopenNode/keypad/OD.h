@@ -11,12 +11,12 @@
 
     File info:
         File Names:   OD.h; OD.c
-        Project File: DASH_v1_1_7.xdd
+        Project File: DASH_v1_1_8.xdd
         File Version: 3
 
         Created:      31.01.2017 17:13:00
         Created By:   Smoke666
-        Modified:     18.03.2025 11:53:14
+        Modified:     19.03.2025 16:38:08
         Modified By:  rOBIN 2
 
     Device Info:
@@ -178,29 +178,6 @@ typedef struct {
         uint32_t applicationObject_7;
         uint32_t applicationObject_8;
     } x1A02_TPDOMappingParameter;
-    uint8_t x2006_DIN_DATA_sub0;
-    uint8_t x2007_BIG_SEG_CONFIG_sub0;
-    uint8_t x2008_RGB_MAP_REGISTER_sub0;
-    uint8_t x2009_RGB1_SETUP_REGISTER_sub0;
-    uint8_t x200A_RGB2_SETUP_REGISTER_sub0;
-    uint8_t x200B_RGB3_SETUP_REGISTER_sub0;
-    uint8_t x200C_RGB4_SETUP_REGISTER_sub0;
-    uint8_t x200D_RGB5_SETUP_REGISTER_sub0;
-    uint8_t x200E_RGB6_SETUP_REGISTER_sub0;
-    uint8_t x200F_RGB7_SETUP_REGISTER_sub0;
-    uint8_t x2010_RGB8_SETUP_REGISTER_sub0;
-    uint8_t x2011_RGB9_SETUP_REGISTER_sub0;
-    uint8_t x2012_RGB10_SETUP_REGISTER_sub0;
-    uint8_t x2013_RGB11_SETUP_REGISTER_sub0;
-    uint8_t x2014_RGB12_SETUP_REGISTER_sub0;
-    uint8_t x2015_RGB13_SETUP_REGISTER_sub0;
-    uint8_t x2016_RGB14_SETUP_REGISTER_sub0;
-    uint8_t x2019_BAR_SETUP_REGISTER_sub0;
-    uint16_t x2019_BAR_SETUP_REGISTER[OD_CNT_ARR_2019];
-    uint8_t x201A_MENU_MAP_REGISTER_sub0;
-    uint32_t x201A_MENU_MAP_REGISTER[OD_CNT_ARR_201A];
-    uint8_t x201B_MENU_SETUP_REGISTER_sub0;
-    uint8_t x2035_RPM_CalibrationRegister_sub0;
 } OD_ROM_t;
 
 typedef struct {
@@ -240,108 +217,42 @@ typedef struct {
     } x2001_virtualRegisters;
     uint8_t x2004_DACH_PARAMETR_sub0;
     uint8_t x2005_AIN_RPM_sub0;
+    uint8_t x2006_DIN_DATA_sub0;
+    uint8_t x2007_BIG_SEG_CONFIG_sub0;
+    uint8_t x2008_RGB_MAP_REGISTER_sub0;
+    uint8_t x2009_RGB1_SETUP_REGISTER_sub0;
+    uint8_t x200A_RGB2_SETUP_REGISTER_sub0;
+    uint8_t x200B_RGB3_SETUP_REGISTER_sub0;
+    uint8_t x200C_RGB4_SETUP_REGISTER_sub0;
+    uint8_t x200D_RGB5_SETUP_REGISTER_sub0;
+    uint8_t x200E_RGB6_SETUP_REGISTER_sub0;
+    uint8_t x200F_RGB7_SETUP_REGISTER_sub0;
+    uint8_t x2010_RGB8_SETUP_REGISTER_sub0;
+    uint8_t x2011_RGB9_SETUP_REGISTER_sub0;
+    uint8_t x2012_RGB10_SETUP_REGISTER_sub0;
+    uint8_t x2013_RGB11_SETUP_REGISTER_sub0;
+    uint8_t x2014_RGB12_SETUP_REGISTER_sub0;
+    uint8_t x2015_RGB13_SETUP_REGISTER_sub0;
+    uint8_t x2016_RGB14_SETUP_REGISTER_sub0;
+    uint8_t x2019_BAR_SETUP_REGISTER_sub0;
+    uint8_t x201A_MENU_MAP_REGISTER_sub0;
+    uint8_t x201B_MENU_SETUP_REGISTER_sub0;
     struct {
         uint8_t highestSub_indexSupported;
     } x2025_boardSettings;
     struct {
         uint8_t highestSub_indexSupported;
-        int8_t calibratonPiontCount;
-        int16_t AIN_Offset;
-        int32_t point1_Y_X;
-        int32_t point2_Y_X;
-        int32_t point3_Y_X;
-        int32_t point4_Y_X;
-        int32_t point5_Y_X;
-        int32_t point6_Y_X;
-        int32_t point7_Y_X;
-        int32_t point8_Y_X;
-        int32_t point9_Y_X;
-        int32_t point10_Y_X;
-        int32_t point11_Y_X;
-        int32_t point12_Y_X;
-        int32_t point13_Y_X;
-        int32_t point14_Y_X;
-        int32_t point15_Y_X;
-        int32_t point16_Y_X;
-        int32_t point17_Y_X;
-        int32_t point18_Y_X;
-        int32_t point19_Y_X;
-        int32_t point20_Y_X;
     } x2032_ADC_1_CalibraionRegister;
     struct {
         uint8_t highestSub_indexSupported;
-        int8_t calibratonPiontCount;
-        int16_t AIN_Offset;
-        int32_t point1_Y_X;
-        int32_t point2_Y_X;
-        int32_t point3_Y_X;
-        int32_t point4_Y_X;
-        int32_t point5_Y_X;
-        int32_t point6_Y_X;
-        int32_t point7_Y_X;
-        int32_t point8_Y_X;
-        int32_t point9_Y_X;
-        int32_t point10_Y_X;
-        int32_t point11_Y_X;
-        int32_t point12_Y_X;
-        int32_t point13_Y_X;
-        int32_t point14_Y_X;
-        int32_t point15_Y_X;
-        int32_t point16_Y_X;
-        int32_t point17_Y_X;
-        int32_t point18_Y_X;
-        int32_t point19_Y_X;
-        int32_t point20_Y_X;
     } x2033_ADC_2_CalibraionRegister;
     struct {
         uint8_t highestSub_indexSupported;
-        int8_t calibratonPiontCount;
-        int16_t AIN_Offset;
-        int32_t point1_Y_X;
-        int32_t point2_Y_X;
-        int32_t point3_Y_X;
-        int32_t point4_Y_X;
-        int32_t point5_Y_X;
-        int32_t point6_Y_X;
-        int32_t point7_Y_X;
-        int32_t point8_Y_X;
-        int32_t point9_Y_X;
-        int32_t point10_Y_X;
-        int32_t point11_Y_X;
-        int32_t point12_Y_X;
-        int32_t point13_Y_X;
-        int32_t point14_Y_X;
-        int32_t point15_Y_X;
-        int32_t point16_Y_X;
-        int32_t point17_Y_X;
-        int32_t point18_Y_X;
-        int32_t point19_Y_X;
-        int32_t point20_Y_X;
     } x2034_ADC_3_CalibraionRegister;
+    uint8_t x2035_RPM_CalibrationRegister_sub0;
     uint8_t x2036_newObject_sub0;
-    int8_t x2036_newObject[OD_CNT_ARR_2036];
     struct {
         uint8_t highestSub_indexSupported;
-        uint16_t virtualChannel_1_Config;
-        uint16_t virtualChannel_2_Config;
-        uint16_t virtualChannel_3_Config;
-        uint16_t virtualChannel_4_Config;
-        uint16_t virtualChannel_5_Config;
-        uint16_t virtualChannel_6_Config;
-        uint16_t virtualChannel_7_Config;
-        uint16_t virtualChannel_8_Config;
-        uint16_t virtualChannel_9_Config;
-        uint16_t virtualChannel_10_Config;
-        uint16_t virtualChannel_11_Config;
-        uint16_t virtualChannel_12_Config;
-        uint16_t virtualChannel_13_Config;
-        uint16_t virtualChannel_14_Config;
-        uint32_t virtualChannel_15_Config;
-        uint32_t virtualChannel_16_Config;
-        uint32_t virtualChannel_17_Config;
-        uint32_t AIN1_Config;
-        uint32_t AIN2_Config;
-        uint32_t AIN3_Config;
     } x2037_inputChannelConfig;
 } OD_RAM_t;
 

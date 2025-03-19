@@ -239,11 +239,12 @@ void vInputsTask( void * argument )
   vDINInit();
   for(;;)
   {
-       vDataModelRegDelayWrite();
+      vDataModelRegDelayWrite();
        vTaskDelay(1);
        if (++din_counter> 10)
        {
            vDinDoutProcess();
+
            din_counter = 0;
        }
        if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) )
