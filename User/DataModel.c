@@ -79,7 +79,7 @@ void vDataModelRegDelayWrite()
     {
         EEPROM_REG_Q_t reg_data;
         xQueueReceive( pDataRegQueue, &reg_data,portMAX_DELAY );
-        eEEPROMWr(reg_data.addr, GetRegisterAddr(reg_data.addr),reg_data.len,2);
+        eEEPROMWr(reg_data.addr, GetRegisterAddr(reg_data.addr),reg_data.len,1);
 
     }
 }

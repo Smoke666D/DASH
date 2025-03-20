@@ -241,6 +241,7 @@ void vInputsTask( void * argument )
   {
       vDataModelRegDelayWrite();
        vTaskDelay(1);
+
        if (++din_counter> 10)
        {
            vDinDoutProcess();
