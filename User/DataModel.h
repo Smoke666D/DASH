@@ -14,14 +14,14 @@
 
 #define SW_V                 1
 #define SW_V2                1
-#define SW_V3                6
+#define SW_V3               10
 
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
 #define VALID_CODE_ADDRES     0
 
-#define HOUR_COUNTER_ADR       ( VALID_CODE_ADDRES  +1 )
-#define ODOMETR_ADR            (HOUR_COUNTER_ADR + 4 )
-#define ODOMETR1_ADR           (ODOMETR_ADR   + 4 )
+#define ODOMETR_ADR           ( VALID_CODE_ADDRES  +1 )
+#define HOUR_COUNTER_ADR       (ODOMETR_ADR + 4 )
+#define ODOMETR1_ADR           (HOUR_COUNTER_ADR  + 4 )
 #define ODOMETR_MAP            (ODOMETR1_ADR  + 4 )
 #define BITRATE_ADR            (ODOMETR_MAP + 1)
 #define RGB_BRIGTH_ADR         (BITRATE_ADR  +1)

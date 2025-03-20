@@ -855,22 +855,25 @@ void vRedrawTask( void * argument )
                      vGetEdgeData( BAR_VALUE_RED_HIGH, &high_edge_r,&low_edge_r);
                      vGetEdgeData( BAR_VALUE_GREEN_HIGH, &high_edge_g,&low_edge_g);
                      float delta = (float)(max_value - min_value)/16.0;
-                     if ( getReg8(BAR_MODE) == 0 )
+                     if ( getReg16(BAR_MODE) == 0 )
                      {
+
                          if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
                          {
+
                              vBarColorMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, delta,  bd );
                          }
                      }
                      else
                      {
+
                          u8 bar_count = (u8)(( float)(bd /delta));
                          if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
-                         {
+                        {
                              vBarWindowMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, bar_count,  bd );
                          }
                          else
-                         {
+                         {   //Режим бара, когда весь бар заполняется цветом, в ависмости от уставок.
                              vBarMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &countG,  &countR, bar_count,  bd );
                          }
                       }

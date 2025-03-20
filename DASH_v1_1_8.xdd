@@ -15,7 +15,7 @@
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH_v1_1_8.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2025-03-20" fileModificationTime="09:28:09.0475369+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q1="http://www.canopen.org/xml/1.1" xsi:type="q1:ProfileBody_Device_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH_v1_1_8.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModifiedBy="rOBIN 2" fileModificationDate="2025-03-20" fileModificationTime="10:11:02.3281456+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <q1:DeviceIdentity>
         <q1:vendorName>SIDER</q1:vendorName>
         <q1:vendorID>2</q1:vendorID>
@@ -2225,42 +2225,18 @@ bit 0-31: Manufacturer specific</description>
           <q1:parameter uniqueID="UID_SUB_200401" access="readWrite">
             <label lang="en">ODOMETR (CH26)</label>
             <DINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="0x3F" />
-              </q1:range>
-            </q1:allowedValues>
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_200402" access="readWrite">
             <label lang="en">HOUR (CH27)</label>
             <DINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="0x3F" />
-              </q1:range>
-            </q1:allowedValues>
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_200403" access="readWrite">
             <label lang="en">ODOMETR CHANNEL</label>
             <DINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="0x3F" />
-              </q1:range>
-            </q1:allowedValues>
           </q1:parameter>
           <q1:parameter uniqueID="UID_SUB_200404" access="readWrite">
             <label lang="en">REVISION CODE</label>
             <DINT />
-            <q1:allowedValues>
-              <q1:range>
-                <minValue value="0x00" />
-                <maxValue value="0x3F" />
-              </q1:range>
-            </q1:allowedValues>
           </q1:parameter>
           <q1:parameter uniqueID="UID_OBJ_2005">
             <label lang="en">AIN RPM</label>
@@ -4179,7 +4155,7 @@ Thride byte - RGB WHITE NUMBER</description>
         <ProfileTechnology>CANopen</ProfileTechnology>
       </ISO15745Reference>
     </ProfileHeader>
-    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH_v1_1_8.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2025-03-20" fileModificationTime="09:28:09.0475369+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
+    <ProfileBody xmlns:q2="http://www.canopen.org/xml/1.1" xsi:type="q2:ProfileBody_CommunicationNetwork_CANopen" formatName="CANopen" formatVersion="1.0" fileName="DASH_v1_1_8.xdd" fileCreator="Smoke666" fileCreationDate="2017-01-31" fileCreationTime="17:13:00.0000000+03:00" fileModificationDate="2025-03-20" fileModificationTime="10:11:02.3281456+03:00" fileVersion="3" supportedLanguages="en" xmlns="">
       <ApplicationLayers>
         <q2:CANopenObjectList>
           <CANopenObject index="1000" name="Device type" objectType="7" PDOmapping="no" uniqueIDRef="UID_OBJ_1000" />

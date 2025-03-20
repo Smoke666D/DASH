@@ -344,7 +344,7 @@ static ODR_t OD_writeDashParam(OD_stream_t *stream,const  void *buf, OD_size_t c
       *countWritten = sizeof(u32);
       switch (stream->subIndex)
       {
-                      case 1:
+                    case 1:
                         data32 =CO_getUint32(buf)*100;
                          WriteRegAfterDelay(ODOMETR_ADR ,&data32, sizeof(data32));
                         break;
@@ -356,12 +356,10 @@ static ODR_t OD_writeDashParam(OD_stream_t *stream,const  void *buf, OD_size_t c
                         data =(uint8_t)CO_getUint32(buf);
                         WriteRegAfterDelay( ODOMETR_MAP ,&data, sizeof(data));
                         break;
-                    case 4:
+                    default:
                         data32 =CO_getUint32(buf);
-                         WriteRegAfterDelay(VERSION_REG ,&data32, sizeof(data32));
-
+                        WriteRegAfterDelay(VERSION_REG ,&data32, sizeof(data32));
                         break;
-
       }
       return (ODR_OK);
 }
@@ -552,6 +550,7 @@ static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, 
      if (stream->subIndex == 1)
      {
          setReg16(BIG_SEG, data);
+
      }
      else
      {
