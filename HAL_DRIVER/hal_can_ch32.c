@@ -14,6 +14,7 @@
 static HAL_CAN_t CAN;
 
 
+
 /* Time out for INAK bit */
 #define INAK_TIMEOUT                 ((uint32_t)0x0000FFFF)
 #define CAN_MODE_MASK                ((uint32_t) 0x00000003)
@@ -25,6 +26,7 @@ void   USB_HP_CAN1_TX_IRQHandler(void) __attribute__((interrupt()));  /* USB HP 
 void   USB_LP_CAN1_RX0_IRQHandler(void) __attribute__((interrupt())); /* USB LP and CAN1RX0 */
 void   CAN1_RX1_IRQHandler(void) __attribute__((interrupt()));        /* CAN1 RX1 */
 void   CAN1_SCE_IRQHandler(void) __attribute__((interrupt()));       /* CAN1 SCE */
+
 
 
 void HAL_CANSetTXCallback(void (* f) ( void ))
