@@ -111,10 +111,7 @@ typedef enum
 
 
 
-#define TIM1_UP_ENABLE 0
-#define TIM2_UP_ENABLE 0
-#define TIM3_UP_ENABLE 0
-#define TIM4_UP_ENABLE 1
+
 
 #if MCU == CH32V2
 #define ADC_1_ENABLE  1

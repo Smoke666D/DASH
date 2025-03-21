@@ -78,6 +78,11 @@
 #define DOUT_COUNT            0
 
 
+//#define TIM1_UP_ENABLE
+//#define TIM2_UP_ENABLE
+//#define TIM3_UP_ENABLE
+#define TIM4_UP_ENABLE
+
 #define ADC_1_2_ENABLE
 /***************************watchdog***************************/
 //§¡§Ü§ä§Ú§Ó§Ú§â§à§Ó§Ñ§ä§î §Ó§Ñ§ä§é§Õ§à§Ô

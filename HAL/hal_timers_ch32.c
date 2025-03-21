@@ -14,6 +14,13 @@
 static void vTimerInitRCC(TimerName_t TimerName);
 static TimerCallback_t callback[TIMERS_COUNT];
 static TIM_TypeDef * timers[TIMERS_COUNT] = { TIM1,TIM2,TIM3,TIM4};
+
+static uint32_t getTimerFreq(  )
+{
+    return  ( SystemCoreClock );
+}
+
+
 #if TIM1_UP_ENABLE == 1
 void TIM1_UP_IRQHandler(void) __attribute__((interrupt()));
 #endif
@@ -28,16 +35,15 @@ void TIM4_IRQHandler(void) __attribute__((interrupt()));
 #endif
 
 
+
 void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Period, void (*f)() ,uint8_t prior, uint8_t subprior )
 {
-    TimerConfif_t config;
-    config.Period = Period;
-    config.Div = ( 72000000U /freq_in_hz);
-    config.ClockDiv = 0;
+
     callback[TimerName].callback_function = f;
-    HW_TIMER_BaseTimerInit(TimerName,&config);
+    HAL_TIMER_BaseTimerInit(TimerName,0,Period,( getTimerFreq() /freq_in_hz));
+    timers[TimerName]->INTFR = (uint16_t)~TIM_IT_Update;
     timers[TimerName]->DMAINTENR |=  TIM_IT_Update;
-    uint8_t irq;
+   // uint8_t irq;
     switch (TimerName )
     {
 #if TIM1_UP_ENABLE == 1
@@ -57,11 +63,12 @@ void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Peri
 #endif
 #if TIM4_UP_ENABLE == 1
         default:
-            irq = TIM4_IRQn;
+            PFIC_IRQ_ENABLE_PG1(TIM4_IRQn,prior,subprior);
+          //  irq = TIM4_IRQn;
             break;
 #endif
     }
-    PFIC_IRQ_ENABLE_PG1(irq,prior,subprior);
+    //PFIC_IRQ_ENABLE_PG1(irq,prior,subprior);
 }
 
 
@@ -102,6 +109,7 @@ void  TIM4_IRQHandler(void)
 
 void HAL_TiemrEneblae( TimerName_t TimerName )
 {
+    timers[TimerName]->CNT = 0;
     timers[TimerName]->CTLR1 |= TIM_CEN;
 }
 
@@ -114,42 +122,29 @@ void HAL_TiemrDisable( TimerName_t TimerName )
  * Проводиться через полный ресет. Поэтому регитстры в дефолных,  обычно нулевых значениях
  * Необхоидмости сброса разных битов нет, все они уже сброшены после ресета
  */
-
-void  HW_TIMER_BaseTimerInit(TimerName_t TimerName , TimerConfif_t * config )
+void  HAL_TIMER_BaseTimerInit(TimerName_t TimerName, u16 ClockDiv, u16 Period, u16 Div)
 {
     vTimerInitRCC(TimerName) ;
-    timers[TimerName]->CTLR1    = ( uint32_t)(TIM_CounterMode_Up | config->ClockDiv) ;
-    timers[TimerName]->ATRLR    = config->Period;
-    timers[TimerName]->PSC      = config->Div;
+    timers[TimerName]->SMCFGR &= (uint16_t)(~((uint16_t)TIM_SMS)); //Тактирование от внутренней шины
+    uint16_t tmpcr1 = 0;
+    tmpcr1 = timers[TimerName]->CTLR1;
+    tmpcr1 &= (uint16_t)(~((uint16_t)(TIM_DIR | TIM_CMS)));
+    tmpcr1 |= (uint32_t)TIM_CounterMode_Up;
+    tmpcr1 &= (uint16_t)(~((uint16_t)TIM_CTLR1_CKD));
+    tmpcr1 |= (uint32_t)ClockDiv;
+    timers[TimerName]->CTLR1   = tmpcr1;
+    timers[TimerName]->ATRLR   = Period;
+    timers[TimerName]->PSC     = Div;
     if((TimerName == TIMER1 ))  timers[TimerName]->RPTCR = 0x0000;
-    timers[TimerName]->SWEVGR   = TIM_PSCReloadMode_Immediate;
+    timers[TimerName]->SWEVGR = TIM_PSCReloadMode_Immediate;
 }
 
 
-u32 HAL_GetTimerCounterRegAdres(TimerName_t TimerName , uint8_t ch )
-{
-    switch (ch)
-    {
-        case TIM_CHANNEL_1:
-            return (timers[TimerName]->CH1CVR);
-        case TIM_CHANNEL_2:
-            return (timers[TimerName]->CH2CVR);
-        case TIM_CHANNEL_3:
-            return (timers[TimerName]->CH3CVR);
-        default:
-            return (timers[TimerName]->CH4CVR);
-    }
-    return 0;
-}
 
 void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel)
 {
 	 TIM_OCInitTypeDef TIM_OCInitStructure={0};
-	 TimerConfif_t config;
-	 config.Period = Period;
-	 config.Div = (72000000U /freq_in_hz);
-	 config.ClockDiv = 0;
-	 HW_TIMER_BaseTimerInit(TimerName, &config);
+	 HAL_TIMER_BaseTimerInit(TimerName,0,Period,( getTimerFreq() /freq_in_hz));
 	 TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
 	 TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	 TIM_OCInitStructure.TIM_Pulse = Period;
@@ -215,11 +210,7 @@ static void TI4_Config(TimerName_t TimerName, uint16_t TIM_ICPolarity, uint16_t 
 
 void HAL_TimeInitCaptureDMA( TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel )
 {
-     TimerConfif_t config;
-     config.Period = Period;
-     config.Div = (72000000U /freq_in_hz);
-     config.ClockDiv = 0;
-     HW_TIMER_BaseTimerInit(TimerName,&config);
+     HAL_TIMER_BaseTimerInit(TimerName,0,Period,( getTimerFreq() /freq_in_hz));
      if ( channel == TIM_CHANNEL_2 )
      {
          TI2_Config(TimerName, TIM_ICPolarity_Falling , TIM_ICSelection_DirectTI, 4);
@@ -235,6 +226,7 @@ void HAL_TimeInitCaptureDMA( TimerName_t TimerName , uint32_t freq_in_hz, uint32
           timers[TimerName]->DMAINTENR |= ( TIM_IT_CC4 | TIM_DMA_CC4 ) ;    //Рзрешаем прерывание и работу по DMA
      }
 }
+
 
 void HAL_TIMER_SetPWMPulse( TimerName_t TimerName , uint8_t channel, uint32_t pulse )
 {
@@ -264,23 +256,69 @@ void HAL_TIMER_EnablePWMCH(TimerName_t TimerName  )
  *  Функция иницализаиурет тактирование таймера и возвращает указатель
  *  на handle нужного таймера
  */
+
+
+
 static void vTimerInitRCC(TimerName_t TimerName)
 {
-    switch (TimerName)
+    u32 timers_mask;
+    if ((TimerName == TIMER1) || (TimerName > TIMER7))
     {
-        case TIMER1:
-            HAL_InitAPB2(RCC_APB2Periph_TIM1);
-            break;
-        case TIMER2:
-            HAL_InitAPB1( RCC_APB1Periph_TIM2);
-            break;
-        case TIMER3:
-            HAL_InitAPB1(RCC_APB1Periph_TIM3);
-            break;
-        default:
-            HAL_InitAPB1(RCC_APB1Periph_TIM4);
-            break;
+#if CORE == WCH32V3
+        switch (TimerName)
+        {
+            case TIMER1:
+#endif
+                timers_mask = RCC_APB2Periph_TIM1;
+#if CORE == WCH32V3
+                break;
+            case TIMER8:
+                timers_mask = RCC_APB2Periph_TIM8;
+                break;
+            case TIMER9:
+                timers_mask = RCC_APB2Periph_TIM9;
+                break;
+            default:
+                timers_mask = RCC_APB2Periph_TIM10;
+                break;
+        }
+#endif
+        RCC->APB2PRSTR |= timers_mask;
+        RCC->APB2PRSTR &= ~timers_mask;
+        RCC->APB2PCENR |= timers_mask;
+
+    }
+    else
+    {
+        switch (TimerName)
+        {
+            case TIMER2:
+                timers_mask = RCC_APB1Periph_TIM2;
+                break;
+            case TIMER3:
+                timers_mask = RCC_APB1Periph_TIM3;
+                break;
+            case TIMER4:
+                timers_mask = RCC_APB1Periph_TIM4;
+                break;
+#if CORE == WCH32V3
+            case TIMER5:
+                timers_mask = RCC_APB1Periph_TIM5;
+                break;
+            case TIMER6:
+                timers_mask = RCC_APB1Periph_TIM6;
+                break;
+            default:
+                timers_mask = RCC_APB1Periph_TIM7;
+                break;
+#endif
+        }
+        RCC->APB1PRSTR |= timers_mask;
+        RCC->APB1PRSTR &= ~timers_mask;
+        RCC->APB1PCENR |= timers_mask;
     }
 }
+
+
 #endif
 
