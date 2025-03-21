@@ -22,7 +22,7 @@ static const u16 RMPMADOWN[] = { (u16)0x1C06,  (u16)0x1C5B};
 static const MenuState_t MenuStateCross[]={RPM1_UP_MENU_STATE,RPM2_UP_MENU_STATE,AIN1_VIEW_STATE,AIN2_VIEW_STATE,AIN3_VIEW_STATE,RPMCOOF1,RPMCOOF2};
 static MenuState_t  MenuSatate = WORK_MENU_STATE;
 static u8           ServieModeFSM = 0;
-
+INIT_FUNC_LOC  void TestProcedure( );
 
 
 TaskHandle_t * xProcessTaskHandle ()
@@ -272,9 +272,7 @@ void vMenuBlink()
                       {
                           SetSegDirect(i,0x00);
                       }
-
               }
-
         }
 }
 
@@ -424,55 +422,32 @@ void vRGBMode( u8 i,  u8 index )
 }
 
 
-void vBarColorMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge_r, u8 * startG, u8 * countG, u8 * startR, u8 * countR, float delta, u16 bd )
+void vBarColorMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge_r, u8 * startG, u8 * countG, u8 * startR, u8 * countR, float delta, u8 bar_count, u16 bd )
 {
-    u16 max_value,min_value;
-    vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
-    delta = (float)(max_value - min_value)/16.0;
-    if (bd >= low_edge_r)
+    if ( high_edge_r > low_edge_r)
     {
-        *startR =(u8)(( float)(low_edge_r - min_value)/delta);
-        u16 val_delta = (bd<= high_edge_r) ? (bd - low_edge_r ) : (high_edge_r - low_edge_r );
-        *countR = (u8)(( float)(val_delta )/delta );
-    }
-    if (bd >= low_edge_g)
-    {
-         *startG =(u8)(( float)(low_edge_g - min_value)/delta);
-         u16 val_delta = (bd<= high_edge_g) ? (bd - low_edge_g ) : (high_edge_g - low_edge_g );
-         *countG = (u8)(( float)(val_delta )/delta) ;
+        if (bd >=low_edge_r )
+           {
+               *startR  = low_edge_r/delta -1;
+               if (bd <= high_edge_r)
+                   *countR = bar_count -*startR ;
+               else
+                   *countR =  (high_edge_r - low_edge_g)/delta ;
+           }
      }
+     //Расчитывем зеленый
+     if ( high_edge_g > low_edge_g)
+      {
+              if (bd >=low_edge_g )
+              {
+                  *startG  = low_edge_g/delta -1;
+                  if (bd <= high_edge_g)
+                              *countG = bar_count -*startG ;
+                              else
+                                  *countG =  (high_edge_g - low_edge_g)/delta ;
+              }
+      }
 }
-
-/*
- *  Режим бара - оконный, одноцветный
- */
-void vBarWindowMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge_r, u8 * startG, u8 * countG, u8 * startR, u8 * countR, u8 bar_count, u16 bd )
-{
-    if (low_edge_g  >  high_edge_g)
-    {
-          if (  ((  bd < low_edge_g) && (bd > high_edge_r) )  || (( bd < high_edge_g ) && ( bd > low_edge_r  )) )
-          {
-               *countR = bar_count;
-               *countG = bar_count;
-          }
-          else
-          if ((  bd < high_edge_r) || ( bd > low_edge_r ) )   *countR = bar_count;
-          else                                                *countG = bar_count;
-
-    }
-    else
-    {
-          if (  ((  bd > low_edge_r) && (bd < high_edge_g) )  || (( bd < high_edge_r ) && ( bd >low_edge_g  )) )
-          {
-                *countR = bar_count;
-                *countG = bar_count;
-          }
-          else
-          if ((  bd < high_edge_g) && ( bd > low_edge_g ) )  *countG = bar_count;
-          else                                               *countR = bar_count;
-     }
-}
-
 
 
 /*
@@ -480,33 +455,34 @@ void vBarWindowMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  hig
  */
 void vBarMode(u16   low_edge_g, u16  high_edge_g, u16  low_edge_r,u16  high_edge_r,  u8 * countG,  u8 * countR, u8 bar_count, u16 bd )
 {
-    u16 max_value,min_value;
-    vGetEdgeData( BAR_VALUE_HIGH, &max_value ,&min_value);
-    if ( high_edge_g > high_edge_r)
+
+    //Расчитываем красный
+    if ( high_edge_r > low_edge_r)
     {
-         if ( ( low_edge_g > high_edge_r) || ( ( high_edge_r >= low_edge_g ) && ( (  bd < low_edge_g)  || ( bd > high_edge_r ))) )
-         {
-              if (bd > high_edge_r)  *countG = bar_count; else  *countR = bar_count;
-         }
-         else
-         {
-              *countG = bar_count;
-              *countR = bar_count;
-         }
-     }
-     else
-     {
-         if ( ( low_edge_r > high_edge_g) || ( ( high_edge_g >= low_edge_r ) && ( (  bd < low_edge_r)  || ( bd > high_edge_g ))) )
-         {
-             if (bd > high_edge_g)  *countR = bar_count; else *countG = bar_count;
-         }
-         else
-         {
-             *countG = bar_count;
-             *countR = bar_count;
-        }
-     }
+        if ((bd >=low_edge_r ) && (bd <= high_edge_r))
+            *countR = bar_count;
+    }
+    else
+    {
+        if ((bd >= high_edge_r ) || (bd <= low_edge_r))
+            *countR = bar_count;
+    }
+    //Расчитывем зеленый
+    if ( high_edge_g > low_edge_g)
+       {
+           if ((bd >=low_edge_g ) && (bd <= high_edge_g))
+               *countG = bar_count;
+       }
+       else
+       {
+           if ((bd >= high_edge_g ) || (bd <= low_edge_g))
+               *countG = bar_count;
+       }
+
 }
+
+
+
 static TaskHandle_t  pTaskToNotifykHandle;
 
 void RedrawNotifyTaskToStop()
@@ -768,45 +744,8 @@ INIT_FUNC_LOC static void vInitKeys()
     Keys.SystemDelayState  = SYSTEM_IDLE;
 }
 
-static u8 test_fasm = 0;
-
-void SetTest(LED_COLOR_t color, u8 number)
-{
-    for (u8 i = 0; i< 14;i++)
-    {
-          SetRGB( i, RED_COLOR,  (( i == number ) && (color ==RED_COLOR)) ? STATE_ON  : STATE_OFF );
-          SetRGB( i, GREEN_COLOR,(( i == number ) && (color == GREEN_COLOR)) ? STATE_ON  : STATE_OFF  );
-          SetRGB( i, BLUE_COLOR, (( i == number ) && (color ==BLUE_COLOR)) ? STATE_ON  : STATE_OFF );
-    }
-
-}
-
-const uint16_t SEG_MASK[]={0x0001,0x0002,0x0004,0x0008,0x0010,0x0020,0x0040,0x0080,0x0100,0x0200};
-INIT_FUNC_LOC  void TestProcedure()
-{
-    if (++test_fasm>=42 ) test_fasm = 0;
-    if (test_fasm < 14)
-         SetTest(RED_COLOR,test_fasm );
-    else
-    if (test_fasm < 28)
-          SetTest(GREEN_COLOR,test_fasm-14 );
-    else
-    if (test_fasm < 42)
-           SetTest(BLUE_COLOR,test_fasm-28 );
-    if (test_fasm < 16)
-        SetBarState( 0, test_fasm, 0, 0 );
-    else  if (test_fasm < 16)
-        SetBarState( 0, 0, 0, test_fasm%16 );
-    else
-        SetBarState( 0, 16, 0, 16);
-    vLedProcess( );
-    SetBigSeg(SEG_MASK[test_fasm%10]);
-    for (int k = 0;k<7;k++)
-
-        SetSegDirect(k,SEG_MASK[test_fasm%7]);
 
 
-}
 /*
  *
  */
@@ -855,28 +794,11 @@ void vRedrawTask( void * argument )
                      vGetEdgeData( BAR_VALUE_RED_HIGH, &high_edge_r,&low_edge_r);
                      vGetEdgeData( BAR_VALUE_GREEN_HIGH, &high_edge_g,&low_edge_g);
                      float delta = (float)(max_value - min_value)/16.0;
-                     if ( getReg16(BAR_MODE) == 0 )
-                     {
-
-                         if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
-                         {
-
-                             vBarColorMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, delta,  bd );
-                         }
-                     }
-                     else
-                     {
-
-                         u8 bar_count = (u8)(( float)(bd /delta));
-                         if ((low_edge_g  >  high_edge_g) ||  (low_edge_r  >  high_edge_r ))
-                        {
-                             vBarWindowMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, bar_count,  bd );
-                         }
-                         else
-                         {   //Режим бара, когда весь бар заполняется цветом, в ависмости от уставок.
-                             vBarMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &countG,  &countR, bar_count,  bd );
-                         }
-                      }
+                     u8 bar_count = (u8)(( float)(bd /delta));
+                    if  (getReg16(BAR_MODE) == 0)
+                       vBarColorMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &startG, &countG, &startR, &countR, delta,bar_count,  bd );
+                    else
+                       vBarMode(low_edge_g, high_edge_g,  low_edge_r, high_edge_r, &countG,  &countR, bar_count,  bd );
                    }
                    SetBarState( startG, countG, startR, countR );
                    //Конец вывода данных в бар
@@ -902,4 +824,45 @@ void vRedrawTask( void * argument )
              }
          }
      }
+}
+
+
+/*
+ *  Функции тестового алгоритма
+ */
+static u8 test_fasm = 0;
+INIT_FUNC_LOC  void SetTest(LED_COLOR_t color, u8 number)
+{
+    for (u8 i = 0; i< 14;i++)
+    {
+          SetRGB( i, RED_COLOR,  (( i == number ) && (color ==RED_COLOR)) ? STATE_ON  : STATE_OFF );
+          SetRGB( i, GREEN_COLOR,(( i == number ) && (color == GREEN_COLOR)) ? STATE_ON  : STATE_OFF  );
+          SetRGB( i, BLUE_COLOR, (( i == number ) && (color ==BLUE_COLOR)) ? STATE_ON  : STATE_OFF );
+    }
+}
+
+
+INIT_FUNC_LOC  void TestProcedure( )
+{
+    uint16_t SEG_MASK[]={0x0001,0x0002,0x0004,0x0008,0x0010,0x0020,0x0040,0x0080,0x0100,0x0200};
+    if (++test_fasm>=42 ) test_fasm = 0;
+    if (test_fasm < 14)
+         SetTest(RED_COLOR,test_fasm );
+    else
+    if (test_fasm < 28)
+          SetTest(GREEN_COLOR,test_fasm-14 );
+    else
+    if (test_fasm < 42)
+           SetTest(BLUE_COLOR,test_fasm-28 );
+    if (test_fasm < 16)
+        SetBarState( 0, test_fasm, 0, 0 );
+    else  if (test_fasm < 16)
+        SetBarState( 0, 0, 0, test_fasm%16 );
+    else
+        SetBarState( 0, 16, 0, 16);
+    vLedProcess( );
+    SetBigSeg(SEG_MASK[test_fasm%10]);
+    for (int k = 0;k<7;k++)
+
+        SetSegDirect(k,SEG_MASK[test_fasm%7]);
 }

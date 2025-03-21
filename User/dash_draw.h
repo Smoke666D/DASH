@@ -69,18 +69,17 @@ typedef enum
 typedef struct
 {
   u32 menu_draw[ MAX_MENU_COUNT];
+  u32 current_timer_ms;
+  u32 buffer_error_register;
   u8 current_menu;
   u8 home_menu;
   u8 home_menu_back_time_s;
-  u32 current_timer_ms;
   u8 error_reg_index;
   u8 show_error_flag;
-  u32 buffer_error_register;
   u8 max_menu_index;
   u8 cur_dispaly_error;
   MENU_BLINK_t blink;
   u8 blink_counter;
-
 } Menu_Object_t;
 
 typedef enum
@@ -124,9 +123,10 @@ typedef struct
 {
     KEY_PRESS_t key_press_state;
     KEY_STATUS_t key_status;
-    u16          key_counter;
     KeyDelayState_t SystemDelayState;
     u8 key_state;
+    u16          key_counter;
+
 } KeyState_t;
 
 #define RMP1_UP_MASK  (RPM1_UP_MENU_STATE & RPM2_UP_MENU_STATE)

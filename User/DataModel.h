@@ -226,8 +226,8 @@
 
 typedef struct
 {
-    u8 len;
     u16 addr;
+    u8 len;
 } EEPROM_REG_Q_t;
 
 

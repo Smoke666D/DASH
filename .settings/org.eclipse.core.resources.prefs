@@ -59,6 +59,7 @@ encoding//HAL_DRIVER/hal_gpio.h=GBK
 encoding//HAL_DRIVER/hal_i2c.h=GBK
 encoding//HAL_DRIVER/hal_i2c_ch32.c=GBK
 encoding//HAL_DRIVER/hal_irq.c=GBK
+encoding//HAL_DRIVER/hal_rtc.h=GBK
 encoding//HAL_DRIVER/hal_typedef.h=GBK
 encoding//HAL_DRIVER/hal_wdt.h=GBK
 encoding//HAL_DRIVER/hal_wdt_ch32.c=GBK
