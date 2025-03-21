@@ -19,12 +19,10 @@
  * Локальные переменные
  */
 
-
 static TaskHandle_t  pCanOpenProcessTaskHandle    __SECTION(RAM_SECTION_CCMRAM);
 static TaskHandle_t  pCanOpenPeriodicTaskHandle    __SECTION(RAM_SECTION_CCMRAM);
 
 static CO_t* CO;
-static uint32_t co_heap_used;
 static CO_NMT_reset_cmd_t reset = CO_RESET_NOT;
 static CAN_TypeDef *pcan;
 
@@ -55,6 +53,7 @@ INIT_FUNC_LOC void vCanOpenInit(CAN_TypeDef *hcan)
 
 void vCanOpenProcess(void *argument)
 {
+    static uint32_t co_heap_used;
     uint32_t max_sleep_time_us;
    /*Инициализация нового объекта CANOpen*/
     if ((CO = CO_new(NULL, &co_heap_used)) == NULL)

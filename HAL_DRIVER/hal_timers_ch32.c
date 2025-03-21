@@ -9,8 +9,8 @@
 #include "hal_timers.h"
 #include "hal_irq.h"
 
-
 static void vTimerInitRCC(TimerName_t TimerName);
+static void HAL_TIMER_BaseTimerInit(TimerName_t TimerName , u16 ClockDiv, u16 Div, u16 Period );
 static TimerConfif_t config[TIMERS_COUNT];
 
 #if CORE == APM32
@@ -106,10 +106,7 @@ static void vTimerInitRCC(TimerName_t TimerName)
 void  HW_TIMER_TimerInit(TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Period )
 {
 
-    config[TimerName].Period = Period;
-    config[TimerName].Div = ( getTimerFreq() /freq_in_hz);
-    HW_TIMER_BaseTimerInit(TimerName);
-
+    HAL_TIMER_BaseTimerInit(TimerName , 0, ( getTimerFreq() /freq_in_hz),  Period );
 }
 
 
@@ -149,11 +146,9 @@ void TIM6_IRQHandler(void) __attribute__((interrupt()));
 void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Period, void (*f)() ,uint8_t prior, uint8_t subprior )
 {
 
-    config[TimerName].Period = Period;
-    config[TimerName].Div = ( getTimerFreq() /freq_in_hz);
     config[TimerName].callback_function = f;
-    config[TimerName].ClockDiv = 0;
-    HW_TIMER_BaseTimerInit(TimerName);
+    HAL_TIMER_BaseTimerInit(TimerName , 0, ( getTimerFreq() /freq_in_hz),  Period );
+
     timers[TimerName]->INTFR = (uint16_t)~TIM_IT_Update;
     timers[TimerName]->DMAINTENR |=  TIM_IT_Update;
     uint8_t irq;
@@ -272,7 +267,7 @@ void HAL_TiemrDisable( TimerName_t TimerName )
     timers[TimerName]->CTLR1 &= (uint16_t)(~((uint16_t)TIM_CEN));
 }
 
-void  HW_TIMER_BaseTimerInit(TimerName_t TimerName  )
+/*void  HW_TIMER_BaseTimerInit(TimerName_t TimerName  )
 {
     vTimerInitRCC(TimerName) ;
     timers[TimerName]->SMCFGR &= (uint16_t)(~((uint16_t)TIM_SMS)); //Тактирование от внутренней шины
@@ -285,6 +280,23 @@ void  HW_TIMER_BaseTimerInit(TimerName_t TimerName  )
     timers[TimerName]->CTLR1   = tmpcr1;
     timers[TimerName]->ATRLR   = config[TimerName].Period;
     timers[TimerName]->PSC     = config[TimerName].Div;
+    if((TimerName == TIMER1 ))  timers[TimerName]->RPTCR = 0x0000;
+    timers[TimerName]->SWEVGR = TIM_PSCReloadMode_Immediate;
+}*/
+
+static void  HAL_TIMER_BaseTimerInit(TimerName_t TimerName , u16 ClockDiv, u16 Div, u16 Period )
+{
+    vTimerInitRCC(TimerName) ;
+    timers[TimerName]->SMCFGR &= (uint16_t)(~((uint16_t)TIM_SMS)); //Тактирование от внутренней шины
+    uint16_t tmpcr1 = 0;
+    tmpcr1 = timers[TimerName]->CTLR1;
+    tmpcr1 &= (uint16_t)(~((uint16_t)(TIM_DIR | TIM_CMS)));
+    tmpcr1 |= (uint32_t)TIM_CounterMode_Up;
+    tmpcr1 &= (uint16_t)(~((uint16_t)TIM_CTLR1_CKD));
+    tmpcr1 |= (uint32_t)ClockDiv;
+    timers[TimerName]->CTLR1   = tmpcr1;
+    timers[TimerName]->ATRLR   = Period;
+    timers[TimerName]->PSC     = Div;
     if((TimerName == TIMER1 ))  timers[TimerName]->RPTCR = 0x0000;
     timers[TimerName]->SWEVGR = TIM_PSCReloadMode_Immediate;
 }
@@ -310,10 +322,8 @@ u32 HAL_GetTimerCounterRegAdres(TimerName_t TimerName , uint8_t ch )
 void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel)
 {
 	 TIM_OCInitTypeDef TIM_OCInitStructure={0};
-	 config[TimerName].Period = Period;
-	 config[TimerName].Div = (getTimerFreq() /(freq_in_hz*Period));
-	 config[TimerName].ClockDiv = 0;
-	 HW_TIMER_BaseTimerInit(TimerName);
+
+	 HAL_TIMER_BaseTimerInit(TimerName , 0,  (getTimerFreq() /freq_in_hz),  Period );
 	 TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
 	 TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	 TIM_OCInitStructure.TIM_Pulse = Period;
@@ -348,10 +358,8 @@ void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32
 void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel)
 {
      TIM_OCInitTypeDef TIM_OCInitStructure={0};
-     config[TimerName].Period = Period;
-     config[TimerName].Div = (72000000U /freq_in_hz);
-     config[TimerName].ClockDiv = 0;
-     HW_TIMER_BaseTimerInit(TimerName);
+
+     HAL_TIMER_BaseTimerInit(TimerName , 0, ( getTimerFreq() /freq_in_hz),  Period );
      TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM2;
      TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
      TIM_OCInitStructure.TIM_Pulse = Period;
@@ -418,11 +426,8 @@ static void TI4_Config(TimerName_t TimerName, uint16_t TIM_ICPolarity, uint16_t 
 
 void HAL_TimeInitCaptureDMA( TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel )
 {
-     vTimerInitRCC(TimerName) ;
-     config[TimerName].Period = Period;
-     config[TimerName].Div = (getTimerFreq() /freq_in_hz);
-     config[TimerName].ClockDiv = 0;
-     HW_TIMER_BaseTimerInit(TimerName);
+
+     HAL_TIMER_BaseTimerInit(TimerName , 0, (getTimerFreq() /freq_in_hz),  Period );
      if ( channel == TIM_CHANNEL_2 )
      {
          TI2_Config(TimerName, TIM_ICPolarity_Rising, TIM_ICSelection_DirectTI, 4);

@@ -75,10 +75,6 @@ typedef enum {
 
 typedef struct
 {
-	uint16_t Period;
-	uint16_t Div;
-	uint16_t ClockDiv;
-	TimerRef_t timers;
 	void (* callback_function)();
 	void (* event_callback_function)(u8, u16);
 } TimerConfif_t;
