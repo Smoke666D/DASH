@@ -90,7 +90,7 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case chAIN2 :
     case chAIN3 :
                 index = (virtualchannel - chAIN1);
-                out_data= fGetAinCalData( AIN1+index , GetAIN( AIN1+index ))*10;
+                out_data= fGetAinCalData( AIN1+index , GetAIN( AIN1+index ));
                 if (offset_enable == 2)
                 {
                     uint32_t config = getReg16( AIN1_SETTING + (index) * sizeof(u32) );
@@ -101,6 +101,7 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
                 }
         return  (out_data);
     case chAKB  :
+
         return ( (int32_t)( GetAIN(AIN4 ) * 10 ));
     case chRPM1  :
         data16 = GetRPM(INPUT_1);

@@ -16,24 +16,24 @@
 
 
  static const uint16_t CalPoint[18][2] = {
-                                  {170,89},
-                                  {160,113},
-                                  {150,110},
-                                  {140,187},
-                                  {130,243},
-                                  {120,323},
-                                  {110,436},
-                                  {100,596},
-                                  {90,834},
-                                  {80,1175},
-                                  {70,1707},
-                                  {60,2500},
-                                  {50,3792},
-                                  {40,5896},
-                                  {30,9397},
-                                  {20,15462},
-                                  {10,26114},
-                                  {0,45313}
+                                  {1700,89},
+                                  {1600,113},
+                                  {1500,110},
+                                  {1400,187},
+                                  {1300,243},
+                                  {1200,323},
+                                  {1100,436},
+                                  {1000,596},
+                                  {900,834},
+                                  {800,1175},
+                                  {700,1707},
+                                  {600,2500},
+                                  {500,3792},
+                                  {400,5896},
+                                  {300,9397},
+                                  {200,15462},
+                                  {100,26114},
+                                  {00,45313}
 
 };
 
@@ -50,11 +50,11 @@
 #define FUEL_SENSOR_CAL_POINT_COUNT 6
 
  static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
-             {28,11},
-             {23,61},
-             {16,112},
-             {9,160},
-             {5,185},
+             {280,11},
+             {230,61},
+             {160,112},
+             {90,160},
+             {50,185},
              {0,300}};
 
 
@@ -219,15 +219,13 @@ INIT_FUNC_LOC  void DataModel_Init()
 
              setReg8(ODOMETR_MAP            , chRPM2 );
              setReg32(ODOMETR_ADR         ,1161200);
-             setReg32(VCH15_SETTING       ,0xA000A);
-             setReg32(VCH16_SETTING       ,0xA000B);
-             setReg32(VCH17_SETTING       ,0xA000C);
+
              setReg8( AIN1_CAL_POINT_COUNT      ,  18 );
-             setReg16(AIN1_OFFSET,AIN_OFFSET );
+             setReg32(AIN1_SETTING ,10<<16 | 40 );
              setReg8( AIN2_CAL_POINT_COUNT      , 18);
-             setReg16(AIN2_OFFSET,AIN_OFFSET );
+             setReg32(AIN2_SETTING ,10<<16 | 40 );
+             setReg32(AIN3_SETTING ,10<<16  );
              setReg8(AIN3_CAL_POINT_COUNT       , FUEL_SENSOR_CAL_POINT_COUNT);
-             setReg16(AIN3_OFFSET,0 );
              for (u8 i=0; i< 18;i++)
              {
                  setReg16(AIN1_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);

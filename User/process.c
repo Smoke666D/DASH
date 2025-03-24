@@ -759,20 +759,15 @@ static ODR_t writeADC(OD_stream_t *stream, const void *buf,AIN_NAME_t name,OD_si
         else {
             u8 temp = CO_getUint8(buf);
             *countWritten = sizeof(temp);
-            WriteRegAfterDelay(AIN1_CAL_POINT_COUNT + name*3  ,&temp,sizeof(temp) );
+            WriteRegAfterDelay(AIN1_CAL_POINT_COUNT + name  ,&temp,sizeof(temp) );
         }
     }
-    else if ( stream->subIndex == 2 )
-    {
-        u16 temp = CO_getUint16(buf);
-        *countWritten = sizeof(temp);
-        WriteRegAfterDelay(AIN1_OFFSET + name*3  ,&temp,  sizeof(temp) ) ;
-    }
+
     else
     {
         u32 temp = CO_getUint32(buf);
         *countWritten = sizeof(temp);
-        WriteRegAfterDelay(AIN1_CAL_POINT_BEGIN + (stream->subIndex -3)* sizeof(temp) + name * MAX_CAL_POINT *  sizeof(temp)  ,&temp,  sizeof(temp));
+        WriteRegAfterDelay(AIN1_CAL_POINT_BEGIN + (stream->subIndex -2)* sizeof(temp) + name * MAX_CAL_POINT *  sizeof(temp)  ,&temp,  sizeof(temp));
         POINT_t cal_point;
         cal_point.X = (float)(temp & 0xFFFF);
         cal_point.Y = ((float)(temp >>16))/10;
@@ -803,17 +798,13 @@ static ODR_t readADC(OD_stream_t *stream, const void *buf,AIN_NAME_t name,OD_siz
     if ( stream->subIndex == 1 )
     {
        *countRead = sizeof(u8);
-       CO_setUint8((void *)buf, getReg8( AIN1_CAL_POINT_COUNT + name*3 ) );
+       CO_setUint8((void *)buf, getReg8( AIN1_CAL_POINT_COUNT + name ) );
     }
-    else if ( stream->subIndex == 2 )
-    {
-        *countRead =  sizeof(u16);
-        CO_setUint16((void*)buf, getReg16( AIN1_OFFSET + name*3  ) );
-    }
+
     else
     {
         *countRead =  sizeof(u32);
-        CO_setUint32((void*)buf, getReg32( AIN1_CAL_POINT_BEGIN + (stream->subIndex -3)*sizeof(u32) + name * MAX_CAL_POINT * sizeof(u32) ) );
+        CO_setUint32((void*)buf, getReg32( AIN1_CAL_POINT_BEGIN + (stream->subIndex -2)*sizeof(u32) + name * MAX_CAL_POINT * sizeof(u32) ) );
     }
     return (ODR_OK );
 }
