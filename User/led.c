@@ -126,105 +126,10 @@ void SetSegPoint( u8 on)
 }
 
 
-void ChekChannelConfig( uint8_t ch, float * data)
-{
-    uint16_t offset = 0;
-    uint16_t mul = 0;
-    if ((ch>0)  && (ch<=14))
-    {
-        uint16_t config = getReg16( VCH1_SETTING + ( ch ) * sizeof(u16) );
-        offset = config & 0xFF;
-        mul =  (config>>8);
-        *data = getODValue( ch, 0);
-        *data = *data- (float)offset;
-        if (mul!=0) *data = *data/(float)mul;
-
-    }
-    else if (ch <17)
-    {
-         uint32_t config = getReg16( VCH15_SETTING + ( ch -15 ) * sizeof(u32) );
-         offset = config & 0xFFFF;
-         mul =  (config>>16);
-         *data = getODValue( ch, 0);
-         *data = *data - (float)offset;
-         if (mul!=0) *data = *data/(float)mul;
-    }
-
-}
-
-
-
-void SetDataSEG( u16 mask, u16 channel)
-{
-   float temp_float;
-   ChekChannelConfig( channel,&temp_float);
 
 
 
 
-
-  int32_t val = (int32_t)(temp_float*10);
-  u8 min = 0;
-  u8 dc = 2,mask_count = 2;
-  if (temp_float  <0)
-  {
-      min = 1;
-      val=val*-1;
-  }
-  if (val/1000000)
-  {
-      dc = 7;
-      mask_count = 0;
-  }
-  else
-      if (val/100000)
-      {
-          mask_count = 1;
-          dc = 6;
-      }
-       else
-          if (val/10000)
-              dc = 5;
-          else
-              if (val/1000)
-                dc = 4;
-              else
-               if (val/100)
-                   dc =3;
-
-  for (u8 i = 0;i<dc;i++)
-  {
-     u8 digit = val % 10;
-
-     SetSegDirect(i,DigitMask[digit]);
-     val = val/10;
-  }
-  SetSegPoint(1);//Ставим точку
-  if ( min )
-  {
-      SetSegDirect(dc,0x40);
-      dc++;
-  }
-  for (u8 i=(dc);i<7;i++)
-  {
-      SetSegDirect(i,0);
-  }
-  switch(mask_count)
-  {
-      case 1:
-          break;
-          SPI2_DATA[3] &= 0xFF80;
-          SPI2_DATA[3] |= ((mask>>8) & 0x7F);
-          break;
-      case 2:
-          SPI2_DATA[3] &= 0xC000;
-          SPI2_DATA[3] |=  ( (mask>>8 & 0x7F) | (mask & 0x7F)<<7);
-          break;
-      default:
-          break;
-  }
-
-}
 
 
 void SetSEG( u16 mask, u32 value, u8 point)

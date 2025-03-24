@@ -38,10 +38,13 @@ void vSetErrorReg( u32 data)
 }
 int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
 {
+  int8_t data8;
+  int16_t data_16;
   u16 data16 = 0;
   u8 index;
   int32_t out_data;
-
+  uint16_t offset = 0;
+  uint16_t mul = 0;
   switch (virtualchannel)
   {
     case vCHANNEL1:
@@ -58,19 +61,44 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case vCHANNEL12:
     case vCHANNEL13:
     case vCHANNEL14:
-        return ( (int32_t) getReg8(V1 + virtualchannel -1 ) );
+            index = virtualchannel -1;
+            data8 = getReg8(V1 + index );
+            if (offset_enable == 2)
+            {
+                uint16_t config = getReg16( VCH1_SETTING + (index ) * sizeof(u16) );
+                offset = config & 0xFF;
+                mul =  (config>>8);
+                data8 = data8- offset;
+                if (mul!=0) data8 = ((int16_t)(data8*10))/mul;
+            }
+            return ( (int32_t) data8 );
     case vCHANNEL15:
     case vCHANNEL16:
     case vCHANNEL17:
-        data16 =getReg16(V15 + (virtualchannel -vCHANNEL15)*sizeof(uint16_t) );
-
-        return ( (u32) data16);
+                index = virtualchannel -vCHANNEL15;
+                data_16 =getReg16(V15 + (index)*sizeof(uint16_t) );
+                if (offset_enable == 2)
+                {
+                   uint32_t config = getReg16( VCH15_SETTING + (index) * sizeof(u32) );
+                   offset = config & 0xFFFF;
+                   mul =  (config>>16);
+                   data_16 = data_16 - offset;
+                   if (mul!=0) data_16 = (int32_t)(data_16*10)/(float)mul;
+               }
+               return ( (u32) data_16);
     case chAIN1 :
     case chAIN2 :
     case chAIN3 :
                 index = (virtualchannel - chAIN1);
                 out_data= fGetAinCalData( AIN1+index , GetAIN( AIN1+index ))*10;
-                if (offset_enable) out_data= out_data + getReg16(AIN1_OFFSET + 3*index  );
+                if (offset_enable == 2)
+                {
+                    uint32_t config = getReg16( AIN1_SETTING + (index) * sizeof(u32) );
+                    offset = config & 0xFFFF;
+                    mul =  (config>>16);
+                    out_data= out_data  - offset;
+                    if (mul!=0) data_16 = (int32_t)(out_data*10)/(float)mul;
+                }
         return  (out_data);
     case chAKB  :
         return ( (int32_t)( GetAIN(AIN4 ) * 10 ));
@@ -577,7 +605,7 @@ static void SystemMenuDraw()
            }
         }
         else
-            SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),0) ,1 );
+            SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),2) ,1 );
     }
     else if (MenuSatate ==SYS_MENU_STATE )
     {
