@@ -155,10 +155,8 @@ CO_ReturnError_t CO_CANmodule_init(
 
 
        HAL_CANIntIT(CANbitRate,CAN1_PRIOR,CAN1_SUBPRIOR);
-
        HAL_CANSetFiters(0, ( 0x180 | vGetNodeId() ),( 0x200 | vGetNodeId() ),( 0x300 | vGetNodeId() ),( 0x400 | vGetNodeId() ), FILTER_FIFO_0);
-       HAL_CANSetFiters(1, ( 0x500 | vGetNodeId() ),( 0x600 | vGetNodeId() ),0, 0, FILTER_FIFO_1);
-
+       HAL_CANSetFiters(1, ( 0x500 | vGetNodeId() ),( 0x600 | vGetNodeId() ),0, 0, FILTER_FIFO_0);
        HAL_CANSetTXCallback(&CAN_SendMessage);
        HAL_CANSetERRCallback(&vRestartNode);
        HAL_CANSetRXCallback(&prv_read_can_received_msg);

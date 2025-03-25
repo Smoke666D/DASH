@@ -85,10 +85,6 @@ void vDataModelRegDelayWrite()
 }
 
 
-//__attribute__((section(".stext"))) static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
-//__attribute__((section(".stext"))) static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
-
-
 
 INIT_FUNC_LOC  void DataModel_Init()
 {
@@ -220,10 +216,10 @@ INIT_FUNC_LOC  void DataModel_Init()
              setReg8(ODOMETR_MAP            , chRPM2 );
              setReg32(ODOMETR_ADR         ,1161200);
 
-             setReg8( AIN1_CAL_POINT_COUNT      ,  18 );
-             setReg32(AIN1_SETTING ,10<<16 | 40 );
-             setReg8( AIN2_CAL_POINT_COUNT      , 18);
-             setReg32(AIN2_SETTING ,10<<16 | 40 );
+             setReg8( AIN1_CAL_POINT_COUNT  ,18 );
+             setReg32(AIN1_SETTING ,10<<16 | 400 );
+             setReg8( AIN2_CAL_POINT_COUNT  ,18);
+             setReg32(AIN2_SETTING ,10<<16 | 400 );
              setReg32(AIN3_SETTING ,10<<16  );
              setReg8(AIN3_CAL_POINT_COUNT       , FUEL_SENSOR_CAL_POINT_COUNT);
              for (u8 i=0; i< 18;i++)

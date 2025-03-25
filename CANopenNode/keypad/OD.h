@@ -11,12 +11,12 @@
 
     File info:
         File Names:   OD.h; OD.c
-        Project File: DASH_v1_1_8.xdd
+        Project File: DASH_v1_1_9.xdd
         File Version: 3
 
         Created:      31.01.2017 17:13:00
         Created By:   Smoke666
-        Modified:     24.03.2025 15:53:07
+        Modified:     25.03.2025 16:57:28
         Modified By:  rOBIN 2
 
     Device Info:
@@ -67,6 +67,7 @@
 #define OD_CNT_ARR_2019 7
 #define OD_CNT_ARR_201A 10
 #define OD_CNT_ARR_201B 3
+#define OD_CNT_ARR_201C 15
 #define OD_CNT_ARR_2035 2
 #define OD_CNT_ARR_2036 2
 
@@ -237,6 +238,8 @@ typedef struct {
     uint8_t x2019_BAR_SETUP_REGISTER_sub0;
     uint8_t x201A_MENU_MAP_REGISTER_sub0;
     uint8_t x201B_MENU_SETUP_REGISTER_sub0;
+    uint8_t x201C_histeresisRegister_sub0;
+    int8_t x201C_histeresisRegister[OD_CNT_ARR_201C];
     struct {
         uint8_t highestSub_indexSupported;
     } x2025_boardSettings;
@@ -330,13 +333,14 @@ extern OD_ATTR_OD OD_t *OD;
 #define OD_ENTRY_H2019 &OD->list[41]
 #define OD_ENTRY_H201A &OD->list[42]
 #define OD_ENTRY_H201B &OD->list[43]
-#define OD_ENTRY_H2025 &OD->list[44]
-#define OD_ENTRY_H2032 &OD->list[45]
-#define OD_ENTRY_H2033 &OD->list[46]
-#define OD_ENTRY_H2034 &OD->list[47]
-#define OD_ENTRY_H2035 &OD->list[48]
-#define OD_ENTRY_H2036 &OD->list[49]
-#define OD_ENTRY_H2037 &OD->list[50]
+#define OD_ENTRY_H201C &OD->list[44]
+#define OD_ENTRY_H2025 &OD->list[45]
+#define OD_ENTRY_H2032 &OD->list[46]
+#define OD_ENTRY_H2033 &OD->list[47]
+#define OD_ENTRY_H2034 &OD->list[48]
+#define OD_ENTRY_H2035 &OD->list[49]
+#define OD_ENTRY_H2036 &OD->list[50]
+#define OD_ENTRY_H2037 &OD->list[51]
 
 
 /*******************************************************************************
@@ -386,13 +390,14 @@ extern OD_ATTR_OD OD_t *OD;
 #define OD_ENTRY_H2019_BAR_SETUP_REGISTER &OD->list[41]
 #define OD_ENTRY_H201A_MENU_MAP_REGISTER &OD->list[42]
 #define OD_ENTRY_H201B_MENU_SETUP_REGISTER &OD->list[43]
-#define OD_ENTRY_H2025_boardSettings &OD->list[44]
-#define OD_ENTRY_H2032_ADC_1_CalibraionRegister &OD->list[45]
-#define OD_ENTRY_H2033_ADC_2_CalibraionRegister &OD->list[46]
-#define OD_ENTRY_H2034_ADC_3_CalibraionRegister &OD->list[47]
-#define OD_ENTRY_H2035_RPM_CalibrationRegister &OD->list[48]
-#define OD_ENTRY_H2036_newObject &OD->list[49]
-#define OD_ENTRY_H2037_inputChannelConfig &OD->list[50]
+#define OD_ENTRY_H201C_histeresisRegister &OD->list[44]
+#define OD_ENTRY_H2025_boardSettings &OD->list[45]
+#define OD_ENTRY_H2032_ADC_1_CalibraionRegister &OD->list[46]
+#define OD_ENTRY_H2033_ADC_2_CalibraionRegister &OD->list[47]
+#define OD_ENTRY_H2034_ADC_3_CalibraionRegister &OD->list[48]
+#define OD_ENTRY_H2035_RPM_CalibrationRegister &OD->list[49]
+#define OD_ENTRY_H2036_newObject &OD->list[50]
+#define OD_ENTRY_H2037_inputChannelConfig &OD->list[51]
 
 
 /*******************************************************************************

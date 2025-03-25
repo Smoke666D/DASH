@@ -96,6 +96,8 @@
 
 #define INIT_FUNC_LOC __attribute__((section(".stext")))
 #define OD_ATTR_ROM const INIT_FUNC_LOC
+//#define OD_ATTR_OD const
+
 #define RESTART_DISABLE  0x0001
 #define DATA_MODEL_READY 0x02
 #define IGNITON_FLAG    0x08

@@ -8,7 +8,8 @@
 #include "process.h"
 
 
-
+static ODR_t OD_writeHister(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
+static ODR_t OD_readHister(OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead);
 static ODR_t OD_writeBAR(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_writeSEG(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
 static ODR_t OD_writeV1_14(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten);
@@ -252,6 +253,12 @@ const OD_extension_t  OD_INPUT_CH_CONFIG_extension = {
         .write = OD_writeICHC
     };
 
+const OD_extension_t  OD_HISTER_CONFIG_extension = {
+        .object = NULL,
+        .read =  OD_readHister,
+        .write = OD_writeHister
+    };
+
 INIT_FUNC_LOC void vProceesInit( void)
 {
     OD_extension_init(OD_ENTRY_H2001, (OD_extension_t *)&OD_VRegiters_extension);
@@ -277,6 +284,7 @@ INIT_FUNC_LOC void vProceesInit( void)
     OD_extension_init(OD_ENTRY_H2019, (OD_extension_t *)&OD_BAR_extension);
     OD_extension_init(OD_ENTRY_H201A, (OD_extension_t *)&OD_MENU_MAP_extension);
     OD_extension_init(OD_ENTRY_H201B, (OD_extension_t *)&OD_MENU_SETUP_extension);
+    OD_extension_init(OD_ENTRY_H201C, (OD_extension_t *)&OD_HISTER_CONFIG_extension);
     OD_extension_init(OD_ENTRY_H2025, (OD_extension_t *)&OD_BOARD_SETTINGS_extension);
     OD_extension_init(OD_ENTRY_H2032, (OD_extension_t *)&OD_ADC1_CAL_extension) ;
     OD_extension_init(OD_ENTRY_H2033, (OD_extension_t *)&OD_ADC2_CAL_extension) ;
@@ -907,5 +915,20 @@ static ODR_t OD_readICHC(OD_stream_t *stream, void *buf, OD_size_t count, OD_siz
         *countRead = sizeof(u32);
         CO_setUint32( buf, getReg32( VCH15_SETTING + ( stream->subIndex -15 ) * sizeof(u32) )  );
     }
+    return (ODR_OK);
+}
+
+
+static ODR_t OD_writeHister(OD_stream_t *stream,const  void *buf, OD_size_t count, OD_size_t *countWritten)
+{
+    *countWritten = sizeof(u8);
+    uint8_t data =  CO_getUint8(buf);
+    WriteRegAfterDelay(RGB1_HIST + ( stream->subIndex -1 ) * sizeof(uint8_t)  ,&data, sizeof(uint8_t));
+    return (ODR_OK);
+}
+static ODR_t OD_readHister(OD_stream_t *stream, void *buf, OD_size_t count, OD_size_t *countRead)
+{
+    *countRead = sizeof(u8);
+    CO_setUint8( buf, getReg8(RGB1_HIST + stream->subIndex -1 ));
     return (ODR_OK);
 }

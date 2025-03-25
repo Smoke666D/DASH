@@ -190,8 +190,6 @@ uint8_t HAL_CANSend(CAN_TX_FRAME_TYPE *buffer)
 
 void HAL_CANSetFiters(uint8_t filter_index, uint32_t f1,uint32_t f2,uint32_t f3,uint32_t f4, HAL_CAN_FILTER_FIFO_t FIFO)
 {
-
-
     u16 CAN_FilterIdLow       = f1 <<5;
     u16 CAN_FilterIdHigh      = f3 <<5;
     u16 CAN_FilterMaskIdLow   = f2 <<5;

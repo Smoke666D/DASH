@@ -183,6 +183,8 @@ OD_ATTR_RAM OD_RAM_t OD_RAM = {
     .x2019_BAR_SETUP_REGISTER_sub0 = 0x07,
     .x201A_MENU_MAP_REGISTER_sub0 = 0x0A,
     .x201B_MENU_SETUP_REGISTER_sub0 = 0x03,
+    .x201C_histeresisRegister_sub0 = 0x0F,
+    .x201C_histeresisRegister = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     .x2025_boardSettings = {
         .highestSub_indexSupported = 0x06
     },
@@ -258,6 +260,7 @@ typedef struct {
     OD_obj_array_t o_2019_BAR_SETUP_REGISTER;
     OD_obj_array_t o_201A_MENU_MAP_REGISTER;
     OD_obj_array_t o_201B_MENU_SETUP_REGISTER;
+    OD_obj_array_t o_201C_histeresisRegister;
     OD_obj_record_t o_2025_boardSettings[7];
     OD_obj_record_t o_2032_ADC_1_CalibraionRegister[22];
     OD_obj_record_t o_2033_ADC_2_CalibraionRegister[22];
@@ -1235,6 +1238,14 @@ static CO_PROGMEM ODObjs_t ODObjs = {
         .dataElementLength = 1,
         .dataElementSizeof = sizeof(uint8_t)
     },
+    .o_201C_histeresisRegister = {
+        .dataOrig0 = &OD_RAM.x201C_histeresisRegister_sub0,
+        .dataOrig = &OD_RAM.x201C_histeresisRegister[0],
+        .attribute0 = ODA_SDO_R,
+        .attribute = ODA_SDO_RW,
+        .dataElementLength = 1,
+        .dataElementSizeof = sizeof(int8_t)
+    },
     .o_2025_boardSettings = {
         {
             .dataOrig = &OD_RAM.x2025_boardSettings.highestSub_indexSupported,
@@ -1876,6 +1887,7 @@ static OD_ATTR_OD OD_entry_t ODList[] = {
     {0x2019, 0x08, ODT_ARR, &ODObjs.o_2019_BAR_SETUP_REGISTER, NULL},
     {0x201A, 0x0B, ODT_ARR, &ODObjs.o_201A_MENU_MAP_REGISTER, NULL},
     {0x201B, 0x04, ODT_ARR, &ODObjs.o_201B_MENU_SETUP_REGISTER, NULL},
+    {0x201C, 0x10, ODT_ARR, &ODObjs.o_201C_histeresisRegister, NULL},
     {0x2025, 0x07, ODT_REC, &ODObjs.o_2025_boardSettings, NULL},
     {0x2032, 0x16, ODT_REC, &ODObjs.o_2032_ADC_1_CalibraionRegister, NULL},
     {0x2033, 0x16, ODT_REC, &ODObjs.o_2033_ADC_2_CalibraionRegister, NULL},

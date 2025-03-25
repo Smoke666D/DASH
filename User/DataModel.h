@@ -14,7 +14,7 @@
 
 #define SW_V                 1
 #define SW_V2                1
-#define SW_V3               10
+#define SW_V3                9
 
 
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
@@ -134,7 +134,22 @@
 #define RGBMAP13                (RGBMAP12  + 1)
 #define RGBMAP14                (RGBMAP13  + 1)
 #define BARMAP                  (RGBMAP14  + 1)
-#define BIG_SEGVAL1             (BARMAP   + 1)
+#define RGB1_HIST               (BARMAP   + 1)
+#define RGB2_HIST               (RGB1_HIST + 1)
+#define RGB3_HIST               (RGB2_HIST + 1)
+#define RGB4_HIST               (RGB3_HIST + 1)
+#define RGB5_HIST               (RGB4_HIST + 1)
+#define RGB6_HIST               (RGB5_HIST + 1)
+#define RGB7_HIST               (RGB6_HIST + 1)
+#define RGB8_HIST               (RGB7_HIST + 1)
+#define RGB9_HIST               (RGB8_HIST + 1)
+#define RGB10_HIST              (RGB9_HIST + 1)
+#define RGB11_HIST              (RGB10_HIST + 1)
+#define RGB12_HIST              (RGB11_HIST + 1)
+#define RGB13_HIST              (RGB12_HIST + 1)
+#define RGB14_HIST              (RGB13_HIST + 1)
+#define BAR_HISR                (RGB14_HIST + 1)
+#define BIG_SEGVAL1             (BAR_HISR + 1)
 #define BIG_SEGVAL2             (BIG_SEGVAL1   + 2)
 #define BIG_SEGVAL3             (BIG_SEGVAL2   + 2)
 #define BIG_SEGVAL4             (BIG_SEGVAL3   + 2)
@@ -170,7 +185,6 @@
 #define CH2_TIME_AVER         ( CH1_TIME_AVER + 2 )
 #define CH3_TIME_AVER         ( CH2_TIME_AVER + 2 )
 #define RGB_HISTERESIS_MAP    ( CH3_TIME_AVER + 2 )
-
 #define VCH1_SETTING           (RGB_HISTERESIS_MAP + 2)
 #define VCH2_SETTING           (VCH1_SETTING + 2)
 #define VCH3_SETTING           (VCH2_SETTING + 2)
