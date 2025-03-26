@@ -24,7 +24,7 @@ static TaskHandle_t  pCanOpenPeriodicTaskHandle    __SECTION(RAM_SECTION_CCMRAM)
 
 static CO_t* CO;
 static CO_NMT_reset_cmd_t reset = CO_RESET_NOT;
-static CAN_TypeDef *pcan;
+static CAN_TypeDef *pcan= CAN1;
 
 /* Default values for CO_CANopenInit() */
 #define NMT_CONTROL                     ( vFDGetNMTState() | CO_NMT_ERR_ON_ERR_REG | CO_ERR_REG_GENERIC_ERR | CO_ERR_REG_COMMUNICATION)

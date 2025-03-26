@@ -136,7 +136,7 @@ void HAL_I2C_Init( I2C_NAME_t i2c, HAL_I2C_InitTypeDef * I2C_InitStruct)
 
 
 
-void InitI2CIT( I2C_NAME_t i2c,HAL_I2C_InitTypeDef * I2C_InitStruct, uint8_t prior, uint8_t subprior, void (* fdata) ( void ), void (* ferror) ( void ))
+INIT_FUNC_LOC  void InitI2CIT( I2C_NAME_t i2c,HAL_I2C_InitTypeDef * I2C_InitStruct, uint8_t prior, uint8_t subprior, void (* fdata) ( void ), void (* ferror) ( void ))
 {
    // I2C_TypeDef *  I2Cx = i2c;
 #ifdef I2C1_ENABLE

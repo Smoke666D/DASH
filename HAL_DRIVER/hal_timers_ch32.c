@@ -355,7 +355,7 @@ void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32
 #endif
 
 #if CORE == WCH32V2
-void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel)
+INIT_FUNC_LOC  void HAL_TIMER_PWMTimersInit(TimerName_t TimerName , uint32_t freq_in_hz, uint32_t Period, uint8_t channel)
 {
      TIM_OCInitTypeDef TIM_OCInitStructure={0};
 

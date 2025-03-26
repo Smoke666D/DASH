@@ -20,7 +20,7 @@ static void MX_GPIO_Init( void );
 Функция инициализации перефирии устройства
 */
 
- void vInit_DeviceConfig( void )
+INIT_FUNC_LOC void vInit_DeviceConfig( void )
 {	
     //Настройка тактирования всех устрйоств
     HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR);
@@ -37,7 +37,6 @@ static void MX_GPIO_Init( void );
     HAL_TiemrEneblae( TIMER4);
     vInitEEPROM_I2C(EEPROM_I2C1, I2C1_PRIOR ,I2C1_SUB_PRIOR );
     //Зависаем в цикле, пока не получен сигнал зажигания
-	while (HAL_GetBit(  Din3_4_5_Port , Din5_Pin)== RESET);  HAL_SetBit(PowerOn_Port, PowerOn_Pin);
 	HAL_WDT_Init1s();  //Инициализируем вачдог.
 	return;
 }

@@ -22,10 +22,11 @@ static const u16 RMPMADOWN[] = { (u16)0x1C06,  (u16)0x1C5B};
 static const MenuState_t MenuStateCross[]={RPM1_UP_MENU_STATE,RPM2_UP_MENU_STATE,AIN1_VIEW_STATE,AIN2_VIEW_STATE,AIN3_VIEW_STATE,RPMCOOF1,RPMCOOF2};
 static MenuState_t  MenuSatate = WORK_MENU_STATE;
 static u8           ServieModeFSM = 0;
+
 INIT_FUNC_LOC  void TestProcedure( );
 
 
-TaskHandle_t * xProcessTaskHandle ()
+INIT_FUNC_LOC  TaskHandle_t * xProcessTaskHandle ()
 {
     return  &pProcessTaskHandle ;
 }
@@ -33,9 +34,10 @@ TaskHandle_t * xProcessTaskHandle ()
 
 void vSetErrorReg( u32 data)
 {
-
     ErrorRegister = data;
 }
+
+
 int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
 {
   int8_t data8;
@@ -355,27 +357,6 @@ void vGetEdgeData(u16 addr,  u16 *high, u16 * low)
     *low  = getReg16(addr + 2 );
 }
 
-static LED_STATE_t checkLedState( u16 addr, u16 bd)
-{
-
-    u16 he;
-    u16 le;
-    vGetEdgeData( addr,  &he, &le);
-    LED_STATE_t state = STATE_OFF;
-    if ((le !=0) && (he !=0))
-    {
-       if (le <= he)   //Обычный режим, проверяем на попадание в окно.
-       {
-           if ((bd >= le) && (bd <= he)) state = STATE_ON;
-       }
-       else  // инвесный режим, попадаем на непопадание в окно
-       {
-           if ((bd >= le) || (bd <= he)) state = STATE_ON;
-       }
-    }
-    return (state);
-}
-
 
 
 static uint8_t CheckLedState( u16 addr, u16 bd, LED_STATE_t * state, u8 hist )
@@ -384,13 +365,13 @@ static uint8_t CheckLedState( u16 addr, u16 bd, LED_STATE_t * state, u8 hist )
     u16 he;
     u16 le;
     vGetEdgeData( addr,  &he, &le);
-    float HIST;
-    u16 h1,h2;
+    u16 HIST;
+    u16 h1;
     if ((le !=0) && (he !=0))
     {
        if (le <= he)   //Обычный режим, проверяем на попадание в окно.
        {
-               HIST = he*(float)hist/100;
+               HIST = (u16)( he*(float)hist/100);
                if (HIST > le) h1 = 0; else h1 = HIST;
 
                if ((bd >= (le +HIST)) && (bd <= (he - HIST)))
@@ -407,7 +388,7 @@ static uint8_t CheckLedState( u16 addr, u16 bd, LED_STATE_t * state, u8 hist )
         }
        else  // инвесный режим, попадаем на непопадание в окно
        {
-               HIST = le*(float)hist/100;
+               HIST =(u16) (le*(float)hist/100);
                if (HIST > he) h1 = 0; else h1 = HIST;
                if ((bd >= (le + HIST)) || (bd <= (he - h1)))
                {
@@ -539,20 +520,21 @@ static void SegPrint(u8 s1,u8 s2,u8 s3,u8 s4,u8 s5,u8 s6,u8 s7)
     SetSegDirect(1,s6);
     SetSegDirect(0,s7);
 }
-
 static const u8 dm[9][7]= { {0x6D,0x6E,0x6D,0,0,0,0},
-                          {0x50,0x73,0x06,0,0,0,0},
-                          {0x50,0x73,0x5B,0,0,0,0},
-                          {0x77,0x06,0x54,0x06,0,0,0},
-                          {0x77,0x06,0x54,0x5B,0,0,0},
-                          {0x77,0x06,0x54,0x4F,0,0,0},
-                          {0x6D,0x77,0x3E,0x79,0,0,0},
-                          {0,0,0,0,0,0,0},
-                          {0x79,0x76,0x06,0x78,0,0,0},
-};
+                             {0x50,0x73,0x06,0,0,0,0},
+                             {0x50,0x73,0x5B,0,0,0,0},
+                             {0x77,0x06,0x54,0x06,0,0,0},
+                             {0x77,0x06,0x54,0x5B,0,0,0},
+                             {0x77,0x06,0x54,0x4F,0,0,0},
+                             {0x6D,0x77,0x3E,0x79,0,0,0},
+                             {0,0,0,0,0,0,0},
+                             {0x79,0x76,0x06,0x78,0,0,0},};
+
+//};
 
 static void SeriveceMenuDraw( u8 * servece_menu_state)
 {
+
     u8 i = *servece_menu_state;
     if (i >8)
         *servece_menu_state = 1;
@@ -792,6 +774,7 @@ void vRedrawTask( void * argument )
     while(1)
     {
          vTaskDelay(10);
+         draw_counter++;
          if (state ==  STATE_RUN)
          {
              if (getReg8(KEY_CONTROL_REG) == 1 )
@@ -804,7 +787,7 @@ void vRedrawTask( void * argument )
              }
              // Отображение меню
              SystemMenuDraw();
-             if (++draw_counter >= 20)
+             if (draw_counter >= 20)
              {
                  //Отрисовываем RGB пикторграммы
                  for ( u8 i = 0; i < RGB_DIOD_COUNT; i++ )
@@ -848,7 +831,7 @@ void vRedrawTask( void * argument )
          else
          {
              vTaskDelay(10);
-             if (++draw_counter >= 20)
+             if (draw_counter >= 20)
              {
                  TestProcedure();
                  draw_counter = 0;
@@ -875,7 +858,7 @@ INIT_FUNC_LOC  void SetTest(LED_COLOR_t color, u8 number)
 
 INIT_FUNC_LOC  void TestProcedure( )
 {
-    uint16_t SEG_MASK[]={0x0001,0x0002,0x0004,0x0008,0x0010,0x0020,0x0040,0x0080,0x0100,0x0200};
+    const uint16_t SEG_MASK[]={0x0001,0x0002,0x0004,0x0008,0x0010,0x0020,0x0040,0x0080,0x0100,0x0200};
     if (++test_fasm>=42 ) test_fasm = 0;
     if (test_fasm < 14)
          SetTest(RED_COLOR,test_fasm );

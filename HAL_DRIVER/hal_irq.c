@@ -16,14 +16,14 @@
 #include "hal_irq.h"
 
 #if CORE == WCH32V2 || CORE == WCH32V3
-void HAL_InitAPB1(uint32_t apbmask)
+INIT_FUNC_LOC void HAL_InitAPB1(uint32_t apbmask)
 {
     RCC->APB1PCENR |= apbmask;
     RCC->APB1PRSTR |= apbmask;
     RCC->APB1PRSTR &= ~apbmask;
 
 }
-void HAL_InitAPB2(uint32_t apbmask)
+INIT_FUNC_LOC  void HAL_InitAPB2(uint32_t apbmask)
 {
     RCC->APB2PCENR |= apbmask;
     RCC->APB2PRSTR |= apbmask;
@@ -32,7 +32,7 @@ void HAL_InitAPB2(uint32_t apbmask)
 }
 
 #if CORE == WCH32V2
-void PFIC_IRQ_ENABLE_PG1(IRQn_Type irg, u8 prior, u8 subprior)
+INIT_FUNC_LOC  void PFIC_IRQ_ENABLE_PG1(IRQn_Type irg, u8 prior, u8 subprior)
 {
     if (prior == 1 )
     {

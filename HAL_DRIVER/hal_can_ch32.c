@@ -43,7 +43,7 @@ void HAL_CANSetERRCallback(void (* f) ( void ))
 	CAN.errorcallback = f;
 }
 
-void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
+INIT_FUNC_LOC void HAL_CANIntIT(  uint16_t   CANbitRate, uint8_t prior, uint8_t subprior)
 {
      u16 CAN_Prescaler;
      HAL_InitAPB1(RCC_APB1Periph_CAN1);

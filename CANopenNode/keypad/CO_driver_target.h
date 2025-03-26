@@ -89,6 +89,7 @@ typedef struct {
 
 /* CAN module object */
 typedef struct {
+
     void *CANptr;
     CO_CANrx_t *rxArray;
     uint16_t rxSize;
@@ -101,11 +102,11 @@ typedef struct {
     volatile bool_t firstCANtxMessage;
     volatile uint16_t CANtxCount;
     uint32_t errOld;
-
     /* STM32 specific features */
-       uint32_t primask_send;                  /* Primask register for interrupts for send operation */
-       uint32_t primask_emcy;                  /* Primask register for interrupts for emergency operation */
-       uint32_t primask_od;                    /* Primask register for interrupts for send operation */
+            uint32_t primask_send;                  /* Primask register for interrupts for send operation */
+            uint32_t primask_emcy;                  /* Primask register for interrupts for emergency operation */
+            uint32_t primask_od;                    /* Primask register for interrupts for send operation */
+
 } CO_CANmodule_t;
 
 

@@ -53,7 +53,7 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_FLASH += \
-DASH.hex \
+DASH.hexAndbin \
 
 SECONDARY_LIST += \
 DASH.lst \
@@ -69,8 +69,8 @@ all: DASH.elf secondary-outputs
 DASH.elf: $(OBJS) $(USER_OBJS)
 	@	@	riscv-none-embed-gcc -march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -fsingle-precision-constant -Wunused  -g -T "C:\MRS_DATA\workspace\DASH\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -Xlinker -print-memory-usage -Wl,-Map,"DASH.map" --specs=nano.specs --specs=nosys.specs -o "DASH.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@	@
-DASH.hex: DASH.elf
-	@	riscv-none-embed-objcopy -O ihex "DASH.elf"  "DASH.hex"
+DASH.hexAndbin: DASH.elf
+	@	riscv-none-embed-objcopy -O ihex "DASH.elf"  "DASH.hex" && riscv-none-embed-objcopy -O binary "DASH.elf"  "DASH.bin"
 	@	@
 DASH.lst: DASH.elf
 	@	riscv-none-embed-objdump --all-headers --demangle --disassemble -M xw "DASH.elf" > "DASH.lst"
@@ -78,12 +78,17 @@ DASH.lst: DASH.elf
 DASH.siz: DASH.elf
 	@	riscv-none-embed-size --format=berkeley "DASH.elf"
 	@	@
+	$(MAKE) --no-print-directory post-build
+
 # Other Targets
 clean:
 	-$(RM) $(ASM_UPPER_DEPS)$(OBJS)$(SECONDARY_FLASH)$(SECONDARY_LIST)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_DEPS)$(S_UPPER_DEPS)$(C_DEPS) DASH.elf
 	-@
+post-build:
+	-riscv-none-embed-objcopy -O ihex "DASH.elf" "DASH.hex" && riscv-none-embed-objcopy -O binary "DASH.elf" "DASH.bin"
+	-@
 secondary-outputs: $(SECONDARY_FLASH) $(SECONDARY_LIST) $(SECONDARY_SIZE)
 
-.PHONY: all clean dependents
+.PHONY: all clean dependents post-build
 
 -include ../makefile.targets

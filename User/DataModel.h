@@ -14,7 +14,7 @@
 
 #define SW_V                 1
 #define SW_V2                1
-#define SW_V3                9
+#define SW_V3                10
 
 
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
@@ -184,8 +184,7 @@
 #define CH1_TIME_AVER         ( KEY_CONTROL_REG  +1 )
 #define CH2_TIME_AVER         ( CH1_TIME_AVER + 2 )
 #define CH3_TIME_AVER         ( CH2_TIME_AVER + 2 )
-#define RGB_HISTERESIS_MAP    ( CH3_TIME_AVER + 2 )
-#define VCH1_SETTING           (RGB_HISTERESIS_MAP + 2)
+#define VCH1_SETTING           (CH3_TIME_AVER + 2)
 #define VCH2_SETTING           (VCH1_SETTING + 2)
 #define VCH3_SETTING           (VCH2_SETTING + 2)
 #define VCH4_SETTING           (VCH3_SETTING + 2)

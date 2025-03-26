@@ -253,7 +253,6 @@ INIT_FUNC_LOC  void DataModel_Init()
              setReg16(CH1_TIME_AVER,10);
              setReg16(CH2_TIME_AVER,10);
              setReg16(CH3_TIME_AVER,300);
-             setReg16(RGB_HISTERESIS_MAP, 0x1<<11);
              setReg32(VERSION_REG,10);
              eEEPROMWr(VALID_CODE_ADDRES,GetDataRegister(),EEPROM_REGISER_COUNT,2);
              ClearDataModel();
@@ -313,7 +312,6 @@ void WriteRegAfterDelay( u16 reg_adress, void * data, u8 len)
     }
     if (reg_adress < EEPROM_REGISER_COUNT)
     {
-
         EEPROM_REG_Q_t reg_data;
         reg_data.addr = reg_adress;
         reg_data.len = len;
