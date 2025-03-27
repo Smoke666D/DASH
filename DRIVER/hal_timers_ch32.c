@@ -143,7 +143,7 @@ void TIM5_IRQHandler(void) __attribute__((interrupt()));
 void TIM6_IRQHandler(void) __attribute__((interrupt()));
 #endif
 
-void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Period, void (*f)() ,uint8_t prior, uint8_t subprior )
+INIT_FUNC_LOC void HAL_TIMER_InitIt( TimerName_t TimerName, uint32_t freq_in_hz, uint32_t Period, void (*f)() ,uint8_t prior, uint8_t subprior )
 {
 
     config[TimerName].callback_function = f;
