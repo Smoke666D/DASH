@@ -5,11 +5,11 @@
  *      Author: i.dymov
  */
 
-#include "hal_gpio.h"
+#include "../DRIVER/hal_gpio.h"
 
 #if CORE == WCH32V2 || CORE==WCH32V3
 
-#include "hal_irq.h"
+#include "../DRIVER/hal_irq.h"
 #if CORE == WCH32V2
     #include "ch32v20x_rcc.h"
     #include "ch32v20x_gpio.h"

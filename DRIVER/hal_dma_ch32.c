@@ -7,9 +7,9 @@
 
 #include "hal_dma.h"
 
-#if MCU == CH32V2
+#if CORE == WCH32V2
 DMA_CFG_t DMA_CALLback[7]   __SECTION(RAM_SECTION_CCMRAM);
-    #include <hal_irq.h>
+    #include "hal_irq.h"
     #include "ch32v20x_dma.h"
 	#include "ch32v20x_rcc.h"
 /* DMA registers Masks */

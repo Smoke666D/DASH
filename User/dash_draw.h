@@ -16,7 +16,6 @@
 #define KEY_OFF_STATE      ( HAL_BIT_SET )
 
 
-
 #define RGB_DIOD_COUNT 14
 #define MAX_MENU_COUNT 10
 typedef enum

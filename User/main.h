@@ -98,6 +98,24 @@
 #define OD_ATTR_ROM const INIT_FUNC_LOC
 //#define OD_ATTR_OD const
 
+
+#define ADC_1_ENABLE  1
+#define ADC_2_ENABLE  0
+#define ADC_CHANNEL_NUMBER_0_9   1
+#define ADC_CHANNEL_NUMBER_10_16 0
+#define ADC_CHANNELRANK_0_6  1
+#define ADC_CHANNELRANK_7_12  0
+#define ADC_CHANNELRANK_13_16 0
+
+#define DMA1_CH1_ENABLE 1
+#define DMA1_CH2_ENABLE 0
+#define DMA1_CH3_ENABLE 1
+#define DMA1_CH4_ENABLE 1
+#define DMA1_CH5_ENABLE 1
+#define DMA1_CH6_ENABLE 0
+#define DMA1_CH7_ENABLE 1
+
+
 #define RESTART_DISABLE  0x0001
 #define DATA_MODEL_READY 0x02
 #define IGNITON_FLAG    0x08

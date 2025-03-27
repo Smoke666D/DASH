@@ -5,16 +5,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../HAL/hal_adc_ch32.c \
-../HAL/hal_dma_ch32.c 
+../HAL/hal_adc_ch32.c 
 
 OBJS += \
-./HAL/hal_adc_ch32.o \
-./HAL/hal_dma_ch32.o 
+./HAL/hal_adc_ch32.o 
 
 C_DEPS += \
-./HAL/hal_adc_ch32.d \
-./HAL/hal_dma_ch32.d 
+./HAL/hal_adc_ch32.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

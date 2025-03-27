@@ -10,11 +10,11 @@
 
 
 #include "main.h"
-#include "hal_config.h"
+
 #include "system_init.h"
 
 
-#if MCU == APM32
+#if CORE == APM32
 #include "apm32f4xx_dma.h"
 
 #define DMA_Stram_t DMA_Stream_T*
@@ -28,7 +28,7 @@
 #define DMA2_CH7  	DMA2_Stream7
 #define DMA2_CH8  	DMA2_Stream8
 #endif
-#if MCU == CH32V2
+#if CORE == WCH32V2
 #include "ch32v20x_dma.h"
 typedef enum
 {
@@ -51,7 +51,7 @@ DMA_Stram_t;
 #endif
 
 
-#if MCU== APM32
+#if CORE== APM32
 typedef enum
 {
   PTOM = DMA_DIR_PERIPHERALTOMEMORY,
@@ -93,13 +93,13 @@ void HAL_DMA_Disable(DMA_Stram_t stream  );
 void HAL_DMA_SetCounter( DMA_Stram_t stream, uint32_t counter );
 void HAL_DMA_TCEnable( DMA_Stram_t chanel);
 void HAL_DMA_SerSource( DMA_Stram_t chanel, uint16_t * data, uint16_t size );
-#if MCU == APM32
+#if CORE == APM32
 void DMA2_STR4_IRQHandler( void );
 void DMA2_STR2_IRQHandler( void );
 void DMA2_STR0_IRQHandler( void );
 void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t dma_size, uint32_t paddr, uint32_t memadr, DMA_CHANNEL_t channel, uint8_t prior, uint8_t subprior, void (*f)(void));
 #endif
-#if MCU == CH32V2 || MCU== CH32V3
+#if CORE== WCH32V2 || CORE == WCH32V3
 void HAL_DMA_ITENABLE( DMA_Stram_t stream, uint32_t it );
 void HAL_DMA_SetCouterAndEnable(DMA_Stram_t stream, uint32_t counter );
 void HAL_DMAInitIT( DMA_Stram_t stream , DMA_Derection_t direction, DMA_Size_t dma_size, uint32_t paddr, uint32_t memadr,  uint8_t prior, uint8_t subprior, void (*f)(void));

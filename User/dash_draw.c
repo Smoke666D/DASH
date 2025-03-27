@@ -10,7 +10,8 @@
 #include "OD.h"
 #include "hw_lib_din.h"
 #include "inputs.h"
-#include "hal_gpio.h"
+
+#include "../DRIVER/hal_gpio.h"
 
 static Menu_Object_t menu;
 static u32 ErrorRegister = 0;

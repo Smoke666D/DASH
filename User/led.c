@@ -7,10 +7,11 @@
 #include "led.h"
 #include <math.h>
 #include "init.h"
-#include "hal_dma.h"
-#include "hal_timers.h"
-#include "hal_spi.h"
-#include "hal_gpio.h"
+
+#include "../DRIVER/hal_dma.h"
+#include "../DRIVER/hal_gpio.h"
+#include "../DRIVER/hal_spi.h"
+#include "../DRIVER/hal_timers.h"
 
 
 

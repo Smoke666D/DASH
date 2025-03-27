@@ -5,14 +5,14 @@
  *      Author: i.dymov
  */
 
-#include "hal_adc.h"
+#include "../DRIVER/hal_adc.h"
 
 
-#if MCU == CH32V2
+#if CORE == WCH32V2
 
 #include "ch32v20x_adc.h"
 
-#include "hal_irq.h"
+#include "../DRIVER/hal_irq.h"
 ADC_t adcs;
 static s16 Calibrattion_Val = 0;
 static const  uint8_t ADC_chennel_ref[]={  ADC_Channel_0,  ADC_Channel_1,  ADC_Channel_2, ADC_Channel_3, ADC_Channel_4,  ADC_Channel_5,  ADC_Channel_6,  ADC_Channel_7,  ADC_Channel_8,  ADC_Channel_9,  ADC_Channel_10,

@@ -7,17 +7,18 @@
 /*----------------------- Includes ------------------------------------------------------------------*/
 #include "inputs.h"
 #include "init.h"
-#include "hal_adc.h"
 #include "DataModel.h"
 #include "CO_ODinterface.h"
 #include "hw_lib_din.h"
 #include "OD.h"
-#include "hal_dma.h"
-#include "hal_adc.h"
 #include "hw_lib_din.h"
-#include "hal_timers.h"
-#include "hal_gpio.h"
 #include "hw_timeout.h"
+#include "../DRIVER/hal_adc.h"
+#include "../DRIVER/hal_adc.h"
+#include "../DRIVER/hal_dma.h"
+#include "../DRIVER/hal_gpio.h"
+#include "../DRIVER/hal_timers.h"
+
 
 /*
  * Внутрение переменные модуля

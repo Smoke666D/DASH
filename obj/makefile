@@ -13,12 +13,11 @@ RM := rm -rf
 -include Startup/subdir.mk
 -include Peripheral/src/subdir.mk
 -include HAL_LIB/subdir.mk
--include HAL_DRIVER/subdir.mk
--include HAL/subdir.mk
 -include FreeRTOS/portable/MemMang/subdir.mk
 -include FreeRTOS/portable/GCC/RISC-V/subdir.mk
 -include FreeRTOS/subdir.mk
 -include Debug/subdir.mk
+-include DRIVER/subdir.mk
 -include Core/subdir.mk
 -include CANopenNode/keypad/subdir.mk
 -include CANopenNode/extra/subdir.mk

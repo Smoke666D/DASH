@@ -4,12 +4,12 @@
  *  Created on: 13 мая 2024 г.
  *      Author: i.dymov
  */
-#include "hal_can.h"
 #include "string.h"
+#include "../DRIVER/hal_can.h"
 
 
 #if CORE == WCH32V2
-#include "hal_irq.h"
+#include "../DRIVER/hal_irq.h"
 
 static HAL_CAN_t CAN;
 

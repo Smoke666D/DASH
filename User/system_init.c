@@ -5,11 +5,11 @@
  *      Author: i.dymov
  */
 #include "system_init.h"
-#include "hal_wdt.h"
 #include "inputs.h"
 #include "process.h"
-#include "hal_rtc.h"
 #include "debug.h"
+#include "../DRIVER/hal_rtc.h"
+#include "../DRIVER/hal_wdt.h"
 
 static void StartDefaultTask(void *argument);
 static StaticTask_t xIdleTaskTCB;
