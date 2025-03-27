@@ -68,6 +68,7 @@
 
 #define CORE WCH32V2
 
+#define CAN_OPEN_USE
 
 #define DEF_H_FRONT 10U
 #define DEF_L_FRONT 10U

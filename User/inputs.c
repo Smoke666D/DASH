@@ -14,9 +14,8 @@
 #include "hw_lib_din.h"
 #include "hw_timeout.h"
 #include "../DRIVER/hal_adc.h"
-#include "../DRIVER/hal_adc.h"
 #include "../DRIVER/hal_dma.h"
-#include "../DRIVER/hal_gpio.h"
+#include "hal_gpio.h"
 #include "../DRIVER/hal_timers.h"
 
 

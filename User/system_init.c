@@ -8,8 +8,8 @@
 #include "inputs.h"
 #include "process.h"
 #include "debug.h"
-#include "../DRIVER/hal_rtc.h"
-#include "../DRIVER/hal_wdt.h"
+#include "hal_rtc.h"
+#include "hal_wdt.h"
 
 static void StartDefaultTask(void *argument);
 static StaticTask_t xIdleTaskTCB;

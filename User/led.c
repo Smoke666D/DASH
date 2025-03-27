@@ -9,7 +9,7 @@
 #include "init.h"
 
 #include "../DRIVER/hal_dma.h"
-#include "../DRIVER/hal_gpio.h"
+#include "hal_gpio.h"
 #include "../DRIVER/hal_spi.h"
 #include "../DRIVER/hal_timers.h"
 

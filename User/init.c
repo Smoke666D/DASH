@@ -4,12 +4,11 @@
 #include "hw_lib_din.h"
 
 #include "../DRIVER/hal_adc.h"
-#include "../DRIVER/hal_gpio.h"
-#include "../DRIVER/hal_rtc.h"
+#include "hal_gpio.h"
+#include "hal_rtc.h"
 #include "../DRIVER/hal_spi.h"
 #include "../DRIVER/hal_timers.h"
-#include "../DRIVER/hal_wdt.h"
-
+#include "hal_wdt.h"
 
 
 
