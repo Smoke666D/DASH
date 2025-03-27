@@ -4398,7 +4398,7 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_ranges  0x00000000000030c0      0x268 ./CANopenNode/301/CO_SDOserver.o
  .debug_ranges  0x0000000000003328      0x148 ./CANopenNode/CANopen.o
 
-.debug_line     0x0000000000000000    0x32cc8
+.debug_line     0x0000000000000000    0x32cf5
  .debug_line    0x0000000000000000      0xa95 ./User/CanOpenNode.o
  .debug_line    0x0000000000000a95      0xef3 ./User/DataModel.o
  .debug_line    0x0000000000001988      0x345 ./User/ch32v20x_it.o
@@ -4433,24 +4433,24 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_line    0x000000000001b955      0x6b5 ./HAL_DRIVER/hal_spi_ch32.o
  .debug_line    0x000000000001c00a      0xd65 ./HAL_DRIVER/hal_timers_ch32.o
  .debug_line    0x000000000001cd6f      0x53c ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_line    0x000000000001d2ab      0x997 ./HAL/hal_adc_ch32.o
- .debug_line    0x000000000001dc42      0x7a1 ./HAL/hal_dma_ch32.o
- .debug_line    0x000000000001e3e3      0xc01 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_line    0x000000000001efe4      0x71a ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_line    0x000000000001f6fe      0x368 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_line    0x000000000001fa66      0x626 ./FreeRTOS/list.o
- .debug_line    0x000000000002008c     0x31aa ./FreeRTOS/queue.o
- .debug_line    0x0000000000023236     0x4982 ./FreeRTOS/tasks.o
- .debug_line    0x0000000000027bb8      0x6b5 ./Debug/debug.o
- .debug_line    0x000000000002826d     0x1178 ./CANopenNode/keypad/CO_driver_ST32F103.o
- .debug_line    0x00000000000293e5      0x341 ./CANopenNode/keypad/OD.o
- .debug_line    0x0000000000029726      0xfdd ./CANopenNode/305/CO_LSSslave.o
- .debug_line    0x000000000002a703     0x1113 ./CANopenNode/301/CO_Emergency.o
- .debug_line    0x000000000002b816      0xb19 ./CANopenNode/301/CO_NMT_Heartbeat.o
- .debug_line    0x000000000002c32f      0xe8b ./CANopenNode/301/CO_ODinterface.o
- .debug_line    0x000000000002d1ba     0x279a ./CANopenNode/301/CO_PDO.o
- .debug_line    0x000000000002f954     0x231a ./CANopenNode/301/CO_SDOserver.o
- .debug_line    0x0000000000031c6e     0x105a ./CANopenNode/CANopen.o
+ .debug_line    0x000000000001d2ab      0x9bd ./HAL/hal_adc_ch32.o
+ .debug_line    0x000000000001dc68      0x7a8 ./HAL/hal_dma_ch32.o
+ .debug_line    0x000000000001e410      0xc01 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_line    0x000000000001f011      0x71a ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_line    0x000000000001f72b      0x368 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_line    0x000000000001fa93      0x626 ./FreeRTOS/list.o
+ .debug_line    0x00000000000200b9     0x31aa ./FreeRTOS/queue.o
+ .debug_line    0x0000000000023263     0x4982 ./FreeRTOS/tasks.o
+ .debug_line    0x0000000000027be5      0x6b5 ./Debug/debug.o
+ .debug_line    0x000000000002829a     0x1178 ./CANopenNode/keypad/CO_driver_ST32F103.o
+ .debug_line    0x0000000000029412      0x341 ./CANopenNode/keypad/OD.o
+ .debug_line    0x0000000000029753      0xfdd ./CANopenNode/305/CO_LSSslave.o
+ .debug_line    0x000000000002a730     0x1113 ./CANopenNode/301/CO_Emergency.o
+ .debug_line    0x000000000002b843      0xb19 ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_line    0x000000000002c35c      0xe8b ./CANopenNode/301/CO_ODinterface.o
+ .debug_line    0x000000000002d1e7     0x279a ./CANopenNode/301/CO_PDO.o
+ .debug_line    0x000000000002f981     0x231a ./CANopenNode/301/CO_SDOserver.o
+ .debug_line    0x0000000000031c9b     0x105a ./CANopenNode/CANopen.o
 
 .debug_str      0x0000000000000000     0xc400
  .debug_str     0x0000000000000000     0x230d ./User/CanOpenNode.o
