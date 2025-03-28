@@ -47,6 +47,7 @@ encoding//FreeRTOS/portable/MemMang/heap_4.c=GBK
 encoding//FreeRTOS/queue.c=GBK
 encoding//FreeRTOS/tasks.c=GBK
 encoding//FreeRTOS/timers.c=GBK
+encoding//HAL_DRIVER/hal_flash.h=GBK
 encoding//HAL_DRIVER/hal_gpio.h=GBK
 encoding//HAL_DRIVER/hal_i2c_ch32.c=GBK
 encoding//HAL_DRIVER/hal_irq.c=GBK

@@ -14,7 +14,7 @@
 
 #define SW_V                 1
 #define SW_V2                1
-#define SW_V3               15
+#define SW_V3               11
 
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
 #define VALID_CODE_ADDRES     0
@@ -228,7 +228,8 @@
 #define V17                     ( V16 + 2 )
 #define KEY_CODE                ( V17 +  2 )
 #define NODE_ID                 ( KEY_CODE +1 )
-#define CHANNEL_TYPE_MASK       ( NODE_ID +1 )
+#define BITRATE                 ( NODE_ID +1 )
+#define CHANNEL_TYPE_MASK       ( BITRATE +1 )
 #define RMP_OFFSET                1000.0
 
 
