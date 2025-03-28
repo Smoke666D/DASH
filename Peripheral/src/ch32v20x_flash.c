@@ -370,6 +370,8 @@ FLASH_Status FLASH_ProgramOptionByteData(uint32_t Address, uint8_t Data)
         }
 
         FLASH->CTLR &= ~CR_OPTPG_Set;
+        for (i=0;i<8;i++)
+            printf("%x\r\n",pbuf[i]);
     }
 
     return status;

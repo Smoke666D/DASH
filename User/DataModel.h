@@ -14,8 +14,7 @@
 
 #define SW_V                 1
 #define SW_V2                1
-#define SW_V3                10
-
+#define SW_V3               15
 
 #define VALID_CODE            ((SW_V2<<4) | (SW_V3))
 #define VALID_CODE_ADDRES     0
@@ -27,8 +26,8 @@
 #define BITRATE_ADR            (ODOMETR_MAP + 1)
 #define RGB_BRIGTH_ADR         (BITRATE_ADR  +1)
 #define WHITE_BRIGTH_ADR       (RGB_BRIGTH_ADR + 1)
-#define NODE_ID                (WHITE_BRIGTH_ADR + 1)
-#define BAR_VALUE_RED_HIGH     (NODE_ID       + 1 )
+//#define NODE_ID                (WHITE_BRIGTH_ADR + 1)
+#define BAR_VALUE_RED_HIGH     (WHITE_BRIGTH_ADR      + 1 )
 #define BAR_VALUE_RED_LOW      ( BAR_VALUE_RED_HIGH    + 2 )
 #define BAR_VALUE_GREEN_HIGH   ( BAR_VALUE_RED_LOW     + 2 )
 #define BAR_VALUE_GREEN_LOW    ( BAR_VALUE_GREEN_HIGH  + 2 )
@@ -228,8 +227,10 @@
 #define V16                     ( V15 + 2 )
 #define V17                     ( V16 + 2 )
 #define KEY_CODE                ( V17 +  2 )
-#define CHANNEL_TYPE_MASK       ( KEY_CODE +1 )
+#define NODE_ID                 ( KEY_CODE +1 )
+#define CHANNEL_TYPE_MASK       ( NODE_ID +1 )
 #define RMP_OFFSET                1000.0
+
 
 #define TOTAL_REGISTER_COUNT  (CHANNEL_TYPE_MASK  + 2 )
 

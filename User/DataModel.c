@@ -13,6 +13,7 @@
 #include "dash_draw.h"
 #include "hw_lib_eeprom_i2c.h"
 #include "hw_data_model.h"
+#include "hal_wdt.h"
 
 
  static const uint16_t CalPoint[18][2] = {
@@ -67,6 +68,9 @@ QueueHandle_t * xDataRegQueue( void )
   return  (&pDataRegQueue);
 }
 
+void vSetBitrate( uint8_t data);
+void vSetNodeID( uint8_t data);
+
 
 u16 DataModelGetSecCounter()
 {
@@ -79,11 +83,77 @@ void vDataModelRegDelayWrite()
     {
         EEPROM_REG_Q_t reg_data;
         xQueueReceive( pDataRegQueue, &reg_data,portMAX_DELAY );
-        eEEPROMWr(reg_data.addr, GetRegisterAddr(reg_data.addr),reg_data.len,1);
-
+        if (reg_data.addr == NODE_ID)
+        {
+            vSetNodeID(getReg8(NODE_ID));
+        }
+        else
+        {
+            eEEPROMWr(reg_data.addr, GetRegisterAddr(reg_data.addr),reg_data.len,1);
+        }
     }
 }
 
+#define FLASH_KEY1                 ((uint32_t)0x45670123)
+#define FLASH_KEY2                 ((uint32_t)0xCDEF89AB)
+#define ProgramTimeout             ((uint32_t)0x00005000)
+
+#define CR_ORWRE_Set               ((uint32_t)0x00000200)
+#define CR_OPTER_Set               ((uint32_t)0x00000020)
+#define CR_STRT_Set                ((uint32_t)0x00000040)
+#define SR_BSY                     ((uint32_t)0x00000001)
+#define CR_OPTPG_Set               ((uint32_t)0x00000010)
+#define CR_LOCK_Set                ((uint32_t)0x00000080)
+
+/*
+ * §¶§å§ß§Ü§è§Ú§ñ §Ù§Ñ§á§Ú§ã§Ú user option data byte
+ */
+FLASH_Status ProgramOptionByteData(uint8_t Address, uint8_t Data)
+{
+    FLASH_Status status = FLASH_COMPLETE;
+    uint32_t     Addr = 0x1FFFF800;
+    __IO uint8_t i;
+    uint16_t     pbuf[8];
+
+    //§²§Ñ§Ù§Ò§Ý§à§Ü§Ú§â§å§Ö§Þ FLASH->CTLR §â§Ö§Ô§Ú§ã§ä§â
+    FLASH->KEYR = FLASH_KEY1;
+    FLASH->KEYR = FLASH_KEY2;
+
+    //§²§Ñ§Ù§Ò§Ý§à§Ü§Ú§â§å§Ö§Þ option byte §â§Ñ§Ò§à§ä§å
+    FLASH->OBKEYR = FLASH_KEY1;
+    FLASH->OBKEYR = FLASH_KEY2;
+
+    status = FLASH_WaitForLastOperation(ProgramTimeout);
+    if(status == FLASH_COMPLETE)
+    {
+         FLASH->CTLR |= CR_ORWRE_Set;
+        /* Read optionbytes */
+        for(i = 0; i < 8; i++){
+            pbuf[i] = *(uint16_t *)(Addr + 2 * i);
+        }
+        /* Erase optionbytes */
+        FLASH->CTLR |= CR_OPTER_Set;
+        FLASH->CTLR |= CR_STRT_Set;
+        while(FLASH->STATR & SR_BSY);
+        FLASH->CTLR &= ~CR_OPTER_Set;
+
+        /* Write optionbytes */
+        pbuf[2+ Address] = ((((uint16_t) ~(Data)) << 8) | ((uint16_t)Data));
+
+        FLASH->CTLR |= CR_OPTPG_Set;
+
+        for(i = 0; i < 8; i++){
+            *(uint16_t *)(Addr + 2 * i) = pbuf[i];
+            while(FLASH->STATR & SR_BSY) ;
+        }
+        FLASH->CTLR &= ~CR_OPTPG_Set;
+        //§¢§Ý§à§Ü§Ú§å§Ö§Þ §à§á§ä§Ú§à§ß §Ò§Ñ§Û§ä§í
+        FLASH->CTLR &= ~CR_ORWRE_Set;
+        //§¢§Ý§à§Ü§Ú§â§å§Ö§Þ §æ§Ý§Ö§ê
+        FLASH->CTLR |= CR_LOCK_Set;
+    }
+    return status;
+}
 
 
 INIT_FUNC_LOC  void DataModel_Init()
@@ -100,7 +170,8 @@ INIT_FUNC_LOC  void DataModel_Init()
              setReg8 (BITRATE_ADR,2 | 0x80);
              setReg8 (RGB_BRIGTH_ADR,10);
              setReg8 (WHITE_BRIGTH_ADR,10);
-             setReg8 (NODE_ID ,0x20);
+             vSetNodeID( 0x20);
+             HAL_WDTReset();
              setReg8 (BAR_MODE ,1);
              setReg32(HOUR_COUNTER_ADR,      1046);
              setReg16(BAR_VALUE_HIGH        ,39000);
@@ -258,7 +329,9 @@ INIT_FUNC_LOC  void DataModel_Init()
              ClearDataModel();
              vTaskDelay(10);
              eEEPROMRd(0x00 ,GetDataRegister() , EEPROM_REGISER_COUNT,2);
+
          }
+
          static const u16 cal_point_index[]={AIN1_CAL_POINT_BEGIN,AIN2_CAL_POINT_BEGIN,AIN3_CAL_POINT_BEGIN};
          POINT_t point[2];
          for (u8 k = 0; k < 3 ;k++)
@@ -280,6 +353,8 @@ INIT_FUNC_LOC  void DataModel_Init()
                 }
             }
          }
+
+
     }
     else {
         printf("fail\r\n");
@@ -340,15 +415,13 @@ void WriteReg( u16 reg_adress, void * data, u8 len)
         eEEPROMWr(reg_adress,Buffer,len,2);
 }
 
-#define MAX_BITRATE_INDEX 8
-static const u16 bitrate_table[MAX_BITRATE_INDEX]={1000,500,250,125,100,50,20,10};
+
 /*
  * §£§à§Ù§Ó§â§Ñ§ë§Ñ§Ö§Þ §Ù§ß§Ñ§é§Ö§ß§Ú§Ö §ã§Ü§à§â§à§ã§ä§Ú CAN §Ú§Ù EEPROM
  */
 uint16_t vGetBitrate()
 {
-   u8 index = bReadEEPROM( BITRATE_ADR,2 ) & 0x7F;
-   return (index <= MAX_BITRATE_INDEX ) ? bitrate_table[index] : 500;
+   return (getReg8( BITRATE_ADR ) & 0x7F);
 }
 
 uint16_t vFDGetNMTState( void )
@@ -358,7 +431,17 @@ uint16_t vFDGetNMTState( void )
 
 uint8_t vGetNodeId( void )
 {
-  return ( getReg8( NODE_ID) );
+  return ( OB->Data1 & 0xFF );
+}
+
+void vSetBitrate( uint8_t data)
+{
+    ProgramOptionByteData(0,data) ;
+}
+
+void vSetNodeID( uint8_t data)
+{
+    ProgramOptionByteData(1,data) ;
 }
 
 /*

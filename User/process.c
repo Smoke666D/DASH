@@ -667,7 +667,7 @@ static ODR_t OD_readBoardSettings(OD_stream_t *stream, void *buf, OD_size_t coun
                 CO_setUint8(buf,  getReg8(BITRATE_ADR ) & 0x7F);
                 break;
             case 5:
-                CO_setUint8(buf,  getReg8(NODE_ID ) );
+                CO_setUint8(buf,  vGetNodeId());
                 break;
             case 6:
                 CO_setUint8(buf,  (getReg8(BITRATE_ADR ) & 0x80)>>7);
@@ -718,6 +718,7 @@ static ODR_t OD_writeBoardSettings(OD_stream_t *stream, const void *buf, OD_size
                }
                break;
            case 5:
+
                WriteRegAfterDelay(  NODE_ID,&temp,sizeof(temp));
                res =  ODR_OK;
                *countWritten =sizeof(temp);
