@@ -1240,7 +1240,7 @@ Discarded input sections
  .text.HAL_FLASH_Lock
                 0x0000000000000000        0xe ./HAL_DRIVER/hal_flash_ch32.o
  .text.HAL_FLASH_ErasePage
-                0x0000000000000000       0x62 ./HAL_DRIVER/hal_flash_ch32.o
+                0x0000000000000000       0x6e ./HAL_DRIVER/hal_flash_ch32.o
  .text          0x0000000000000000        0x0 ./HAL_DRIVER/hal_gpio_ch32.o
  .data          0x0000000000000000        0x0 ./HAL_DRIVER/hal_gpio_ch32.o
  .bss           0x0000000000000000        0x0 ./HAL_DRIVER/hal_gpio_ch32.o
@@ -1983,7 +1983,7 @@ Discarded input sections
 Memory Configuration
 
 Name             Origin             Length             Attributes
-FLASH            0x0000000000000000 0x0000000000010000 xr
+FLASH            0x0000000000000000 0x000000000000f000 xr
 SFLASH           0x0000000000010000 0x0000000000002800 xr
 RAM              0x0000000020000000 0x0000000000005000 xrw
 *default*        0x0000000000000000 0xffffffffffffffff
@@ -3903,7 +3903,7 @@ END GROUP
  *fill*         0x000000002000042e        0x2 
  .sbss.pInputsTaskHandle
                 0x0000000020000430        0x4 ./User/inputs.o
- .sbss.xHigherPriorityTaskWoken.7423
+ .sbss.xHigherPriorityTaskWoken.7428
                 0x0000000020000434        0x4 ./User/inputs.o
  .sbss.SPI2_DATA
                 0x0000000020000438        0x8 ./User/led.o
@@ -4084,7 +4084,7 @@ END GROUP
                 0x0000000020005000                __freertos_irq_stack_top = .
 OUTPUT(DASH.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000    0x53a56
+.debug_info     0x0000000000000000    0x53a4d
  .debug_info    0x0000000000000000     0x2e74 ./User/CanOpenNode.o
  .debug_info    0x0000000000002e74     0x31ee ./User/DataModel.o
  .debug_info    0x0000000000006062      0xa02 ./User/ch32v20x_it.o
@@ -4113,34 +4113,34 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_info    0x0000000000028d8e     0x1871 ./HAL_LIB/hw_lib_eeprom_i2c.o
  .debug_info    0x000000000002a5ff      0xaa8 ./HAL_LIB/hw_timeout.o
  .debug_info    0x000000000002b0a7     0x155e ./HAL_DRIVER/hal_can_ch32.o
- .debug_info    0x000000000002c605      0xd93 ./HAL_DRIVER/hal_flash_ch32.o
- .debug_info    0x000000000002d398     0x10ab ./HAL_DRIVER/hal_gpio_ch32.o
- .debug_info    0x000000000002e443      0xf39 ./HAL_DRIVER/hal_irq.o
- .debug_info    0x000000000002f37c     0x13a7 ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_info    0x0000000000030723      0xaa2 ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_info    0x00000000000311c5      0xe63 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_info    0x0000000000032028     0x1080 ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_info    0x00000000000330a8       0x26 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_info    0x00000000000330ce      0xb87 ./FreeRTOS/list.o
- .debug_info    0x0000000000033c55     0x3240 ./FreeRTOS/queue.o
- .debug_info    0x0000000000036e95     0x394b ./FreeRTOS/tasks.o
- .debug_info    0x000000000003a7e0      0xf05 ./Debug/debug.o
- .debug_info    0x000000000003b6e5     0x149d ./DRIVER/hal_adc_ch32.o
- .debug_info    0x000000000003cb82     0x107a ./DRIVER/hal_dma_ch32.o
- .debug_info    0x000000000003dbfc     0x13a0 ./DRIVER/hal_i2c_ch32.o
- .debug_info    0x000000000003ef9c      0xf26 ./DRIVER/hal_spi_ch32.o
- .debug_info    0x000000000003fec2     0x18a7 ./DRIVER/hal_timers_ch32.o
- .debug_info    0x0000000000041769     0x19d4 ./CANopenNode/keypad/CO_driver_ST32F103.o
- .debug_info    0x000000000004313d     0x1bb2 ./CANopenNode/keypad/OD.o
- .debug_info    0x0000000000044cef     0x17c6 ./CANopenNode/305/CO_LSSslave.o
- .debug_info    0x00000000000464b5     0x1e35 ./CANopenNode/301/CO_Emergency.o
- .debug_info    0x00000000000482ea     0x19f0 ./CANopenNode/301/CO_NMT_Heartbeat.o
- .debug_info    0x0000000000049cda     0x14c6 ./CANopenNode/301/CO_ODinterface.o
- .debug_info    0x000000000004b1a0     0x336f ./CANopenNode/301/CO_PDO.o
- .debug_info    0x000000000004e50f     0x25c1 ./CANopenNode/301/CO_SDOserver.o
- .debug_info    0x0000000000050ad0     0x2f86 ./CANopenNode/CANopen.o
+ .debug_info    0x000000000002c605      0xd8a ./HAL_DRIVER/hal_flash_ch32.o
+ .debug_info    0x000000000002d38f     0x10ab ./HAL_DRIVER/hal_gpio_ch32.o
+ .debug_info    0x000000000002e43a      0xf39 ./HAL_DRIVER/hal_irq.o
+ .debug_info    0x000000000002f373     0x13a7 ./HAL_DRIVER/hal_rtc_ch32.o
+ .debug_info    0x000000000003071a      0xaa2 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_info    0x00000000000311bc      0xe63 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_info    0x000000000003201f     0x1080 ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_info    0x000000000003309f       0x26 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_info    0x00000000000330c5      0xb87 ./FreeRTOS/list.o
+ .debug_info    0x0000000000033c4c     0x3240 ./FreeRTOS/queue.o
+ .debug_info    0x0000000000036e8c     0x394b ./FreeRTOS/tasks.o
+ .debug_info    0x000000000003a7d7      0xf05 ./Debug/debug.o
+ .debug_info    0x000000000003b6dc     0x149d ./DRIVER/hal_adc_ch32.o
+ .debug_info    0x000000000003cb79     0x107a ./DRIVER/hal_dma_ch32.o
+ .debug_info    0x000000000003dbf3     0x13a0 ./DRIVER/hal_i2c_ch32.o
+ .debug_info    0x000000000003ef93      0xf26 ./DRIVER/hal_spi_ch32.o
+ .debug_info    0x000000000003feb9     0x18a7 ./DRIVER/hal_timers_ch32.o
+ .debug_info    0x0000000000041760     0x19d4 ./CANopenNode/keypad/CO_driver_ST32F103.o
+ .debug_info    0x0000000000043134     0x1bb2 ./CANopenNode/keypad/OD.o
+ .debug_info    0x0000000000044ce6     0x17c6 ./CANopenNode/305/CO_LSSslave.o
+ .debug_info    0x00000000000464ac     0x1e35 ./CANopenNode/301/CO_Emergency.o
+ .debug_info    0x00000000000482e1     0x19f0 ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_info    0x0000000000049cd1     0x14c6 ./CANopenNode/301/CO_ODinterface.o
+ .debug_info    0x000000000004b197     0x336f ./CANopenNode/301/CO_PDO.o
+ .debug_info    0x000000000004e506     0x25c1 ./CANopenNode/301/CO_SDOserver.o
+ .debug_info    0x0000000000050ac7     0x2f86 ./CANopenNode/CANopen.o
 
-.debug_abbrev   0x0000000000000000     0xc138
+.debug_abbrev   0x0000000000000000     0xc12d
  .debug_abbrev  0x0000000000000000      0x3da ./User/CanOpenNode.o
  .debug_abbrev  0x00000000000003da      0x467 ./User/DataModel.o
  .debug_abbrev  0x0000000000000841      0x1e3 ./User/ch32v20x_it.o
@@ -4169,32 +4169,32 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_abbrev  0x0000000000005810      0x4a7 ./HAL_LIB/hw_lib_eeprom_i2c.o
  .debug_abbrev  0x0000000000005cb7      0x236 ./HAL_LIB/hw_timeout.o
  .debug_abbrev  0x0000000000005eed      0x422 ./HAL_DRIVER/hal_can_ch32.o
- .debug_abbrev  0x000000000000630f      0x362 ./HAL_DRIVER/hal_flash_ch32.o
- .debug_abbrev  0x0000000000006671      0x384 ./HAL_DRIVER/hal_gpio_ch32.o
- .debug_abbrev  0x00000000000069f5      0x2cd ./HAL_DRIVER/hal_irq.o
- .debug_abbrev  0x0000000000006cc2      0x354 ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_abbrev  0x0000000000007016      0x213 ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_abbrev  0x0000000000007229      0x36c ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_abbrev  0x0000000000007595      0x3ad ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_abbrev  0x0000000000007942       0x14 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_abbrev  0x0000000000007956      0x254 ./FreeRTOS/list.o
- .debug_abbrev  0x0000000000007baa      0x4a1 ./FreeRTOS/queue.o
- .debug_abbrev  0x000000000000804b      0x540 ./FreeRTOS/tasks.o
- .debug_abbrev  0x000000000000858b      0x2d7 ./Debug/debug.o
- .debug_abbrev  0x0000000000008862      0x3c2 ./DRIVER/hal_adc_ch32.o
- .debug_abbrev  0x0000000000008c24      0x2ce ./DRIVER/hal_dma_ch32.o
- .debug_abbrev  0x0000000000008ef2      0x345 ./DRIVER/hal_i2c_ch32.o
- .debug_abbrev  0x0000000000009237      0x2e4 ./DRIVER/hal_spi_ch32.o
- .debug_abbrev  0x000000000000951b      0x4a6 ./DRIVER/hal_timers_ch32.o
- .debug_abbrev  0x00000000000099c1      0x501 ./CANopenNode/keypad/CO_driver_ST32F103.o
- .debug_abbrev  0x0000000000009ec2      0x264 ./CANopenNode/keypad/OD.o
- .debug_abbrev  0x000000000000a126      0x43f ./CANopenNode/305/CO_LSSslave.o
- .debug_abbrev  0x000000000000a565      0x482 ./CANopenNode/301/CO_Emergency.o
- .debug_abbrev  0x000000000000a9e7      0x46f ./CANopenNode/301/CO_NMT_Heartbeat.o
- .debug_abbrev  0x000000000000ae56      0x3ef ./CANopenNode/301/CO_ODinterface.o
- .debug_abbrev  0x000000000000b245      0x5c7 ./CANopenNode/301/CO_PDO.o
- .debug_abbrev  0x000000000000b80c      0x4f3 ./CANopenNode/301/CO_SDOserver.o
- .debug_abbrev  0x000000000000bcff      0x439 ./CANopenNode/CANopen.o
+ .debug_abbrev  0x000000000000630f      0x357 ./HAL_DRIVER/hal_flash_ch32.o
+ .debug_abbrev  0x0000000000006666      0x384 ./HAL_DRIVER/hal_gpio_ch32.o
+ .debug_abbrev  0x00000000000069ea      0x2cd ./HAL_DRIVER/hal_irq.o
+ .debug_abbrev  0x0000000000006cb7      0x354 ./HAL_DRIVER/hal_rtc_ch32.o
+ .debug_abbrev  0x000000000000700b      0x213 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_abbrev  0x000000000000721e      0x36c ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_abbrev  0x000000000000758a      0x3ad ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_abbrev  0x0000000000007937       0x14 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_abbrev  0x000000000000794b      0x254 ./FreeRTOS/list.o
+ .debug_abbrev  0x0000000000007b9f      0x4a1 ./FreeRTOS/queue.o
+ .debug_abbrev  0x0000000000008040      0x540 ./FreeRTOS/tasks.o
+ .debug_abbrev  0x0000000000008580      0x2d7 ./Debug/debug.o
+ .debug_abbrev  0x0000000000008857      0x3c2 ./DRIVER/hal_adc_ch32.o
+ .debug_abbrev  0x0000000000008c19      0x2ce ./DRIVER/hal_dma_ch32.o
+ .debug_abbrev  0x0000000000008ee7      0x345 ./DRIVER/hal_i2c_ch32.o
+ .debug_abbrev  0x000000000000922c      0x2e4 ./DRIVER/hal_spi_ch32.o
+ .debug_abbrev  0x0000000000009510      0x4a6 ./DRIVER/hal_timers_ch32.o
+ .debug_abbrev  0x00000000000099b6      0x501 ./CANopenNode/keypad/CO_driver_ST32F103.o
+ .debug_abbrev  0x0000000000009eb7      0x264 ./CANopenNode/keypad/OD.o
+ .debug_abbrev  0x000000000000a11b      0x43f ./CANopenNode/305/CO_LSSslave.o
+ .debug_abbrev  0x000000000000a55a      0x482 ./CANopenNode/301/CO_Emergency.o
+ .debug_abbrev  0x000000000000a9dc      0x46f ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_abbrev  0x000000000000ae4b      0x3ef ./CANopenNode/301/CO_ODinterface.o
+ .debug_abbrev  0x000000000000b23a      0x5c7 ./CANopenNode/301/CO_PDO.o
+ .debug_abbrev  0x000000000000b801      0x4f3 ./CANopenNode/301/CO_SDOserver.o
+ .debug_abbrev  0x000000000000bcf4      0x439 ./CANopenNode/CANopen.o
 
 .debug_loc      0x0000000000000000    0x19484
  .debug_loc     0x0000000000000000      0x158 ./User/CanOpenNode.o
@@ -4409,7 +4409,7 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_ranges  0x0000000000003260      0x268 ./CANopenNode/301/CO_SDOserver.o
  .debug_ranges  0x00000000000034c8      0x148 ./CANopenNode/CANopen.o
 
-.debug_line     0x0000000000000000    0x35c3b
+.debug_line     0x0000000000000000    0x35c4f
  .debug_line    0x0000000000000000      0xa94 ./User/CanOpenNode.o
  .debug_line    0x0000000000000a94     0x1084 ./User/DataModel.o
  .debug_line    0x0000000000001b18      0x345 ./User/ch32v20x_it.o
@@ -4438,32 +4438,32 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_line    0x000000000001921e      0xfd6 ./HAL_LIB/hw_lib_eeprom_i2c.o
  .debug_line    0x000000000001a1f4      0x3fa ./HAL_LIB/hw_timeout.o
  .debug_line    0x000000000001a5ee     0x144c ./HAL_DRIVER/hal_can_ch32.o
- .debug_line    0x000000000001ba3a      0x96e ./HAL_DRIVER/hal_flash_ch32.o
- .debug_line    0x000000000001c3a8      0x887 ./HAL_DRIVER/hal_gpio_ch32.o
- .debug_line    0x000000000001cc2f      0x4af ./HAL_DRIVER/hal_irq.o
- .debug_line    0x000000000001d0de      0xc53 ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_line    0x000000000001dd31      0x549 ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_line    0x000000000001e27a      0xc01 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_line    0x000000000001ee7b      0x71a ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_line    0x000000000001f595      0x368 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_line    0x000000000001f8fd      0x626 ./FreeRTOS/list.o
- .debug_line    0x000000000001ff23     0x31aa ./FreeRTOS/queue.o
- .debug_line    0x00000000000230cd     0x4982 ./FreeRTOS/tasks.o
- .debug_line    0x0000000000027a4f      0x6b5 ./Debug/debug.o
- .debug_line    0x0000000000028104      0x9df ./DRIVER/hal_adc_ch32.o
- .debug_line    0x0000000000028ae3      0x7b6 ./DRIVER/hal_dma_ch32.o
- .debug_line    0x0000000000029299      0xad3 ./DRIVER/hal_i2c_ch32.o
- .debug_line    0x0000000000029d6c      0x6e2 ./DRIVER/hal_spi_ch32.o
- .debug_line    0x000000000002a44e      0xd87 ./DRIVER/hal_timers_ch32.o
- .debug_line    0x000000000002b1d5     0x1183 ./CANopenNode/keypad/CO_driver_ST32F103.o
- .debug_line    0x000000000002c358      0x341 ./CANopenNode/keypad/OD.o
- .debug_line    0x000000000002c699      0xfdd ./CANopenNode/305/CO_LSSslave.o
- .debug_line    0x000000000002d676     0x1113 ./CANopenNode/301/CO_Emergency.o
- .debug_line    0x000000000002e789      0xb19 ./CANopenNode/301/CO_NMT_Heartbeat.o
- .debug_line    0x000000000002f2a2      0xe8b ./CANopenNode/301/CO_ODinterface.o
- .debug_line    0x000000000003012d     0x279a ./CANopenNode/301/CO_PDO.o
- .debug_line    0x00000000000328c7     0x231a ./CANopenNode/301/CO_SDOserver.o
- .debug_line    0x0000000000034be1     0x105a ./CANopenNode/CANopen.o
+ .debug_line    0x000000000001ba3a      0x982 ./HAL_DRIVER/hal_flash_ch32.o
+ .debug_line    0x000000000001c3bc      0x887 ./HAL_DRIVER/hal_gpio_ch32.o
+ .debug_line    0x000000000001cc43      0x4af ./HAL_DRIVER/hal_irq.o
+ .debug_line    0x000000000001d0f2      0xc53 ./HAL_DRIVER/hal_rtc_ch32.o
+ .debug_line    0x000000000001dd45      0x549 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_line    0x000000000001e28e      0xc01 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_line    0x000000000001ee8f      0x71a ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_line    0x000000000001f5a9      0x368 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_line    0x000000000001f911      0x626 ./FreeRTOS/list.o
+ .debug_line    0x000000000001ff37     0x31aa ./FreeRTOS/queue.o
+ .debug_line    0x00000000000230e1     0x4982 ./FreeRTOS/tasks.o
+ .debug_line    0x0000000000027a63      0x6b5 ./Debug/debug.o
+ .debug_line    0x0000000000028118      0x9df ./DRIVER/hal_adc_ch32.o
+ .debug_line    0x0000000000028af7      0x7b6 ./DRIVER/hal_dma_ch32.o
+ .debug_line    0x00000000000292ad      0xad3 ./DRIVER/hal_i2c_ch32.o
+ .debug_line    0x0000000000029d80      0x6e2 ./DRIVER/hal_spi_ch32.o
+ .debug_line    0x000000000002a462      0xd87 ./DRIVER/hal_timers_ch32.o
+ .debug_line    0x000000000002b1e9     0x1183 ./CANopenNode/keypad/CO_driver_ST32F103.o
+ .debug_line    0x000000000002c36c      0x341 ./CANopenNode/keypad/OD.o
+ .debug_line    0x000000000002c6ad      0xfdd ./CANopenNode/305/CO_LSSslave.o
+ .debug_line    0x000000000002d68a     0x1113 ./CANopenNode/301/CO_Emergency.o
+ .debug_line    0x000000000002e79d      0xb19 ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_line    0x000000000002f2b6      0xe8b ./CANopenNode/301/CO_ODinterface.o
+ .debug_line    0x0000000000030141     0x279a ./CANopenNode/301/CO_PDO.o
+ .debug_line    0x00000000000328db     0x231a ./CANopenNode/301/CO_SDOserver.o
+ .debug_line    0x0000000000034bf5     0x105a ./CANopenNode/CANopen.o
 
 .debug_str      0x0000000000000000     0xcab8
  .debug_str     0x0000000000000000     0x2305 ./User/CanOpenNode.o
