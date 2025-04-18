@@ -25,6 +25,9 @@ void Delay_Init(void)
 {
     p_us = SystemCoreClock / 8000000;
     p_ms = (uint16_t)p_us * 1000;
+    SysTick->CTLR = 0;
+    SysTick->SR = 0;
+    SysTick->CMP = 0;
 }
 
 /*********************************************************************
@@ -64,6 +67,7 @@ void Delay_Ms(uint32_t n)
 {
     uint32_t i;
 
+    SysTick->CTLR &= ~(1 << 0);
     SysTick->SR &= ~(1 << 0);
     i = (uint32_t)n * p_ms;
 

@@ -703,6 +703,7 @@ static ODR_t OD_writeBoardSettings(OD_stream_t *stream, const void *buf, OD_size
            case 1:
                  if (temp <= 7)
                  {
+
                     WriteRegAfterDelay(  BITRATE,&temp,sizeof(temp));
                     res =  ODR_OK;
                     *countWritten =sizeof(temp);

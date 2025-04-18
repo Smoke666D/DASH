@@ -40,15 +40,6 @@
 };
 
 
-/*__attribute__((section(".stext"))) static const uint16_t CalPoint1[8][2] = {
-                            //      {35,1},
-                                  {32,18},
-                                  {22,90},
-                                  {17,159},
-                                  {5,250},
-                                  {1,380}};
-
-*/
 #define FUEL_SENSOR_CAL_POINT_COUNT 6
 
  static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
@@ -87,7 +78,7 @@ void vDataModelRegDelayWrite()
         switch(reg_data.addr )
         {
             case BITRATE:
-                vSetBitrate(getReg8(BITRATE));
+                vSetBitrate(getReg8(BITRATE ));
                 break;
             case NODE_ID:
                 vSetNodeID(getReg8(NODE_ID));
@@ -106,7 +97,7 @@ void vDataModelRegDelayWrite()
 
 INIT_FUNC_LOC  void DataModel_Init()
 {
-    //ClearDataModel();
+
      printf("EEPROM Init...");
     if ( eEEPROMRd(0x00 ,GetDataRegister() , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
@@ -304,7 +295,7 @@ INIT_FUNC_LOC  void DataModel_Init()
             }
          }
 
-         if (( vGetBitrate()==0x00) || ( vGetBitrate()==0xFF)) vSetBitrate(2);
+         if  ( vGetBitrate()==0xFF)  vSetBitrate(2);
          if (( vGetNodeId() ==0x00)|| ( vGetNodeId() ==0xFF) ) vSetNodeID( 0x20);
          HAL_WDTReset();
 
@@ -338,7 +329,7 @@ void WriteRegAfterDelay( u16 reg_adress, void * data, u8 len)
             setReg32(reg_adress, *((u32 *)Buffer));
             break;
     }
-    if (reg_adress < EEPROM_REGISER_COUNT)
+    if ((reg_adress < EEPROM_REGISER_COUNT) || (reg_adress==BITRATE) || (reg_adress==NODE_ID))
     {
         EEPROM_REG_Q_t reg_data;
         reg_data.addr = reg_adress;
