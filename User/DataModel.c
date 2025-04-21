@@ -106,7 +106,7 @@ INIT_FUNC_LOC  void DataModel_Init()
          {
              ClearDataModel();
              setReg8 (VALID_CODE_ADDRES ,VALID_CODE);
-             setReg8 (BITRATE_ADR,2 | 0x80);
+             setReg8 (BITRATE_ADR,2);// | 0x80);
              setReg8 (RGB_BRIGTH_ADR,10);
              setReg8 (WHITE_BRIGTH_ADR,10);
              vSetNodeID( 0x20);
