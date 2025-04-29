@@ -6,7 +6,7 @@
 #include "../DRIVER/hal_adc.h"
 #include "hal_gpio.h"
 #include "hal_rtc.h"
-#include "../DRIVER/hal_spi.h"
+#include "hal_spi.h"//"../DRIVER/hal_spi.h"
 #include "../DRIVER/hal_timers.h"
 #include "hal_wdt.h"
 

@@ -8,21 +8,18 @@ C_SRCS += \
 ../DRIVER/hal_adc_ch32.c \
 ../DRIVER/hal_dma_ch32.c \
 ../DRIVER/hal_i2c_ch32.c \
-../DRIVER/hal_spi_ch32.c \
 ../DRIVER/hal_timers_ch32.c 
 
 C_DEPS += \
 ./DRIVER/hal_adc_ch32.d \
 ./DRIVER/hal_dma_ch32.d \
 ./DRIVER/hal_i2c_ch32.d \
-./DRIVER/hal_spi_ch32.d \
 ./DRIVER/hal_timers_ch32.d 
 
 OBJS += \
 ./DRIVER/hal_adc_ch32.o \
 ./DRIVER/hal_dma_ch32.o \
 ./DRIVER/hal_i2c_ch32.o \
-./DRIVER/hal_spi_ch32.o \
 ./DRIVER/hal_timers_ch32.o 
 
 

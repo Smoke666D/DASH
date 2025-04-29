@@ -1268,6 +1268,20 @@ Discarded input sections
                 0x0000000000000000       0xf2 ./HAL_DRIVER/hal_rtc_ch32.o
  .rodata.mon_table
                 0x0000000000000000        0xc ./HAL_DRIVER/hal_rtc_ch32.o
+ .text          0x0000000000000000        0x0 ./HAL_DRIVER/hal_spi_ch32.o
+ .data          0x0000000000000000        0x0 ./HAL_DRIVER/hal_spi_ch32.o
+ .bss           0x0000000000000000        0x0 ./HAL_DRIVER/hal_spi_ch32.o
+ .text.HAL_SPI_MsterBaseInit
+                0x0000000000000000       0x78 ./HAL_DRIVER/hal_spi_ch32.o
+ .text.HAL_SPI_ConfgiIT
+                0x0000000000000000       0x2a ./HAL_DRIVER/hal_spi_ch32.o
+ .text.HAL_SPI_EnableDMA
+                0x0000000000000000       0x20 ./HAL_DRIVER/hal_spi_ch32.o
+ .text.HAL_SPI_GetData
+                0x0000000000000000       0x12 ./HAL_DRIVER/hal_spi_ch32.o
+ .text.HAL_SPI_Send
+                0x0000000000000000       0x12 ./HAL_DRIVER/hal_spi_ch32.o
+ .bss.CallBack  0x0000000000000000       0x18 ./HAL_DRIVER/hal_spi_ch32.o
  .text          0x0000000000000000        0x0 ./HAL_DRIVER/hal_wdt_ch32.o
  .data          0x0000000000000000        0x0 ./HAL_DRIVER/hal_wdt_ch32.o
  .bss           0x0000000000000000        0x0 ./HAL_DRIVER/hal_wdt_ch32.o
@@ -1512,20 +1526,6 @@ Discarded input sections
                 0x0000000000000000       0x12 ./DRIVER/hal_i2c_ch32.o
  .text.HAL_I2C_GET_STAT2
                 0x0000000000000000       0x12 ./DRIVER/hal_i2c_ch32.o
- .text          0x0000000000000000        0x0 ./DRIVER/hal_spi_ch32.o
- .data          0x0000000000000000        0x0 ./DRIVER/hal_spi_ch32.o
- .bss           0x0000000000000000        0x0 ./DRIVER/hal_spi_ch32.o
- .text.HAL_SPI_MsterBaseInit
-                0x0000000000000000       0x78 ./DRIVER/hal_spi_ch32.o
- .text.HAL_SPI_ConfgiIT
-                0x0000000000000000       0x2a ./DRIVER/hal_spi_ch32.o
- .text.HAL_SPI_EnableDMA
-                0x0000000000000000       0x20 ./DRIVER/hal_spi_ch32.o
- .text.HAL_SPI_GetData
-                0x0000000000000000       0x12 ./DRIVER/hal_spi_ch32.o
- .text.HAL_SPI_Send
-                0x0000000000000000       0x12 ./DRIVER/hal_spi_ch32.o
- .bss.CallBack  0x0000000000000000       0x18 ./DRIVER/hal_spi_ch32.o
  .text          0x0000000000000000        0x0 ./DRIVER/hal_timers_ch32.o
  .data          0x0000000000000000        0x0 ./DRIVER/hal_timers_ch32.o
  .bss           0x0000000000000000        0x0 ./DRIVER/hal_timers_ch32.o
@@ -2033,6 +2033,7 @@ LOAD ./HAL_DRIVER/hal_flash_ch32.o
 LOAD ./HAL_DRIVER/hal_gpio_ch32.o
 LOAD ./HAL_DRIVER/hal_irq.o
 LOAD ./HAL_DRIVER/hal_rtc_ch32.o
+LOAD ./HAL_DRIVER/hal_spi_ch32.o
 LOAD ./HAL_DRIVER/hal_wdt_ch32.o
 LOAD ./FreeRTOS/portable/MemMang/heap_4.o
 LOAD ./FreeRTOS/portable/GCC/RISC-V/port.o
@@ -2048,7 +2049,6 @@ LOAD ./Debug/debug.o
 LOAD ./DRIVER/hal_adc_ch32.o
 LOAD ./DRIVER/hal_dma_ch32.o
 LOAD ./DRIVER/hal_i2c_ch32.o
-LOAD ./DRIVER/hal_spi_ch32.o
 LOAD ./DRIVER/hal_timers_ch32.o
 LOAD ./Core/core_riscv.o
 LOAD ./CANopenNode/keypad/CO_driver_ST32F103.o
@@ -2155,17 +2155,18 @@ END GROUP
                 0x0000000000011422                PFIC_IRQ_ENABLE_PG1
  .stext         0x0000000000011456       0xdc ./HAL_DRIVER/hal_rtc_ch32.o
                 0x0000000000011456                HAL_RTC_IT_Init
- .stext         0x0000000000011532       0x86 ./HAL_DRIVER/hal_wdt_ch32.o
-                0x0000000000011532                HAL_WDT_Init
-                0x0000000000011566                HAL_WDTInit
-                0x0000000000011590                HAL_WDT_Init1s
- .stext         0x00000000000115b8       0x6e ./DRIVER/hal_i2c_ch32.o
-                0x00000000000115b8                InitI2CIT
- .stext         0x0000000000011626       0x5e ./DRIVER/hal_spi_ch32.o
-                0x0000000000011626                HAL_SPI_InitDMA
- .stext         0x0000000000011684      0x120 ./DRIVER/hal_timers_ch32.o
-                0x0000000000011684                HAL_TIMER_InitIt
-                0x00000000000116e8                HAL_TIMER_PWMTimersInit
+ .stext         0x0000000000011532       0x5c ./HAL_DRIVER/hal_spi_ch32.o
+                0x0000000000011532                HAL_SPI_InitDMA
+ .stext         0x000000000001158e       0x86 ./HAL_DRIVER/hal_wdt_ch32.o
+                0x000000000001158e                HAL_WDT_Init
+                0x00000000000115c2                HAL_WDTInit
+                0x00000000000115ec                HAL_WDT_Init1s
+ .stext         0x0000000000011614       0x6e ./DRIVER/hal_i2c_ch32.o
+                0x0000000000011614                InitI2CIT
+ .stext         0x0000000000011682      0x120 ./DRIVER/hal_timers_ch32.o
+                0x0000000000011682                HAL_TIMER_InitIt
+                0x00000000000116e6                HAL_TIMER_PWMTimersInit
+ *fill*         0x00000000000117a2        0x2 
  .stext         0x00000000000117a4      0x138 ./CANopenNode/keypad/OD.o
                 0x00000000000117a4                OD_ROM
 
@@ -2825,291 +2826,291 @@ END GROUP
  .text.RTC_IRQHandler
                 0x00000000000055a4       0x78 ./HAL_DRIVER/hal_rtc_ch32.o
                 0x00000000000055a4                RTC_IRQHandler
- .text.HAL_WDTReset
-                0x000000000000561c        0xe ./HAL_DRIVER/hal_wdt_ch32.o
-                0x000000000000561c                HAL_WDTReset
- .text.prvInsertBlockIntoFreeList
-                0x000000000000562a       0x4c ./FreeRTOS/portable/MemMang/heap_4.o
- .text.pvPortMalloc
-                0x0000000000005676      0x18a ./FreeRTOS/portable/MemMang/heap_4.o
-                0x0000000000005676                pvPortMalloc
- .text.vPortSetupTimerInterrupt
-                0x0000000000005800       0x3e ./FreeRTOS/portable/GCC/RISC-V/port.o
-                0x0000000000005800                vPortSetupTimerInterrupt
- .text.xPortStartScheduler
-                0x000000000000583e       0x90 ./FreeRTOS/portable/GCC/RISC-V/port.o
-                0x000000000000583e                xPortStartScheduler
- .text.SysTick_Handler
-                0x00000000000058ce       0x7c ./FreeRTOS/portable/GCC/RISC-V/port.o
-                0x00000000000058ce                SysTick_Handler
- .text.vPortEnterCritical
-                0x000000000000594a       0x16 ./FreeRTOS/portable/GCC/RISC-V/port.o
-                0x000000000000594a                vPortEnterCritical
- .text.vPortExitCritical
-                0x0000000000005960       0x42 ./FreeRTOS/portable/GCC/RISC-V/port.o
-                0x0000000000005960                vPortExitCritical
- .text.xPortSetInterruptMask
-                0x00000000000059a2        0xc ./FreeRTOS/portable/GCC/RISC-V/port.o
-                0x00000000000059a2                xPortSetInterruptMask
- .text.vPortClearInterruptMask
-                0x00000000000059ae        0x6 ./FreeRTOS/portable/GCC/RISC-V/port.o
-                0x00000000000059ae                vPortClearInterruptMask
- .text.vListInitialise
-                0x00000000000059b4       0x14 ./FreeRTOS/list.o
-                0x00000000000059b4                vListInitialise
- .text.vListInitialiseItem
-                0x00000000000059c8        0x6 ./FreeRTOS/list.o
-                0x00000000000059c8                vListInitialiseItem
- .text.vListInsertEnd
-                0x00000000000059ce       0x18 ./FreeRTOS/list.o
-                0x00000000000059ce                vListInsertEnd
- .text.vListInsert
-                0x00000000000059e6       0x2e ./FreeRTOS/list.o
-                0x00000000000059e6                vListInsert
- .text.uxListRemove
-                0x0000000000005a14       0x20 ./FreeRTOS/list.o
-                0x0000000000005a14                uxListRemove
- .text.prvIsQueueEmpty
-                0x0000000000005a34       0x1e ./FreeRTOS/queue.o
- .text.prvCopyDataToQueue
-                0x0000000000005a52       0x72 ./FreeRTOS/queue.o
- .text.prvCopyDataFromQueue
-                0x0000000000005ac4       0x28 ./FreeRTOS/queue.o
- .text.prvUnlockQueue
-                0x0000000000005aec       0x76 ./FreeRTOS/queue.o
- .text.xQueueGenericReset
-                0x0000000000005b62       0xc4 ./FreeRTOS/queue.o
-                0x0000000000005b62                xQueueGenericReset
- .text.xQueueGenericCreateStatic
-                0x0000000000005c26       0xae ./FreeRTOS/queue.o
-                0x0000000000005c26                xQueueGenericCreateStatic
- .text.xQueueGenericCreate
-                0x0000000000005cd4       0x72 ./FreeRTOS/queue.o
-                0x0000000000005cd4                xQueueGenericCreate
- .text.xQueueGenericSend
-                0x0000000000005d46      0x178 ./FreeRTOS/queue.o
-                0x0000000000005d46                xQueueGenericSend
- .text.xQueueGiveMutexRecursive
-                0x0000000000005ebe       0x56 ./FreeRTOS/queue.o
-                0x0000000000005ebe                xQueueGiveMutexRecursive
- .text.xQueueCreateMutex
-                0x0000000000005f14       0x2e ./FreeRTOS/queue.o
-                0x0000000000005f14                xQueueCreateMutex
- .text.xQueueReceive
-                0x0000000000005f42      0x138 ./FreeRTOS/queue.o
-                0x0000000000005f42                xQueueReceive
- .text.xQueueSemaphoreTake
-                0x000000000000607a      0x18e ./FreeRTOS/queue.o
-                0x000000000000607a                xQueueSemaphoreTake
- .text.xQueueTakeMutexRecursive
-                0x0000000000006208       0x5a ./FreeRTOS/queue.o
-                0x0000000000006208                xQueueTakeMutexRecursive
- .text.uxQueueMessagesWaiting
-                0x0000000000006262       0x44 ./FreeRTOS/queue.o
-                0x0000000000006262                uxQueueMessagesWaiting
- .text.prvIdleTask
-                0x00000000000062a6        0x2 ./FreeRTOS/tasks.o
- .text.prvAddNewTaskToReadyList
-                0x00000000000062a8      0x10e ./FreeRTOS/tasks.o
- .text.prvResetNextTaskUnblockTime
-                0x00000000000063b6       0x24 ./FreeRTOS/tasks.o
- .text.prvTaskIsTaskSuspended
-                0x00000000000063da       0x50 ./FreeRTOS/tasks.o
- .text.prvInitialiseNewTask.isra.2
-                0x000000000000642a       0xc8 ./FreeRTOS/tasks.o
- .text.prvAddCurrentTaskToDelayedList
-                0x00000000000064f2       0xa8 ./FreeRTOS/tasks.o
- .text.xTaskCreateStatic
-                0x000000000000659a       0xa6 ./FreeRTOS/tasks.o
-                0x000000000000659a                xTaskCreateStatic
- .text.vTaskResume
-                0x0000000000006640       0xaa ./FreeRTOS/tasks.o
-                0x0000000000006640                vTaskResume
- .text.vTaskStartScheduler
-                0x00000000000066ea       0x60 ./FreeRTOS/tasks.o
-                0x00000000000066ea                vTaskStartScheduler
- .text.vTaskSuspendAll
-                0x000000000000674a       0x10 ./FreeRTOS/tasks.o
-                0x000000000000674a                vTaskSuspendAll
- .text.xTaskGetTickCount
-                0x000000000000675a        0x6 ./FreeRTOS/tasks.o
-                0x000000000000675a                xTaskGetTickCount
- .text.xTaskIncrementTick
-                0x0000000000006760      0x19c ./FreeRTOS/tasks.o
-                0x0000000000006760                xTaskIncrementTick
- .text.xTaskResumeAll
-                0x00000000000068fc      0x158 ./FreeRTOS/tasks.o
-                0x00000000000068fc                xTaskResumeAll
- .text.vTaskDelay
-                0x0000000000006a54       0x66 ./FreeRTOS/tasks.o
-                0x0000000000006a54                vTaskDelay
- .text.vTaskSwitchContext
-                0x0000000000006aba       0x96 ./FreeRTOS/tasks.o
-                0x0000000000006aba                vTaskSwitchContext
- .text.vTaskSuspend
-                0x0000000000006b50       0xea ./FreeRTOS/tasks.o
-                0x0000000000006b50                vTaskSuspend
- .text.vTaskPlaceOnEventList
-                0x0000000000006c3a       0x48 ./FreeRTOS/tasks.o
-                0x0000000000006c3a                vTaskPlaceOnEventList
- .text.xTaskRemoveFromEventList
-                0x0000000000006c82       0xe8 ./FreeRTOS/tasks.o
-                0x0000000000006c82                xTaskRemoveFromEventList
- .text.vTaskInternalSetTimeOutState
-                0x0000000000006d6a        0xe ./FreeRTOS/tasks.o
-                0x0000000000006d6a                vTaskInternalSetTimeOutState
- .text.xTaskCheckForTimeOut
-                0x0000000000006d78       0xaa ./FreeRTOS/tasks.o
-                0x0000000000006d78                xTaskCheckForTimeOut
- .text.vTaskMissedYield
-                0x0000000000006e22        0x8 ./FreeRTOS/tasks.o
-                0x0000000000006e22                vTaskMissedYield
- .text.xTaskGetCurrentTaskHandle
-                0x0000000000006e2a        0xa ./FreeRTOS/tasks.o
-                0x0000000000006e2a                xTaskGetCurrentTaskHandle
- .text.xTaskPriorityInherit
-                0x0000000000006e34       0xae ./FreeRTOS/tasks.o
-                0x0000000000006e34                xTaskPriorityInherit
- .text.xTaskPriorityDisinherit
-                0x0000000000006ee2       0xca ./FreeRTOS/tasks.o
-                0x0000000000006ee2                xTaskPriorityDisinherit
- .text.vTaskPriorityDisinheritAfterTimeout
-                0x0000000000006fac       0xe6 ./FreeRTOS/tasks.o
-                0x0000000000006fac                vTaskPriorityDisinheritAfterTimeout
- .text.pvTaskIncrementMutexHeldCount
-                0x0000000000007092       0x1c ./FreeRTOS/tasks.o
-                0x0000000000007092                pvTaskIncrementMutexHeldCount
- .text.ulTaskGenericNotifyTake
-                0x00000000000070ae       0xb8 ./FreeRTOS/tasks.o
-                0x00000000000070ae                ulTaskGenericNotifyTake
- .text.xTaskGenericNotifyWait
-                0x0000000000007166       0xe6 ./FreeRTOS/tasks.o
-                0x0000000000007166                xTaskGenericNotifyWait
- .text.xTaskGenericNotifyFromISR
-                0x000000000000724c      0x1ec ./FreeRTOS/tasks.o
-                0x000000000000724c                xTaskGenericNotifyFromISR
- .text.Delay_Init
-                0x0000000000007438       0x3e ./Debug/debug.o
-                0x0000000000007438                Delay_Init
- .text.Delay_Ms
-                0x0000000000007476       0x3c ./Debug/debug.o
-                0x0000000000007476                Delay_Ms
- .text.USART_Printf_Init
-                0x00000000000074b2       0x5a ./Debug/debug.o
-                0x00000000000074b2                USART_Printf_Init
- .text._write   0x000000000000750c       0x3e ./Debug/debug.o
-                0x000000000000750c                _write
- .text._sbrk    0x000000000000754a       0x2a ./Debug/debug.o
-                0x000000000000754a                _sbrk
- .text.Get_ConversionVal
-                0x0000000000007574       0x2a ./DRIVER/hal_adc_ch32.o
-                0x0000000000007574                Get_ConversionVal
- .text.HAL_ADC_RegularChannelConfig
-                0x000000000000759e       0x46 ./DRIVER/hal_adc_ch32.o
-                0x000000000000759e                HAL_ADC_RegularChannelConfig
- .text.HAL_ADC_ContiniusScanCinvertionDMA
-                0x00000000000075e4       0xca ./DRIVER/hal_adc_ch32.o
-                0x00000000000075e4                HAL_ADC_ContiniusScanCinvertionDMA
- .text.HAL_ADC_StartDMA
-                0x00000000000076ae       0x42 ./DRIVER/hal_adc_ch32.o
-                0x00000000000076ae                HAL_ADC_StartDMA
- .text.ADC1_2_IRQHandler
-                0x00000000000076f0       0x70 ./DRIVER/hal_adc_ch32.o
-                0x00000000000076f0                ADC1_2_IRQHandler
- .text.DMA_IRQ  0x0000000000007760       0x3a ./DRIVER/hal_dma_ch32.o
- .text.HAL_DMA_Enable
-                0x000000000000779a       0x18 ./DRIVER/hal_dma_ch32.o
-                0x000000000000779a                HAL_DMA_Enable
- .text.HAL_DMA_Disable
-                0x00000000000077b2       0x1a ./DRIVER/hal_dma_ch32.o
-                0x00000000000077b2                HAL_DMA_Disable
- .text.HAL_DMAInitIT
-                0x00000000000077cc       0xa0 ./DRIVER/hal_dma_ch32.o
-                0x00000000000077cc                HAL_DMAInitIT
- .text.HAL_DMA_SetCounter
-                0x000000000000786c       0x12 ./DRIVER/hal_dma_ch32.o
-                0x000000000000786c                HAL_DMA_SetCounter
- .text.HAL_DMA_ITENABLE
-                0x000000000000787e       0x16 ./DRIVER/hal_dma_ch32.o
-                0x000000000000787e                HAL_DMA_ITENABLE
- .text.HAL_DMA_SetCouterAndEnable
-                0x0000000000007894       0x1a ./DRIVER/hal_dma_ch32.o
-                0x0000000000007894                HAL_DMA_SetCouterAndEnable
- .text.DMA1_Channel1_IRQHandler
-                0x00000000000078ae       0x4e ./DRIVER/hal_dma_ch32.o
-                0x00000000000078ae                DMA1_Channel1_IRQHandler
- .text.DMA1_Channel3_IRQHandler
-                0x00000000000078fc       0x4e ./DRIVER/hal_dma_ch32.o
-                0x00000000000078fc                DMA1_Channel3_IRQHandler
- .text.DMA1_Channel4_IRQHandler
-                0x000000000000794a       0x4e ./DRIVER/hal_dma_ch32.o
-                0x000000000000794a                DMA1_Channel4_IRQHandler
- .text.DMA1_Channel5_IRQHandler
-                0x0000000000007998       0x4e ./DRIVER/hal_dma_ch32.o
-                0x0000000000007998                DMA1_Channel5_IRQHandler
- .text.DMA1_Channel7_IRQHandler
-                0x00000000000079e6       0x4e ./DRIVER/hal_dma_ch32.o
-                0x00000000000079e6                DMA1_Channel7_IRQHandler
- .text.HAL_I2C_Init
-                0x0000000000007a34       0xf6 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007a34                HAL_I2C_Init
- .text.HAL_I2C_GET_STAR2
-                0x0000000000007b2a        0xe ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007b2a                HAL_I2C_GET_STAR2
- .text.HAL_I2C_GET_STAR1
-                0x0000000000007b38        0xe ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007b38                HAL_I2C_GET_STAR1
- .text.HAL_I2C_ENABLE
-                0x0000000000007b46       0x14 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007b46                HAL_I2C_ENABLE
- .text.HAL_I2C_DISABLE
-                0x0000000000007b5a       0x1a ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007b5a                HAL_I2C_DISABLE
- .text.I2C_IT_ENABLE
-                0x0000000000007b74       0x12 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007b74                I2C_IT_ENABLE
- .text.I2C_IT_DISABLE
-                0x0000000000007b86       0x16 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007b86                I2C_IT_DISABLE
- .text.HAL_I2C_STOP
-                0x0000000000007b9c       0x14 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007b9c                HAL_I2C_STOP
- .text.HAL_I2C_START
-                0x0000000000007bb0       0x14 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007bb0                HAL_I2C_START
- .text.HAL_I2C_SEND
-                0x0000000000007bc4        0xe ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007bc4                HAL_I2C_SEND
- .text.HAL_I2C_SEND_ADDR_TRANS
-                0x0000000000007bd2       0x12 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007bd2                HAL_I2C_SEND_ADDR_TRANS
- .text.HAL_I2C_SEND_ADDR_RECIEVE
-                0x0000000000007be4       0x16 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007be4                HAL_I2C_SEND_ADDR_RECIEVE
- .text.HAL_I2C_ACK_ENABLE
-                0x0000000000007bfa       0x14 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007bfa                HAL_I2C_ACK_ENABLE
- .text.HAL_I2C_ACK_DISABLE
-                0x0000000000007c0e       0x1c ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007c0e                HAL_I2C_ACK_DISABLE
- .text.HAL_I2C_ClearFlag
-                0x0000000000007c2a       0x20 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007c2a                HAL_I2C_ClearFlag
- .text.HAL_I2C_READ_DATA
-                0x0000000000007c4a        0xe ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007c4a                HAL_I2C_READ_DATA
- .text.I2C1_EV_IRQHandler
-                0x0000000000007c58       0x52 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007c58                I2C1_EV_IRQHandler
- .text.I2C1_ER_IRQHandler
-                0x0000000000007caa       0x52 ./DRIVER/hal_i2c_ch32.o
-                0x0000000000007caa                I2C1_ER_IRQHandler
  .text.HAL_SPI_RXOveleyClear
-                0x0000000000007cfc       0x1e ./DRIVER/hal_spi_ch32.o
-                0x0000000000007cfc                HAL_SPI_RXOveleyClear
+                0x000000000000561c       0x1e ./HAL_DRIVER/hal_spi_ch32.o
+                0x000000000000561c                HAL_SPI_RXOveleyClear
  .text.HAL_SPI_GetBusy
-                0x0000000000007d1a       0x10 ./DRIVER/hal_spi_ch32.o
-                0x0000000000007d1a                HAL_SPI_GetBusy
+                0x000000000000563a       0x10 ./HAL_DRIVER/hal_spi_ch32.o
+                0x000000000000563a                HAL_SPI_GetBusy
+ .text.HAL_WDTReset
+                0x000000000000564a        0xe ./HAL_DRIVER/hal_wdt_ch32.o
+                0x000000000000564a                HAL_WDTReset
+ .text.prvInsertBlockIntoFreeList
+                0x0000000000005658       0x4c ./FreeRTOS/portable/MemMang/heap_4.o
+ .text.pvPortMalloc
+                0x00000000000056a4      0x18a ./FreeRTOS/portable/MemMang/heap_4.o
+                0x00000000000056a4                pvPortMalloc
+ .text.vPortSetupTimerInterrupt
+                0x000000000000582e       0x3e ./FreeRTOS/portable/GCC/RISC-V/port.o
+                0x000000000000582e                vPortSetupTimerInterrupt
+ .text.xPortStartScheduler
+                0x000000000000586c       0x90 ./FreeRTOS/portable/GCC/RISC-V/port.o
+                0x000000000000586c                xPortStartScheduler
+ .text.SysTick_Handler
+                0x00000000000058fc       0x7c ./FreeRTOS/portable/GCC/RISC-V/port.o
+                0x00000000000058fc                SysTick_Handler
+ .text.vPortEnterCritical
+                0x0000000000005978       0x16 ./FreeRTOS/portable/GCC/RISC-V/port.o
+                0x0000000000005978                vPortEnterCritical
+ .text.vPortExitCritical
+                0x000000000000598e       0x42 ./FreeRTOS/portable/GCC/RISC-V/port.o
+                0x000000000000598e                vPortExitCritical
+ .text.xPortSetInterruptMask
+                0x00000000000059d0        0xc ./FreeRTOS/portable/GCC/RISC-V/port.o
+                0x00000000000059d0                xPortSetInterruptMask
+ .text.vPortClearInterruptMask
+                0x00000000000059dc        0x6 ./FreeRTOS/portable/GCC/RISC-V/port.o
+                0x00000000000059dc                vPortClearInterruptMask
+ .text.vListInitialise
+                0x00000000000059e2       0x14 ./FreeRTOS/list.o
+                0x00000000000059e2                vListInitialise
+ .text.vListInitialiseItem
+                0x00000000000059f6        0x6 ./FreeRTOS/list.o
+                0x00000000000059f6                vListInitialiseItem
+ .text.vListInsertEnd
+                0x00000000000059fc       0x18 ./FreeRTOS/list.o
+                0x00000000000059fc                vListInsertEnd
+ .text.vListInsert
+                0x0000000000005a14       0x2e ./FreeRTOS/list.o
+                0x0000000000005a14                vListInsert
+ .text.uxListRemove
+                0x0000000000005a42       0x20 ./FreeRTOS/list.o
+                0x0000000000005a42                uxListRemove
+ .text.prvIsQueueEmpty
+                0x0000000000005a62       0x1e ./FreeRTOS/queue.o
+ .text.prvCopyDataToQueue
+                0x0000000000005a80       0x72 ./FreeRTOS/queue.o
+ .text.prvCopyDataFromQueue
+                0x0000000000005af2       0x28 ./FreeRTOS/queue.o
+ .text.prvUnlockQueue
+                0x0000000000005b1a       0x76 ./FreeRTOS/queue.o
+ .text.xQueueGenericReset
+                0x0000000000005b90       0xc4 ./FreeRTOS/queue.o
+                0x0000000000005b90                xQueueGenericReset
+ .text.xQueueGenericCreateStatic
+                0x0000000000005c54       0xae ./FreeRTOS/queue.o
+                0x0000000000005c54                xQueueGenericCreateStatic
+ .text.xQueueGenericCreate
+                0x0000000000005d02       0x72 ./FreeRTOS/queue.o
+                0x0000000000005d02                xQueueGenericCreate
+ .text.xQueueGenericSend
+                0x0000000000005d74      0x178 ./FreeRTOS/queue.o
+                0x0000000000005d74                xQueueGenericSend
+ .text.xQueueGiveMutexRecursive
+                0x0000000000005eec       0x56 ./FreeRTOS/queue.o
+                0x0000000000005eec                xQueueGiveMutexRecursive
+ .text.xQueueCreateMutex
+                0x0000000000005f42       0x2e ./FreeRTOS/queue.o
+                0x0000000000005f42                xQueueCreateMutex
+ .text.xQueueReceive
+                0x0000000000005f70      0x138 ./FreeRTOS/queue.o
+                0x0000000000005f70                xQueueReceive
+ .text.xQueueSemaphoreTake
+                0x00000000000060a8      0x18e ./FreeRTOS/queue.o
+                0x00000000000060a8                xQueueSemaphoreTake
+ .text.xQueueTakeMutexRecursive
+                0x0000000000006236       0x5a ./FreeRTOS/queue.o
+                0x0000000000006236                xQueueTakeMutexRecursive
+ .text.uxQueueMessagesWaiting
+                0x0000000000006290       0x44 ./FreeRTOS/queue.o
+                0x0000000000006290                uxQueueMessagesWaiting
+ .text.prvIdleTask
+                0x00000000000062d4        0x2 ./FreeRTOS/tasks.o
+ .text.prvAddNewTaskToReadyList
+                0x00000000000062d6      0x10e ./FreeRTOS/tasks.o
+ .text.prvResetNextTaskUnblockTime
+                0x00000000000063e4       0x24 ./FreeRTOS/tasks.o
+ .text.prvTaskIsTaskSuspended
+                0x0000000000006408       0x50 ./FreeRTOS/tasks.o
+ .text.prvInitialiseNewTask.isra.2
+                0x0000000000006458       0xc8 ./FreeRTOS/tasks.o
+ .text.prvAddCurrentTaskToDelayedList
+                0x0000000000006520       0xa8 ./FreeRTOS/tasks.o
+ .text.xTaskCreateStatic
+                0x00000000000065c8       0xa6 ./FreeRTOS/tasks.o
+                0x00000000000065c8                xTaskCreateStatic
+ .text.vTaskResume
+                0x000000000000666e       0xaa ./FreeRTOS/tasks.o
+                0x000000000000666e                vTaskResume
+ .text.vTaskStartScheduler
+                0x0000000000006718       0x60 ./FreeRTOS/tasks.o
+                0x0000000000006718                vTaskStartScheduler
+ .text.vTaskSuspendAll
+                0x0000000000006778       0x10 ./FreeRTOS/tasks.o
+                0x0000000000006778                vTaskSuspendAll
+ .text.xTaskGetTickCount
+                0x0000000000006788        0x6 ./FreeRTOS/tasks.o
+                0x0000000000006788                xTaskGetTickCount
+ .text.xTaskIncrementTick
+                0x000000000000678e      0x19c ./FreeRTOS/tasks.o
+                0x000000000000678e                xTaskIncrementTick
+ .text.xTaskResumeAll
+                0x000000000000692a      0x158 ./FreeRTOS/tasks.o
+                0x000000000000692a                xTaskResumeAll
+ .text.vTaskDelay
+                0x0000000000006a82       0x66 ./FreeRTOS/tasks.o
+                0x0000000000006a82                vTaskDelay
+ .text.vTaskSwitchContext
+                0x0000000000006ae8       0x96 ./FreeRTOS/tasks.o
+                0x0000000000006ae8                vTaskSwitchContext
+ .text.vTaskSuspend
+                0x0000000000006b7e       0xea ./FreeRTOS/tasks.o
+                0x0000000000006b7e                vTaskSuspend
+ .text.vTaskPlaceOnEventList
+                0x0000000000006c68       0x48 ./FreeRTOS/tasks.o
+                0x0000000000006c68                vTaskPlaceOnEventList
+ .text.xTaskRemoveFromEventList
+                0x0000000000006cb0       0xe8 ./FreeRTOS/tasks.o
+                0x0000000000006cb0                xTaskRemoveFromEventList
+ .text.vTaskInternalSetTimeOutState
+                0x0000000000006d98        0xe ./FreeRTOS/tasks.o
+                0x0000000000006d98                vTaskInternalSetTimeOutState
+ .text.xTaskCheckForTimeOut
+                0x0000000000006da6       0xaa ./FreeRTOS/tasks.o
+                0x0000000000006da6                xTaskCheckForTimeOut
+ .text.vTaskMissedYield
+                0x0000000000006e50        0x8 ./FreeRTOS/tasks.o
+                0x0000000000006e50                vTaskMissedYield
+ .text.xTaskGetCurrentTaskHandle
+                0x0000000000006e58        0xa ./FreeRTOS/tasks.o
+                0x0000000000006e58                xTaskGetCurrentTaskHandle
+ .text.xTaskPriorityInherit
+                0x0000000000006e62       0xae ./FreeRTOS/tasks.o
+                0x0000000000006e62                xTaskPriorityInherit
+ .text.xTaskPriorityDisinherit
+                0x0000000000006f10       0xca ./FreeRTOS/tasks.o
+                0x0000000000006f10                xTaskPriorityDisinherit
+ .text.vTaskPriorityDisinheritAfterTimeout
+                0x0000000000006fda       0xe6 ./FreeRTOS/tasks.o
+                0x0000000000006fda                vTaskPriorityDisinheritAfterTimeout
+ .text.pvTaskIncrementMutexHeldCount
+                0x00000000000070c0       0x1c ./FreeRTOS/tasks.o
+                0x00000000000070c0                pvTaskIncrementMutexHeldCount
+ .text.ulTaskGenericNotifyTake
+                0x00000000000070dc       0xb8 ./FreeRTOS/tasks.o
+                0x00000000000070dc                ulTaskGenericNotifyTake
+ .text.xTaskGenericNotifyWait
+                0x0000000000007194       0xe6 ./FreeRTOS/tasks.o
+                0x0000000000007194                xTaskGenericNotifyWait
+ .text.xTaskGenericNotifyFromISR
+                0x000000000000727a      0x1ec ./FreeRTOS/tasks.o
+                0x000000000000727a                xTaskGenericNotifyFromISR
+ .text.Delay_Init
+                0x0000000000007466       0x3e ./Debug/debug.o
+                0x0000000000007466                Delay_Init
+ .text.Delay_Ms
+                0x00000000000074a4       0x3c ./Debug/debug.o
+                0x00000000000074a4                Delay_Ms
+ .text.USART_Printf_Init
+                0x00000000000074e0       0x5a ./Debug/debug.o
+                0x00000000000074e0                USART_Printf_Init
+ .text._write   0x000000000000753a       0x3e ./Debug/debug.o
+                0x000000000000753a                _write
+ .text._sbrk    0x0000000000007578       0x2a ./Debug/debug.o
+                0x0000000000007578                _sbrk
+ .text.Get_ConversionVal
+                0x00000000000075a2       0x2a ./DRIVER/hal_adc_ch32.o
+                0x00000000000075a2                Get_ConversionVal
+ .text.HAL_ADC_RegularChannelConfig
+                0x00000000000075cc       0x46 ./DRIVER/hal_adc_ch32.o
+                0x00000000000075cc                HAL_ADC_RegularChannelConfig
+ .text.HAL_ADC_ContiniusScanCinvertionDMA
+                0x0000000000007612       0xca ./DRIVER/hal_adc_ch32.o
+                0x0000000000007612                HAL_ADC_ContiniusScanCinvertionDMA
+ .text.HAL_ADC_StartDMA
+                0x00000000000076dc       0x42 ./DRIVER/hal_adc_ch32.o
+                0x00000000000076dc                HAL_ADC_StartDMA
+ .text.ADC1_2_IRQHandler
+                0x000000000000771e       0x70 ./DRIVER/hal_adc_ch32.o
+                0x000000000000771e                ADC1_2_IRQHandler
+ .text.DMA_IRQ  0x000000000000778e       0x3a ./DRIVER/hal_dma_ch32.o
+ .text.HAL_DMA_Enable
+                0x00000000000077c8       0x18 ./DRIVER/hal_dma_ch32.o
+                0x00000000000077c8                HAL_DMA_Enable
+ .text.HAL_DMA_Disable
+                0x00000000000077e0       0x1a ./DRIVER/hal_dma_ch32.o
+                0x00000000000077e0                HAL_DMA_Disable
+ .text.HAL_DMAInitIT
+                0x00000000000077fa       0xa0 ./DRIVER/hal_dma_ch32.o
+                0x00000000000077fa                HAL_DMAInitIT
+ .text.HAL_DMA_SetCounter
+                0x000000000000789a       0x12 ./DRIVER/hal_dma_ch32.o
+                0x000000000000789a                HAL_DMA_SetCounter
+ .text.HAL_DMA_ITENABLE
+                0x00000000000078ac       0x16 ./DRIVER/hal_dma_ch32.o
+                0x00000000000078ac                HAL_DMA_ITENABLE
+ .text.HAL_DMA_SetCouterAndEnable
+                0x00000000000078c2       0x1a ./DRIVER/hal_dma_ch32.o
+                0x00000000000078c2                HAL_DMA_SetCouterAndEnable
+ .text.DMA1_Channel1_IRQHandler
+                0x00000000000078dc       0x4e ./DRIVER/hal_dma_ch32.o
+                0x00000000000078dc                DMA1_Channel1_IRQHandler
+ .text.DMA1_Channel3_IRQHandler
+                0x000000000000792a       0x4e ./DRIVER/hal_dma_ch32.o
+                0x000000000000792a                DMA1_Channel3_IRQHandler
+ .text.DMA1_Channel4_IRQHandler
+                0x0000000000007978       0x4e ./DRIVER/hal_dma_ch32.o
+                0x0000000000007978                DMA1_Channel4_IRQHandler
+ .text.DMA1_Channel5_IRQHandler
+                0x00000000000079c6       0x4e ./DRIVER/hal_dma_ch32.o
+                0x00000000000079c6                DMA1_Channel5_IRQHandler
+ .text.DMA1_Channel7_IRQHandler
+                0x0000000000007a14       0x4e ./DRIVER/hal_dma_ch32.o
+                0x0000000000007a14                DMA1_Channel7_IRQHandler
+ .text.HAL_I2C_Init
+                0x0000000000007a62       0xf6 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007a62                HAL_I2C_Init
+ .text.HAL_I2C_GET_STAR2
+                0x0000000000007b58        0xe ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007b58                HAL_I2C_GET_STAR2
+ .text.HAL_I2C_GET_STAR1
+                0x0000000000007b66        0xe ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007b66                HAL_I2C_GET_STAR1
+ .text.HAL_I2C_ENABLE
+                0x0000000000007b74       0x14 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007b74                HAL_I2C_ENABLE
+ .text.HAL_I2C_DISABLE
+                0x0000000000007b88       0x1a ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007b88                HAL_I2C_DISABLE
+ .text.I2C_IT_ENABLE
+                0x0000000000007ba2       0x12 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007ba2                I2C_IT_ENABLE
+ .text.I2C_IT_DISABLE
+                0x0000000000007bb4       0x16 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007bb4                I2C_IT_DISABLE
+ .text.HAL_I2C_STOP
+                0x0000000000007bca       0x14 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007bca                HAL_I2C_STOP
+ .text.HAL_I2C_START
+                0x0000000000007bde       0x14 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007bde                HAL_I2C_START
+ .text.HAL_I2C_SEND
+                0x0000000000007bf2        0xe ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007bf2                HAL_I2C_SEND
+ .text.HAL_I2C_SEND_ADDR_TRANS
+                0x0000000000007c00       0x12 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007c00                HAL_I2C_SEND_ADDR_TRANS
+ .text.HAL_I2C_SEND_ADDR_RECIEVE
+                0x0000000000007c12       0x16 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007c12                HAL_I2C_SEND_ADDR_RECIEVE
+ .text.HAL_I2C_ACK_ENABLE
+                0x0000000000007c28       0x14 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007c28                HAL_I2C_ACK_ENABLE
+ .text.HAL_I2C_ACK_DISABLE
+                0x0000000000007c3c       0x1c ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007c3c                HAL_I2C_ACK_DISABLE
+ .text.HAL_I2C_ClearFlag
+                0x0000000000007c58       0x20 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007c58                HAL_I2C_ClearFlag
+ .text.HAL_I2C_READ_DATA
+                0x0000000000007c78        0xe ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007c78                HAL_I2C_READ_DATA
+ .text.I2C1_EV_IRQHandler
+                0x0000000000007c86       0x52 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007c86                I2C1_EV_IRQHandler
+ .text.I2C1_ER_IRQHandler
+                0x0000000000007cd8       0x52 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000007cd8                I2C1_ER_IRQHandler
  .text.HAL_TIMER_BaseTimerInit.constprop.2
                 0x0000000000007d2a       0x7e ./DRIVER/hal_timers_ch32.o
  .text.HAL_TiemrEneblae
@@ -3820,15 +3821,15 @@ END GROUP
                 0x000000002000038c                SystemCoreClock
  .sdata.ADCPrescTable
                 0x0000000020000390        0x4 ./Peripheral/src/ch32v20x_rcc.o
+ .sdata.SPI     0x0000000020000394        0x8 ./HAL_DRIVER/hal_spi_ch32.o
+                0x0000000020000394                SPI
  .sdata.uxCriticalNesting
-                0x0000000020000394        0x4 ./FreeRTOS/portable/GCC/RISC-V/port.o
+                0x000000002000039c        0x4 ./FreeRTOS/portable/GCC/RISC-V/port.o
  .sdata.uxTopUsedPriority
-                0x0000000020000398        0x4 ./FreeRTOS/tasks.o
-                0x0000000020000398                uxTopUsedPriority
+                0x00000000200003a0        0x4 ./FreeRTOS/tasks.o
+                0x00000000200003a0                uxTopUsedPriority
  .sdata.curbrk.4668
-                0x000000002000039c        0x4 ./Debug/debug.o
- .sdata.SPI     0x00000000200003a0        0x8 ./DRIVER/hal_spi_ch32.o
-                0x00000000200003a0                SPI
+                0x00000000200003a4        0x4 ./Debug/debug.o
  .sdata.OD      0x00000000200003a8        0x4 ./CANopenNode/keypad/OD.o
                 0x00000000200003a8                OD
  .sdata.OD_PERSIST_COMM
@@ -4119,18 +4120,18 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_info    0x000000000002d36e     0x10ab ./HAL_DRIVER/hal_gpio_ch32.o
  .debug_info    0x000000000002e419      0xf39 ./HAL_DRIVER/hal_irq.o
  .debug_info    0x000000000002f352     0x13ce ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_info    0x0000000000030720      0xaa2 ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_info    0x00000000000311c2      0xe63 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_info    0x0000000000032025     0x1080 ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_info    0x00000000000330a5       0x26 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_info    0x00000000000330cb      0xb87 ./FreeRTOS/list.o
- .debug_info    0x0000000000033c52     0x3240 ./FreeRTOS/queue.o
- .debug_info    0x0000000000036e92     0x394b ./FreeRTOS/tasks.o
- .debug_info    0x000000000003a7dd      0xf05 ./Debug/debug.o
- .debug_info    0x000000000003b6e2     0x149d ./DRIVER/hal_adc_ch32.o
- .debug_info    0x000000000003cb7f     0x107a ./DRIVER/hal_dma_ch32.o
- .debug_info    0x000000000003dbf9     0x13a0 ./DRIVER/hal_i2c_ch32.o
- .debug_info    0x000000000003ef99      0xf26 ./DRIVER/hal_spi_ch32.o
+ .debug_info    0x0000000000030720      0xf26 ./HAL_DRIVER/hal_spi_ch32.o
+ .debug_info    0x0000000000031646      0xaa2 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_info    0x00000000000320e8      0xe63 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_info    0x0000000000032f4b     0x1080 ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_info    0x0000000000033fcb       0x26 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_info    0x0000000000033ff1      0xb87 ./FreeRTOS/list.o
+ .debug_info    0x0000000000034b78     0x3240 ./FreeRTOS/queue.o
+ .debug_info    0x0000000000037db8     0x394b ./FreeRTOS/tasks.o
+ .debug_info    0x000000000003b703      0xf05 ./Debug/debug.o
+ .debug_info    0x000000000003c608     0x149d ./DRIVER/hal_adc_ch32.o
+ .debug_info    0x000000000003daa5     0x107a ./DRIVER/hal_dma_ch32.o
+ .debug_info    0x000000000003eb1f     0x13a0 ./DRIVER/hal_i2c_ch32.o
  .debug_info    0x000000000003febf     0x18a7 ./DRIVER/hal_timers_ch32.o
  .debug_info    0x0000000000041766     0x19d4 ./CANopenNode/keypad/CO_driver_ST32F103.o
  .debug_info    0x000000000004313a     0x1bb2 ./CANopenNode/keypad/OD.o
@@ -4175,18 +4176,18 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_abbrev  0x000000000000664c      0x384 ./HAL_DRIVER/hal_gpio_ch32.o
  .debug_abbrev  0x00000000000069d0      0x2cd ./HAL_DRIVER/hal_irq.o
  .debug_abbrev  0x0000000000006c9d      0x365 ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_abbrev  0x0000000000007002      0x213 ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_abbrev  0x0000000000007215      0x36c ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_abbrev  0x0000000000007581      0x3ad ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_abbrev  0x000000000000792e       0x14 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_abbrev  0x0000000000007942      0x254 ./FreeRTOS/list.o
- .debug_abbrev  0x0000000000007b96      0x4a1 ./FreeRTOS/queue.o
- .debug_abbrev  0x0000000000008037      0x540 ./FreeRTOS/tasks.o
- .debug_abbrev  0x0000000000008577      0x2d7 ./Debug/debug.o
- .debug_abbrev  0x000000000000884e      0x3c2 ./DRIVER/hal_adc_ch32.o
- .debug_abbrev  0x0000000000008c10      0x2ce ./DRIVER/hal_dma_ch32.o
- .debug_abbrev  0x0000000000008ede      0x345 ./DRIVER/hal_i2c_ch32.o
- .debug_abbrev  0x0000000000009223      0x2e4 ./DRIVER/hal_spi_ch32.o
+ .debug_abbrev  0x0000000000007002      0x2e4 ./HAL_DRIVER/hal_spi_ch32.o
+ .debug_abbrev  0x00000000000072e6      0x213 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_abbrev  0x00000000000074f9      0x36c ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_abbrev  0x0000000000007865      0x3ad ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_abbrev  0x0000000000007c12       0x14 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_abbrev  0x0000000000007c26      0x254 ./FreeRTOS/list.o
+ .debug_abbrev  0x0000000000007e7a      0x4a1 ./FreeRTOS/queue.o
+ .debug_abbrev  0x000000000000831b      0x540 ./FreeRTOS/tasks.o
+ .debug_abbrev  0x000000000000885b      0x2d7 ./Debug/debug.o
+ .debug_abbrev  0x0000000000008b32      0x3c2 ./DRIVER/hal_adc_ch32.o
+ .debug_abbrev  0x0000000000008ef4      0x2ce ./DRIVER/hal_dma_ch32.o
+ .debug_abbrev  0x00000000000091c2      0x345 ./DRIVER/hal_i2c_ch32.o
  .debug_abbrev  0x0000000000009507      0x4a6 ./DRIVER/hal_timers_ch32.o
  .debug_abbrev  0x00000000000099ad      0x501 ./CANopenNode/keypad/CO_driver_ST32F103.o
  .debug_abbrev  0x0000000000009eae      0x264 ./CANopenNode/keypad/OD.o
@@ -4227,16 +4228,16 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_loc     0x000000000000c557      0x4a2 ./HAL_DRIVER/hal_gpio_ch32.o
  .debug_loc     0x000000000000c9f9       0xe2 ./HAL_DRIVER/hal_irq.o
  .debug_loc     0x000000000000cadb      0x3e7 ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_loc     0x000000000000cec2      0x330 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_loc     0x000000000000d1f2       0xad ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_loc     0x000000000000d29f       0x94 ./FreeRTOS/list.o
- .debug_loc     0x000000000000d333     0x1df5 ./FreeRTOS/queue.o
- .debug_loc     0x000000000000f128     0x24d4 ./FreeRTOS/tasks.o
- .debug_loc     0x00000000000115fc      0x177 ./Debug/debug.o
- .debug_loc     0x0000000000011773      0x3f6 ./DRIVER/hal_adc_ch32.o
- .debug_loc     0x0000000000011b69      0x21a ./DRIVER/hal_dma_ch32.o
- .debug_loc     0x0000000000011d83      0x59c ./DRIVER/hal_i2c_ch32.o
- .debug_loc     0x000000000001231f      0x230 ./DRIVER/hal_spi_ch32.o
+ .debug_loc     0x000000000000cec2      0x230 ./HAL_DRIVER/hal_spi_ch32.o
+ .debug_loc     0x000000000000d0f2      0x330 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_loc     0x000000000000d422       0xad ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_loc     0x000000000000d4cf       0x94 ./FreeRTOS/list.o
+ .debug_loc     0x000000000000d563     0x1df5 ./FreeRTOS/queue.o
+ .debug_loc     0x000000000000f358     0x24d4 ./FreeRTOS/tasks.o
+ .debug_loc     0x000000000001182c      0x177 ./Debug/debug.o
+ .debug_loc     0x00000000000119a3      0x3f6 ./DRIVER/hal_adc_ch32.o
+ .debug_loc     0x0000000000011d99      0x21a ./DRIVER/hal_dma_ch32.o
+ .debug_loc     0x0000000000011fb3      0x59c ./DRIVER/hal_i2c_ch32.o
  .debug_loc     0x000000000001254f      0x5d5 ./DRIVER/hal_timers_ch32.o
  .debug_loc     0x0000000000012b24      0x615 ./CANopenNode/keypad/CO_driver_ST32F103.o
  .debug_loc     0x0000000000013139      0xa23 ./CANopenNode/305/CO_LSSslave.o
@@ -4313,29 +4314,29 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_aranges
                 0x0000000000001448       0x50 ./HAL_DRIVER/hal_rtc_ch32.o
  .debug_aranges
-                0x0000000000001498       0x38 ./HAL_DRIVER/hal_wdt_ch32.o
+                0x0000000000001498       0x58 ./HAL_DRIVER/hal_spi_ch32.o
  .debug_aranges
-                0x00000000000014d0       0x50 ./FreeRTOS/portable/MemMang/heap_4.o
+                0x00000000000014f0       0x38 ./HAL_DRIVER/hal_wdt_ch32.o
  .debug_aranges
-                0x0000000000001520       0x58 ./FreeRTOS/portable/GCC/RISC-V/port.o
+                0x0000000000001528       0x50 ./FreeRTOS/portable/MemMang/heap_4.o
  .debug_aranges
-                0x0000000000001578       0x20 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+                0x0000000000001578       0x58 ./FreeRTOS/portable/GCC/RISC-V/port.o
  .debug_aranges
-                0x0000000000001598       0x40 ./FreeRTOS/list.o
+                0x00000000000015d0       0x20 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
  .debug_aranges
-                0x00000000000015d8      0x108 ./FreeRTOS/queue.o
+                0x00000000000015f0       0x40 ./FreeRTOS/list.o
  .debug_aranges
-                0x00000000000016e0      0x190 ./FreeRTOS/tasks.o
+                0x0000000000001630      0x108 ./FreeRTOS/queue.o
  .debug_aranges
-                0x0000000000001870       0x48 ./Debug/debug.o
+                0x0000000000001738      0x190 ./FreeRTOS/tasks.o
  .debug_aranges
-                0x00000000000018b8       0x48 ./DRIVER/hal_adc_ch32.o
+                0x00000000000018c8       0x48 ./Debug/debug.o
  .debug_aranges
-                0x0000000000001900       0x78 ./DRIVER/hal_dma_ch32.o
+                0x0000000000001910       0x48 ./DRIVER/hal_adc_ch32.o
  .debug_aranges
-                0x0000000000001978       0xb8 ./DRIVER/hal_i2c_ch32.o
+                0x0000000000001958       0x78 ./DRIVER/hal_dma_ch32.o
  .debug_aranges
-                0x0000000000001a30       0x58 ./DRIVER/hal_spi_ch32.o
+                0x00000000000019d0       0xb8 ./DRIVER/hal_i2c_ch32.o
  .debug_aranges
                 0x0000000000001a88       0x80 ./DRIVER/hal_timers_ch32.o
  .debug_aranges
@@ -4390,17 +4391,17 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_ranges  0x0000000000001e48       0x70 ./HAL_DRIVER/hal_gpio_ch32.o
  .debug_ranges  0x0000000000001eb8       0x38 ./HAL_DRIVER/hal_irq.o
  .debug_ranges  0x0000000000001ef0       0x40 ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_ranges  0x0000000000001f30       0x28 ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_ranges  0x0000000000001f58       0x40 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_ranges  0x0000000000001f98       0x60 ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_ranges  0x0000000000001ff8       0x30 ./FreeRTOS/list.o
- .debug_ranges  0x0000000000002028      0x2d0 ./FreeRTOS/queue.o
- .debug_ranges  0x00000000000022f8      0x3a8 ./FreeRTOS/tasks.o
- .debug_ranges  0x00000000000026a0       0x38 ./Debug/debug.o
- .debug_ranges  0x00000000000026d8       0xc0 ./DRIVER/hal_adc_ch32.o
- .debug_ranges  0x0000000000002798       0x68 ./DRIVER/hal_dma_ch32.o
- .debug_ranges  0x0000000000002800       0xa8 ./DRIVER/hal_i2c_ch32.o
- .debug_ranges  0x00000000000028a8       0x48 ./DRIVER/hal_spi_ch32.o
+ .debug_ranges  0x0000000000001f30       0x48 ./HAL_DRIVER/hal_spi_ch32.o
+ .debug_ranges  0x0000000000001f78       0x28 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_ranges  0x0000000000001fa0       0x40 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_ranges  0x0000000000001fe0       0x60 ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_ranges  0x0000000000002040       0x30 ./FreeRTOS/list.o
+ .debug_ranges  0x0000000000002070      0x2d0 ./FreeRTOS/queue.o
+ .debug_ranges  0x0000000000002340      0x3a8 ./FreeRTOS/tasks.o
+ .debug_ranges  0x00000000000026e8       0x38 ./Debug/debug.o
+ .debug_ranges  0x0000000000002720       0xc0 ./DRIVER/hal_adc_ch32.o
+ .debug_ranges  0x00000000000027e0       0x68 ./DRIVER/hal_dma_ch32.o
+ .debug_ranges  0x0000000000002848       0xa8 ./DRIVER/hal_i2c_ch32.o
  .debug_ranges  0x00000000000028f0       0xd0 ./DRIVER/hal_timers_ch32.o
  .debug_ranges  0x00000000000029c0       0xe8 ./CANopenNode/keypad/CO_driver_ST32F103.o
  .debug_ranges  0x0000000000002aa8       0xf0 ./CANopenNode/305/CO_LSSslave.o
@@ -4411,7 +4412,7 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_ranges  0x0000000000003278      0x268 ./CANopenNode/301/CO_SDOserver.o
  .debug_ranges  0x00000000000034e0      0x148 ./CANopenNode/CANopen.o
 
-.debug_line     0x0000000000000000    0x3814a
+.debug_line     0x0000000000000000    0x38140
  .debug_line    0x0000000000000000      0xb4c ./User/CanOpenNode.o
  .debug_line    0x0000000000000b4c     0x114f ./User/DataModel.o
  .debug_line    0x0000000000001c9b      0x3fd ./User/ch32v20x_it.o
@@ -4444,30 +4445,30 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_line    0x000000000001d6e0      0x93f ./HAL_DRIVER/hal_gpio_ch32.o
  .debug_line    0x000000000001e01f      0x567 ./HAL_DRIVER/hal_irq.o
  .debug_line    0x000000000001e586      0xd65 ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_line    0x000000000001f2eb      0x601 ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_line    0x000000000001f8ec      0xcb9 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_line    0x00000000000205a5      0x7d2 ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_line    0x0000000000020d77      0x368 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
- .debug_line    0x00000000000210df      0x6de ./FreeRTOS/list.o
- .debug_line    0x00000000000217bd     0x3262 ./FreeRTOS/queue.o
- .debug_line    0x0000000000024a1f     0x4a3a ./FreeRTOS/tasks.o
- .debug_line    0x0000000000029459      0x798 ./Debug/debug.o
- .debug_line    0x0000000000029bf1      0xa97 ./DRIVER/hal_adc_ch32.o
- .debug_line    0x000000000002a688      0x86e ./DRIVER/hal_dma_ch32.o
- .debug_line    0x000000000002aef6      0xb8b ./DRIVER/hal_i2c_ch32.o
- .debug_line    0x000000000002ba81      0x79a ./DRIVER/hal_spi_ch32.o
- .debug_line    0x000000000002c21b      0xe3f ./DRIVER/hal_timers_ch32.o
- .debug_line    0x000000000002d05a     0x124d ./CANopenNode/keypad/CO_driver_ST32F103.o
- .debug_line    0x000000000002e2a7      0x3f9 ./CANopenNode/keypad/OD.o
- .debug_line    0x000000000002e6a0     0x1095 ./CANopenNode/305/CO_LSSslave.o
- .debug_line    0x000000000002f735     0x11cb ./CANopenNode/301/CO_Emergency.o
- .debug_line    0x0000000000030900      0xbd1 ./CANopenNode/301/CO_NMT_Heartbeat.o
- .debug_line    0x00000000000314d1      0xf43 ./CANopenNode/301/CO_ODinterface.o
- .debug_line    0x0000000000032414     0x2852 ./CANopenNode/301/CO_PDO.o
- .debug_line    0x0000000000034c66     0x23d2 ./CANopenNode/301/CO_SDOserver.o
- .debug_line    0x0000000000037038     0x1112 ./CANopenNode/CANopen.o
+ .debug_line    0x000000000001f2eb      0x790 ./HAL_DRIVER/hal_spi_ch32.o
+ .debug_line    0x000000000001fa7b      0x601 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_line    0x000000000002007c      0xcb9 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_line    0x0000000000020d35      0x7d2 ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_line    0x0000000000021507      0x368 ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_line    0x000000000002186f      0x6de ./FreeRTOS/list.o
+ .debug_line    0x0000000000021f4d     0x3262 ./FreeRTOS/queue.o
+ .debug_line    0x00000000000251af     0x4a3a ./FreeRTOS/tasks.o
+ .debug_line    0x0000000000029be9      0x798 ./Debug/debug.o
+ .debug_line    0x000000000002a381      0xa97 ./DRIVER/hal_adc_ch32.o
+ .debug_line    0x000000000002ae18      0x86e ./DRIVER/hal_dma_ch32.o
+ .debug_line    0x000000000002b686      0xb8b ./DRIVER/hal_i2c_ch32.o
+ .debug_line    0x000000000002c211      0xe3f ./DRIVER/hal_timers_ch32.o
+ .debug_line    0x000000000002d050     0x124d ./CANopenNode/keypad/CO_driver_ST32F103.o
+ .debug_line    0x000000000002e29d      0x3f9 ./CANopenNode/keypad/OD.o
+ .debug_line    0x000000000002e696     0x1095 ./CANopenNode/305/CO_LSSslave.o
+ .debug_line    0x000000000002f72b     0x11cb ./CANopenNode/301/CO_Emergency.o
+ .debug_line    0x00000000000308f6      0xbd1 ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_line    0x00000000000314c7      0xf43 ./CANopenNode/301/CO_ODinterface.o
+ .debug_line    0x000000000003240a     0x2852 ./CANopenNode/301/CO_PDO.o
+ .debug_line    0x0000000000034c5c     0x23d2 ./CANopenNode/301/CO_SDOserver.o
+ .debug_line    0x000000000003702e     0x1112 ./CANopenNode/CANopen.o
 
-.debug_str      0x0000000000000000     0xcac8
+.debug_str      0x0000000000000000     0xcaef
  .debug_str     0x0000000000000000     0x2315 ./User/CanOpenNode.o
                                        0x2480 (size before relaxing)
  .debug_str     0x0000000000002315      0x4e9 ./User/DataModel.o
@@ -4532,49 +4533,49 @@ OUTPUT(DASH.elf elf32-littleriscv)
                                         0xaff (size before relaxing)
  .debug_str     0x00000000000084b7      0x2ae ./HAL_DRIVER/hal_rtc_ch32.o
                                         0xe2a (size before relaxing)
- .debug_str     0x0000000000008765       0x80 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_str     0x0000000000008765      0x1c2 ./HAL_DRIVER/hal_spi_ch32.o
+                                        0x98a (size before relaxing)
+ .debug_str     0x0000000000008927       0x80 ./HAL_DRIVER/hal_wdt_ch32.o
                                         0x702 (size before relaxing)
- .debug_str     0x00000000000087e5      0x312 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_str     0x00000000000089a7      0x312 ./FreeRTOS/portable/MemMang/heap_4.o
                                         0x8ef (size before relaxing)
- .debug_str     0x0000000000008af7      0x128 ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_str     0x0000000000008cb9      0x128 ./FreeRTOS/portable/GCC/RISC-V/port.o
                                         0xb32 (size before relaxing)
- .debug_str     0x0000000000008c1f       0x2a ./FreeRTOS/portable/GCC/RISC-V/portASM.o
+ .debug_str     0x0000000000008de1       0x2a ./FreeRTOS/portable/GCC/RISC-V/portASM.o
                                          0x55 (size before relaxing)
- .debug_str     0x0000000000008c49      0x10f ./FreeRTOS/list.o
+ .debug_str     0x0000000000008e0b      0x10f ./FreeRTOS/list.o
                                         0x6f9 (size before relaxing)
- .debug_str     0x0000000000008d58      0x69d ./FreeRTOS/queue.o
+ .debug_str     0x0000000000008f1a      0x69d ./FreeRTOS/queue.o
                                        0x1378 (size before relaxing)
- .debug_str     0x00000000000093f5      0x876 ./FreeRTOS/tasks.o
+ .debug_str     0x00000000000095b7      0x876 ./FreeRTOS/tasks.o
                                        0x17ff (size before relaxing)
- .debug_str     0x0000000000009c6b       0x67 ./Debug/debug.o
+ .debug_str     0x0000000000009e2d       0x67 ./Debug/debug.o
                                         0x91a (size before relaxing)
- .debug_str     0x0000000000009cd2      0x16c ./DRIVER/hal_adc_ch32.o
+ .debug_str     0x0000000000009e94      0x16c ./DRIVER/hal_adc_ch32.o
                                         0xdb6 (size before relaxing)
- .debug_str     0x0000000000009e3e       0xf6 ./DRIVER/hal_dma_ch32.o
+ .debug_str     0x000000000000a000       0xf6 ./DRIVER/hal_dma_ch32.o
                                         0xc1f (size before relaxing)
- .debug_str     0x0000000000009f34       0xb2 ./DRIVER/hal_i2c_ch32.o
+ .debug_str     0x000000000000a0f6       0xb2 ./DRIVER/hal_i2c_ch32.o
                                         0xde6 (size before relaxing)
- .debug_str     0x0000000000009fe6      0x19b ./DRIVER/hal_spi_ch32.o
-                                        0x963 (size before relaxing)
- .debug_str     0x000000000000a181      0x128 ./DRIVER/hal_timers_ch32.o
+ .debug_str     0x000000000000a1a8      0x128 ./DRIVER/hal_timers_ch32.o
                                         0xee8 (size before relaxing)
- .debug_str     0x000000000000a2a9      0x26c ./CANopenNode/keypad/CO_driver_ST32F103.o
+ .debug_str     0x000000000000a2d0      0x26c ./CANopenNode/keypad/CO_driver_ST32F103.o
                                         0xfd8 (size before relaxing)
- .debug_str     0x000000000000a515      0x693 ./CANopenNode/keypad/OD.o
+ .debug_str     0x000000000000a53c      0x693 ./CANopenNode/keypad/OD.o
                                        0x16d5 (size before relaxing)
- .debug_str     0x000000000000aba8      0x406 ./CANopenNode/305/CO_LSSslave.o
+ .debug_str     0x000000000000abcf      0x406 ./CANopenNode/305/CO_LSSslave.o
                                        0x1171 (size before relaxing)
- .debug_str     0x000000000000afae      0xaa8 ./CANopenNode/301/CO_Emergency.o
+ .debug_str     0x000000000000afd5      0xaa8 ./CANopenNode/301/CO_Emergency.o
                                        0x19a3 (size before relaxing)
- .debug_str     0x000000000000ba56      0x14b ./CANopenNode/301/CO_NMT_Heartbeat.o
+ .debug_str     0x000000000000ba7d      0x14b ./CANopenNode/301/CO_NMT_Heartbeat.o
                                        0x1582 (size before relaxing)
- .debug_str     0x000000000000bba1       0xbf ./CANopenNode/301/CO_ODinterface.o
+ .debug_str     0x000000000000bbc8       0xbf ./CANopenNode/301/CO_ODinterface.o
                                         0xa9c (size before relaxing)
- .debug_str     0x000000000000bc60      0x337 ./CANopenNode/301/CO_PDO.o
+ .debug_str     0x000000000000bc87      0x337 ./CANopenNode/301/CO_PDO.o
                                        0x1b41 (size before relaxing)
- .debug_str     0x000000000000bf97      0xa2d ./CANopenNode/301/CO_SDOserver.o
+ .debug_str     0x000000000000bfbe      0xa2d ./CANopenNode/301/CO_SDOserver.o
                                        0x1d6e (size before relaxing)
- .debug_str     0x000000000000c9c4      0x104 ./CANopenNode/CANopen.o
+ .debug_str     0x000000000000c9eb      0x104 ./CANopenNode/CANopen.o
                                        0x23a6 (size before relaxing)
 
 .comment        0x0000000000000000       0x33
@@ -4610,6 +4611,7 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .comment       0x0000000000000033       0x34 ./HAL_DRIVER/hal_gpio_ch32.o
  .comment       0x0000000000000033       0x34 ./HAL_DRIVER/hal_irq.o
  .comment       0x0000000000000033       0x34 ./HAL_DRIVER/hal_rtc_ch32.o
+ .comment       0x0000000000000033       0x34 ./HAL_DRIVER/hal_spi_ch32.o
  .comment       0x0000000000000033       0x34 ./HAL_DRIVER/hal_wdt_ch32.o
  .comment       0x0000000000000033       0x34 ./FreeRTOS/portable/MemMang/heap_4.o
  .comment       0x0000000000000033       0x34 ./FreeRTOS/portable/GCC/RISC-V/port.o
@@ -4620,7 +4622,6 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .comment       0x0000000000000033       0x34 ./DRIVER/hal_adc_ch32.o
  .comment       0x0000000000000033       0x34 ./DRIVER/hal_dma_ch32.o
  .comment       0x0000000000000033       0x34 ./DRIVER/hal_i2c_ch32.o
- .comment       0x0000000000000033       0x34 ./DRIVER/hal_spi_ch32.o
  .comment       0x0000000000000033       0x34 ./DRIVER/hal_timers_ch32.o
  .comment       0x0000000000000033       0x34 ./CANopenNode/keypad/CO_driver_ST32F103.o
  .comment       0x0000000000000033       0x34 ./CANopenNode/keypad/OD.o
@@ -4664,17 +4665,17 @@ OUTPUT(DASH.elf elf32-littleriscv)
  .debug_frame   0x0000000000003320      0x134 ./HAL_DRIVER/hal_gpio_ch32.o
  .debug_frame   0x0000000000003454       0x40 ./HAL_DRIVER/hal_irq.o
  .debug_frame   0x0000000000003494      0x160 ./HAL_DRIVER/hal_rtc_ch32.o
- .debug_frame   0x00000000000035f4       0x50 ./HAL_DRIVER/hal_wdt_ch32.o
- .debug_frame   0x0000000000003644       0xc8 ./FreeRTOS/portable/MemMang/heap_4.o
- .debug_frame   0x000000000000370c       0xf4 ./FreeRTOS/portable/GCC/RISC-V/port.o
- .debug_frame   0x0000000000003800       0x60 ./FreeRTOS/list.o
- .debug_frame   0x0000000000003860      0x484 ./FreeRTOS/queue.o
- .debug_frame   0x0000000000003ce4      0x610 ./FreeRTOS/tasks.o
- .debug_frame   0x00000000000042f4       0x9c ./Debug/debug.o
- .debug_frame   0x0000000000004390      0x104 ./DRIVER/hal_adc_ch32.o
- .debug_frame   0x0000000000004494      0x268 ./DRIVER/hal_dma_ch32.o
- .debug_frame   0x00000000000046fc      0x240 ./DRIVER/hal_i2c_ch32.o
- .debug_frame   0x000000000000493c       0xc4 ./DRIVER/hal_spi_ch32.o
+ .debug_frame   0x00000000000035f4       0xc4 ./HAL_DRIVER/hal_spi_ch32.o
+ .debug_frame   0x00000000000036b8       0x50 ./HAL_DRIVER/hal_wdt_ch32.o
+ .debug_frame   0x0000000000003708       0xc8 ./FreeRTOS/portable/MemMang/heap_4.o
+ .debug_frame   0x00000000000037d0       0xf4 ./FreeRTOS/portable/GCC/RISC-V/port.o
+ .debug_frame   0x00000000000038c4       0x60 ./FreeRTOS/list.o
+ .debug_frame   0x0000000000003924      0x484 ./FreeRTOS/queue.o
+ .debug_frame   0x0000000000003da8      0x610 ./FreeRTOS/tasks.o
+ .debug_frame   0x00000000000043b8       0x9c ./Debug/debug.o
+ .debug_frame   0x0000000000004454      0x104 ./DRIVER/hal_adc_ch32.o
+ .debug_frame   0x0000000000004558      0x268 ./DRIVER/hal_dma_ch32.o
+ .debug_frame   0x00000000000047c0      0x240 ./DRIVER/hal_i2c_ch32.o
  .debug_frame   0x0000000000004a00      0x1a8 ./DRIVER/hal_timers_ch32.o
  .debug_frame   0x0000000000004ba8      0x1f0 ./CANopenNode/keypad/CO_driver_ST32F103.o
  .debug_frame   0x0000000000004d98       0xe0 ./CANopenNode/305/CO_LSSslave.o

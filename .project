@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" ?> 
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <projectDescription>
   <name>DASH</name>
-  <comment />
-  <projects />
+  <comment/>
+  <projects/>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
       <triggers>clean,full,incremental,</triggers>
-      <arguments />
+      <arguments/>
     </buildCommand>
     <buildCommand>
       <name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
       <triggers>full,incremental,</triggers>
-      <arguments />
+      <arguments/>
     </buildCommand>
   </buildSpec>
   <natures>
@@ -24,19 +24,18 @@
     <link>
       <name>HAL_LIB</name>
       <type>2</type>
-      <locationURI>PARENT-3-PROJECT_LOC/Users/i.dymov/Documents/SYSTEM_LIB/HAL_LIB</locationURI>
+      <locationURI>c:/Users/i.dymov/Documents/SYSTEM_LIB/HAL_LIB</locationURI>
     </link>
     <link>
       <name>HAL_DRIVER</name>
       <type>2</type>
-      <location>PARENT-3-PROJECT_LOC/Users/i.dymov/Documents/SYSTEM_LIB/HAL_DRIVER</location>
+      <locationURI>c:/Users/i.dymov/Documents/SYSTEM_LIB/HAL_DRIVER</locationURI>
     </link>
   </linkedResources>
   <filteredResources>
     <filter>
-      <id>1742981950816</id>
-      <name />
-      <type>22</type>
+      <name/>
+      <type>6</type>
       <matcher>
         <id>org.eclipse.ui.ide.multiFilter</id>
         <arguments>1.0-name-matches-false-false-*.wvproj</arguments>
