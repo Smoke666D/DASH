@@ -365,7 +365,7 @@ void WriteReg( u16 reg_adress, void * data, u8 len)
  */
 uint16_t vGetBitrate()
 {
-   return (OB->Data0 & 0xFF);
+   return (OB->Data0 & 0x7F);
 }
 
 uint16_t vFDGetNMTState( void )
@@ -380,7 +380,8 @@ uint8_t vGetNodeId( void )
 
 void vSetBitrate( uint8_t data)
 {
-    ProgramOptionByteData(0,data) ;
+    uint8_t temp = OB->Data0 & 0x80;
+    ProgramOptionByteData(0,temp | (data & 0x7F )) ;
 }
 
 void vSetNodeID( uint8_t data)

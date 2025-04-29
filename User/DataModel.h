@@ -255,7 +255,7 @@ uint8_t vGetNodeId( void );
 void vSaveData();
 u32 getOdometr();
 u32 getOdometr1();
-
+uint16_t vFDGetNMTState( void );
 void ResrtOdometr1();
 void SaveReg16(u16 reg_adress, u8 notyfy_index );
 #endif /* USER_DATAMODEL_H_ */

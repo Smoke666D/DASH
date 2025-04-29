@@ -510,7 +510,7 @@ static CO_PROGMEM ODObjs_t ODObjs = {
             .dataLength = 4
         },
         {
-            .dataOrig = &OD_ROM.x1601_RPDOMappingParameter.applicationObject_2,
+            .dataOrig = (void *)&OD_ROM.x1601_RPDOMappingParameter.applicationObject_2,
             .subIndex = 2,
             .attribute = ODA_SDO_RW | ODA_MB,
             .dataLength = 4
