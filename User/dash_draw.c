@@ -43,6 +43,7 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
 {
   int8_t data8;
   int16_t data_16;
+  int32_t data_32;
   u16 data16 = 0;
   u8 index;
   int32_t out_data;
@@ -79,16 +80,16 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case vCHANNEL16:
     case vCHANNEL17:
                 index = virtualchannel -vCHANNEL15;
-                data_16 =getReg16(V15 + (index)*sizeof(uint16_t) );
+                data_32 =getReg16(V15 + (index)*sizeof(uint16_t) );
                 if (offset_enable == 2)
                 {
                    uint32_t config = getReg16( VCH15_SETTING + (index) * sizeof(u32) );
                    offset = config & 0xFFFF;
                    mul =  (config>>16);
-                   data_16 = data_16 - offset;
-                   if (mul!=0) data_16 = (int32_t)(data_16*10)/(float)mul;
+                   data_32 = data_32 - offset;
+                   if (mul!=0) data_32 = (int32_t)(data_32*10)/(float)mul;
                }
-               return ( (u32) data_16);
+               return ( data_32);
     case chAIN1 :
     case chAIN2 :
     case chAIN3 :
@@ -591,7 +592,9 @@ static void SystemMenuDraw()
            }
         }
         else
+        {
             SetSEG( (u16)((buffer32 >>16) & 0xFFFF),  getODValue((u8)(buffer32 & 0xFF),2) ,1 );
+        }
     }
     else if (MenuSatate ==SYS_MENU_STATE )
     {
