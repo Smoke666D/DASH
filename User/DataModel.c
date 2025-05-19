@@ -98,7 +98,7 @@ void vDataModelRegDelayWrite()
 INIT_FUNC_LOC  void DataModel_Init()
 {
 
-     printf("EEPROM Init...");
+    printf("EEPROM Init...");
     if ( eEEPROMRd(0x00 ,GetDataRegister() , EEPROM_REGISER_COUNT,2) == EEPROM_OK)
     {
          printf("OK!\r\n");

@@ -95,8 +95,8 @@
 #define I2C1_IT_ENABLE
 //#define I2C2_IT_ENABLE
 
-#define INIT_FUNC_LOC __attribute__((section(".stext")))
-#define OD_ATTR_ROM const INIT_FUNC_LOC
+#define INIT_FUNC_LOC __attribute__((section(".stext"))) __attribute__((optimize(3)))
+#define OD_ATTR_ROM const __attribute__((section(".stext")))
 //#define OD_ATTR_OD const
 
 

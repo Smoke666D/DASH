@@ -28,9 +28,9 @@ INIT_FUNC_LOC void vInit_DeviceConfig( void )
     HAL_RTC_IT_Init(&vIncrementSystemCounters,RTC_PRIOR,RTC_SUB_PRIOR,1);
 
 
-	HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
+	  HAL_TIMER_PWMTimersInit(TIMER3 , 1000000, 1000, TIM_CHANNEL_3 | TIM_CHANNEL_4  );
 
-   HAL_TiemrEneblae( TIMER3);
+    HAL_TiemrEneblae( TIMER3);
     vSetBrigth(RGB_CHANNEL,0);
     vSetBrigth(WHITE_CHANNEL,0);
     vAINInit();

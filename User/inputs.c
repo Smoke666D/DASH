@@ -239,7 +239,7 @@ void vInputsTask( void * argument )
   vDINInit();
   for(;;)
   {
-      vDataModelRegDelayWrite();
+       vDataModelRegDelayWrite();
        vTaskDelay(1);
 
        if (++din_counter> 10)
