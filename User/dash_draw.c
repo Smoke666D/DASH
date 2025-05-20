@@ -369,20 +369,25 @@ static uint8_t CheckLedState( u16 addr, u16 bd, LED_STATE_t * state, u8 hist )
     vGetEdgeData( addr,  &he, &le);
     u16 HIST;
     u16 h1;
+ 
     if ((le !=0) && (he !=0))
     {
        if (le <= he)   //Обычный режим, проверяем на попадание в окно.
        {
-               HIST = (u16)( he*(float)hist/100);
+                HIST = (u16)( he*(float)hist/100);
+               
                if (HIST > le) h1 = 0; else h1 = HIST;
 
                if ((bd >= (le +HIST)) && (bd <= (he - HIST)))
                {
+              
                    *state = STATE_ON;
                    res  = 1;
                }
+               else
                if ((bd <= (le - h1)) || (bd >= (he + HIST)))
                {
+                
                    *state = STATE_OFF;
                    res  = 1;
                }
@@ -428,10 +433,11 @@ void vRGBMode( u8 i,  u8 index )
     u8 histeresis = getReg8(RGB1_HIST + i);
     u16 bd = getODValue( index, 1 );
     u16 offset = RGB1_VALUE_GREEN_HIGH + i*6*sizeof(u16);
+ 
     LED_STATE_t state;
-    if ( CheckLedState(offset   , bd, &state ,histeresis ) == 1 )  SetRGB( i, GREEN_COLOR, state );
-    if ( CheckLedState(offset+4 , bd, &state ,histeresis ) == 1 )  SetRGB( i, RED_COLOR,   state );
-    if ( CheckLedState(offset+8 , bd, &state ,histeresis ) == 1 )  SetRGB( i, BLUE_COLOR,  state );
+    if ( CheckLedState(offset   , bd, &state ,histeresis ) == 1 ) {  SetRGB( i, GREEN_COLOR, state );}
+    if ( CheckLedState(offset+4 , bd, &state ,histeresis ) == 1 ) { SetRGB( i, RED_COLOR,   state );}
+    if ( CheckLedState(offset+8 , bd, &state ,histeresis ) == 1 ) { SetRGB( i, BLUE_COLOR,  state );}
 
 }
 
@@ -796,6 +802,7 @@ void vRedrawTask( void * argument )
                  //Отрисовываем RGB пикторграммы
                  for ( u8 i = 0; i < RGB_DIOD_COUNT; i++ )
                  {
+                    
                      vRGBMode( i,  getReg8( RGBMAP1 + i));
                  }
                  //Вывод данных в бар

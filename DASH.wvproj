@@ -111,7 +111,9 @@
 					"${project}/HAL/hal_can.h",
 					"${project}/HAL/hal_gpio_ch32.c",
 					"${project}/DRIVER/hal_spi_ch32.c",
-					"${project}/DRIVER/hal_spi.h"
+					"${project}/DRIVER/hal_spi.h",
+					"${project}/HAL_LIB/hw_lib_can.c",
+					"${project}/HAL_LIB/hw_lib_can.h"
 				],
 				"riscvTargetProcessor": {
 					"architecture": "rv32i",
@@ -794,7 +796,7 @@
 		"address": "0x08000000",
 		"target_path": "obj\\DASH.hex",
 		"clkSpeed": "High",
-		"debug_interface_mode": "1-wire serial",
+		"debug_interface_mode": "",
 		"erase": true,
 		"program": true,
 		"verify": true,
