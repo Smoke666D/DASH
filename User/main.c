@@ -37,7 +37,7 @@ int main(void)
     vInit_DeviceConfig( );      //§ª§ß§Ú§Ú§Ñ§Ý§Ú§Ù§Ñ§è§Ú§ñ §á§Ö§â§Ö§æ§Ú§â§Ú§Ú
 
     //§ª§ß§Ú§è§Ú§Ñ§Ý§Ú§Ù§Ñ§è§Ú§ñ §à§ä§Õ§Ñ§Ý§à§é§ß§à§Ô§à §Ó§í§Ó§à§Õ§Ñ
-    printf("SystemClk:%d\r\n", SystemCoreClock);
+    //printf("SystemClk:%d\r\n", SystemCoreClock);
     vSYSqueueInit (  );         // §ª§ß§Ú§è§Ú§Ñ§Ý§Ú§Ñ§Ù§è§Ú§ñ §à§é§Ö§â§Ö§Õ§Ö§Û §à§ã.
     vSYStaskInit ( );           // §ª§ß§Ú§è§Ú§Ñ§Ý§Ú§Ù§Ñ§è§Ú§ñ §á§â§à§è§Ö§ã§ã§à§Ó §°§³
     vTaskStartScheduler();      // §³§ä§Ñ§â§ä §°§³.

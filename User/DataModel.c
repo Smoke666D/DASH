@@ -40,17 +40,30 @@
 };
 
 
-#define FUEL_SENSOR_CAL_POINT_COUNT 6
+#define FUEL_SENSOR_CAL_POINT_COUNT 9
 
- static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
+static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
              {280,11},
              {230,61},
              {160,112},
              {90,160},
-             {50,185},
-             {0,300}};
+             {50,210},
+             {10,290},
+             {5,300},
+             {1,330},
+             {0,350}};
 
-
+/*static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
+            
+            
+             
+               {0,300},
+              {50,185},
+              {90,160},
+              {160,112},
+              {230,61},
+              {280,11}};
+*/
 static u16 secondcounter;
 static QueueHandle_t    pDataRegQueue;
 
@@ -233,7 +246,7 @@ INIT_FUNC_LOC  void DataModel_Init()
              setReg8( AIN2_CAL_POINT_COUNT  ,18);
              setReg32(AIN2_SETTING ,10<<16 | 400 );
              setReg32(AIN3_SETTING ,10<<16  );
-             setReg8(AIN3_CAL_POINT_COUNT       , FUEL_SENSOR_CAL_POINT_COUNT);
+             
              for (u8 i=0; i< 18;i++)
              {
                  setReg16(AIN1_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
@@ -241,6 +254,7 @@ INIT_FUNC_LOC  void DataModel_Init()
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4    , CalPoint[i][0]);
                  setReg16(AIN2_CAL_POINT_BEGIN + i*4 + 2, CalPoint[i][1]);
              }
+             setReg8(AIN3_CAL_POINT_COUNT       , FUEL_SENSOR_CAL_POINT_COUNT);
              for (u8 i=0; i<FUEL_SENSOR_CAL_POINT_COUNT;i++)
              {
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint1[i][0]);
@@ -277,7 +291,8 @@ INIT_FUNC_LOC  void DataModel_Init()
          POINT_t point[2];
          for (u8 k = 0; k < 3 ;k++)
          {
-            u8 cal_point_count  = getReg8(AIN1_CAL_POINT_COUNT + k *3 );
+            u8 cal_point_count  = getReg8(AIN1_CAL_POINT_COUNT + k );
+            printf("channel=%d  cot=%d\r\n",k,cal_point_count);
             if ( eAinCalDataConfig(AIN1+ k,cal_point_count -1 ) == CAL_SUCCESS)
             {
                 for (u8 i = 0; i< cal_point_count - 1 ;i++)

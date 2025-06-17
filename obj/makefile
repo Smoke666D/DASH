@@ -74,7 +74,7 @@ post-build:
 
 # Tool invocations
 DASH.elf: $(OBJS) $(USER_OBJS)
-	@	riscv-none-embed-gcc -march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -msave-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -fsingle-precision-constant -Wunused -g -T "c:/MRS_DATA/workspace/DASH/Ld/Link.ld" -nostartfiles -Xlinker --gc-sections -Xlinker --print-memory-usage -Xlinker -print-memory-usage -Wl,-Map,"DASH.map" --specs=nano.specs --specs=nosys.specs -o "DASH.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	@	riscv-none-embed-gcc -march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -msave-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -fsingle-precision-constant -Wunused -g -T "c:/MRS_DATA/workspace/DASH/Ld/Link.ld" -nostartfiles -Xlinker --gc-sections -Xlinker --print-memory-usage -Xlinker -print-memory-usage -Wl,-Map,"DASH.map" --specs=nano.specs --specs=nosys.specs -o "DASH.elf" $(OBJS) $(USER_OBJS) $(LIBS) -lprintfloat
 DASH.bin: DASH.elf
 	@	riscv-none-embed-objcopy -O binary "DASH.elf" "DASH.bin"
 DASH.hex: DASH.elf
