@@ -37,7 +37,7 @@ Debug \
 FreeRTOS \
 FreeRTOS/portable/GCC/RISC-V \
 FreeRTOS/portable/MemMang \
-HAL_LIB \
+LIB \
 Peripheral/src \
 Startup \
 User \
