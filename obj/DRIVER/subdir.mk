@@ -6,21 +6,42 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../DRIVER/hal_adc_ch32.c \
+../DRIVER/hal_can_ch32.c \
 ../DRIVER/hal_dma_ch32.c \
+../DRIVER/hal_flash_ch32.c \
+../DRIVER/hal_gpio_ch32.c \
 ../DRIVER/hal_i2c_ch32.c \
-../DRIVER/hal_timers_ch32.c 
+../DRIVER/hal_irq.c \
+../DRIVER/hal_rtc_ch32.c \
+../DRIVER/hal_spi_ch32.c \
+../DRIVER/hal_timers_ch32.c \
+../DRIVER/hal_wdt_ch32.c 
 
 C_DEPS += \
 ./DRIVER/hal_adc_ch32.d \
+./DRIVER/hal_can_ch32.d \
 ./DRIVER/hal_dma_ch32.d \
+./DRIVER/hal_flash_ch32.d \
+./DRIVER/hal_gpio_ch32.d \
 ./DRIVER/hal_i2c_ch32.d \
-./DRIVER/hal_timers_ch32.d 
+./DRIVER/hal_irq.d \
+./DRIVER/hal_rtc_ch32.d \
+./DRIVER/hal_spi_ch32.d \
+./DRIVER/hal_timers_ch32.d \
+./DRIVER/hal_wdt_ch32.d 
 
 OBJS += \
 ./DRIVER/hal_adc_ch32.o \
+./DRIVER/hal_can_ch32.o \
 ./DRIVER/hal_dma_ch32.o \
+./DRIVER/hal_flash_ch32.o \
+./DRIVER/hal_gpio_ch32.o \
 ./DRIVER/hal_i2c_ch32.o \
-./DRIVER/hal_timers_ch32.o 
+./DRIVER/hal_irq.o \
+./DRIVER/hal_rtc_ch32.o \
+./DRIVER/hal_spi_ch32.o \
+./DRIVER/hal_timers_ch32.o \
+./DRIVER/hal_wdt_ch32.o 
 
 
 

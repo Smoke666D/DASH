@@ -27,6 +27,56 @@
 				"parentLogicPath": "",
 				"type": "file",
 				"name": "*.wvproj"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_can_ch32.c"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_can.h"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_flash_ch32.c"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_flash.h"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_gpio_ch32.c"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_gpio.h"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_irq.c"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_irq.h"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_rtc_ch32.c"
+			},
+			{
+				"parentLogicPath": "HAL_DRIVER",
+				"type": "file",
+				"name": "hal_rtc.h"
 			}
 		],
 		"projectName": "DASH",
@@ -48,10 +98,6 @@
 				"pre_script_description": "",
 				"post_script": " ${cross_prefix}${cross_objcopy}${cross_suffix} -O ihex \"${ProjName}.elf\" \"${ProjName}.hex\" && ${cross_prefix}${cross_objcopy}${cross_suffix} -O binary \"${ProjName}.elf\" \"${ProjName}.bin\"",
 				"excludeResources": [
-					"${project}/DRIVER/hal_rtc_ch32.c",
-					"${project}/DRIVER/hal_rtc.h",
-					"${project}/DRIVER/hal_can.h",
-					"${project}/DRIVER/hal_can_ch32.c",
 					"${project}/HAL_DRIVER/hal_adc.c",
 					"${project}/HAL_DRIVER/hal_adc.h",
 					"${project}/HAL_DRIVER/hal_dac.c",
@@ -110,10 +156,13 @@
 					"${project}/LiteOS/testsuits",
 					"${project}/HAL/hal_can.h",
 					"${project}/HAL/hal_gpio_ch32.c",
-					"${project}/DRIVER/hal_spi_ch32.c",
-					"${project}/DRIVER/hal_spi.h",
 					"${project}/HAL_LIB/hw_lib_can.c",
-					"${project}/HAL_LIB/hw_lib_can.h"
+					"${project}/HAL_LIB/hw_lib_can.h",
+					"${project}/HAL_DRIVER/hal_wdt.h",
+					"${project}/HAL_DRIVER/hal_wdt_ch32.c",
+					"${project}/HAL_DRIVER/hal_typedef.h",
+					"${project}/HAL_DRIVER/hal_spi.h",
+					"${project}/HAL_DRIVER/hal_spi_ch32.c"
 				],
 				"riscvTargetProcessor": {
 					"architecture": "rv32i",
@@ -796,7 +845,7 @@
 		"address": "0x08000000",
 		"target_path": "obj\\DASH.hex",
 		"clkSpeed": "High",
-		"debug_interface_mode": "",
+		"debug_interface_mode": "1-wire serial",
 		"erase": true,
 		"program": true,
 		"verify": true,
