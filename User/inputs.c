@@ -92,7 +92,7 @@ void ADC_FSM( BaseType_t time, u8 * init_flag )
        for (u8 k = 0;k < ADC_FRAME_SIZE;k++)
               ADCB = ADCB + pBuffer[k*ADC1_CHANNELS  + i ];
        ADC_Buffer[i] =( ADCB /ADC_FRAME_SIZE);
-      // ADC_Buffer[i] = vRCFilterConfig(ADC_Buffer[i], &ADC_OLD_RAW[i],(i < AIN4)? 230: 100 );
+       ADC_Buffer[i] = vRCFilterConfig(ADC_Buffer[i], &ADC_OLD_RAW[i],(i < AIN4)? 230: 100 );
    }
    OurVData[AIN4] = (float)((double) ADC_Buffer[AIN4]  * AINCOOF3)+DIOD;
    OurVData[AIN5]=  (float) ((double)ADC_Buffer[AIN5]*VADD_COOF*K);
