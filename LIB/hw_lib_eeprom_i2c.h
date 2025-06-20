@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-#include "C:/MRS_DATA/workspace/DASH/DRIVER/hal_i2c.h"
+#include "hal_i2c.h"
 
 
 #define EEPROM_ADRESS_TYPE uint16_t
