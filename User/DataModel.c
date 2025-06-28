@@ -43,13 +43,13 @@
 #define FUEL_SENSOR_CAL_POINT_COUNT 9
 
 static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
-             {280,11},
-             {230,61},
-             {160,112},
-             {90,160},
-             {50,210},
-             {10,290},
-             {5,300},
+             {420,11},
+             {350,61},
+             {280,112},
+             {200,160},
+             {180,210},
+             {70,290},
+             {20,300},
              {1,330},
              {0,350}};
 
@@ -232,7 +232,7 @@ INIT_FUNC_LOC  void DataModel_Init()
              setReg8(RGBMAP11               , 0 );
              setReg8(RGBMAP13               , vCHANNEL4 );
              setReg8(RGBMAP14               , vCHANNEL3 ) ;
-             setReg8(BARMAP                 , vCHANNEL15 );
+             setReg8(BARMAP                 , chRPM1 );
 
              static const u16 seg_const[]={0x336, 0x03F, 0x2F3 , 0x0F3, 0x0f6, 0x038 , 0x0CF , 0x0E6 , 0x0ED};
              for (u8 i=0; i<9;i++)
@@ -260,9 +260,9 @@ INIT_FUNC_LOC  void DataModel_Init()
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4    , CalPoint1[i][0]);
                   setReg16(AIN3_CAL_POINT_BEGIN + i*4 + 2, CalPoint1[i][1]);
              }
-             setReg16(RPM1_COOF,1);
+             setReg16(RPM1_COOF,66);
              setReg16(RPM2_COOF,8);
-             setReg32( MENU1_MAP , 0x50730000 | vCHANNEL15);
+             setReg32( MENU1_MAP , 0x50730000 | chRPM1);
              setReg32( MENU2_MAP , 0x3E000000  | chAKB );
              setReg32( MENU3_MAP , 0x76000000  | chHOUR );
              setReg32( MENU4_MAP , 0x71000000  | chAIN3);
@@ -413,6 +413,7 @@ void vIncrementSystemCounters()
     if (++secondcounter >=  360 )
     {
         setReg32(HOUR_COUNTER_ADR,  (uint32_t)(getReg32(HOUR_COUNTER_ADR) + 1) );
+         
         secondcounter = 0;
     }
     u32 distance = ((float)getODValue( getReg8(ODOMETR_MAP),0))/10.0/3.6;
@@ -427,7 +428,8 @@ void vIncrementSystemCounters()
 
 void vSaveData()
 {
-    eEEPROMWrFast(HOUR_COUNTER_ADR,GetRegisterAddr(HOUR_COUNTER_ADR),12);
+    eEEPROMWr(ODOMETR_ADR,GetRegisterAddr(ODOMETR_ADR),12,1);
+    //eEEPROMWrFast(HOUR_COUNTER_ADR,GetRegisterAddr(HOUR_COUNTER_ADR),12);
 }
 
 u32 getOdometr()

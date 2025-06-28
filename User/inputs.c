@@ -247,7 +247,6 @@ void vInputsTask( void * argument )
        if (++din_counter> 10)
        {
            vDinDoutProcess();
-
            din_counter = 0;
        }
        if (xTaskNotifyWaitIndexed(2, 0, 0xFF, &ulNotifiedValue,0) )
@@ -260,6 +259,7 @@ void vInputsTask( void * argument )
 
             if (  InitState  == START_UP_STATE)
             {
+                  
                     if  (uGetDIN(INPUT_4) && (GetAIN(AIN4)>= 9.0 ))
                     {
                         HAL_SetBit(PowerOn_Port, PowerOn_Pin);
@@ -271,11 +271,13 @@ void vInputsTask( void * argument )
             }
             else
             {
+                
                  if ((GetAIN(AIN5) < 4.9) || (uGetDIN(INPUT_4)== RESET))
                  {
                      vSystemStop();
-                     HardwareDeinit();
                      vSaveData();
+                     
+                     HardwareDeinit();
                      vTaskDelay(10);
                      HAL_ResetBit(PowerON_Port,PowerON_Pin);
                      vTaskDelay(1);

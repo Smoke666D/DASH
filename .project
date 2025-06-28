@@ -20,7 +20,7 @@
     <nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
     <nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
   </natures>
-
+  <linkedResources/>
   <filteredResources>
     <filter>
       <name/>

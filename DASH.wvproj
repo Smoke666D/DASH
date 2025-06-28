@@ -12,12 +12,7 @@
 			"link": "WCH-Link",
 			"peripheral_version": "=======================================1.8"
 		},
-		"linkedFolders": [
-			{
-				"name": "HAL_LIB",
-				"location": "c:/Users/i.dymov/Documents/SYSTEM_LIB/HAL_LIB"
-			}
-		],
+		"linkedFolders": [],
 		"removedResources": [
 			{
 				"parentLogicPath": "",
@@ -56,10 +51,6 @@
 					"${project}/HAL/hal_i2c_ch32.c",
 					"${project}/HAL/hal_i2c.h",
 					"${project}/FreeRTOS/portable/Common/mpu_wrappers.c",
-					"${project}/HAL_LIB/EEPROM_25C.c",
-					"${project}/HAL_LIB/EEPROM_25C.h",
-					"${project}/HAL_LIB/hw_lib_keyboard.c",
-					"${project}/HAL_LIB/hw_lib_keyboard.h",
 					"${project}/LiteOS/third_party/cmsis",
 					"${project}/Drivers/drivers_config.h",
 					"${project}/HAL/hal_wdt_ch32.c",
@@ -88,20 +79,6 @@
 					"${project}/LiteOS/testsuits",
 					"${project}/HAL/hal_can.h",
 					"${project}/HAL/hal_gpio_ch32.c",
-					"${project}/HAL_LIB/hw_lib_can.c",
-					"${project}/HAL_LIB/hw_lib_can.h",
-					"${project}/HAL_LIB/filters.c",
-					"${project}/HAL_LIB/filters.h",
-					"${project}/HAL_LIB/hw_data_model.c",
-					"${project}/HAL_LIB/hw_data_model.h",
-					"${project}/HAL_LIB/hw_lib_adc.c",
-					"${project}/HAL_LIB/hw_lib_adc.h",
-					"${project}/HAL_LIB/hw_lib_din.c",
-					"${project}/HAL_LIB/hw_lib_din.h",
-					"${project}/HAL_LIB/hw_lib_eeprom_i2c.c",
-					"${project}/HAL_LIB/hw_lib_eeprom_i2c.h",
-					"${project}/HAL_LIB/hw_timeout.c",
-					"${project}/HAL_LIB/hw_timeout.h",
 					"${project}/LIB/EEPROM_25C.c",
 					"${project}/LIB/EEPROM_25C.h",
 					"${project}/LIB/hw_lib_can.c",
@@ -230,7 +207,6 @@
 							"${project}/FreeRTOS/portable/GCC/RISC-V",
 							"${project}/FreeRTOS/portable/GCC/RISC-V/chip_specific_extensions/RV32I_PFIC_no_extensions",
 							"${project}/FreeRTOS/portable/MemMang",
-							"${project}/HAL_LIB",
 							"${project}/DRIVER",
 							"${project}/LIB"
 						],
@@ -434,10 +410,6 @@
 					"${project}/HAL/hal_i2c_ch32.c",
 					"${project}/HAL/hal_i2c.h",
 					"${project}/FreeRTOS/portable/Common/mpu_wrappers.c",
-					"${project}/HAL_LIB/EEPROM_25C.c",
-					"${project}/HAL_LIB/EEPROM_25C.h",
-					"${project}/HAL_LIB/hw_lib_keyboard.c",
-					"${project}/HAL_LIB/hw_lib_keyboard.h",
 					"${project}/LiteOS/third_party/cmsis",
 					"${project}/Drivers/drivers_config.h",
 					"${project}/HAL/hal_wdt_ch32.c",
@@ -590,7 +562,6 @@
 							"${project}/FreeRTOS/portable/GCC/RISC-V",
 							"${project}/FreeRTOS/portable/GCC/RISC-V/chip_specific_extensions/RV32I_PFIC_no_extensions",
 							"${project}/FreeRTOS/portable/MemMang",
-							"${project}/HAL_LIB",
 							"${project}/DRIVER"
 						],
 						"include_system_paths": [],
@@ -771,7 +742,7 @@
 		"address": "0x08000000",
 		"target_path": "obj\\DASH.hex",
 		"clkSpeed": "High",
-		"debug_interface_mode": "1-wire serial",
+		"debug_interface_mode": "",
 		"erase": true,
 		"program": true,
 		"verify": true,

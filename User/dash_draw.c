@@ -94,7 +94,7 @@ int32_t getODValue( VIRTUAL_CHANNEL_t virtualchannel, uint8_t offset_enable)
     case chAIN2 :
     case chAIN3 :
                 index = (virtualchannel - chAIN1);
-               out_data= fGetAinCalData( AIN1+index , GetAIN( AIN1+index ));
+                out_data= fGetAinCalData( AIN1+index , GetAIN( AIN1+index ));
                 if ((out_data<0) && (index ==2)) out_data=1;
                 if (offset_enable == 2)
                 {
