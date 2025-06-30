@@ -42,6 +42,8 @@
 
 #define FUEL_SENSOR_CAL_POINT_COUNT 9
 
+#ifdef K3
+
 static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
              {420,11},
              {350,61},
@@ -53,6 +55,22 @@ static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
              {1,330},
              {0,350}};
 
+#endif
+
+#ifdef K1
+static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
+             {280,11},
+             {230,61},
+             {160,112},
+             {90,160},
+             {50,210},
+             {10,290},
+             {5,300},
+             {1,330},
+             {0,350}};
+
+
+#endif
 /*static const uint16_t CalPoint1[FUEL_SENSOR_CAL_POINT_COUNT][2] = {
             
             
